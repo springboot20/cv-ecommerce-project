@@ -1,0 +1,153 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+@layer base {
+  @font-face {
+    font-family: 'Roboto', sans-serif;
+    src: url('./fonts/Roboto-Bold.ttf');
+  }
+  body {
+    font-family: 'Roboto', sans-serif;
+    /* @apply bg-[#f2f2f2]; */
+  }
+}
+
+@layer components {
+  .nav-bg {
+    @apply bg-white/50 backdrop-blur-sm;
+  }
+
+  .nav-bar-bg {
+    background: url(../assets/nav-bg.png) no-repeat;
+    background-position: center;
+    background-size: cover;
+  }
+
+  .signup-navigation::before {
+    content: '';
+    position: absolute;
+    bottom: 0;
+    left: 0;
+    width: 100%;
+    height: 3px;
+    background: #d5d7e4;
+  }
+
+  .signup-navigation::after {
+    content: '';
+    position: absolute;
+    bottom: 0;
+    left: 0;
+    width: 149px;
+    height: 3px;
+    display: block;
+    -webkit-transition: all 500ms ease;
+    -moz-transition: all 500ms ease;
+    -ms-transition: all 500ms ease;
+    -o-transition: all 500ms ease;
+    transition: all 500ms ease;
+  }
+
+  .signup-navigation.user-signup::after {
+    @apply left-0;
+  }
+
+  .signup-navigation.agent-signup::after {
+    @apply left-[142px];
+  }
+
+  .form-group {
+    @apply col-span-full md:col-span-1;
+  }
+
+  .form-control {
+    @apply py-3 px-3 text-lg font-medium border-[1px] border-gray-400 rounded-lg outline-none w-full;
+  }
+
+  .eye-icon {
+    @apply h-5 cursor-pointer top-[50%] right-3 absolute -translate-y-[50%];
+  }
+
+  .signup-form {
+    @apply absolute grid p-4 grid-cols-2 transition-all gap-4 w-full;
+    -webkit-transition: all 600ms ease-in-out;
+    -moz-transition: all 600ms ease-in-out;
+    -ms-transition: all 600ms ease-in-out;
+    -o-transition: all 600ms ease-in-out;
+    transition: all 600ms ease-in-out;
+  }
+
+  /* animation */
+  .card {
+    @apply flex flex-col h-96 flex-shrink-0 flex-grow-0 max-w-full bg-white rounded-xl overflow-hidden shadow-md;
+  }
+
+  .card-img {
+    @apply pb-14 m-0 w-full relative overflow-hidden h-1/2 top-0;
+  }
+
+  .skeleton {
+    background-color: #e2e5e7;
+    background-image: linear-gradient(90deg, rgba(255, 255, 255, 0.5), rgba(255, 255, 255, 0));
+    background-size: 250px 100%;
+    background-position: left -250px top 0;
+    animation: skeletonLoading 4s both ease infinite;
+    -webkit-animation: skeletonLoading 4s both ease infinite;
+  }
+
+  .card-body {
+    @apply p-6;
+  }
+
+  .card-title.skeleton {
+    @apply h-7 w-1/2 rounded-md;
+  }
+
+  .card-description {
+    @apply mt-10;
+  }
+
+  .card-description p {
+    @apply h-7 w-full mt-2 rounded-md;
+  }
+
+  .card-description p:last-child {
+    @apply w-1/2;
+  }
+
+  @keyframes skeletonLoading {
+    to {
+      background-position: right -250px top 0;
+    }
+  }
+}
+/* CAROUSEL */
+
+.slick-slide > div {
+  margin: 0 5px;
+}
+
+.slick-slide {
+  margin-top: 2rem;
+  width: 652px;
+}
+
+.slick-next::before,
+.slick-prev::before {
+  color: #000000;
+}
+
+.slick-next {
+  right: -20px;
+}
+
+.slick-next,
+.slick-prev{
+  z-index: 10;
+}
+
+.slick-prev {
+  left: -6px;
+  color: #ffffff !important;
+}
