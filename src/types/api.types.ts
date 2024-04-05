@@ -1,8 +1,9 @@
-import { AxiosResponse } from 'axios';
+// import { AxiosResponse } from 'axios';
 import { ToastOptions } from 'react-toastify';
 
 export interface ApiResponseObj {
-  api: () => Promise<AxiosResponse<ApiSuccessResponseObj, any>>;
+  // api: () => Promise<AxiosResponse<ApiSuccessResponseObj, any>>;
+  api: () => Promise<ApiSuccessResponseObj>;
   setLoading: ((loading: boolean) => void) | null;
   onSuccess: (
     data: ApiSuccessResponseObj,

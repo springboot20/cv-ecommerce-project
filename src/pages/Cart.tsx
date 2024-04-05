@@ -3,21 +3,21 @@
 import { Fragment } from 'react';
 import cartImage from '../assets/cart-image.jpg';
 import { Link } from 'react-router-dom';
-import { useCart } from '../context/CartContext';
+import { useCart } from '../hooks/useCart';
 import { Modal } from '../components/modal/Modal';
-import { useAuth } from '../context/AuthContext';
+import { useAuth } from '../hooks/useAuth';
 import { IconType } from '../components/icon/IconType';
 import { faEdit, faTrashAlt } from '@fortawesome/free-solid-svg-icons';
 import Button from '../components/icon/Button';
 import { formatPrice } from '../helpers/index';
 
 export const Cart = () => {
-  const cart = useCart();
+  const { cart } = useCart();
   const auth = useAuth();
 
   return (
     <Fragment>
-      <Modal token={auth.tokens?.access_token} />
+      <Modal token={auth.tokens?.accessToken} />
       <section className='top-32 relative h-[calc(100vh-6rem)]'>
         <div className='container h-full mx-auto max-w-5xl px-4 py-8 sm:px-3 sm:py-18 md:max-w-6xl lg:max-w-[86.25rem] xl:max-w-[92.5rem] 2xl:max-w-[104.5rem] flex flex-col'>
           <div className='flex'>
@@ -28,10 +28,10 @@ export const Cart = () => {
           <div className='mt-9 flex'>
             <div className='flex-1'>
               <h3 className='text-xl font-semibold text-gray-700 dark:text-white my-4'>
-                <span>{`{${cart.items!.length}}`}</span> Products in Cart
+                <span>{`{${cart?.items!.length}}`}</span> Products in Cart
               </h3>
               <div className='rounded-md border bg-white shadow border-gray-300 mb-12 p-10'>
-                {cart.items!.length === 0 ? (
+                {cart?.items!.length === 0 ? (
                   <div className='flex flex-col justify-center items-center text-center'>
                     <div className='mb-6'>
                       <img
@@ -53,11 +53,11 @@ export const Cart = () => {
                   <div className='mt-8'>
                     <div className='flow-root'>
                       <ul role='list' className='-my-6 divide-y divide-gray-200'>
-                        {cart.items!.map((item) => (
+                        {cart?.items!.map((item) => (
                           <li key={item?._id} className='flex py-6'>
                             <div className='h-24 w-24 flex-shrink-0 overflow-hidden rounded-md border border-gray-200'>
                               <img
-                                src={item?.imageUrl}
+                                src={item?.product.mainImg.url}
                                 alt={''}
                                 className='h-full w-full object-cover object-center'
                               />
@@ -67,9 +67,9 @@ export const Cart = () => {
                               <div>
                                 <div className='flex justify-between  font-medium text-gray-900'>
                                   <h3 className='text-gray-800 font-semibold text-xl'>
-                                    {item?.productName}
+                                    {item?.product.name}
                                   </h3>
-                                  <p className='ml-4 text-xl'>{formatPrice(item?.price)}</p>
+                                  <p className='ml-4 text-xl'>{formatPrice(item?.product.price)}</p>
                                 </div>
                               </div>
                               <div className='flex flex-1 items-end justify-between text-sm'>

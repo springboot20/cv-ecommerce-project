@@ -1,10 +1,7 @@
 import { Fragment, useEffect, useMemo, useState } from 'react';
-import { useAuth } from '../context/AuthContext';
+import { useAuth } from '../hooks/useAuth';
 import { Modal } from '../components/modal/Modal';
-import { ProductInterface } from '../types/product.types';
-import { classNames, formatPrice } from '../helpers';
-import { apiRequestHandler } from '../util';
-import { getAllProducts } from '../api/Axios';
+import { classNames } from '../helpers';
 import { motion } from 'framer-motion';
 import { Pagination } from '../components/Pagination';
 import { gridVariants } from '../util/framerMotion.config';
@@ -23,11 +20,13 @@ import HandGloves from '../assets/gloves.png';
 import Sanitizer from '../assets/sanitizer.png';
 import FaceMask from '../assets/face-mask.png';
 import Deodorant from '../assets/deodorant.png';
+import { useGetProductsQuery } from '../features/product/product.endpoints';
 
 export const Products = () => {
   const { tokens } = useAuth();
-  const [products, setProducts] = useState<ProductInterface[]>([]);
-  const [loadingProducts, setLoadingProducts] = useState<boolean>(true);
+
+  const { data, isLoading } = useGetProductsQuery();
+  const products = data;
 
   // const [activeButton, setActiveButton] = useState<boolean>(true);
   const itemsPerPage = 12;
@@ -35,7 +34,7 @@ export const Products = () => {
 
   const startIndex = (currentPage - 1) * itemsPerPage;
   const endIndex = startIndex + itemsPerPage;
-  const currentProducts = products.slice(startIndex, endIndex);
+  const currentProducts = products?.slice(startIndex, endIndex);
 
   const options = useMemo(
     () => [
@@ -55,30 +54,9 @@ export const Products = () => {
     setLocalOptions(options);
   }, [options]);
 
-  const handleFetchProducts = async () => {
-    await apiRequestHandler({
-      api: async () => await getAllProducts(),
-      setLoading: setLoadingProducts,
-      onSuccess: (response, message, toast) => {
-        const { data } = response;
-
-        setProducts(data?.products || []);
-
-        toast(message, { type: 'success' });
-      },
-      onError: (error, toast) => {
-        toast(error, { type: 'error' });
-      },
-    });
-  };
-
-  useEffect(() => {
-    // handleFetchProducts();
-  });
-
   return (
     <Fragment>
-      <Modal token={tokens?.access_token} />
+      <Modal token={tokens?.accessToken} />
       <Fragment>
         <main className='bg-hero-bg h-[70vh] bg-no-repeat bg-cover mt-40'></main>
         <section className='w-full'>
@@ -319,7 +297,7 @@ export const Products = () => {
                   currentPage={currentPage}
                   itemsPerPage={itemsPerPage}
                   onPageChange={setCurrentPage}
-                  totalItems={products.length}
+                  totalItems={products?.length}
                 />
               </div>
             </div>

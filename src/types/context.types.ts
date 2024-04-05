@@ -1,37 +1,14 @@
-import { UserInterface } from './user.types';
+import { AuthRegisterPayload, AuthLoginPayload } from './redux.types';
+import { UserTypes } from './user.types';
 
-export interface AuthContextInterface {
-  tokens: { access_token: string; refresh_token: string } | null;
-  user: UserInterface | null;
-  register: (data: { username: string; email: string; password: string }) => void;
-  login: (data: { username?: string; email?: string; password: string }) => void;
-  logout: () => void;
+export interface AuthContextType {
+  tokens: { accessToken: string; refreshToken: string } | null | void;
+  user: UserTypes | null | void;
+  register: (data: AuthRegisterPayload) => Promise<void>;
+  login: (data: AuthLoginPayload) => Promise<void>;
+  logout: () => Promise<void>;
 }
 
-export type AuthProviderProps = {
+export type AuthContextProps = {
   children: React.ReactNode;
 };
-
-export interface CartContextInterface {
-  items:
-    | {
-        quantity: number;
-        productId: string;
-      }[]
-    | null;
-  getUserCart: () => void;
-  addItemOrUpdateItemQuantity: (data: { quantity: number }) => void;
-  removeItemFromCart: () => void;
-  clearCart: () => void;
-}
-
-export interface ProductContextInterface {
-  getAllProducts: () => void;
-  createProduct: (data: {
-    name: string;
-    description: string;
-    category: string;
-    price: number;
-    stock: number;
-  }) => void;
-}

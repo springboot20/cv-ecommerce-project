@@ -3,7 +3,7 @@ import { Button } from '@material-tailwind/react'
 
 export const Pagination: React.FC<{
   itemsPerPage: number
-  totalItems: number
+  totalItems: number | undefined
   currentPage: number
   onPageChange: React.Dispatch<React.SetStateAction<number>>
 }> = ({ itemsPerPage, totalItems, currentPage, onPageChange }) => {

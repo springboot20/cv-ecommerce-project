@@ -4,12 +4,16 @@ import { Link, useNavigate } from 'react-router-dom';
 import { faEyeSlash, faEye } from '@fortawesome/free-solid-svg-icons';
 import { InputField } from '../components/inputs/Input';
 import { loginSchema } from '../schema/Schema';
-import { useAuth } from '../context/AuthContext';
+import { useLoginMutation } from '../features/auth/auth.endpoints';
+import { setCredentials } from '../features/auth/auth.slice';
 import { IconType } from '../components/icon/IconType';
-import { SignInInitialValues } from '../types/form.types';
+import { SignInInitialValues } from '../types';
+import { LocalStorage } from '../util';
 import { motion } from 'framer-motion';
 import { Button, Typography } from '@material-tailwind/react';
 import { GitHubIcon, GoogleIcon } from '../components/Icons';
+import { useAppDispatch } from '../app/hooks';
+import { toast } from 'react-toastify';
 
 const initialValues: SignInInitialValues = {
   username: '',
@@ -34,8 +38,9 @@ const motionConfig = {
 };
 
 export const Signin = () => {
-  const { login } = useAuth();
+  const [loginMutation] = useLoginMutation();
   const navigate = useNavigate();
+  const dispatch = useAppDispatch();
   // const location = useLocation();
   // const redirectPath = location.state.path || '/';
 
@@ -45,11 +50,24 @@ export const Signin = () => {
     useFormik({
       initialValues,
       validationSchema: loginSchema,
-      onSubmit: async (values) => {
-        if (values) {
-          login(values);
+      onSubmit: async (values, actions) => {
+        try {
+          // eslint-disable-next-line @typescript-eslint/no-unused-vars
+          const response = await loginMutation(values).unwrap();
+
+          const { userData, tokens } = response;
+
+          LocalStorage.set('userInfo', userData);
+          LocalStorage.set('tokens', tokens);
+
+          dispatch(setCredentials({ userData, tokens, isAuthenticated: true }));
+
           await new Promise((resolve) => setTimeout(resolve, 1500));
-          navigate('/products', { replace: true });
+          actions.resetForm();
+          navigate('/', { replace: true });
+          
+        } catch (error: any) {
+          toast.error(error?.data.message || error.error);
         }
       },
     });

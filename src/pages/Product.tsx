@@ -1,19 +1,17 @@
 import { useState } from 'react';
-import { useAuth } from '../context/AuthContext';
 import { HeartIcon, ChevronUpIcon, ChevronDownIcon } from '@heroicons/react/24/outline';
 import { Button } from '@material-tailwind/react';
-import { getProduct } from '../api/Axios';
-import { ProductInterface } from '../types/product.types';
-import { apiRequestHandler } from '../util';
 import { motion } from 'framer-motion';
 import Slider from 'react-slick';
 import { productCarouselSettings } from '../util/slickSlider.config';
 import { useParams } from 'react-router-dom';
+import { Disclosure } from '@headlessui/react';
+import { useGetProductMutation } from '../features/product/product.endpoints';
+import { toast } from 'react-toastify';
 
 import { gridVariants } from '../util/framerMotion.config';
 
 import Clorox from '../assets/clorox.png';
-import { Disclosure } from '@headlessui/react';
 
 import BodySpray from '../assets/spray.png';
 import Vitamin from '../assets/vitamin.png';
@@ -23,29 +21,19 @@ import FaceMask from '../assets/face-mask.png';
 import Deodorant from '../assets/deodorant.png';
 
 export const Product = () => {
-  const { tokens } = useAuth();
   const { id } = useParams();
-  const [currentCarouselSlide, setCurrentCarouselSlide] = useState<number>(0);
-  const [product, setProduct] = useState<ProductInterface>({} as ProductInterface);
-  const [loadingProduct, setLoadingProduct] = useState<boolean>(true);
+  // const [currentCarouselSlide, setCurrentCarouselSlide] = useState<number>(0);
+
+  const [getProductMutation] = useGetProductMutation();
 
   const [favorite, setFavorite] = useState<boolean>(false);
 
-  const handleFetchProduct = async (productId?: string) => {
-    await apiRequestHandler({
-      api: async () => await getProduct(productId),
-      setLoading: setLoadingProduct,
-      onSuccess: (response, message, toast) => {
-        const { data } = response;
-
-        setProduct(data?.products || {});
-
-        toast(message);
-      },
-      onError: (error, toast) => {
-        toast(error);
-      },
-    });
+  const handleFetchProduct = async () => {
+    try {
+      const response = await getProductMutation(id).unwrap();
+    } catch (error: any) {
+      toast.error(error?.data.message || error.error);
+    }
   };
   return (
     <motion.main layout initial='hidden' animate='visible' variants={gridVariants}>

@@ -11,17 +11,17 @@ import {
 import { IconType } from '../components/icon/IconType';
 import { ModeToggler } from '../components/icon/ModeToggler';
 import { faMoon, faSun } from '@fortawesome/free-solid-svg-icons';
-import { useAuth } from '../context/AuthContext';
 import { useTheme } from '../context/ThemeContext';
 import { Footer } from '../components/Footer';
-// import { Input } from '@material-tailwind/react';
+import { useAppDispatch } from '../app/hooks';
+import { logout } from '../features/auth/auth.slice';
 
 const navigation = [
-  { to: '/', name: 'home', current: true },
+  { to: '/home', name: 'home', current: true },
   { to: '/collections', name: 'collections', current: true },
-  { to: '/', name: 'essentials', current: true },
+  { to: '/home', name: 'essentials', current: true },
   { to: '/sales', name: 'best ', current: true },
-  { to: '/', name: 'about us', current: true },
+  { to: '/home', name: 'about us', current: true },
 ];
 
 function classNames(...classes: string[]) {
@@ -36,15 +36,14 @@ const handleActive = ({ isActive }: { isActive: boolean }) => {
 };
 
 export const AppLayout = () => {
-  const auth = useAuth();
   const { activeMode, setTheme, activateTheme } = useTheme();
-  const navigate = useNavigate();
+  // const navigate = useNavigate();
+  // const dispatch = useAppDispatch();
 
-  const handleLogOut = () => {
-    auth.logout();
-
-    navigate('/auth/signin', { replace: true });
-  };
+  // const handleLogOut = () => {
+  //   dispatch(logout());
+  //   navigate('/login', { replace: true });
+  // };
 
   return (
     <Fragment>
@@ -94,7 +93,7 @@ export const AppLayout = () => {
                                 <Menu.Item>
                                   {({ active }) => (
                                     <NavLink
-                                      to='/auth/signup'
+                                      to='/'
                                       className={classNames(
                                         active ? 'bg-gray-100' : '',
                                         'block px-4 py-2 text-sm text-gray-700'
@@ -106,12 +105,11 @@ export const AppLayout = () => {
                                 <Menu.Item>
                                   {({ active }) => (
                                     <NavLink
-                                      to='/auth/signin'
+                                      to='/login'
                                       className={classNames(
                                         active ? 'bg-gray-100' : '',
                                         'block px-4 py-2 text-sm text-gray-700'
-                                      )}
-                                      onClick={handleLogOut}>
+                                      )}>
                                       Signin
                                     </NavLink>
                                   )}

@@ -25,19 +25,11 @@ AxiosApiClient.interceptors.request.use(
   }
 );
 
-/**
- * Sign endpoints
- */
-export const registerUser = async (data: { username: string; email: string; password: string }) =>
-  AxiosApiClient.post(' ', data);
-export const loginUser = async (data: { username?: string; email?: string; password: string }) =>
-  AxiosApiClient.post(' ', data);
-export const logoutUser = async () => AxiosApiClient.post('', {});
-export const getUserCart = async () => AxiosApiClient.get('');
 
-/**
- * product endpoints
- */
-export const getAllProducts = async () => AxiosApiClient.get('');
-export const getProductsByCategory = async () => AxiosApiClient.get(' ');
-export const getProduct = async (productId?: string) => AxiosApiClient.get(`/${productId}`);
+export const register = (data: { username: string; password: string; email: string }) =>
+  AxiosApiClient.post('/auth/users/register', data);
+
+export const login = (data: { email: string; password: string }) =>
+  AxiosApiClient.post('/auth/users/login', data);
+
+export const logOut = () => AxiosApiClient.post('/auth/users/logout');

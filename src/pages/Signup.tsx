@@ -1,15 +1,16 @@
 import { useState } from 'react';
 import { useFormik } from 'formik';
 import { registerSchema } from '../schema/Schema';
-import { useAuth } from '../context/AuthContext';
+import { useRegisterMutation } from '../features/auth/auth.endpoints';
 import { Link, useNavigate } from 'react-router-dom';
 import { InputField } from '../components/inputs/Input';
 import { IconType } from '../components/icon/IconType';
 import { faEyeSlash, faEye } from '@fortawesome/free-solid-svg-icons';
-import 'react-toastify/dist/ReactToastify.css';
+import { toast } from 'react-toastify';
 import { motion } from 'framer-motion';
-import { SignUpInitialValues } from '../types/form.types';
+import { SignUpInitialValues } from '../types';
 import { Button } from '@material-tailwind/react';
+import { LocalStorage } from '../util';
 
 const initialValues: SignUpInitialValues = {
   username: '',
@@ -42,19 +43,28 @@ export const Signup = () => {
   };
 
   const navigate = useNavigate();
-  const { register } = useAuth();
+  const [registerMutation, { isLoading }] = useRegisterMutation();
 
   const { values, handleSubmit, handleBlur, handleChange, touched, errors, isSubmitting } =
     useFormik({
       initialValues: initialValues,
       validationSchema: registerSchema,
       onSubmit: async (values, actions) => {
-        const { __, ...rest } = values;
-        register(rest);
+        try {
+          // eslint-disable-next-line @typescript-eslint/no-unused-vars
+          const { confirmPassword, ...rest } = values;
+          const response = await registerMutation(rest).unwrap();
 
-        await new Promise((resolve) => setTimeout(resolve, 1500));
-        actions.resetForm();
-        navigate('/', { replace: true });
+          const { userData } = response;
+
+          LocalStorage.set('userInfo', userData);
+
+          await new Promise((resolve) => setTimeout(resolve, 1500));
+          navigate('/', { replace: true });
+          actions.resetForm();
+        } catch (error: any) {
+          toast.error(error?.data.message || error.error);
+        }
       },
     });
   return (
