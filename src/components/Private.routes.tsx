@@ -1,7 +1,7 @@
 import { Navigate } from 'react-router-dom';
 import { useAuth } from '../hooks/useAuth';
 
-export const PrivateRoute: React.FC<{ children: React.ReactNode }> = ({ children }) => {
+const PrivateRoute: React.FC<{ children: React.ReactNode }> = ({ children }) => {
   const auth = useAuth();
 
   if (auth?.tokens && auth.userData) {
@@ -10,3 +10,5 @@ export const PrivateRoute: React.FC<{ children: React.ReactNode }> = ({ children
 
   return children;
 };
+
+export default PrivateRoute

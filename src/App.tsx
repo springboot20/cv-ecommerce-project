@@ -9,6 +9,7 @@ import { Suspense } from 'react';
 import { AppContextProvider } from './features/context/Appcontext';
 import { Loader } from './components/Loader';
 import AppRouter from './router/AppRouter';
+import { AppLayout } from './layout/AppLayout';
 
 const DefaultApp = () => {
   return (
@@ -16,7 +17,9 @@ const DefaultApp = () => {
       <ThemeContextProvider>
         <ToastContainer />
         <Suspense fallback={<Loader />}>
-          <AppRouter />
+          <AppLayout>
+            <AppRouter />
+          </AppLayout>
         </Suspense>
       </ThemeContextProvider>
     </AppContextProvider>
