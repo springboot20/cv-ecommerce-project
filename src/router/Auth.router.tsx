@@ -1,7 +1,6 @@
 import { Routes, Route, Navigate } from 'react-router-dom';
 import { Signin } from '../pages/Signin';
 import { Signup } from '../pages/Signup';
-import { NotFound } from '../components/NotFound';
 
 export const AuthRouter = () => {
   return (
@@ -11,7 +10,7 @@ export const AuthRouter = () => {
       <Route element={<Navigate to='/login' replace />} path='/logout' />
       {/* <Route element={<ForgetPassword />} path='/forgetpassword' />
       <Route element={<ResetPassword />} path='/resetpassword/:userId/:resetToken' /> */}
-      <Route path='*' element={<NotFound />} />
+      {/* <Route path='*' element={<NotFound />} /> */}
     </Routes>
   );
 };

@@ -43,7 +43,7 @@ export const Signup = () => {
   };
 
   const navigate = useNavigate();
-  const [registerMutation, { isLoading }] = useRegisterMutation();
+  const [registerMutation] = useRegisterMutation();
 
   const { values, handleSubmit, handleBlur, handleChange, touched, errors, isSubmitting } =
     useFormik({
@@ -184,7 +184,7 @@ export const Signup = () => {
           </div>
           <p className='mt-4 text-xl font-medium text-gray-600'>
             Already have an account ?
-            <Link to='/auth/signin' className='text-[#167ece] ml-2'>
+            <Link to='/login' className='text-[#167ece] ml-2'>
               Sign in
             </Link>
           </p>

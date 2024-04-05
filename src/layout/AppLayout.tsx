@@ -1,5 +1,5 @@
 import { Fragment } from 'react';
-import { Outlet, Link, NavLink, useNavigate } from 'react-router-dom';
+import { Outlet, Link, NavLink } from 'react-router-dom';
 import { Disclosure, Menu, Transition } from '@headlessui/react';
 import {
   BellIcon,
@@ -13,8 +13,6 @@ import { ModeToggler } from '../components/icon/ModeToggler';
 import { faMoon, faSun } from '@fortawesome/free-solid-svg-icons';
 import { useTheme } from '../context/ThemeContext';
 import { Footer } from '../components/Footer';
-import { useAppDispatch } from '../app/hooks';
-import { logout } from '../features/auth/auth.slice';
 
 const navigation = [
   { to: '/home', name: 'home', current: true },

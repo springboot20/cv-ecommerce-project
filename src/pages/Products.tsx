@@ -22,7 +22,7 @@ import FaceMask from '../assets/face-mask.png';
 import Deodorant from '../assets/deodorant.png';
 import { useGetProductsQuery } from '../features/product/product.endpoints';
 
-export const Products = () => {
+ const Products = () => {
   const { tokens } = useAuth();
 
   const { data, isLoading } = useGetProductsQuery();
@@ -307,3 +307,4 @@ export const Products = () => {
     </Fragment>
   );
 };
+export default Products

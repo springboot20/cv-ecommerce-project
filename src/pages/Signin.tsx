@@ -199,7 +199,7 @@ export const Signin = () => {
           </div>
           <p className='mt-4 text-xl font-medium text-gray-600'>
             Don't have an account ?
-            <Link to='/auth/signup' className='text-[#167ece] ml-2'>
+            <Link to='/' className='text-[#167ece] ml-2'>
               Sign Up
             </Link>
           </p>

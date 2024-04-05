@@ -1,26 +1,36 @@
 import { ToastContainer } from 'react-toastify';
-import { BrowserRouter } from 'react-router-dom';
 import 'react-toastify/dist/ReactToastify.css';
 import { ThemeContextProvider } from './context/ThemeContext';
-import { ThemeProvider } from '@material-tailwind/react';
 import 'slick-carousel/slick/slick.css';
 import 'slick-carousel/slick/slick-theme.css';
-import { AppRouter } from './router/AppRouter';
 import { AuthRouter } from './router/Auth.router';
 import { useAuth } from './hooks/useAuth';
+import { Suspense } from 'react';
+import { AppContextProvider } from './features/context/Appcontext';
+import { Loader } from './components/Loader';
+import AppRouter from './router/AppRouter';
+
+const DefaultApp = () => {
+  return (
+    <AppContextProvider>
+      <ThemeContextProvider>
+        <ToastContainer />
+        <Suspense fallback={<Loader />}>
+          <AppRouter />
+        </Suspense>
+      </ThemeContextProvider>
+    </AppContextProvider>
+  );
+};
 
 function App() {
   const { isAuthenticated } = useAuth();
-  return (
-    <BrowserRouter>
-      <ThemeProvider>
-        <ThemeContextProvider>
-          <ToastContainer />
-          {isAuthenticated ? <AuthRouter /> : <AppRouter />}
-        </ThemeContextProvider>
-      </ThemeProvider>
-    </BrowserRouter>
-  );
+
+  if (isAuthenticated) {
+    return <DefaultApp />;
+  } else {
+    return <AuthRouter />;
+  }
 }
 
 export default App;

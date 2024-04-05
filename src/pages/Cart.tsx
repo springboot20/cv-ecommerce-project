@@ -11,7 +11,7 @@ import { faEdit, faTrashAlt } from '@fortawesome/free-solid-svg-icons';
 import Button from '../components/icon/Button';
 import { formatPrice } from '../helpers/index';
 
-export const Cart = () => {
+const Cart = () => {
   const { cart } = useCart();
   const auth = useAuth();
 
@@ -134,3 +134,5 @@ export const Cart = () => {
     </Fragment>
   );
 };
+
+export default Cart;

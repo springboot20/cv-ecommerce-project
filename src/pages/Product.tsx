@@ -20,7 +20,7 @@ import Sanitizer from '../assets/sanitizer.png';
 import FaceMask from '../assets/face-mask.png';
 import Deodorant from '../assets/deodorant.png';
 
-export const Product = () => {
+ const Product = () => {
   const { id } = useParams();
   // const [currentCarouselSlide, setCurrentCarouselSlide] = useState<number>(0);
 
@@ -229,3 +229,4 @@ export const Product = () => {
 };
 
 // top-24 min-h-[calc(100%-8rem)] max-w-[105rem] relative mb-5
+export default Product

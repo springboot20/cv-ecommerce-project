@@ -6,7 +6,7 @@ import Shoe from '../assets/running-shoes-sneakers.png';
 import { SuccessModal } from '../components/modal/SuccessModal';
 import { useState } from 'react';
 
-export const Payment = () => {
+ const Payment = () => {
   const [open, setOpen] = useState<boolean>(false);
   return (
     <>
@@ -129,3 +129,4 @@ export const Payment = () => {
     </>
   );
 };
+export default Payment

@@ -1,80 +1,43 @@
-import { Route, Routes } from 'react-router-dom';
-import { AppLayout } from '../layout/AppLayout';
-import { PrivateRoute } from '../components/Private.routes';
-import { Home } from '../pages/Home';
-import { Products } from '../pages/Products';
-import { Product } from '../pages/Product';
-import { Cart } from '../pages/Cart';
-import CheckOut from '../pages/CheckOut';
-import { Payment } from '../pages/Payment';
-import { ErrorBoundary } from '../components/ErrorBoundary';
-import { NotFound } from '../components/NotFound';
+import { useEffect } from 'react';
+import { RouteObject, useLocation, useRoutes } from 'react-router-dom';
+import { routes } from '../routes/routes';
+import { useAppContext } from '../features/context/Appcontext';
+import { open, defaultApp } from '../features/context/context.slice';
 
-export const AppRouter = () => {
-  return (
-    <Routes>
-      <Route
-        element={
-          <ErrorBoundary>
-            <AppLayout />
-          </ErrorBoundary>
-        }>
-        <Route
-          path='/home'
-          element={
-            <PrivateRoute>
-              <Home />
-            </PrivateRoute>
-          }
-        />
+export default function AppRouter() {
+  const location = useLocation();
+  const [currentApp, dispatch] = useAppContext();
 
-        <Route
-          path='/collections'
-          element={
-            <PrivateRoute>
-              <Products />
-            </PrivateRoute>
-          }
-        />
+  const routesList = routes[currentApp] || [];
 
-        <Route
-          path='/collections/:id'
-          element={
-            <PrivateRoute>
-              <Product />
-            </PrivateRoute>
-          }
-        />
+  function getAppNameByPath(path: string): string {
+    for (const key in routes) {
+      for (let i = 0; i < routes[key].length; i++) {
+        if (routes[key][i].path === path) {
+          return key;
+        }
+      }
+    }
+    // Return 'default' app if the path is not found
+    return 'default';
+  }
 
-        <Route
-          path='/cart'
-          element={
-            <PrivateRoute>
-              <Cart />
-            </PrivateRoute>
-          }
-        />
+  useEffect(() => {
+    if (location.pathname === '/') {
+      dispatch(defaultApp());
+    } else {
+      const appName = getAppNameByPath(location.pathname);
+      dispatch(open({ appName }));
+    }
+  }, [location.pathname, dispatch]);
 
-        <Route
-          path='/check-out'
-          element={
-            <PrivateRoute>
-              <CheckOut />
-            </PrivateRoute>
-          }
-        />
+  // Generate routes for useRoutes hook
+  const reactRouterRoutes: RouteObject[] = routesList.map((route) => ({
+    path: route.path,
+    element: route.element,
+  }));
 
-        <Route
-          path='/payment'
-          element={
-            <PrivateRoute>
-              <Payment />
-            </PrivateRoute>
-          }
-        />
+  const element = useRoutes(reactRouterRoutes);
 
-        <Route path='*' element={<NotFound />} />
-      </Route>
-    </Routes>
-  );
-};
+  return element;
+}

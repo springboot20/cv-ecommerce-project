@@ -3,7 +3,7 @@ import BusinessMan from '../assets/cover_img.png';
 import Bg from '../assets/Bg.png';
 import { Fragment } from 'react';
 
-export const Home = () => {
+const Home = () => {
   return (
     <Fragment>
       <main className='mt-40 relative lg:h-[calc(70vh-10rem)] grid place-items-center place-content-center bg-[#F8F8F8]'>
@@ -121,3 +121,4 @@ export const Home = () => {
     </Fragment>
   );
 };
+export default Home;
