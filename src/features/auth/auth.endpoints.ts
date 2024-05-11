@@ -7,26 +7,24 @@ import type {
 } from '../../types';
 import { ApiSlice } from '../../app/services/api.service';
 
-const AUTH_URL = '/users';
-
 export const AuthEndPoints = ApiSlice.injectEndpoints({
   endpoints: (builder) => ({
     register: builder.mutation<AuthStateType & ResponseObj, AuthRegisterPayload>({
       query: (data) => ({
-        url: `${AUTH_URL}/register`,
+        url: `/users/auth/signup`,
         method: 'POST',
         body: data,
       }),
     }),
     login: builder.mutation<AuthStateType & ResponseObj, AuthLoginPayload>({
       query: (data) => ({
-        url: `${AUTH_URL}/signin`,
+        url: `/users/auth/signin`,
         method: 'POST',
         body: data,
       }),
     }),
     getCurrentUser: builder.query<UserTypes, Pick<UserTypes, '_id'>>({
-      query: ({ _id }) => ({ url: ` users/${_id}` }),
+      query: ({ _id }) => ({ url: `/users/${_id}` }),
       transformResponse: (response: { data: UserTypes }) => response.data,
       transformErrorResponse: (response: { status: string | number }) => response.status,
     }),

@@ -1,7 +1,7 @@
 import { useEffect } from 'react';
 import { RouteObject, useLocation, useRoutes } from 'react-router-dom';
 import { routes } from '../routes/routes';
-import { useAppContext } from '../features/context/Appcontext';
+import { useAppContext } from '../features/context/AppContext';
 import { open, defaultApp } from '../features/context/context.slice';
 
 export default function AppRouter() {

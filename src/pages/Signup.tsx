@@ -57,11 +57,13 @@ export const Signup = () => {
 
           const { userData } = response;
 
+          console.log(userData);
+
           LocalStorage.set('userInfo', userData);
 
           await new Promise((resolve) => setTimeout(resolve, 1500));
-          navigate('/', { replace: true });
           actions.resetForm();
+          navigate('/login', { replace: true });
         } catch (error: any) {
           toast.error(error?.data.message || error.error);
         }

@@ -1,37 +1,29 @@
-import { ChevronLeftIcon, ChevronRightIcon } from '@heroicons/react/24/outline'
-import { Button } from '@material-tailwind/react'
+import { Button, ButtonGroup } from '@material-tailwind/react';
 
 export const Pagination: React.FC<{
-  itemsPerPage: number
-  totalItems: number | undefined
-  currentPage: number
-  onPageChange: React.Dispatch<React.SetStateAction<number>>
+  itemsPerPage: number;
+  totalItems: number | undefined;
+  currentPage: number;
+  onPageChange: React.Dispatch<React.SetStateAction<number>>;
 }> = ({ itemsPerPage, totalItems, currentPage, onPageChange }) => {
-  const totalPages = Math.ceil(totalItems / itemsPerPage)
+  const totalPages = Math.ceil(totalItems! / itemsPerPage);
 
   const handlePageChange = (page: number) => {
     if (page >= 1 && page <= totalPages) {
-      onPageChange(page)
+      onPageChange(page);
     }
-  }
+  };
   return (
-    <div className="py-12 rounded-lg dark:bg-dark-blue-dark-DME mx-auto flex justify-center">
-      <div className="flex items-center lg:px-4 py-2 rounded-md gap-[0.15rem] lg:gap-4">
-        <Button
+    <div className='py-12 rounded-lg dark:bg-dark-blue-dark-DME mx-auto flex justify-center'>
+      <div className='flex items-center lg:px-4 py-2 rounded-md gap-[0.15rem] lg:gap-4'>
+        <ButtonGroup
           onClick={() => handlePageChange(currentPage - 1)}
+          variant="text"
           className={
-            'flex items-center space-x-3 border-r-[1px] border-gray-900/75 p-2 cursor-pointer'
-          }
-        >
-          <ChevronLeftIcon
-            className={
-              'h-6 text-dark-blue-dark-LMT hidden md:block dark:text-white'
-            }
-          />
-          <span className="text-md md:text-xl font-semibold block dark:text-white">
-            Previous
-          </span>
-        </Button>
+            'flex items-center space-x-3 border-r-[1px] border-gray-900/75 p-2 cursor-pointer lowercase'
+          }>
+          <span className='text-md md:text-xl font-semibold block dark:text-white'>prev</span>
+        </ButtonGroup>
         {Array.from({ length: totalPages }, (_, index) => (
           <Button
             key={index}
@@ -40,27 +32,19 @@ export const Pagination: React.FC<{
               currentPage === index + 1
                 ? 'text-blue-700 bg-gray-300'
                 : 'text-gray-500 dark:text-white'
-            }`}
-          >
+            }`}>
             {index + 1}
           </Button>
         ))}
-        <Button
+        <ButtonGroup
           onClick={() => handlePageChange(currentPage + 1)}
+          variant="text"
           className={
-            'flex items-center space-x-3 border-l-[1px] border-gray-900/75 p-2 cursor-pointer'
-          }
-        >
-          <span className="text-md md:text-xl font-semibold block dark:text-white">
-            Next
-          </span>
-          <ChevronRightIcon
-            className={
-              'h-6 text-dark-blue-dark-LMT dark:text-white hidden md:block'
-            }
-          />
-        </Button>
+            'flex items-center space-x-3 border-l-[1px] border-gray-900/75 p-2 cursor-pointer lowercase'
+          }>
+          <span className='text-md md:text-xl font-semibold block dark:text-white'>next</span>
+        </ButtonGroup>
       </div>
     </div>
-  )
-}
+  );
+};

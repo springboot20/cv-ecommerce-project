@@ -448,3 +448,54 @@ className='mt-3 flex items-center text-2xl font-semibold justify-between text-gr
       )}
     </motion.div>
   );
+
+
+<motion.div layout className='relative'>
+                  <span className='absolute py-1.5 px-12 bg-[#e2342d] text-white text-xl font-semibold top-0 right-0 uppercase'>
+                    top seller
+                  </span>
+                  <header className='h-[30rem] bg-[#d2d2d2] flex items-center justify-center'>
+                    <img src={BodySpray} alt='' className='h-60' />
+                  </header>
+                  <div className='mt-4 space-y-3'>
+                    <h3 className='capitalize text-xl font-semibold text-gray-700'>body spray</h3>
+                    <p className='text-lg font-medium italic'>$50</p>
+                  </div>
+                </motion.div>
+                <motion.div layout>
+                  <header className='h-[30rem] relative bg-[#d2d2d2] flex items-center justify-center'>
+                    <img src={Vitamin} alt='' className='h-60' />
+                  </header>
+                  <div className='mt-4 space-y-3'>
+                    <h3 className='capitalize text-xl font-semibold text-gray-700'>vitamin c</h3>
+                    <p className='text-lg font-medium italic'>$50</p>
+                  </div>
+                </motion.div>
+              
+                <motion.div layout>
+                  <header className='h-[30rem] relative bg-[#d2d2d2] flex items-center justify-center'>
+                    <img src={Sanitizer} alt='' className='h-60' />
+                  </header>
+                  <div className='mt-4 space-y-3'>
+                    <h3 className='capitalize text-xl font-semibold text-gray-700'>sanitizer</h3>
+                    <p className='text-lg font-medium italic'>$50</p>
+                  </div>
+                </motion.div>
+                <motion.div layout>
+                  <header className='h-[30rem] relative bg-[#d2d2d2] flex items-center justify-center'>
+                    <img src={FaceMask} alt='' className='h-60' />
+                  </header>
+                  <div className='mt-4 space-y-3'>
+                    <h3 className='capitalize text-xl font-semibold text-gray-700'>face mask</h3>
+                    <p className='text-lg font-medium italic'>$50</p>
+                  </div>
+                </motion.div>
+                <motion.div layout>
+                  <header className='h-[30rem] relative bg-[#d2d2d2] flex items-center justify-center'>
+                    <img src={Deodorant} alt='' className='h-60' />
+                  </header>
+                  <div className='mt-4 space-y-3'>
+                    <h3 className='capitalize text-xl font-semibold text-gray-700'>deodorant</h3>
+                    <p className='text-lg font-medium italic'>$50</p>
+                  </div>
+                </motion.div>

@@ -5,7 +5,7 @@ import { LocalStorage } from '../../util';
 const initialState: AuthStateType = {
   userData: null,
   tokens: null,
-  isAuthenticated: false,
+  isAuthenticated: true,
 };
 
 const AuthSliceReducer = createSlice({

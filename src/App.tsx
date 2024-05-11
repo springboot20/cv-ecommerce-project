@@ -6,7 +6,7 @@ import 'slick-carousel/slick/slick-theme.css';
 import { AuthRouter } from './router/Auth.router';
 import { useAuth } from './hooks/useAuth';
 import { Suspense } from 'react';
-import { AppContextProvider } from './features/context/Appcontext';
+import { AppContextProvider } from './features/context/AppContext';
 import { Loader } from './components/Loader';
 import AppRouter from './router/AppRouter';
 import { AppLayout } from './layout/AppLayout';
@@ -29,7 +29,7 @@ const DefaultApp = () => {
 function App() {
   const { isAuthenticated } = useAuth();
 
-  if (isAuthenticated) {
+  if (!isAuthenticated) {
     return <DefaultApp />;
   } else {
     return <AuthRouter />;

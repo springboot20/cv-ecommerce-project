@@ -57,6 +57,8 @@ export const Signin = () => {
 
           const { userData, tokens } = response;
 
+          console.log(response);
+
           LocalStorage.set('userInfo', userData);
           LocalStorage.set('tokens', tokens);
 
