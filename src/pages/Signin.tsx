@@ -37,7 +37,7 @@ const motionConfig = {
   },
 };
 
-export const Signin = () => {
+const Signin = () => {
   const [loginMutation] = useLoginMutation();
   const navigate = useNavigate();
   const dispatch = useAppDispatch();
@@ -67,7 +67,6 @@ export const Signin = () => {
           await new Promise((resolve) => setTimeout(resolve, 1500));
           actions.resetForm();
           navigate('/', { replace: true });
-          
         } catch (error: any) {
           toast.error(error?.data.message || error.error);
         }
@@ -201,7 +200,7 @@ export const Signin = () => {
           </div>
           <p className='mt-4 text-xl font-medium text-gray-600'>
             Don't have an account ?
-            <Link to='/' className='text-[#167ece] ml-2'>
+            <Link to='/register' className='text-[#167ece] ml-2'>
               Sign Up
             </Link>
           </p>
@@ -210,3 +209,4 @@ export const Signin = () => {
     </motion.div>
   );
 };
+export default Signin;

@@ -35,7 +35,7 @@ const motionConfig = {
   },
 };
 
-export const Signup = () => {
+const Signup = () => {
   const [showPassword, setShowPassword] = useState(false);
 
   const handleTogglePassword = () => {
@@ -195,3 +195,4 @@ export const Signup = () => {
     </motion.div>
   );
 };
+export default Signup;

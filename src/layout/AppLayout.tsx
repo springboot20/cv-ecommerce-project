@@ -1,5 +1,5 @@
 import { Fragment } from 'react';
-import {  Link, NavLink } from 'react-router-dom';
+import { Link, NavLink, Outlet } from 'react-router-dom';
 import { Disclosure, Menu, Transition } from '@headlessui/react';
 import {
   BellIcon,
@@ -33,7 +33,7 @@ const handleActive = ({ isActive }: { isActive: boolean }) => {
   );
 };
 
-export const AppLayout:React.FC<{children:React.ReactNode}> = ({children}) => {
+export const AppLayout: React.FC = () => {
   const { activeMode, setTheme, activateTheme } = useTheme();
   // const navigate = useNavigate();
   // const dispatch = useAppDispatch();
@@ -189,7 +189,7 @@ export const AppLayout:React.FC<{children:React.ReactNode}> = ({children}) => {
           )}
         </Disclosure>
       </>
-    {children}
+      <Outlet />
       <Footer />
     </Fragment>
   );

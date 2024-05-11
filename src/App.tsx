@@ -1,39 +1,116 @@
-import { ToastContainer } from 'react-toastify';
-import 'react-toastify/dist/ReactToastify.css';
-import { ThemeContextProvider } from './context/ThemeContext';
-import 'slick-carousel/slick/slick.css';
-import 'slick-carousel/slick/slick-theme.css';
-import { AuthRouter } from './router/Auth.router';
+import { Routes, Route, Navigate } from 'react-router-dom';
 import { useAuth } from './hooks/useAuth';
-import { Suspense } from 'react';
-import { AppContextProvider } from './features/context/AppContext';
-import { Loader } from './components/Loader';
-import AppRouter from './router/AppRouter';
 import { AppLayout } from './layout/AppLayout';
-
-const DefaultApp = () => {
-  return (
-    <AppContextProvider>
-      <ThemeContextProvider>
-        <ToastContainer />
-        <Suspense fallback={<Loader />}>
-          <AppLayout>
-            <AppRouter />
-          </AppLayout>
-        </Suspense>
-      </ThemeContextProvider>
-    </AppContextProvider>
-  );
-};
+import {
+  Home,
+  Products,
+  Product,
+  Cart,
+  CheckOut,
+  Payment,
+  Notfound,
+  PrivateRoute,
+  PublicRoute,
+  Login,
+  Register,
+} from './routes/lazy.import';
 
 function App() {
-  const { isAuthenticated } = useAuth();
+  const { isAuthenticated, tokens } = useAuth();
 
-  if (!isAuthenticated) {
-    return <DefaultApp />;
-  } else {
-    return <AuthRouter />;
-  }
+  return (
+    <Routes>
+      <Route
+        path='/'
+        element={tokens && isAuthenticated ? <Navigate to='/login' /> : <Navigate to='/home' />}
+      />
+
+      <Route
+        path='/login'
+        element={
+          <PublicRoute>
+            <Login />
+          </PublicRoute>
+        }
+      />
+
+      <Route
+        path='/register'
+        element={
+          <PublicRoute>
+            <Register />
+          </PublicRoute>
+        }
+      />
+
+      <Route element={<AppLayout />}>
+        <Route
+          path='/home'
+          element={
+            <PrivateRoute>
+              <Home />
+            </PrivateRoute>
+          }
+        />
+
+        <Route
+          path='/collections'
+          element={
+            <PrivateRoute>
+              <Products />
+            </PrivateRoute>
+          }
+        />
+
+        <Route
+          path='/collections/:id'
+          element={
+            <PrivateRoute>
+              <Product />
+            </PrivateRoute>
+          }
+        />
+
+        <Route
+          path='/collections/:id'
+          element={
+            <PrivateRoute>
+              <Product />
+            </PrivateRoute>
+          }
+        />
+
+        <Route
+          path='/cart'
+          element={
+            <PrivateRoute>
+              <Cart />
+            </PrivateRoute>
+          }
+        />
+
+        <Route
+          path='/check-out'
+          element={
+            <PrivateRoute>
+              <CheckOut />
+            </PrivateRoute>
+          }
+        />
+
+        <Route
+          path='/payment'
+          element={
+            <PrivateRoute>
+              <Payment />
+            </PrivateRoute>
+          }
+        />
+
+        <Route path='*' element={<Notfound />} />
+      </Route>
+    </Routes>
+  );
 }
 
 export default App;

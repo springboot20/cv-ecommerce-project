@@ -8,3 +8,6 @@ export const Cart = lazy(() => import('../pages/Cart'));
 export const Payment = lazy(() => import('../pages/Payment'));
 export const CheckOut = lazy(() => import('../pages/CheckOut'));
 export const Notfound = lazy(() => import('../components/NotFound'));
+export const PublicRoute = lazy(() => import('../components/Public.routes'));
+export const Login = lazy(() => import('../pages/Signin'));
+export const Register = lazy(() => import('../pages/Signup'));
