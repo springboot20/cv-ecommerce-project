@@ -71,7 +71,7 @@ const Signup = () => {
     });
   return (
     <motion.div {...motionConfig}>
-      <div className='px-10 md:px-0 mt-48'>
+      <div className='px-10 md:px-0 flex min-h-screen justify-center items-center'>
         <form
           onSubmit={handleSubmit}
           className='flex-shrink-0 max-w-3xl w-full mx-auto bg-white border rounded-lg px-8 py-6'>

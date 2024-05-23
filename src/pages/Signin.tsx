@@ -11,7 +11,7 @@ import { SignInInitialValues } from '../types';
 import { LocalStorage } from '../util';
 import { motion } from 'framer-motion';
 import { Button, Typography } from '@material-tailwind/react';
-import { GitHubIcon, GoogleIcon } from '../components/Icons';
+import { GoogleIcon } from '../components/Icons';
 import { useAppDispatch } from '../app/hooks';
 import { toast } from 'react-toastify';
 
@@ -75,7 +75,7 @@ const Signin = () => {
 
   return (
     <motion.div {...motionConfig}>
-      <div className='px-10 mt-52 mb-20'>
+      <div className='px-10 flex min-h-screen justify-center items-center'>
         <form
           onSubmit={handleSubmit}
           className='max-w-3xl w-full mx-auto border  bg-white rounded-lg px-8 py-6'>
@@ -83,46 +83,19 @@ const Signin = () => {
             Sign In
           </legend>
 
-          <div className='hidden md:flex flex-row items-center flex-shrink-0 justify-between'>
-            <Button
-              variant='gradient'
-              color='light-blue'
-              className='relative group capitalize flex-shrink-0 flex items-center overflow-hidden gap-3 group pr-[72px]'
-              size='lg'>
-              <Typography as='span' className='text-xl font-medium tracking-wider'>
-                Sign in with Github
-              </Typography>
-              <span className='absolute right-0 top-1/2 -translate-y-1/2 p-6 bg-light-blue-600 group:hover:bg-light-blue-700'>
-                <GitHubIcon className='h-6 w-6 fill-white' />
-              </span>
-            </Button>
-            <span className='text-lg font-medium'>or</span>
-            <Button
-              className='relative group bg-white capitalize flex items-center flex-shrink-0 overflow-hidden gap-3 group pr-[72px]'
-              size='lg'>
-              <Typography
-                as='span'
-                className='text-xl text-gray-800 font-medium tracking-wider bg-gradient-to-l from-red-700 to-light-blue-500 bg-clip-text text-transparent'>
-                Sign in with Google
-              </Typography>
-              <span className='absolute right-0 top-1/2 -translate-y-1/2 p-6 bg-light-blue-600 group:hover:bg-light-blue-700'>
-                <GoogleIcon className='h-6 w-6 fill-white bg-clip-text text-transparent' />
-              </span>
-            </Button>
-          </div>
-
-          <div className='flex md:hidden items-center flex-shrink-0 space-x-10 justify-center'>
-            <Button
-              variant='gradient'
-              color='light-blue'
-              className='relative group capitalize flex-shrink-0 flex items-center group'>
-              <GitHubIcon className='h-6 w-6 fill-white' />
-            </Button>
-            <span className='text-lg font-medium'>or</span>
-            <Button className='relative group bg-white capitalize flex items-center group'>
-              <GoogleIcon className='h-6 w-6 fill-red-500 bg-clip-text text-transparent' />
-            </Button>
-          </div>
+          <Button
+            className='relative group bg-white border  border-gray-500  capitalize flex items-center flex-shrink-0 overflow-hidden gap-3 group pr-[72px]'
+            size='lg'
+            fullWidth>
+            <Typography
+              as='span'
+              className='text-xl text-gray-800 font-medium tracking-wider bg-gradient-to-l from-red-700 to-light-blue-500 bg-clip-text text-transparent'>
+              Sign in with Google
+            </Typography>
+            <span className='absolute right-0 top-1/2 -translate-y-1/2 p-6 bg-light-blue-600 group:hover:bg-light-blue-700'>
+              <GoogleIcon className='h-6 w-6 fill-white bg-clip-text text-transparent' />
+            </span>
+          </Button>
 
           <div className='border-t-2 border-gray-900/10 mt-4'>
             <fieldset className='mb-5 mt-5'>

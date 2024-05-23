@@ -50,4 +50,3 @@ export const apiRequestHandler = async ({
   } finally {
     setLoading && setLoading(false);
   }
-};
