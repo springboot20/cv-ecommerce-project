@@ -12,9 +12,10 @@ import { LocalStorage } from '../util'
 import { motion } from 'framer-motion'
 import { Button } from '@material-tailwind/react'
 import { useAppDispatch } from '../app/hooks'
+import { toast } from 'react-toastify'
 
 const initialValues: SignInInitialValues = {
-  username: '',
+  email: '',
   password: '',
 }
 
@@ -55,21 +56,29 @@ const Signin = () => {
     initialValues,
     validationSchema: loginSchema,
     onSubmit: async (values, actions) => {
-      // eslint-disable-next-line @typescript-eslint/no-unused-vars
-      const response = await loginMutation(values).unwrap()
+      try {
+        // eslint-disable-next-line @typescript-eslint/no-unused-vars
+        const response = await loginMutation(values).unwrap()
 
-      const { userData, token } = response
+        const { userData, tokens } = response
 
-      console.log(response)
+        console.log(response)
 
-      LocalStorage.set('userInfo', userData)
-      LocalStorage.set('token', token)
+        LocalStorage.set('userInfo', userData)
+        LocalStorage.set('tokens', tokens)
 
-      dispatch(setCredentials({ userData, token, isAuthenticated: true }))
+        dispatch(setCredentials({ userData, tokens, isAuthenticated: true }))
 
-      await new Promise((resolve) => setTimeout(resolve, 1500))
-      actions.resetForm()
-      navigate('/', { replace: true })
+        await new Promise((resolve) => setTimeout(resolve, 1500))
+        actions.resetForm()
+        navigate('/', { replace: true })
+      } catch (err:any) {
+        if (err?.status === 'PARSING_ERROR' && err?.originalStatus === 401) {
+          toast.error(err?.data)
+        } else {
+          toast.error(err?.error)
+        }
+      }
     },
   })
 
@@ -91,29 +100,29 @@ const Signin = () => {
                   htmlFor="username"
                   className="block text-xl font-medium leading-6 text-gray-700"
                 >
-                  Username
+                  Email
                 </label>
                 <div className="mt-2">
                   <InputField
-                    id="username"
-                    name="username"
-                    type="username"
-                    autoComplete="username"
-                    placeholder="enter your username  here..."
+                    id="email"
+                    name="email"
+                    type="email"
+                    autoComplete="email"
+                    placeholder="enter your email  here..."
                     onChange={handleChange}
                     onBlur={handleBlur}
-                    value={values.username}
+                    value={values.email}
                     className={`block w-full rounded-md border-0 py-3 px-3  text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-light-blue-600 sm:text-lg font-base sm:leading-6 ${
-                      errors.username && touched.username
+                      errors.email && touched.email
                         ? 'ring-red-600 ring-[0.15rem]'
                         : ''
                     }`}
                   />
                 </div>
               </div>
-              {errors.username && touched.username && (
+              {errors.email && touched.email && (
                 <small className="text-xl block text-red-600">
-                  {errors.username}
+                  {errors.email}
                 </small>
               )}
             </fieldset>

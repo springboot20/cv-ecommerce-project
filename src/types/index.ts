@@ -1,9 +1,7 @@
 export type UserTypes = {
   id?: string | number;
-  username: {
-    firstname: string;
-    lastname: string;
-  };
+  username: string;
+  avatar: string;
   email: string;
 };
 
@@ -32,10 +30,8 @@ export type CartTypes = {
 };
 
 export type AuthRegisterPayload = {
-  username: {
-    firstname: string;
-    lastname: string;
-  };
+  avatar: string;
+  name: string;
   email: string;
   password: string;
 };
@@ -52,7 +48,7 @@ export type ProductPayload = {
 
 export type AuthStateType = {
   userData: UserTypes | null;
-  token: string | undefined;
+  tokens: { access_token: string | undefined; refresh_token: string | undefined };
   isAuthenticated: boolean;
 };
 
@@ -83,14 +79,14 @@ export type NavRoutesType = {
 };
 
 export interface SignUpInitialValues {
-  lastname: string;
-  firstname: string;
+  name: string;
+  avatar: string;
   email: string;
   password: string;
   confirmPassword: string;
 }
 
 export interface SignInInitialValues {
-  username: string;
+  email: string;
   password: string;
 }

@@ -16,14 +16,14 @@ import {
 } from './routes/lazy.import'
 
 function App() {
-  const { isAuthenticated, token } = useAuth()
+  const { isAuthenticated, tokens } = useAuth()
 
   return (
     <Routes>
       <Route
         path="/"
         element={
-          !(token && isAuthenticated) ? (
+          !(tokens && isAuthenticated) ? (
             <Navigate to="/login" />
           ) : (
             <Navigate to="/home" />

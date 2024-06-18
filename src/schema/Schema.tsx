@@ -1,7 +1,7 @@
 import * as yup from 'yup'
 
-const passwordRule = /(?=.*\d)[a-zA-Z\d]{8,}$/
-const nameRule = /^(?=.*[_@])[\w\s@]+$/
+const passwordRule = /^(?=.*\d)[a-zA-Z\d]{8,}$/
+const nameRule = /[\w\s@]+$/
 
 export const registerSchema = yup.object().shape({
   username: yup
@@ -9,21 +9,7 @@ export const registerSchema = yup.object().shape({
     .matches(nameRule, {
       message: 'only allow letters, number, and underscore',
     })
-    .required('first name is required'),
-
-  lastname: yup
-    .string()
-    .matches(nameRule, {
-      message: 'only allow letters, number, and underscore',
-    })
-    .required('last name is required'),
-
-  firstname: yup
-    .string()
-    .matches(nameRule, {
-      message: 'only allow letters, number, and underscore',
-    })
-    .required('first name is required'),
+    .required('userame is required'),
 
   email: yup
     .string()
@@ -40,12 +26,10 @@ export const registerSchema = yup.object().shape({
 })
 
 export const loginSchema = yup.object().shape({
-  username: yup
+  email: yup
     .string()
-    .matches(nameRule, {
-      message: 'username should start with @ or an underscore ',
-    })
-    .required('username is required'),
+    .email({ message: 'Enter a valid email address' })
+    .required('email is required'),
 
   password: yup
     .string()

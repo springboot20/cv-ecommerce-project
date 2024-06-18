@@ -13,8 +13,8 @@ import { Button } from '@material-tailwind/react'
 import { LocalStorage } from '../util'
 
 const initialValues: SignUpInitialValues = {
-  lastname: '',
-  firstname: '',
+  name: '',
+  avatar: '',
   email: '',
   password: '',
   confirmPassword: '',
@@ -60,17 +60,9 @@ const Signup = () => {
     onSubmit: async (values, actions) => {
       try {
         // eslint-disable-next-line @typescript-eslint/no-unused-vars
-        const { confirmPassword, firstname, lastname, ...rest } = values
+        const { confirmPassword, ...rest } = values
 
-        const data = {
-          username: {
-            firstname,
-            lastname,
-          },
-          ...rest,
-        }
-
-        const response = await registerMutation(data).unwrap()
+        const response = await registerMutation(rest).unwrap()
 
         const { userData } = response
 
@@ -99,72 +91,37 @@ const Signup = () => {
                 Sign Up
               </legend>
               <div className="mt-10 grid grid-cols-1 gap-x-6 gap-y-8 sm:grid-cols-6">
-                <div className="sm:col-span-full grid sm:grid-cols-2 gap-9">
-                  <div className="col-span-full sm:col-span-1">
-                    <fieldset className="mb-2">
-                      <label
-                        htmlFor="firstname"
-                        className="block text-xl font-medium leading-6 text-gray-700"
-                      >
-                        Firstname
-                      </label>
-                      <div className="mt-2">
-                        <InputField
-                          type="text"
-                          name="firstname"
-                          id="firstname"
-                          autoComplete="given-name"
-                          placeholder="enter your firstname here..."
-                          onChange={handleChange}
-                          onBlur={handleBlur}
-                          value={values.firstname}
-                          className={`block w-full rounded-md border-0 py-3 text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-indigo-600 sm:text-sm font-medium sm:leading-6 ${
-                            errors.firstname && touched.firstname
-                              ? 'ring-red-600 ring-[0.15rem]'
-                              : ''
-                          }`}
-                        />
-                      </div>
-                    </fieldset>
-                    {errors.firstname && touched.firstname && (
-                      <small className="text-xl block text-red-600">
-                        {errors.firstname}
-                      </small>
-                    )}
-                  </div>
-
-                  <div className="col-span-full sm:col-span-1">
-                    <fieldset className="mb-2">
-                      <label
-                        htmlFor="lastname"
-                        className="block text-xl font-medium leading-6 text-gray-700"
-                      >
-                        Lastname
-                      </label>
-                      <div className="mt-2">
-                        <InputField
-                          type="text"
-                          name="lastname"
-                          id="lastname"
-                          autoComplete="given-name"
-                          placeholder="enter your lastname here..."
-                          onChange={handleChange}
-                          onBlur={handleBlur}
-                          value={values.lastname}
-                          className={`block w-full rounded-md border-0 py-3 text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-indigo-600 sm:text-sm font-medium sm:leading-6 ${
-                            errors.lastname && touched.lastname
-                              ? 'ring-red-600 ring-[0.15rem]'
-                              : ''
-                          }`}
-                        />
-                      </div>
-                    </fieldset>
-                    {errors.lastname && touched.lastname && (
-                      <small className="text-xl block text-red-600">
-                        {errors.lastname}
-                      </small>
-                    )}
-                  </div>
+                <div className="col-span-full">
+                  <fieldset className="mb-2">
+                    <label
+                      htmlFor="Username"
+                      className="block text-xl font-medium leading-6 text-gray-700"
+                    >
+                      Username
+                    </label>
+                    <div className="mt-2">
+                      <InputField
+                        type="text"
+                        name="name"
+                        id="name"
+                        autoComplete="given-name"
+                        placeholder="enter your name here..."
+                        onChange={handleChange}
+                        onBlur={handleBlur}
+                        value={values.name}
+                        className={`block w-full rounded-md border-0 py-3 text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-indigo-600 sm:text-sm font-medium sm:leading-6 ${
+                          errors.name && touched.name
+                            ? 'ring-red-600 ring-[0.15rem]'
+                            : ''
+                        }`}
+                      />
+                    </div>
+                  </fieldset>
+                  {errors.name && touched.name && (
+                    <small className="text-xl block text-red-600">
+                      {errors.name}
+                    </small>
+                  )}
                 </div>
 
                 <div className="col-span-full">

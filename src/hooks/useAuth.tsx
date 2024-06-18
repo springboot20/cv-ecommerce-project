@@ -2,14 +2,14 @@ import { useMemo } from 'react';
 import { useAppSelector } from '../app/hooks';
 
 export const useAuth = () => {
-  const { userData, token, isAuthenticated } = useAppSelector((state) => state.auth);
+  const { userData, tokens, isAuthenticated } = useAppSelector((state) => state.auth);
 
   return useMemo(
     () => ({
       userData,
-      token,
+      tokens,
       isAuthenticated,
     }),
-    [userData, token, isAuthenticated]
+    [userData, tokens, isAuthenticated]
   );
 };
