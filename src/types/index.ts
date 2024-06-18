@@ -83,7 +83,6 @@ export type NavRoutesType = {
 };
 
 export interface SignUpInitialValues {
-  username: string;
   lastname: string;
   firstname: string;
   email: string;

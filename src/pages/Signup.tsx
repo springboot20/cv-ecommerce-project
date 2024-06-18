@@ -13,7 +13,6 @@ import { Button } from '@material-tailwind/react'
 import { LocalStorage } from '../util'
 
 const initialValues: SignUpInitialValues = {
-  username: '',
   lastname: '',
   firstname: '',
   email: '',
@@ -167,38 +166,6 @@ const Signup = () => {
                       </small>
                     )}
                   </div>
-                </div>
-                <div className="col-span-full">
-                  <fieldset className="mb-2">
-                    <label
-                      htmlFor="Username"
-                      className="block text-xl font-medium leading-6 text-gray-700"
-                    >
-                      Username
-                    </label>
-                    <div className="mt-2">
-                      <InputField
-                        type="text"
-                        name="username"
-                        id="username"
-                        autoComplete="given-name"
-                        placeholder="enter your username here..."
-                        onChange={handleChange}
-                        onBlur={handleBlur}
-                        value={values.username}
-                        className={`block w-full rounded-md border-0 py-3 text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-indigo-600 sm:text-sm font-medium sm:leading-6 ${
-                          errors.username && touched.username
-                            ? 'ring-red-600 ring-[0.15rem]'
-                            : ''
-                        }`}
-                      />
-                    </div>
-                  </fieldset>
-                  {errors.username && touched.username && (
-                    <small className="text-xl block text-red-600">
-                      {errors.username}
-                    </small>
-                  )}
                 </div>
 
                 <div className="col-span-full">
