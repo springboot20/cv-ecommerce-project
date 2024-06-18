@@ -16,7 +16,7 @@ const ProductEndpoints = ApiSlice.injectEndpoints({
     }),
 
     getProduct: builder.mutation<ProductType & ResponseObj, string | undefined>({
-      query: (_id) => `${PRODUCT_URL}/${_id}`,
+      query: (id) => `${PRODUCT_URL}/${id}`,
     }),
 
     getProducts: builder.query<ProductsResponse & ResponseObj, void>({
@@ -24,7 +24,7 @@ const ProductEndpoints = ApiSlice.injectEndpoints({
       providesTags: (result) =>
         result
           ? [
-              ...result.map(({ _id }) => ({ type: 'Product' as const, _id })),
+              ...result.map(({ id }) => ({ type: 'Product' as const, id })),
               { type: 'Product', id: 'LIST' },
             ]
           : [{ type: 'Product', id: 'LIST' }],

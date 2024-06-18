@@ -11,7 +11,7 @@ const Home = () => {
           <div className='flex flex-col lg:flex-row gap-10'>
             <div className='flex items-start flex-col justify-between'>
               <div className='space-y-5'>
-                <h1 className='text-7xl font-bold uppercase leading-snug text-[#3a408c]'>
+                <h1 className='text-5xl font-bold uppercase leading-snug text-[#3a408c]'>
                   Providing Services at your Door
                 </h1>
                 <p className='text-2xl font-medium text-gray-700'>
@@ -27,8 +27,8 @@ const Home = () => {
                 Learn more
               </Link>
             </div>
-            <div className=''>
-              <img src={BusinessMan} className='rounded-xl max-w-[30rem]' />
+            <div className='w-full lg:max-w-fit'>
+              <img src={BusinessMan} className='rounded-xl w-full lg:h-[40rem] block' alt="Business man image" />
             </div>
           </div>
         </div>
@@ -41,14 +41,14 @@ const Home = () => {
             <span className='text-[#3a408c]'>products</span>
           </h1>
 
-          <div className='grid grid-cols-1 sm:grid-cols-2  md:grid-cols-3 gap-4 mt-4'>
+          <div className='grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-4 mt-4'>
             <div className='h-[34rem] relative bg-[#d2d2d2]'>
               <span className='absolute py-1.5 px-12 bg-[#e2342d] text-white text-xl font-semibold top-0 right-0 uppercase'>
                 top seller
               </span>
             </div>
-            <div className='h-[34rem] relative  bg-[#d2d2d2]'></div>
-            <div className='h-[34rem] relative  bg-[#d2d2d2]'></div>
+            <div className='h-[34rem] relative bg-[#d2d2d2]'></div>
+            <div className='h-[34rem] relative bg-[#d2d2d2]'></div>
           </div>
         </div>
       </section>
@@ -57,7 +57,7 @@ const Home = () => {
         <div className='mx-auto max-w-9xl px-8 lg:px-0'>
           <div className='flex items-start flex-col lg:flex-row gap-5 mt-10'>
             <div className='w-full lg:max-w-fit'>
-              <img src={Bg} className='rounded-xl w-full lg:h-[40rem] block' />
+              <img src={Bg} className='rounded-xl w-full lg:h-[40rem] block' alt=""/>
             </div>
             <div className='w-full flex-1'>
               <div className='flex items-center justify-between w-full'>
@@ -69,7 +69,7 @@ const Home = () => {
                   View all
                 </button>
               </div>
-              <div className='grid grid-cols-2 gap-4 mt-4'>
+              <div className='grid grid-cols-1 sm:grid-cols-2 gap-4 mt-4'>
                 <div className='h-[36rem] bg-[#d2d2d2] relative'>
                   <span className='absolute py-1.5 px-12 bg-[#e2342d] text-white text-xl font-semibold top-0 right-0 uppercase'>
                     20% off
@@ -113,7 +113,7 @@ const Home = () => {
               </div>
             </div>
             <div className='w-full lg:max-w-fit'>
-              <img src={Bg} className='rounded-xl w-full lg:h-[40rem] block' />
+              <img src={Bg} className='rounded-xl w-full lg:h-[40rem] block' alt=""/>
             </div>
           </div>
         </div>

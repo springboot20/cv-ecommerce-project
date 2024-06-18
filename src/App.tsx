@@ -1,6 +1,6 @@
-import { Routes, Route, Navigate } from 'react-router-dom';
-import { useAuth } from './hooks/useAuth';
-import { AppLayout } from './layout/AppLayout';
+import { Routes, Route, Navigate } from 'react-router-dom'
+import { useAuth } from './hooks/useAuth'
+import { AppLayout } from './layout/AppLayout'
 import {
   Home,
   Products,
@@ -13,20 +13,26 @@ import {
   PublicRoute,
   Login,
   Register,
-} from './routes/lazy.import';
+} from './routes/lazy.import'
 
 function App() {
-  const { isAuthenticated, tokens } = useAuth();
+  const { isAuthenticated, token } = useAuth()
 
   return (
     <Routes>
       <Route
-        path='/'
-        element={tokens && isAuthenticated ? <Navigate to='/login' /> : <Navigate to='/home' />}
+        path="/"
+        element={
+          !(token && isAuthenticated) ? (
+            <Navigate to="/login" />
+          ) : (
+            <Navigate to="/home" />
+          )
+        }
       />
 
       <Route
-        path='/login'
+        path="/login"
         element={
           <PublicRoute>
             <Login />
@@ -35,7 +41,7 @@ function App() {
       />
 
       <Route
-        path='/register'
+        path="/register"
         element={
           <PublicRoute>
             <Register />
@@ -45,7 +51,7 @@ function App() {
 
       <Route element={<AppLayout />}>
         <Route
-          path='/home'
+          path="/home"
           element={
             <PrivateRoute>
               <Home />
@@ -54,7 +60,7 @@ function App() {
         />
 
         <Route
-          path='/collections'
+          path="/collections"
           element={
             <PrivateRoute>
               <Products />
@@ -63,7 +69,7 @@ function App() {
         />
 
         <Route
-          path='/collections/:id'
+          path="/collections/:id"
           element={
             <PrivateRoute>
               <Product />
@@ -72,16 +78,7 @@ function App() {
         />
 
         <Route
-          path='/collections/:id'
-          element={
-            <PrivateRoute>
-              <Product />
-            </PrivateRoute>
-          }
-        />
-
-        <Route
-          path='/cart'
+          path="/cart"
           element={
             <PrivateRoute>
               <Cart />
@@ -90,7 +87,7 @@ function App() {
         />
 
         <Route
-          path='/check-out'
+          path="/check-out"
           element={
             <PrivateRoute>
               <CheckOut />
@@ -99,7 +96,7 @@ function App() {
         />
 
         <Route
-          path='/payment'
+          path="/payment"
           element={
             <PrivateRoute>
               <Payment />
@@ -107,10 +104,10 @@ function App() {
           }
         />
 
-        <Route path='*' element={<Notfound />} />
+        <Route path="*" element={<Notfound />} />
       </Route>
     </Routes>
-  );
+  )
 }
 
-export default App;
+export default App

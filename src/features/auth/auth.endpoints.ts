@@ -1,30 +1,24 @@
-import type {
-  UserTypes,
-  AuthRegisterPayload,
-  AuthLoginPayload,
-  AuthStateType,
-  ResponseObj,
-} from '../../types';
+import type { UserTypes, AuthRegisterPayload, AuthLoginPayload, AuthStateType } from '../../types';
 import { ApiSlice } from '../../app/services/api.service';
 
 export const AuthEndPoints = ApiSlice.injectEndpoints({
   endpoints: (builder) => ({
-    register: builder.mutation<AuthStateType & ResponseObj, AuthRegisterPayload>({
+    register: builder.mutation<AuthStateType, AuthRegisterPayload>({
       query: (data) => ({
-        url: `/users/auth/signup`,
+        url: `/users`,
         method: 'POST',
         body: data,
       }),
     }),
-    login: builder.mutation<AuthStateType & ResponseObj, AuthLoginPayload>({
+    login: builder.mutation<AuthStateType, AuthLoginPayload>({
       query: (data) => ({
-        url: `/users/auth/signin`,
+        url: `/auth/login`,
         method: 'POST',
         body: data,
       }),
     }),
-    getCurrentUser: builder.query<UserTypes, Pick<UserTypes, '_id'>>({
-      query: ({ _id }) => ({ url: `/users/${_id}` }),
+    getCurrentUser: builder.query<UserTypes, Pick<UserTypes, 'id'>>({
+      query: ({ id }) => ({ url: `/users/${id}` }),
       transformResponse: (response: { data: UserTypes }) => response.data,
       transformErrorResponse: (response: { status: string | number }) => response.status,
     }),

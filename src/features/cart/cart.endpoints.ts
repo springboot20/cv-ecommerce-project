@@ -1,16 +1,27 @@
 import { ApiSlice } from '../../app/services/api.service';
-import { CartTypes, ResponseObj } from '../../types';
+import { CartTypes } from '../../types';
 
 type Carts = CartTypes[];
 
-const PRODUCT_URL = '/cart';
+const CART_URL = '/cart';
 
 const CartEndpoints = ApiSlice.injectEndpoints({
   endpoints: (builder) => ({
-    getUserCart: builder.query<CartTypes, void>({
-      query: () => ``,
+    getSingleCart: builder.mutation<CartTypes, string | number>({
+      query: (id) => `${CART_URL}/${id}`,
+    }),
+
+    getCarts: builder.query<Carts, void>({
+      query: () => `${CART_URL}`,
+      providesTags: (result) =>
+        result
+          ? [
+              ...result.map(({ id }) => ({ type: 'Cart' as const, id })),
+              { type: 'Cart', id: 'LIST' },
+            ]
+          : [{ type: 'Cart', id: 'LIST' }],
     }),
   }),
 });
 
-export const { useGetUserCartQuery } = CartEndpoints;
+export const { useGetSingleCartMutation, useGetCartsQuery } = CartEndpoints;

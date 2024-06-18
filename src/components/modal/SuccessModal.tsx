@@ -35,6 +35,7 @@ export const SuccessModal: React.FC<{
         <button
           onClick={() => setOpen((prev) => !prev)}
           className='absolute top-4 right-4 flex h-14 w-14 cursor-pointer bg-white/30  rounded-full items-center justify-center'>
+            <span className="sr-only">close </span>
           <XMarkIcon className='h-10 text-white' />
         </button>
         <div className=''>

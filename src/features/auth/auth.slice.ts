@@ -4,8 +4,8 @@ import { LocalStorage } from '../../util';
 
 const initialState: AuthStateType = {
   userData: null,
-  tokens: null,
-  isAuthenticated: true,
+  token: null,
+  isAuthenticated: false,
 };
 
 const AuthSliceReducer = createSlice({
@@ -17,10 +17,10 @@ const AuthSliceReducer = createSlice({
     },
     setCredentials: (state, action: PayloadAction<AuthStateType>) => {
       state.userData = action.payload.userData;
-      state.tokens = action.payload.tokens;
+      state.token = action.payload.token;
 
       LocalStorage.set('userInfo', state.userData);
-      LocalStorage.set('tokens', state.tokens);
+      LocalStorage.set('tokens', state.token);
     },
   },
 });

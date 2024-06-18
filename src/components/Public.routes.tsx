@@ -4,7 +4,7 @@ import { useAuth } from '../hooks/useAuth';
 const PublicRoute: React.FC<{ children: React.ReactNode }> = ({ children }) => {
   const auth = useAuth();
 
-  if (auth?.tokens?.accessToken && auth.userData) {
+  if (auth.token && auth.userData) {
     return <Navigate to='/home' state={{ path: window.location.pathname }} replace={true} />;
   }
 

@@ -1,8 +1,7 @@
-import { AuthRegisterPayload, AuthLoginPayload } from './redux.types';
-import { UserTypes } from './user.types';
+import { UserTypes, AuthRegisterPayload, AuthLoginPayload } from './index';
 
 export interface AuthContextType {
-  tokens: { accessToken: string; refreshToken: string } | null | void;
+  token: string | null;
   user: UserTypes | null | void;
   register: (data: AuthRegisterPayload) => Promise<void>;
   login: (data: AuthLoginPayload) => Promise<void>;
