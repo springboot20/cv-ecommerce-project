@@ -60,15 +60,14 @@ const Signup = () => {
     onSubmit: async (values, actions) => {
       try {
         // eslint-disable-next-line @typescript-eslint/no-unused-vars
-        const { confirmPassword, ...rest } = values
-        const [firstname, lastname] = values.username.split(' ')
+        const { confirmPassword, firstname, lastname, ...rest } = values
 
         const data = {
-          ...rest,
           username: {
             firstname,
             lastname,
           },
+          ...rest,
         }
 
         const response = await registerMutation(data).unwrap()
