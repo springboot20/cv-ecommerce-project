@@ -1,50 +1,65 @@
-import { Button, ButtonGroup } from '@material-tailwind/react';
+import { ArrowLeftIcon, ArrowRightIcon } from '@heroicons/react/24/outline'
 
 export const Pagination: React.FC<{
-  itemsPerPage: number;
-  totalItems: number | undefined;
-  currentPage: number;
-  onPageChange: React.Dispatch<React.SetStateAction<number>>;
+  itemsPerPage: number
+  totalItems: number | undefined
+  currentPage: number
+  onPageChange: React.Dispatch<React.SetStateAction<number>>
 }> = ({ itemsPerPage, totalItems, currentPage, onPageChange }) => {
-  const totalPages = Math.ceil(totalItems! / itemsPerPage);
+  const totalPages = Math.ceil(totalItems! / itemsPerPage)
 
   const handlePageChange = (page: number) => {
     if (page >= 1 && page <= totalPages) {
-      onPageChange(page);
+      onPageChange(page)
     }
-  };
+  }
   return (
-    <div className='py-12 rounded-lg dark:bg-dark-blue-dark-DME mx-auto flex justify-center'>
-      <div className='flex items-center lg:px-4 py-2 rounded-md gap-[0.15rem] lg:gap-4'>
-        <ButtonGroup
+    <div className="z-40 fixed bottom-7 left-2/4 rounded-lg bg-white dark:bg-dark-blue-dark-DME mx-auto -translate-x-2/4">
+      <div className="flex items-center lg:px-4 py-2 rounded-md gap-[0.15rem] lg:gap-9">
+        <button
           onClick={() => handlePageChange(currentPage - 1)}
-          variant="text"
           className={
-            'flex items-center space-x-3 border-r-[1px] border-gray-900/75 p-2 cursor-pointer lowercase'
-          }>
-          <span className='text-md md:text-xl font-semibold block dark:text-white'>prev</span>
-        </ButtonGroup>
+            'flex items-center gap-5 p-2 cursor-pointer mr-4'
+          }
+        >
+          <ArrowLeftIcon
+            className={
+              'h-6 text-dark-blue-dark-LMT hidden md:block dark:text-white'
+            }
+          />
+          <span className="text-md md:text-xl font-semibold block dark:text-white">
+            Previous
+          </span>
+        </button>
         {Array.from({ length: totalPages }, (_, index) => (
-          <Button
+          <button
             key={index}
             onClick={() => handlePageChange(index + 1)}
             className={`p-[0.30rem] sm:p-[0.55rem] lg:p-3 h-full block font-semibold text-lg cursor-pointer rounded-md transition-all ${
               currentPage === index + 1
                 ? 'text-blue-700 bg-gray-300'
                 : 'text-gray-500 dark:text-white'
-            }`}>
+            }`}
+          >
             {index + 1}
-          </Button>
+          </button>
         ))}
-        <ButtonGroup
+        <button
           onClick={() => handlePageChange(currentPage + 1)}
-          variant="text"
           className={
-            'flex items-center space-x-3 border-l-[1px] border-gray-900/75 p-2 cursor-pointer lowercase'
-          }>
-          <span className='text-md md:text-xl font-semibold block dark:text-white'>next</span>
-        </ButtonGroup>
+            'flex items-center gap-3 p-2 cursor-pointer'
+          }
+        >
+          <span className="text-md md:text-xl font-semibold block dark:text-white">
+            Next
+          </span>
+          <ArrowRightIcon
+            className={
+              'h-6 text-dark-blue-dark-LMT dark:text-white hidden md:block'
+            }
+          />
+        </button>
       </div>
     </div>
-  );
-};
+  )
+}

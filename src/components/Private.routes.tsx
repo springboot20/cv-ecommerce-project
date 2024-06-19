@@ -6,7 +6,7 @@ const PrivateRoute: React.FC<{ children: React.ReactNode }> = ({
 }) => {
   const auth = useAuth()
 
-  if (!(auth?.tokens && auth.userData)) {
+  if ((auth?.token)) {
     return (
       <Navigate
         to="/login"

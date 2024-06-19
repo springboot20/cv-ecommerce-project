@@ -4,7 +4,6 @@ import { Fragment } from 'react'
 import cartImage from '../assets/cart-image.jpg'
 import { Link } from 'react-router-dom'
 import { useCart } from '../hooks/useCart'
-import { Modal } from '../components/modal/Modal'
 import { useAuth } from '../hooks/useAuth'
 import { IconType } from '../components/icon/IconType'
 import { faEdit, faTrashAlt } from '@fortawesome/free-solid-svg-icons'
@@ -12,12 +11,11 @@ import Button from '../components/icon/Button'
 import { formatPrice } from '../helpers/index'
 
 const Cart = () => {
-  const { cart } = useCart()
+  const { cartItems } = useCart()
   const auth = useAuth()
 
   return (
     <Fragment>
-      <Modal token={auth.token} />
       <section className="top-[11rem] relative h-[calc(100vh-11rem)]">
         <div className="mt- h-full mx-auto max-w-5xl px-4 py-8 sm:px-3 sm:py-18 md:max-w-6xl lg:max-w-[86.25rem] xl:max-w-[92.5rem] 2xl:max-w-[104.5rem] flex flex-col">
           <div className="flex">
@@ -28,10 +26,11 @@ const Cart = () => {
           <div className="mt-9 flex">
             <div className="flex-1">
               <h3 className="text-xl font-semibold text-gray-700 dark:text-white my-4">
-                <span>{`${cart?.products!.length ?? 0}`}</span> Products in Cart
+                <span>{`${cartItems?.length ?? 0}`}</span> Products in
+                Cart
               </h3>
               <div className="rounded-md border bg-white shadow border-gray-300 mb-12 p-10">
-                {cart?.products.length === 0 ? (
+                {cartItems?.length === 0 ? (
                   <div className="flex flex-col justify-center items-center text-center">
                     <div className="mb-6">
                       <img
@@ -57,11 +56,11 @@ const Cart = () => {
                         role="list"
                         className="-my-6 divide-y divide-gray-200"
                       >
-                        {cart?.products!.map((item) => (
-                          <li key={item?.id} className="flex py-6">
+                        {cartItems.map((item) => (
+                          <li key={item?.product.id} className="flex py-6">
                             <div className="h-24 w-24 flex-shrink-0 overflow-hidden rounded-md border border-gray-200">
                               <img
-                                src={item?.image}
+                                src={item?.product.images[0]}
                                 alt={''}
                                 className="h-full w-full object-cover object-center"
                               />
@@ -71,10 +70,10 @@ const Cart = () => {
                               <div>
                                 <div className="flex justify-between  font-medium text-gray-900">
                                   <h3 className="text-gray-800 font-semibold text-xl">
-                                    {item?.title}
+                                    {item?.product.title}
                                   </h3>
                                   <p className="ml-4 text-xl">
-                                    {formatPrice(item?.price)}
+                                    {formatPrice(item?.product.price)}
                                   </p>
                                 </div>
                               </div>

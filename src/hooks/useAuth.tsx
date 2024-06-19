@@ -1,15 +1,6 @@
-import { useMemo } from 'react';
-import { useAppSelector } from '../app/hooks';
+import {  useContext } from 'react'
+import {AuthContext} from '../context/AuthContext'
 
 export const useAuth = () => {
-  const { userData, tokens, isAuthenticated } = useAppSelector((state) => state.auth);
-
-  return useMemo(
-    () => ({
-      userData,
-      tokens,
-      isAuthenticated,
-    }),
-    [userData, tokens, isAuthenticated]
-  );
-};
+  return useContext(AuthContext)
+}

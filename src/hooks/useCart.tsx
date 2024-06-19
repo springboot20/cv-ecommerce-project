@@ -1,8 +1,6 @@
-import { useMemo } from 'react';
-import { useAppSelector } from '../app/hooks';
+import { CartContext } from '../context/CartContext'
+import { useContext } from 'react'
 
 export const useCart = () => {
-  const { cart } = useAppSelector((state) => state.cart);
-
-  return useMemo(() => ({ cart }), [cart]);
-};
+  return useContext(CartContext)
+}

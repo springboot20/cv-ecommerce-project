@@ -1,13 +1,16 @@
-import { UserTypes, AuthRegisterPayload, AuthLoginPayload } from './index';
-
+import { CartTypes, ProductType } from './index';
 export interface AuthContextType {
   token: string | null;
-  user: UserTypes | null | void;
-  register: (data: AuthRegisterPayload) => Promise<void>;
-  login: (data: AuthLoginPayload) => Promise<void>;
-  logout: () => Promise<void>;
+  createToken: (newToken: string) => string | null;
 }
 
 export type AuthContextProps = {
   children: React.ReactNode;
+};
+
+export type CartContextType = {
+  cartItems: CartTypes[];
+  addToCart: (p: { product: ProductType; quantity: number }) => void;
+  removeFromCart: (productId: string) => void;
+  clearCart: () => void;
 };
