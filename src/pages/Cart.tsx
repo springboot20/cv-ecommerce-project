@@ -11,7 +11,7 @@ import Button from '../components/icon/Button'
 import { formatPrice } from '../helpers/index'
 
 const Cart = () => {
-  const { cartItems } = useCart()
+  const { cartItems, removeFromCart } = useCart()
   const shippingFee = 1.55
   const auth = useAuth()
 
@@ -71,7 +71,11 @@ const Cart = () => {
                           <li key={item?.product.id} className="flex py-6">
                             <div className="h-24 w-24 flex-shrink-0 overflow-hidden rounded-md border border-gray-200">
                               <img
-                                src={item?.product.images[0]}
+                                src={
+                                  item?.product.images[0].startsWith('[')
+                                    ? JSON.parse(item?.product.images[0])
+                                    : item?.product.images[0]
+                                }
                                 alt={''}
                                 className="h-full w-full object-cover object-center"
                               />
@@ -96,6 +100,9 @@ const Cart = () => {
                                 <div className="flex space-x-4 items-center">
                                   <Button
                                     type="button"
+                                    onClick={() => {
+                                      removeFromCart(item.product?.id)
+                                    }}
                                     className="font-medium text-red-600 hover:text-red-500"
                                   >
                                     <IconType

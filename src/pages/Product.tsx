@@ -1,21 +1,44 @@
-import { useState } from 'react'
+import { useState, useEffect } from 'react'
 import { HeartIcon, PlusIcon, MinusIcon } from '@heroicons/react/24/outline'
 import { Button } from '@material-tailwind/react'
 import { motion } from 'framer-motion'
 import Slider from 'react-slick'
 import { productCarouselSettings } from '../util/slickSlider.config'
+import { useParams } from 'react-router-dom'
 import { Disclosure } from '@headlessui/react'
+import { instance } from '../api/ClientService'
 import { gridVariants } from '../util/framerMotion.config'
+import { ProductType } from '../types'
 import { formatPrice } from '../helpers'
 import { Link } from 'react-router-dom'
 import { useCart } from '../hooks/useCart'
-import { useProduct } from '../hooks/useProduct'
 
 const Product = () => {
-  const [quantity, setQuantity] = useState<number>(1)
+  const { id } = useParams()
   const [favorite, setFavorite] = useState<boolean>(false)
+  const [product, setProduct] = useState<ProductType>({} as ProductType)
+  const [relatedProducts, setRelatedProducts] = useState<ProductType[]>([])
+  const [quantity, setQuantity] = useState<number>(1)
   const { addToCart } = useCart()
-  const { product, relatedProducts } = useProduct()
+
+  useEffect(() => {
+    const fetchProduct = async () => {
+      try {
+        const response = await instance.get(`/products/${id}`)
+        setProduct(response.data)
+
+        // Assuming your API endpoint for related products is something like `/products/${id}/related`
+        const relatedResponse = await instance.get(
+          `/products/?category=${response.data.category}`,
+        )
+        setRelatedProducts(relatedResponse.data)
+      } catch (error) {
+        console.log('Error fetching product or related products:', error)
+      }
+    }
+
+    fetchProduct()
+  }, [id])
 
   const handleAddToCart = () => {
     addToCart({ product, quantity })
@@ -31,9 +54,11 @@ const Product = () => {
       <div className="max-w-9xl mx-auto mt-44 py-8">
         <section className="grid grid-cols-1 md:grid-cols-2 place-items-center lg:place-items-start place-content-center gap-8 px-8">
           <div className="col-span-full md:col-span-1 flex items-start gap-2">
-            <div className=""></div>
             <div className="bg-[#d2d2d2]">
-              <img src={product.images && product.images[0]} alt="" />
+              <img
+                src={product.images && JSON.parse(product.images[0])}
+                alt=""
+              />
             </div>
           </div>
           <div className="col-span-full md:col-span-1 w-full">
@@ -123,25 +148,25 @@ const Product = () => {
             {...productCarouselSettings}
             className="flex gap-4 mt-4 w-full"
           >
-            {relatedProducts.map((p) => (
-              <motion.div className="w-full relative" key={p.id}>
-                <Link to={`/collections/${p.id}`}>
+            {relatedProducts.map((product) => (
+              <motion.div className="w-full relative" key={product.id}>
+                <Link to={`/collections/${product.id}`}>
                   <span className="absolute py-1.5 px-12 z-20 bg-[#e2342d] text-white text-xl font-semibold top-0 right-0 uppercase">
                     top seller
                   </span>
                   <header className="h-[30rem] relative bg-[#d2d2d2] flex items-center justify-center">
                     <img
-                      src={p.images && p.images[0]}
+                      src={product.images && JSON.parse(product.images[0])}
                       alt=""
                       className="h-full absolute w-full"
                     />
                   </header>
                   <div className="mt-4 space-y-3">
                     <h3 className="capitalize text-xl font-semibold text-gray-700">
-                      {p.title}
+                      {product.title}
                     </h3>
                     <p className="text-lg font-medium italic">
-                      {formatPrice(p.price)}
+                      {formatPrice(product.price)}
                     </p>
                   </div>
                 </Link>

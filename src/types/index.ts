@@ -6,7 +6,7 @@ export type UserTypes = {
 };
 
 export type ProductType = {
-  id: string | number;
+  id: number;
   title: string;
   price: number;
   description: string;

@@ -1,22 +1,56 @@
-import { Fragment } from 'react'
+import { Fragment, useEffect, useState } from 'react'
 import { formatPrice } from '../helpers'
 import { motion } from 'framer-motion'
 import { Pagination } from '../components/Pagination'
 import { gridVariants } from '../util/framerMotion.config'
 import { Button } from '@material-tailwind/react'
 import { Loader } from '../components/Loader'
+import { instance } from '../api/ClientService'
+import { ProductType } from '../types'
 import { Link } from 'react-router-dom'
-import { useProduct } from '../hooks/useProduct'
 
 const Products = () => {
-  const {
-    products,
-    categories,
-    isLoading,
-    setCurrentPage,
-    currentPage,
-    itemsPerPage,
-  } = useProduct()
+  const [products, setProducts] = useState<ProductType[]>([])
+  const [isLoading, setIsLoading] = useState<boolean>(false)
+  const [categories, setCategories] = useState<
+    { name: string; image: string; id: number | string }[]
+  >([])
+
+  // const [activeButton, setActiveButton] = useState<boolean>(true);
+  const itemsPerPage = 150
+  const [currentPage, setCurrentPage] = useState(1)
+
+  const startIndex = (currentPage - 1) * itemsPerPage
+  const endIndex = startIndex + itemsPerPage
+  const currentProducts = products?.slice(startIndex, endIndex)
+
+  const handleProductFetch = async () => {
+    try {
+      setIsLoading && setIsLoading(false)
+
+      const response = await instance.get('/products')
+      setProducts(response.data)
+      console.log(response.data)
+    } catch (err) {
+      setIsLoading && setIsLoading(true)
+    }
+  }
+
+  const handleCategories = async () => {
+    try {
+      setIsLoading && setIsLoading(false)
+
+      const response = await instance.get('/categories')
+      setCategories(response.data)
+    } catch (err) {
+      setIsLoading && setIsLoading(true)
+    }
+  }
+
+  useEffect(() => {
+    handleProductFetch()
+    handleCategories()
+  }, [])
 
   return (
     <Fragment>
@@ -30,7 +64,7 @@ const Products = () => {
                   {categories.map((c) => (
                     <Button
                       className="capitalize bg-[#f4f4f4] !rounded-none py-5 text-xl font-semibold text-[#4a4b4d] shadow-none"
-                      key={c.name}
+                      key={c.id}
                     >
                       {c.name}
                     </Button>
@@ -55,13 +89,17 @@ const Products = () => {
                 {isLoading ? (
                   <Loader />
                 ) : (
-                  products?.map((product) => {
+                  currentProducts?.map((product) => {
                     return (
                       <motion.div layout key={product.id}>
                         <Link to={`/collections/${product.id}`}>
                           <header className="h-[30rem] relative bg-[#d2d2d2] flex items-center justify-center">
                             <img
-                              src={product.images[0]}
+                              src={
+                                product.images[0].startsWith('[')
+                                  ? JSON.parse(product.images[0])
+                                  : product.images[0]
+                              }
                               alt=""
                               className="h-full absolute w-full"
                             />
