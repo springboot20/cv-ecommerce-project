@@ -1,8 +1,6 @@
-import { useMemo } from 'react';
-import { useAppSelector } from '../app/hooks';
+import { ProductContext } from '../context/ProductContext'
+import { useContext } from 'react'
 
 export const useProduct = () => {
-  const { data } = useAppSelector((state) => state.product);
-
-  return useMemo(() => ({ data }), [data]);
-};
+  return useContext(ProductContext)
+}

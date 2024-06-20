@@ -13,6 +13,7 @@ import 'slick-carousel/slick/slick-theme.css'
 import { ThemeContextProvider } from './context/ThemeContext'
 import { AuthContextProvider } from './context/AuthContext'
 import { CartContextProvider } from './context/CartContext'
+import { ProductContextProvider } from './context/ProductContext'
 
 ReactDOM.createRoot(document.getElementById('root')!).render(
   <React.StrictMode>
@@ -20,12 +21,14 @@ ReactDOM.createRoot(document.getElementById('root')!).render(
       <ThemeProvider>
         <ThemeContextProvider>
           <AuthContextProvider>
-            <CartContextProvider>
-              <ToastContainer />
-              <Suspense fallback={<Loader />}>
-                <App />
-              </Suspense>
-            </CartContextProvider>
+            <ProductContextProvider>
+              <CartContextProvider>
+                <ToastContainer />
+                <Suspense fallback={<Loader />}>
+                  <App />
+                </Suspense>
+              </CartContextProvider>
+            </ProductContextProvider>
           </AuthContextProvider>
         </ThemeContextProvider>
       </ThemeProvider>

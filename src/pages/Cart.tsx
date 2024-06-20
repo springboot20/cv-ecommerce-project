@@ -12,7 +12,19 @@ import { formatPrice } from '../helpers/index'
 
 const Cart = () => {
   const { cartItems } = useCart()
+  const shippingFee = 1.55
   const auth = useAuth()
+
+  const totalItemsCost = cartItems.reduce((acc, item) => {
+    const itemPrice = item.product.price
+    const quantity = item.quantity
+
+    const initialTotal = itemPrice * quantity
+
+    return acc + initialTotal
+  }, 0)
+
+  console.log(totalItemsCost)
 
   return (
     <Fragment>
@@ -26,8 +38,7 @@ const Cart = () => {
           <div className="mt-9 flex">
             <div className="flex-1">
               <h3 className="text-xl font-semibold text-gray-700 dark:text-white my-4">
-                <span>{`${cartItems?.length ?? 0}`}</span> Products in
-                Cart
+                <span>{`${cartItems?.length ?? 0}`}</span> Products in Cart
               </h3>
               <div className="rounded-md border bg-white shadow border-gray-300 mb-12 p-10">
                 {cartItems?.length === 0 ? (
@@ -43,7 +54,7 @@ const Cart = () => {
                       Your cart is empty. Keep shopping to find a product!
                     </p>
                     <Link
-                      to="/products"
+                      to="/collections"
                       className="bg-gray-800 hover:bg-gray-600 rounded-md px-5 py-4 text-xl font-semibold text-white shadow-sm focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-gray-600 disabled:opacity-20"
                     >
                       Keep Shopping
@@ -118,7 +129,7 @@ const Cart = () => {
                     Subtotal :{' '}
                   </h2>
                   <p className="text-lg font-semibold text-gray-700">
-                    {formatPrice(233.3)}
+                    {formatPrice(totalItemsCost)}
                   </p>
                 </div>
                 <div className="flex justify-between items-center">
@@ -126,14 +137,14 @@ const Cart = () => {
                     Shipping fee :
                   </h2>
                   <p className="text-lg font-semibold text-gray-700">
-                    {formatPrice(1.55)}
+                    {formatPrice(shippingFee)}
                   </p>
                 </div>
               </div>
               <div className="container flex justify-between items-center mt-3">
                 <h1 className="text-2xl font-bold">Order Total : </h1>
                 <p className="text-lg font-semibold text-gray-700">
-                  {formatPrice(399)}
+                  {formatPrice(totalItemsCost + shippingFee)}
                 </p>
               </div>
             </div>

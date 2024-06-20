@@ -1,44 +1,21 @@
-import { useState, useEffect } from 'react'
+import { useState } from 'react'
 import { HeartIcon, PlusIcon, MinusIcon } from '@heroicons/react/24/outline'
 import { Button } from '@material-tailwind/react'
 import { motion } from 'framer-motion'
 import Slider from 'react-slick'
 import { productCarouselSettings } from '../util/slickSlider.config'
-import { useParams } from 'react-router-dom'
 import { Disclosure } from '@headlessui/react'
-import { instance } from '../api/ClientService'
 import { gridVariants } from '../util/framerMotion.config'
-import { ProductType } from '../types'
 import { formatPrice } from '../helpers'
 import { Link } from 'react-router-dom'
 import { useCart } from '../hooks/useCart'
+import { useProduct } from '../hooks/useProduct'
 
 const Product = () => {
-  const { id } = useParams()
-  const [favorite, setFavorite] = useState<boolean>(false)
-  const [product, setProduct] = useState<ProductType>({} as ProductType)
-  const [relatedProducts, setRelatedProducts] = useState<ProductType[]>([])
   const [quantity, setQuantity] = useState<number>(1)
+  const [favorite, setFavorite] = useState<boolean>(false)
   const { addToCart } = useCart()
-
-  useEffect(() => {
-    const fetchProduct = async () => {
-      try {
-        const response = await instance.get(`/products/${id}`)
-        setProduct(response.data)
-
-        // Assuming your API endpoint for related products is something like `/products/${id}/related`
-        const relatedResponse = await instance.get(
-          `/products/?category=${response.data.category}`,
-        )
-        setRelatedProducts(relatedResponse.data)
-      } catch (error) {
-        console.log('Error fetching product or related products:', error)
-      }
-    }
-
-    fetchProduct()
-  }, [id])
+  const { product, relatedProducts } = useProduct()
 
   const handleAddToCart = () => {
     addToCart({ product, quantity })

@@ -14,3 +14,14 @@ export type CartContextType = {
   removeFromCart: (productId: string) => void;
   clearCart: () => void;
 };
+
+export type ProductContextType = {
+  products: ProductType[];
+  product: ProductType;
+  categories: { name: string; image: string; id: number | string }[];
+  isLoading: boolean;
+  relatedProducts: ProductType[];
+  setCurrentPage: React.Dispatch<React.SetStateAction<number>>;
+  currentPage: number;
+  itemsPerPage: number;
+};
