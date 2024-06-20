@@ -1,3 +1,4 @@
+import { useState, useEffect } from 'react'
 import { XMarkIcon } from '@heroicons/react/24/outline'
 import { classNames } from '../../helpers'
 import { Link } from 'react-router-dom'
@@ -14,13 +15,54 @@ export default function CartModal({
   isOpen: boolean
   setIsOpen: React.Dispatch<React.SetStateAction<boolean>>
 }) {
-  const { cartItems } = useCart()
+  const {
+    cartItems,
+    removeFromCart,
+    updateCartItemQuantity,
+    isNewItemAdded,
+    setIsNewItemAdded,
+  } = useCart()
+  const [isEditing, setIsEditing] = useState<boolean>(false)
+  const [quantityInput, setQuantityInput] = useState<number>(0)
+  const [selectedItemId, setSelectedItemId] = useState<number | null>(null)
+
+  const handleEditClick = (id: number) => {
+    const selectedItem = cartItems.find((item) => item.product.id === id)
+
+    if (selectedItem) {
+      if (selectedItem) {
+        setQuantityInput(selectedItem.quantity) // Set initial quantity input to current quantity
+        setSelectedItemId(id)
+        setIsEditing(true)
+      }
+    }
+  }
+
+  const handleCancelEdit = () => {
+    setSelectedItemId(null)
+    setIsEditing(false)
+  }
+
+  const handleUpdateQuantity = () => {
+    if (selectedItemId !== null) {
+      updateCartItemQuantity(selectedItemId, quantityInput) // Call updateCartItemQuantity from useCart with itemId and quantityInput
+      setSelectedItemId(null)
+      setIsEditing(false)
+    }
+  }
+
+  useEffect(() => {
+    if (isNewItemAdded && !isOpen) {
+      setIsOpen(true) // Open the modal if a new item is added and the modal is not already open
+      setIsNewItemAdded(false) // Reset isNewItemAdded flag
+    }
+  }, [isNewItemAdded, isOpen, setIsOpen, setIsNewItemAdded])
 
   return (
     <div
       className={classNames(
         'h-screen w-[30rem] bg-white shadow-sm border transition-all fixed top-0 z-10 p-8',
-        isOpen ? 'right-0' : '-right-full',
+        isNewItemAdded || isOpen ? 'right-0' : '-right-full',
       )}
     >
       <button
@@ -38,7 +80,10 @@ export default function CartModal({
                 <li key={item?.product.id} className="flex py-6">
                   <div className="h-24 w-24 flex-shrink-0 overflow-hidden rounded-md border border-gray-200">
                     <img
-                      src={item?.product.images[0]&& JSON.parse(item?.product.images[0])}
+                      src={
+                        item?.product.images[0] &&
+                        JSON.parse(item?.product.images[0])
+                      }
                       alt={''}
                       className="h-full w-full object-cover object-center"
                     />
@@ -56,22 +101,60 @@ export default function CartModal({
                       </div>
                     </div>
                     <div className="flex flex-1 items-end justify-between text-sm">
-                      <p className="text-gray-500">Qty {item?.quantity}</p>
-
-                      <div className="flex space-x-4 items-center">
-                        <Button
-                          type="button"
-                          className="font-medium text-red-600 hover:text-red-500"
-                        >
-                          <IconType icon={faTrashAlt} className="h-6" />
-                        </Button>
-                        <Button
-                          type="button"
-                          className="font-medium text-indigo-600 hover:text-indigo-500"
-                        >
-                          <IconType icon={faEdit} className="h-6" />
-                        </Button>
-                      </div>
+                      {selectedItemId === item.product.id && isEditing ? (
+                        <div className="flex items-center space-x-4">
+                          <fieldset>
+                            <label htmlFor="quantity" className="sr-only">
+                              quantity
+                            </label>
+                            <input
+                              id="quantity"
+                              type="number"
+                              value={quantityInput}
+                              onChange={(e) =>
+                                setQuantityInput(parseInt(e.target.value))
+                              }
+                              className="border border-gray-300 rounded-md p-1 text-sm w-16"
+                            />
+                          </fieldset>
+                          <Button
+                            type="button"
+                            onClick={handleUpdateQuantity}
+                            className="font-medium text-indigo-600 hover:text-indigo-500"
+                          >
+                            Save
+                          </Button>
+                          <Button
+                            type="button"
+                            onClick={handleCancelEdit}
+                            className="font-medium text-gray-500 hover:text-gray-400"
+                          >
+                            Cancel
+                          </Button>
+                        </div>
+                      ) : (
+                        <>
+                          <p className="text-gray-500">Qty {item?.quantity}</p>
+                          <div className="flex space-x-4 items-center">
+                            <Button
+                              type="button"
+                              onClick={() => {
+                                removeFromCart(item.product?.id)
+                              }}
+                              className="font-medium text-red-600 hover:text-red-500"
+                            >
+                              <IconType icon={faTrashAlt} className="h-6" />
+                            </Button>
+                            <Button
+                              type="button"
+                              onClick={() => handleEditClick(item.product.id)}
+                              className="font-medium text-indigo-600 hover:text-indigo-500"
+                            >
+                              <IconType icon={faEdit} className="h-6" />
+                            </Button>
+                          </div>
+                        </>
+                      )}
                     </div>
                   </div>
                 </li>

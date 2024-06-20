@@ -1,6 +1,6 @@
 /** @format */
 
-import { Fragment } from 'react'
+import { Fragment, useState } from 'react'
 import cartImage from '../assets/cart-image.jpg'
 import { Link } from 'react-router-dom'
 import { useCart } from '../hooks/useCart'
@@ -11,7 +11,35 @@ import Button from '../components/icon/Button'
 import { formatPrice } from '../helpers/index'
 
 const Cart = () => {
-  const { cartItems, removeFromCart } = useCart()
+  const { cartItems, removeFromCart, updateCartItemQuantity } = useCart()
+  const [isEditing, setIsEditing] = useState<boolean>(false)
+  const [quantityInput, setQuantityInput] = useState<number>(0)
+  const [selectedItemId, setSelectedItemId] = useState<number | null>(null)
+
+  const handleEditClick = (id: number) => {
+    const selectedItem = cartItems.find((item) => item.product.id === id)
+
+    if (selectedItem) {
+      if (selectedItem) {
+        setQuantityInput(selectedItem.quantity) // Set initial quantity input to current quantity
+        setSelectedItemId(id)
+        setIsEditing(true)
+      }
+    }
+  }
+
+  const handleCancelEdit = () => {
+    setSelectedItemId(null)
+    setIsEditing(false)
+  }
+
+  const handleUpdateQuantity = () => {
+    if (selectedItemId !== null) {
+      updateCartItemQuantity(selectedItemId, quantityInput) // Call updateCartItemQuantity from useCart with itemId and quantityInput
+      setSelectedItemId(null)
+      setIsEditing(false)
+    }
+  }
   const shippingFee = 1.55
   const auth = useAuth()
 
@@ -28,7 +56,7 @@ const Cart = () => {
 
   return (
     <Fragment>
-      <section className="top-[11rem] relative h-[calc(100vh-11rem)]">
+      <section className="mt-[11rem] h-screen">
         <div className="mt- h-full mx-auto max-w-5xl px-4 py-8 sm:px-3 sm:py-18 md:max-w-6xl lg:max-w-[86.25rem] xl:max-w-[92.5rem] 2xl:max-w-[104.5rem] flex flex-col">
           <div className="flex">
             <h1 className="font-bold text-4xl text-gray-800 dark:text-white leading-5">
@@ -72,7 +100,8 @@ const Cart = () => {
                             <div className="h-24 w-24 flex-shrink-0 overflow-hidden rounded-md border border-gray-200">
                               <img
                                 src={
-                                  item?.product.images[0] && JSON.parse(item?.product.images[0])
+                                  item?.product.images[0] &&
+                                  JSON.parse(item?.product.images[0])
                                 }
                                 alt={''}
                                 className="h-full w-full object-cover object-center"
@@ -91,30 +120,76 @@ const Cart = () => {
                                 </div>
                               </div>
                               <div className="flex flex-1 items-end justify-between text-sm">
-                                <p className="text-gray-500">
-                                  Qty {item?.quantity}
-                                </p>
-
-                                <div className="flex space-x-4 items-center">
-                                  <Button
-                                    type="button"
-                                    onClick={() => {
-                                      removeFromCart(item.product?.id)
-                                    }}
-                                    className="font-medium text-red-600 hover:text-red-500"
-                                  >
-                                    <IconType
-                                      icon={faTrashAlt}
-                                      className="h-6"
-                                    />
-                                  </Button>
-                                  <Button
-                                    type="button"
-                                    className="font-medium text-indigo-600 hover:text-indigo-500"
-                                  >
-                                    <IconType icon={faEdit} className="h-6" />
-                                  </Button>
-                                </div>
+                                {selectedItemId === item.product.id &&
+                                isEditing ? (
+                                  <div className="flex items-center space-x-4">
+                                    <fieldset>
+                                      <label
+                                        htmlFor="quantity"
+                                        className="sr-only"
+                                      >
+                                        quantity
+                                      </label>
+                                      <input
+                                        id="quantity"
+                                        type="number"
+                                        value={quantityInput}
+                                        onChange={(e) =>
+                                          setQuantityInput(
+                                            parseInt(e.target.value),
+                                          )
+                                        }
+                                        className="border border-gray-300 rounded-md p-1 text-sm w-16"
+                                      />
+                                    </fieldset>
+                                    <Button
+                                      type="button"
+                                      onClick={handleUpdateQuantity}
+                                      className="font-medium text-indigo-600 hover:text-indigo-500"
+                                    >
+                                      Save
+                                    </Button>
+                                    <Button
+                                      type="button"
+                                      onClick={handleCancelEdit}
+                                      className="font-medium text-gray-500 hover:text-gray-400"
+                                    >
+                                      Cancel
+                                    </Button>
+                                  </div>
+                                ) : (
+                                  <>
+                                    <p className="text-gray-500">
+                                      Qty {item?.quantity}
+                                    </p>
+                                    <div className="flex space-x-4 items-center">
+                                      <Button
+                                        type="button"
+                                        onClick={() => {
+                                          removeFromCart(item.product?.id)
+                                        }}
+                                        className="font-medium text-red-600 hover:text-red-500"
+                                      >
+                                        <IconType
+                                          icon={faTrashAlt}
+                                          className="h-6"
+                                        />
+                                      </Button>
+                                      <Button
+                                        type="button"
+                                        onClick={() =>
+                                          handleEditClick(item.product.id)
+                                        }
+                                        className="font-medium text-indigo-600 hover:text-indigo-500"
+                                      >
+                                        <IconType
+                                          icon={faEdit}
+                                          className="h-6"
+                                        />
+                                      </Button>
+                                    </div>
+                                  </>
+                                )}
                               </div>
                             </div>
                           </li>

@@ -12,7 +12,10 @@ export type CartContextType = {
   cartItems: CartTypes[];
   addToCart: (p: { product: ProductType; quantity: number }) => void;
   removeFromCart: (productId: number) => void;
+  updateCartItemQuantity :(productId: number, quantity: number) => void
   clearCart: () => void;
+  setIsNewItemAdded: React.Dispatch<React.SetStateAction<boolean>>
+  isNewItemAdded: boolean
 };
 
 export type ProductContextType = {
