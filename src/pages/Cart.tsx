@@ -72,9 +72,7 @@ const Cart = () => {
                             <div className="h-24 w-24 flex-shrink-0 overflow-hidden rounded-md border border-gray-200">
                               <img
                                 src={
-                                  item?.product.images[0].startsWith('[')
-                                    ? JSON.parse(item?.product.images[0])
-                                    : item?.product.images[0]
+                                  item?.product.images[0] && JSON.parse(item?.product.images[0])
                                 }
                                 alt={''}
                                 className="h-full w-full object-cover object-center"
