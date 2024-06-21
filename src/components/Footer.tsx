@@ -34,7 +34,7 @@ export const Footer = () => {
   ]
 
   return (
-    <footer className="bg-white p-10 top-32 sticky bottom-0 w-full">
+    <footer className="bg-white p-10 w-full relative">
       <div className="max-w-8xl mx-auto flex flex-col space-y-10">
         {/* Top section with logo, navigation links, and email subscription */}
         <div className="flex items-start justify-between space-x-8">

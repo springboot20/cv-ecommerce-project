@@ -66,7 +66,7 @@ const Products = () => {
     <Fragment>
       <Fragment>
         <section className="mt-[11rem] relative">
-          <div className="max-w-9xl mx-auto">
+          <div className="max-w-9xl mx-auto relative">
             <div className="w-full min-h-screen absolute justify-between lg:relative left-0 right-0">
               <header className="h-24">
                 <nav className="px-8 flex items-center space-x-4 h-full">
