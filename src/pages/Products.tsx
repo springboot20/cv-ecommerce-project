@@ -105,7 +105,7 @@ const Products = () => {
 											</div>
               </nav>
 
-              <div className="flex items-start justify-between px-8 mt-4">
+              <div className="flex mt-6 items-start justify-between px-8 mt-4">
                 <span className="text-xl text-gray-700 font-semibold space-x-3">
                   <small>{filteredProducts.length}</small>
                   <span>products</span>
