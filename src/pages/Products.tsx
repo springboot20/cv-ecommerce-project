@@ -19,14 +19,10 @@ const Products = () => {
     { name: string; image: string; id: number | string }[]
   >([])
   const [selectedCategory, setSelectedCategory] = useState<string | null>(null)
-
-  const itemsPerPage = 12
   const [currentPage, setCurrentPage] = useState(1)
 
-  const startIndex = (currentPage - 1) * itemsPerPage
-  const endIndex = startIndex + itemsPerPage
-  const currentProducts = filteredProducts.slice(startIndex, endIndex)
-
+  const itemsPerPage = 12
+ 
   const handleProductFetch = async () => {
     try {
       setIsLoading(true)
@@ -68,6 +64,12 @@ const Products = () => {
   }
 
   console.log(filteredProducts)
+const productsToDisplay = selectedCategory === '' ? products : filteredProducts;
+ 
+  const startIndex = (currentPage - 1) * itemsPerPage
+  const endIndex = startIndex + itemsPerPage
+  const currentProducts = productsToDisplay.slice(startIndex, endIndex)
+
 
   useEffect(() => {
     handleProductFetch()
@@ -150,7 +152,7 @@ const Products = () => {
               currentPage={currentPage}
               itemsPerPage={itemsPerPage}
               onPageChange={setCurrentPage}
-              totalItems={filteredProducts.length}
+              totalItems={currentProducts.length}
             />
           </div>
         </div>
