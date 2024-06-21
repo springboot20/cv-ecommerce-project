@@ -28,7 +28,7 @@ const Home = () => {
           toast.error(err.message)
         }
       } finally {
-        setIsLoading && setIsLoading(true)
+        setIsLoading && setIsLoading(false)
       }
     }
 
