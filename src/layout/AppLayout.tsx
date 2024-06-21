@@ -8,7 +8,6 @@ import {
   Bars3Icon,
   UserIcon,
 } from '@heroicons/react/24/outline'
-import { Footer } from '../components/Footer'
 import CartModal from '../components/modal/CartModal'
 
 const navigation = [
@@ -191,7 +190,6 @@ export const AppLayout: React.FC = () => {
         )}
       </Disclosure>
       <Outlet />
-      <Footer />
     </>
   )
 }
