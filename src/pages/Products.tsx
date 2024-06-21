@@ -16,9 +16,11 @@ const Products = () => {
   const [categories, setCategories] = useState<
     { name: string; image: string; id: number | string }[]
   >([])
+  const [filteredProducts, setFilteredProducts] = useState<ProductType[]>([])
+  const [selectedCategory, setSelectedCategory] = useState<string | null>(null)
 
   // const [activeButton, setActiveButton] = useState<boolean>(true);
-  const itemsPerPage = 12 
+  const itemsPerPage = 12
   const [currentPage, setCurrentPage] = useState(1)
 
   const startIndex = (currentPage - 1) * itemsPerPage
@@ -57,6 +59,18 @@ const Products = () => {
     }
   }
 
+  const handleCategorySelect = (categoryName: string | null) => {
+    setSelectedCategory(categoryName)
+    if (categoryName) {
+      setFilteredProducts(
+        products.filter((product) => product.category === categoryName),
+      )
+    } else {
+      setFilteredProducts(products)
+    }
+    setCurrentPage(1) // Reset to first page whenever category changes
+  }
+
   useEffect(() => {
     handleProductFetch()
     handleCategories()
@@ -70,10 +84,21 @@ const Products = () => {
             <div className="w-full min-h-screen absolute justify-between lg:relative left-0 right-0">
               <header className="h-24">
                 <nav className="px-8 flex items-center space-x-4 h-full">
+                  <Button
+                    className={`capitalize bg-[#f4f4f4] !rounded-none py-5 text-xl font-semibold text-[#4a4b4d] shadow-none ${
+                      selectedCategory === null ? 'bg-gray-300' : ''
+                    }`}
+                    onClick={() => handleCategorySelect(null)}
+                  >
+                    All
+                  </Button>
                   {categories.map((c) => (
                     <Button
-                      className="capitalize bg-[#f4f4f4] !rounded-none py-5 text-xl font-semibold text-[#4a4b4d] shadow-none"
+                      className={`capitalize bg-[#f4f4f4] !rounded-none py-5 text-xl font-semibold text-[#4a4b4d] shadow-none ${
+                        selectedCategory === c.name ? 'bg-gray-300' : ''
+                      }`}
                       key={c.id}
+                      onClick={() => handleCategorySelect(c.name)}
                     >
                       {c.name}
                     </Button>
@@ -82,7 +107,7 @@ const Products = () => {
 
                 <div className="flex items-start justify-between px-8 mt-4">
                   <span className="text-xl text-gray-700 font-semibold space-x-3">
-                    <small>{products.length}</small>
+                    <small>{filteredProducts.length}</small>
                     <span>products</span>
                   </span>
                 </div>
@@ -104,7 +129,7 @@ const Products = () => {
                         <Link to={`/collections/${product.id}`}>
                           <header className="h-[30rem] relative bg-[#d2d2d2] flex items-center justify-center">
                             <img
-                              src={ product.images &&product.images[0]}
+                              src={product.images && product.images[0]}
                               alt=""
                               className="h-full absolute w-full"
                             />
