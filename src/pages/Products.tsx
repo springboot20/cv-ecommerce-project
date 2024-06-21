@@ -9,6 +9,7 @@ import { instance } from '../api/ClientService'
 import { ProductType } from '../types'
 import { Link } from 'react-router-dom'
 import { toast } from 'react-toastify'
+import { truncate } from "../helpers" 
 
 const Products = () => {
   const [products, setProducts] = useState<ProductType[]>([])
@@ -96,7 +97,8 @@ const Products = () => {
                     key={c.id}
                     onClick={() => handleCategorySelect(c.name)}
                   >
-                    {c.name}
+                    {truncate 
+(c.name, 9)}
                   </Button>
                 ))}
               </nav>
