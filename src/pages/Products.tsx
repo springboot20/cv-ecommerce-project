@@ -89,6 +89,7 @@ const Products = () => {
                 >
                   All
                 </Button>
+											<div className="flex flex-wrap space-x-4">
                 {categories.map((c) => (
                   <Button
                     className={`capitalize bg-[#f4f4f4] !rounded-none py-5 text-xl font-semibold text-[#4a4b4d] shadow-none ${
@@ -101,6 +102,7 @@ const Products = () => {
 (c.name, 9)}
                   </Button>
                 ))}
+											</div>
               </nav>
 
               <div className="flex items-start justify-between px-8 mt-4">
