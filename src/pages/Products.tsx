@@ -89,7 +89,7 @@ const Products = () => {
                 >
                   All
                 </Button>
-											<div className="flex flex-wrap space-x-4">
+											<div className="flex flex-wrap items-center space-x-4">
                 {categories.map((c) => (
                   <Button
                     className={`capitalize bg-[#f4f4f4] !rounded-none py-5 text-xl font-semibold text-[#4a4b4d] shadow-none ${
