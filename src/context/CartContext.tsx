@@ -20,7 +20,7 @@ export const CartContextProvider: React.FC<{ children: React.ReactNode }> = ({
         if (itemExists) {
           const updatedCart = cartItems.map((item) =>
             item.product.id === item.product.id
-              ? { ...item, quantity: item.quantity }
+              ? { ...item, quantity: item.quantity + p.quantity }
               : item,
           )
           setCartItems(updatedCart)
@@ -31,8 +31,10 @@ export const CartContextProvider: React.FC<{ children: React.ReactNode }> = ({
           setCartItems([...cartItems, newCartItem])
         }
       } catch (err) {
-        console.log(err.message)
-        toast.error(err.message)
+        if (err instanceof Error) {
+          console.log(err.message)
+          toast.error(err.message)
+        }
       }
     },
     [cartItems],
@@ -79,7 +81,15 @@ export const CartContextProvider: React.FC<{ children: React.ReactNode }> = ({
       isNewItemAdded,
       setIsNewItemAdded,
     }),
-    [cartItems, addToCart, removeFromCart, updateCartItemQuantity, clearCart,isNewItemAdded,setIsNewItemAdded],
+    [
+      cartItems,
+      addToCart,
+      removeFromCart,
+      updateCartItemQuantity,
+      clearCart,
+      isNewItemAdded,
+      setIsNewItemAdded,
+    ],
   )
 
   return (

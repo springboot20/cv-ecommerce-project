@@ -12,6 +12,7 @@ import { ProductType } from '../types'
 import { formatPrice } from '../helpers'
 import { Link } from 'react-router-dom'
 import { useCart } from '../hooks/useCart'
+import { toast } from 'react-toastify'
 
 const Product = () => {
   const { id } = useParams()
@@ -32,8 +33,13 @@ const Product = () => {
           `/products/?category=${response.data.category}`,
         )
         setRelatedProducts(relatedResponse.data)
-      } catch (error) {
-        console.log('Error fetching product or related products:', error)
+      } catch (err) {
+        if (err instanceof Error) {
+          console.log(
+            `Error occur when trying to fetch product:  ${err.message}`,
+          )
+          toast.error(err.message)
+        }
       }
     }
 

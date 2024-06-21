@@ -8,6 +8,7 @@ import { Loader } from '../components/Loader'
 import { instance } from '../api/ClientService'
 import { ProductType } from '../types'
 import { Link } from 'react-router-dom'
+import { toast } from 'react-toastify'
 
 const Products = () => {
   const [products, setProducts] = useState<ProductType[]>([])
@@ -33,6 +34,10 @@ const Products = () => {
       console.log(response.data)
     } catch (err) {
       setIsLoading && setIsLoading(true)
+      if (err instanceof Error) {
+        toast(err.message)
+        console.log(`Error occur during fetching: ${err.message}`)
+      }
     }
   }
 
@@ -44,6 +49,10 @@ const Products = () => {
       setCategories(response.data)
     } catch (err) {
       setIsLoading && setIsLoading(true)
+      if (err instanceof Error) {
+        toast(err.message)
+        console.log(`Error occur during fetching: ${err.message}`)
+      }
     }
   }
 
