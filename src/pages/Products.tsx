@@ -12,49 +12,44 @@ import { toast } from 'react-toastify'
 
 const Products = () => {
   const [products, setProducts] = useState<ProductType[]>([])
+  const [filteredProducts, setFilteredProducts] = useState<ProductType[]>([])
   const [isLoading, setIsLoading] = useState<boolean>(false)
   const [categories, setCategories] = useState<
     { name: string; image: string; id: number | string }[]
   >([])
-  const [filteredProducts, setFilteredProducts] = useState<ProductType[]>([])
   const [selectedCategory, setSelectedCategory] = useState<string | null>(null)
 
-  // const [activeButton, setActiveButton] = useState<boolean>(true);
   const itemsPerPage = 12
   const [currentPage, setCurrentPage] = useState(1)
 
   const startIndex = (currentPage - 1) * itemsPerPage
   const endIndex = startIndex + itemsPerPage
-  const currentProducts = products?.slice(startIndex, endIndex)
+  const currentProducts = filteredProducts.slice(startIndex, endIndex)
 
   const handleProductFetch = async () => {
     try {
-      setIsLoading && setIsLoading(false)
-
+      setIsLoading(true)
       const response = await instance.get('/products')
-
       setProducts(response.data)
-      console.log(response.data)
+      setFilteredProducts(response.data) // Initialize filteredProducts with all products
     } catch (err) {
-      setIsLoading && setIsLoading(true)
       if (err instanceof Error) {
         toast(err.message)
-        console.log(`Error occur during fetching: ${err.message}`)
+        console.log(`Error occurred during fetching: ${err.message}`)
       }
+    } finally {
+      setIsLoading(false)
     }
   }
 
   const handleCategories = async () => {
     try {
-      setIsLoading && setIsLoading(false)
-
       const response = await instance.get('/categories')
       setCategories(response.data)
     } catch (err) {
-      setIsLoading && setIsLoading(true)
       if (err instanceof Error) {
         toast(err.message)
-        console.log(`Error occur during fetching: ${err.message}`)
+        console.log(`Error occurred during fetching: ${err.message}`)
       }
     }
   }
@@ -71,6 +66,8 @@ const Products = () => {
     setCurrentPage(1) // Reset to first page whenever category changes
   }
 
+  console.log(filteredProducts)
+
   useEffect(() => {
     handleProductFetch()
     handleCategories()
@@ -78,87 +75,84 @@ const Products = () => {
 
   return (
     <Fragment>
-      <Fragment>
-        <section className="mt-[11rem] relative">
-          <div className="max-w-9xl mx-auto relative">
-            <div className="w-full min-h-screen absolute justify-between lg:relative left-0 right-0">
-              <header className="h-24">
-                <nav className="px-8 flex items-center space-x-4 h-full">
+      <section className="mt-[11rem] relative">
+        <div className="max-w-9xl mx-auto relative">
+          <div className="w-full min-h-screen absolute justify-between lg:relative left-0 right-0">
+            <header className="h-24">
+              <nav className="px-8 flex items-center space-x-4 h-full">
+                <Button
+                  className={`capitalize bg-[#f4f4f4] !rounded-none py-5 text-xl font-semibold text-[#4a4b4d] shadow-none ${
+                    selectedCategory === null ? 'bg-gray-300' : ''
+                  }`}
+                  onClick={() => handleCategorySelect(null)}
+                >
+                  All
+                </Button>
+                {categories.map((c) => (
                   <Button
                     className={`capitalize bg-[#f4f4f4] !rounded-none py-5 text-xl font-semibold text-[#4a4b4d] shadow-none ${
-                      selectedCategory === null ? 'bg-gray-300' : ''
+                      selectedCategory === c.name ? 'bg-gray-300' : ''
                     }`}
-                    onClick={() => handleCategorySelect(null)}
+                    key={c.id}
+                    onClick={() => handleCategorySelect(c.name)}
                   >
-                    All
+                    {c.name}
                   </Button>
-                  {categories.map((c) => (
-                    <Button
-                      className={`capitalize bg-[#f4f4f4] !rounded-none py-5 text-xl font-semibold text-[#4a4b4d] shadow-none ${
-                        selectedCategory === c.name ? 'bg-gray-300' : ''
-                      }`}
-                      key={c.id}
-                      onClick={() => handleCategorySelect(c.name)}
-                    >
-                      {c.name}
-                    </Button>
-                  ))}
-                </nav>
+                ))}
+              </nav>
 
-                <div className="flex items-start justify-between px-8 mt-4">
-                  <span className="text-xl text-gray-700 font-semibold space-x-3">
-                    <small>{filteredProducts.length}</small>
-                    <span>products</span>
-                  </span>
-                </div>
-              </header>
+              <div className="flex items-start justify-between px-8 mt-4">
+                <span className="text-xl text-gray-700 font-semibold space-x-3">
+                  <small>{filteredProducts.length}</small>
+                  <span>products</span>
+                </span>
+              </div>
+            </header>
 
-              <motion.div
-                layout
-                initial="hidden"
-                animate="visible"
-                variants={gridVariants}
-                className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8 px-8 mt-24"
-              >
-                {isLoading ? (
-                  <Loader />
-                ) : (
-                  currentProducts?.map((product) => {
-                    return (
-                      <motion.div layout key={product.id}>
-                        <Link to={`/collections/${product.id}`}>
-                          <header className="h-[30rem] relative bg-[#d2d2d2] flex items-center justify-center">
-                            <img
-                              src={product.images && product.images[0]}
-                              alt=""
-                              className="h-full absolute w-full"
-                            />
-                          </header>
-                          <div className="mt-4 space-y-3">
-                            <h3 className="capitalize text-xl font-semibold text-gray-700">
-                              {product.title}
-                            </h3>
-                            <p className="text-lg font-medium italic">
-                              {formatPrice(product.price)}
-                            </p>
-                          </div>
-                        </Link>
-                      </motion.div>
-                    )
-                  })
-                )}
-              </motion.div>
-              <Pagination
-                currentPage={currentPage}
-                itemsPerPage={itemsPerPage}
-                onPageChange={setCurrentPage}
-                totalItems={products?.length}
-              />
-            </div>
+            <motion.div
+              layout
+              initial="hidden"
+              animate="visible"
+              variants={gridVariants}
+              className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8 px-8 mt-24"
+            >
+              {isLoading ? (
+                <Loader />
+              ) : (
+                currentProducts.map((product) => (
+                  <motion.div layout key={product.id}>
+                    <Link to={`/collections/${product.id}`}>
+                      <header className="h-[30rem] relative bg-[#d2d2d2] flex items-center justify-center">
+                        <img
+                          src={product.images && product.images[0]}
+                          alt=""
+                          className="h-full absolute w-full"
+                        />
+                      </header>
+                      <div className="mt-4 space-y-3">
+                        <h3 className="capitalize text-xl font-semibold text-gray-700">
+                          {product.title}
+                        </h3>
+                        <p className="text-lg font-medium italic">
+                          {formatPrice(product.price)}
+                        </p>
+                      </div>
+                    </Link>
+                  </motion.div>
+                ))
+              )}
+            </motion.div>
+            <Pagination
+              currentPage={currentPage}
+              itemsPerPage={itemsPerPage}
+              onPageChange={setCurrentPage}
+              totalItems={filteredProducts.length}
+            />
           </div>
-        </section>
-      </Fragment>
+        </div>
+      </section>
     </Fragment>
   )
 }
+
 export default Products
