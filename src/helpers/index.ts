@@ -3,8 +3,8 @@ export function classNames(...classes: string[]) {
 }
 
 export const formatPrice = (price: number) => {
-  return new Intl.NumberFormat('en-NG', {
-    currency: 'NGN',
+  return new Intl.NumberFormat('en-US', {
+    currency: 'USD',
     style: 'currency',
   }).format(price);
 };

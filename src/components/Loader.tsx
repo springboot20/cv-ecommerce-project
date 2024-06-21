@@ -1,6 +1,6 @@
 export const Loader = () => {
   return (
-    <div className='flex space-x-2 w-full h-screen fixed inset-0 bg-zinc-700/50 z-50 justify-center items-center'>
+    <div className='flex space-x-2 w-full absolute inset-0 bg-zinc-700/50 z-10 justify-center items-center'>
       <div aria-label='Loading...' role='status' className='flex items-center space-x-4'>
         <span className='text-xl font-bold text-gray-500'>Loading...</span>
         <svg className='h-16 w-16 animate-spin' viewBox='3 3 18 18'>

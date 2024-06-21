@@ -18,7 +18,7 @@ const Products = () => {
   >([])
 
   // const [activeButton, setActiveButton] = useState<boolean>(true);
-  const itemsPerPage = 150
+  const itemsPerPage = 12 
   const [currentPage, setCurrentPage] = useState(1)
 
   const startIndex = (currentPage - 1) * itemsPerPage
@@ -30,6 +30,7 @@ const Products = () => {
       setIsLoading && setIsLoading(false)
 
       const response = await instance.get('/products')
+
       setProducts(response.data)
       console.log(response.data)
     } catch (err) {
@@ -64,8 +65,7 @@ const Products = () => {
   return (
     <Fragment>
       <Fragment>
-        <main className="bg-hero-bg h-[70vh] bg-no-repeat bg-cover mt-40"></main>
-        <section className="w-full">
+        <section className="mt-[11rem] relative">
           <div className="max-w-9xl mx-auto">
             <div className="w-full min-h-screen absolute justify-between lg:relative left-0 right-0">
               <header className="h-24">
@@ -104,11 +104,7 @@ const Products = () => {
                         <Link to={`/collections/${product.id}`}>
                           <header className="h-[30rem] relative bg-[#d2d2d2] flex items-center justify-center">
                             <img
-                              src={
-                                product.images[0].startsWith('[')
-                                  ? JSON.parse(product.images[0])
-                                  : product.images[0]
-                              }
+                              src={ product.images &&product.images[0]}
                               alt=""
                               className="h-full absolute w-full"
                             />

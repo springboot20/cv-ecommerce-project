@@ -14,7 +14,7 @@ export const Pagination: React.FC<{
     }
   }
   return (
-    <div className="z-40 fixed bottom-7 left-2/4 rounded-lg bg-white dark:bg-dark-blue-dark-DME mx-auto -translate-x-2/4">
+    <div className=" absolute bottom-7 mt-32 left-2/4 rounded-lg bg-white dark:bg-dark-blue-dark-DME mx-auto -translate-x-2/4">
       <div className="flex items-center lg:px-4 py-2 rounded-md gap-[0.15rem] lg:gap-9">
         <button
           onClick={() => handlePageChange(currentPage - 1)}

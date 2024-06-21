@@ -34,7 +34,7 @@ export const Footer = () => {
   ]
 
   return (
-    <footer className="bg-white p-10 mt-6 relative">
+    <footer className="bg-white p-10 top-32 sticky bottom-0 w-full">
       <div className="max-w-8xl mx-auto flex flex-col space-y-10">
         {/* Top section with logo, navigation links, and email subscription */}
         <div className="flex items-start justify-between space-x-8">
@@ -47,7 +47,7 @@ export const Footer = () => {
           </div>
 
           {/* Navigation links */}
-          <div className="flex space-x-8">
+          <div className="flex space-x-20">
             {/* Footer routes */}
             <div className="flex flex-col space-y-2">
               <h4 className="text-lg font-semibold text-[#4a4b4d] mb-2">
@@ -82,7 +82,7 @@ export const Footer = () => {
           </div>
 
           {/* Email subscription */}
-          <div className="flex flex-col items-start space-y-6 w-[20rem]">
+          <div className="flex flex-col items-start space-y-6 w-[20rem] bottom-0">
             <p className="text-base text-[#4a4b4d] leading-7 font-medium">
               Be the first to know about our biggest and best sales. We'll never
               send more than one email a month.

@@ -28,6 +28,9 @@ const Product = () => {
         const response = await instance.get(`/products/${id}`)
         setProduct(response.data)
 
+        console.log(id)
+        console.log(response)
+
         // Assuming your API endpoint for related products is something like `/products/${id}/related`
         const relatedResponse = await instance.get(
           `/products/?category=${response.data.category}`,
@@ -61,10 +64,7 @@ const Product = () => {
         <section className="grid grid-cols-1 md:grid-cols-2 place-items-center lg:place-items-start place-content-center gap-8 px-8">
           <div className="col-span-full md:col-span-1 flex items-start gap-2">
             <div className="bg-[#d2d2d2]">
-              <img
-                src={product.images && JSON.parse(product.images[0])}
-                alt=""
-              />
+              <img src={product.images && product.images[1]} alt="" />
             </div>
           </div>
           <div className="col-span-full md:col-span-1 w-full">
@@ -162,7 +162,7 @@ const Product = () => {
                   </span>
                   <header className="h-[30rem] relative bg-[#d2d2d2] flex items-center justify-center">
                     <img
-                      src={product.images && JSON.parse(product.images[0])}
+                      src={product.images && product.images[0]}
                       alt=""
                       className="h-full absolute w-full"
                     />
