@@ -9,7 +9,7 @@ import { SignInInitialValues } from '../types'
 import AuthService from '../api/AuthService'
 import { motion } from 'framer-motion'
 import { Button } from '@material-tailwind/react'
-import { useAuth } from '../hooks/useAuth'
+// import { useAuth } from '../hooks/useAuth'
 
 const initialValues: SignInInitialValues = {
   email: '',
@@ -34,7 +34,7 @@ const motionConfig = {
 
 const Signin = () => {
   const navigate = useNavigate()
-  const { createToken } = useAuth()
+  // const { createToken } = useAuth()
 
   const [showPassword, setShowPassword] = useState(false)
 
@@ -53,9 +53,18 @@ const Signin = () => {
       try {
         const response = await AuthService.login(values)
 
+        if (response.status.toString().startsWith('2')) {
+          await Promise.resolve(setTimeout(() => navigate('/home'), 1200))
+
+          actions.resetForm()
+        }
+
         console.log(response)
       } catch (err) {
         console.log(err)
+        if (err instanceof Error) {
+          console.log(`Error occur when signing: ${err.message}`)
+        }
       }
     },
   })
