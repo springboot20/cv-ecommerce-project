@@ -19,7 +19,7 @@ const Products = () => {
   >([])
   const [selectedCategory, setSelectedCategory] = useState<string | null>(null)
 
-  const itemsPerPage = 12
+  const itemsPerPage = 70
   const [currentPage, setCurrentPage] = useState(1)
 
   const startIndex = (currentPage - 1) * itemsPerPage
@@ -124,7 +124,7 @@ const Products = () => {
                     <Link to={`/collections/${product.id}`}>
                       <header className="h-[30rem] relative bg-[#d2d2d2] flex items-center justify-center">
                         <img
-                          src={product.images && product.images[0]}
+                          src={product?.images[0]}
                           alt=""
                           className="h-full absolute w-full"
                         />

@@ -1,14 +1,34 @@
-import React, { createContext, useState, useMemo, useCallback } from 'react'
+import React, {
+  createContext,
+  useState,
+  useMemo,
+  useCallback,
+  useEffect,
+} from 'react'
 import { CartContextType } from '../types/context.types'
 import { CartTypes, ProductType } from '../types/index'
 import { toast } from 'react-toastify'
 
 export const CartContext = createContext<CartContextType>({} as CartContextType)
 
+const getCartFromLocalStorage = () => {
+  const cartItems =
+    localStorage.getItem('cart') === null
+      ? ((localStorage.setItem(
+          'cart',
+          JSON.stringify([]),
+        ) as unknown) as CartTypes[])
+      : JSON.parse(localStorage.getItem('cart') as string)
+
+  return cartItems
+}
+
 export const CartContextProvider: React.FC<{ children: React.ReactNode }> = ({
   children,
 }) => {
-  const [cartItems, setCartItems] = useState<CartTypes[]>([])
+  const [cartItems, setCartItems] = useState<CartTypes[]>(() =>
+    getCartFromLocalStorage(),
+  )
   const [isNewItemAdded, setIsNewItemAdded] = useState<boolean>(false)
 
   const addToCart = useCallback(
@@ -70,6 +90,10 @@ export const CartContextProvider: React.FC<{ children: React.ReactNode }> = ({
   const clearCart = useCallback(() => {
     setCartItems([])
   }, [])
+
+  useEffect(() => {
+    localStorage.setItem('cart', JSON.stringify(cartItems))
+  }, [cartItems])
 
   const cartValues = useMemo(
     () => ({
