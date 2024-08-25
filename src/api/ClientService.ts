@@ -5,14 +5,14 @@ export const instance: AxiosInstance = axios.create({
   baseURL: 'https://api.escuelajs.co/api/v1/',
 });
 
-interface clientServiceProps extends AxiosRequestConfig {
+interface ClientServiceProps extends AxiosRequestConfig {
   showSuccessNotification?: boolean;
 }
 
 export const clientService = async ({
   showSuccessNotification = true,
   ...options
-}: clientServiceProps) => {
+}: ClientServiceProps) => {
   instance.interceptors.response.use(
     (response: AxiosResponse) => {
       if (response.status.toString().startsWith('2')) {
