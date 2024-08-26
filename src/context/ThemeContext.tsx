@@ -7,7 +7,7 @@ const ThemeContext = createContext<ThemeContextInterface>({} as ThemeContextInte
 export const useTheme = () => useContext(ThemeContext);
 
 export const ThemeContextProvider: React.FC<{ children: React.ReactNode }> = ({ children }) => {
-  const [theme, setTheme] = useState<string | null>(LocalStorage.get('theme'));
+  const [theme, setTheme] = useState<string | null>("");
   const dark = 'dark';
   const light = 'light';
 

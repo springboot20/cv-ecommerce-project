@@ -1,4 +1,4 @@
-import CheckOutForm from '../components/check-out/CheckOutForm';
+import CheckOutForm from '../../components/check-out/CheckOutForm';
 import Shoe from '../assets/running-shoes-sneakers.png';
 
 const CheckOut = () => {

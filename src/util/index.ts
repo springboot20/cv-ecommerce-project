@@ -1,9 +1,11 @@
-import { ApiResponseObj } from '../types/api.types';
-import { toast } from 'react-toastify';
+import { ApiResponseObj } from "../types/api.types";
+import { toast } from "react-toastify";
+
+export const isBrowser = typeof window !== "undefined";
 
 export class LocalStorage {
   static get(key: string) {
-    if (isBrowser) return;
+    if (!isBrowser) return;
 
     const value = localStorage.getItem(key);
     if (value) {
@@ -13,25 +15,23 @@ export class LocalStorage {
   }
 
   static set(key: string, value: any) {
-    if (isBrowser) return;
+    if (!isBrowser) return;
 
     return localStorage.setItem(key, value);
   }
 
   static remove(key: string) {
-    if (isBrowser) return;
+    if (!isBrowser) return;
 
     return localStorage.removeItems(key);
   }
 
   static clear(): void {
-    if (isBrowser) return;
+    if (!isBrowser) return;
 
     return localStorage.clear();
   }
 }
-
-export const isBrowser = typeof window !== 'undefined';
 
 export const apiRequestHandler = async ({
   api,
@@ -50,4 +50,4 @@ export const apiRequestHandler = async ({
   } finally {
     setLoading && setLoading(false);
   }
-}
+};

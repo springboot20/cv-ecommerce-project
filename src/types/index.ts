@@ -5,19 +5,6 @@ export type UserTypes = {
   email: string;
 };
 
-export type ProductType = {
-  id: number;
-  title: string;
-  price: number;
-  description: string;
-  images: string[];
-  category: string;
-};
-
-export type CartTypes = {
-  product: ProductType;
-  quantity: number;
-};
 
 export type AuthRegisterPayload = {
   avatar: string;
@@ -54,8 +41,8 @@ export type showPasswordProps = {
   setShowPassword: React.Dispatch<React.SetStateAction<boolean>>;
 };
 
-export type InputProps = React.ComponentProps<'input'>;
-export type ButtonProps = React.ComponentProps<'button'>;
+export type InputProps = React.ComponentProps<"input">;
+export type ButtonProps = React.ComponentProps<"button">;
 
 export type FeaturedCardProps = {
   cards: Array<{

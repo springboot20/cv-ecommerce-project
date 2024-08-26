@@ -3,12 +3,12 @@
 import { Fragment, useState } from 'react'
 import cartImage from '../assets/cart-image.jpg'
 import { Link } from 'react-router-dom'
-import { useCart } from '../hooks/useCart'
-import { useAuth } from '../hooks/useAuth'
-import { IconType } from '../components/icon/IconType'
+import { useCart } from '../../hooks/useCart'
+import { useAuth } from '../../hooks/useAuth'
+import { IconType } from '../../components/icon/IconType'
 import { faEdit, faTrashAlt } from '@fortawesome/free-solid-svg-icons'
-import Button from '../components/icon/Button'
-import { formatPrice } from '../helpers/index'
+import Button from '../../components/icon/Button'
+import { formatPrice } from '../../helpers/index'
 
 const Cart = () => {
   const { cartItems, removeFromCart, updateCartItemQuantity } = useCart()

@@ -1,34 +1,25 @@
-import React, { Suspense } from 'react'
-import ReactDOM from 'react-dom/client'
-import App from './App.tsx'
-import './index.css'
-import { ThemeProvider } from '@material-tailwind/react'
-import { BrowserRouter } from 'react-router-dom'
-import { Loader } from './components/Loader'
-import { ToastContainer } from 'react-toastify'
-import 'react-toastify/dist/ReactToastify.css'
-import 'slick-carousel/slick/slick.css'
-import 'slick-carousel/slick/slick-theme.css'
+import React, { Suspense } from "react";
+import ReactDOM from "react-dom/client";
+import App from "./App.tsx";
+import "./index.css";
+import { ThemeProvider } from "@material-tailwind/react";
+import { Loader } from "./components/Loader";
+import { ToastContainer } from "react-toastify";
+import { Provider } from "react-redux";
+import store from "./app/store.ts";
+import "react-toastify/dist/ReactToastify.css";
+import "slick-carousel/slick/slick.css";
+import "slick-carousel/slick/slick-theme.css";
 
-import { ThemeContextProvider } from './context/ThemeContext'
-import { AuthContextProvider } from './context/AuthContext'
-import { CartContextProvider } from './context/CartContext'
-
-ReactDOM.createRoot(document.getElementById('root')!).render(
+ReactDOM.createRoot(document.getElementById("root")!).render(
   <React.StrictMode>
-    <BrowserRouter>
+    <Provider store={store}>
       <ThemeProvider>
-        <ThemeContextProvider>
-          <AuthContextProvider>
-            <CartContextProvider>
-              <ToastContainer />
-              <Suspense fallback={<Loader />}>
-                <App />
-              </Suspense>
-            </CartContextProvider>
-          </AuthContextProvider>
-        </ThemeContextProvider>
+        <ToastContainer />
+        <Suspense fallback={<Loader />}>
+          <App />
+        </Suspense>
       </ThemeProvider>
-    </BrowserRouter>
+    </Provider>
   </React.StrictMode>,
-)
+);
