@@ -4,9 +4,9 @@ import { useAppSelector } from "./hooks/redux/redux.hooks";
 import { RootState } from "./app/store";
 
 function App() {
-  const { tokens } = useAppSelector((state: RootState) => state.auth.data);
+  const { tokens, user } = useAppSelector((state: RootState) => state.auth.data);
 
-  return <RouterProvider router={Router(tokens!)} />;
+  return <RouterProvider router={Router(tokens!, user!)} />;
 }
 
 export default App;

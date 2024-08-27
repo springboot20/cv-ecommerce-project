@@ -71,14 +71,6 @@ export const ProductSlice = ApiService.injectEndpoints({
       }),
       invalidatesTags: (_, __, productId) => [{ type: "Product", id: productId }],
     }),
-
-    removeProductSubImage: builder.mutation<Response, { productId: string; subImageId: string }>({
-      query: ({ productId, subImageId }) => ({
-        url: `/products/remove/subImg/${productId}/${subImageId}`,
-        method: "DELETE",
-      }),
-      invalidatesTags: (_, __, { productId }) => [{ type: "Product", id: productId }],
-    }),
   }),
 });
 
@@ -89,5 +81,4 @@ export const {
   useGetProductByIdQuery,
   useGetProductsByCategoryQuery,
   useDeleteProductMutation,
-  useRemoveProductSubImageMutation,
 } = ProductSlice;

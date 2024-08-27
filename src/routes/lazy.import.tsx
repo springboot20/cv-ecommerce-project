@@ -1,7 +1,7 @@
 import { AppLayout } from "../layout/AppLayout";
 import { lazy } from "react";
 import { createBrowserRouter, Navigate } from "react-router-dom";
-import { Token } from "../types/redux/auth";
+import { Token, User } from "../types/redux/auth";
 
 const PrivateRoute = lazy(() => import("../components/Private.routes"));
 const Home = lazy(() => import("../pages/home/Home"));
@@ -15,21 +15,16 @@ const PublicRoute = lazy(() => import("../components/Public.routes"));
 const Login = lazy(() => import("../pages/auth/Signin"));
 const Register = lazy(() => import("../pages/auth/Signup"));
 
-const Router = (tokens: Token) => {
+const Router = (tokens: Token, user: User) => {
   return createBrowserRouter([
-    {
-      path: "/",
-      children: [
-        {
-          index: true,
-          element: tokens ? <Navigate to="/login" /> : <Navigate to="/" />,
-        },
-      ],
-    },
     {
       path: "/",
       element: <AppLayout />,
       children: [
+        {
+          index: true,
+          element: tokens && user._id ? <Navigate to="/" /> : <Navigate to="/login" />,
+        },
         {
           index: true,
           element: (

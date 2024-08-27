@@ -44,3 +44,5 @@ export const AuthSlice = ApiService.injectEndpoints({
     }),
   }),
 });
+
+export const { useRegisterMutation, useLoginMutation, useLogoutMutation } = AuthSlice;
