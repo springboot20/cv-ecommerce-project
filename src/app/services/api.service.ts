@@ -5,7 +5,7 @@ export const ApiService = createApi({
   baseQuery: fetchBaseQuery({
     baseUrl: "http://localhost:5050/api/v1",
     prepareHeaders: (headers, { getState }) => {
-      const accessToken = (getState() as RootState).auth.data.tokens.accessToken;
+      const accessToken = (getState() as RootState).auth.data.tokens?.accessToken;
 
       if (accessToken) {
         headers.set("authorrzation", "");
@@ -14,6 +14,6 @@ export const ApiService = createApi({
       return headers;
     },
   }),
-  tagTypes: ["User", "Product"],
+  tagTypes: ["User", "Product", "Cart"],
   endpoints: () => ({}),
 });

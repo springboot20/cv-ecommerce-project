@@ -36,9 +36,9 @@ export const ProductSlice = ApiService.injectEndpoints({
                 type: "Product" as const,
                 id: p._id,
               })),
-              { type: "Product", id: "LIST" },
+              { type: "Product", id: "PRODUCT" },
             ]
-          : [{ type: "Product", id: "LIST" }],
+          : [{ type: "Product", id: "PRODUCT" }],
     }),
 
     updateProduct: builder.mutation<

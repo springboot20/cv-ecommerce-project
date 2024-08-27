@@ -16,5 +16,5 @@ const productSlice = createSlice({
   extraReducers: (_) => {},
 });
 
-export const authReducer = productSlice.reducer;
+export const productReducer = productSlice.reducer;
 export const {} = productSlice.actions;
