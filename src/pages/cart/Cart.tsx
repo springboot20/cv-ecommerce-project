@@ -9,12 +9,14 @@ import Button from "../../components/icon/Button";
 import { formatPrice } from "../../helpers/index";
 import { useAppSelector } from "../../hooks/redux/redux.hooks";
 import { RootState } from "../../app/store";
+import { useGetUserCartQuery } from "../../features/cart/cart.slice";
 
 const Cart = () => {
-  const { cartItems, removeFromCart, updateCartItemQuantity } = useCart();
   const [isEditing, setIsEditing] = useState<boolean>(false);
   const [quantityInput, setQuantityInput] = useState<number>(0);
   const [selectedItemId, setSelectedItemId] = useState<number | null>(null);
+
+  const { data, isLoading, isError } = useGetUserCartQuery();
 
   const handleEditClick = (id: number) => {
     const selectedItem = cartItems.find((item) => item.product.id === id);
