@@ -1,58 +1,58 @@
 /** @format */
 
-import { Fragment, useState } from 'react'
-import cartImage from '../assets/cart-image.jpg'
-import { Link } from 'react-router-dom'
-import { useCart } from '../../hooks/useCart'
-import { useAuth } from '../../hooks/useAuth'
-import { IconType } from '../../components/icon/IconType'
-import { faEdit, faTrashAlt } from '@fortawesome/free-solid-svg-icons'
-import Button from '../../components/icon/Button'
-import { formatPrice } from '../../helpers/index'
+import { Fragment, useState } from "react";
+import cartImage from "../assets/cart-image.jpg";
+import { Link } from "react-router-dom";
+import { IconType } from "../../components/icon/IconType";
+import { faEdit, faTrashAlt } from "@fortawesome/free-solid-svg-icons";
+import Button from "../../components/icon/Button";
+import { formatPrice } from "../../helpers/index";
+import { useAppSelector } from "../../hooks/redux/redux.hooks";
+import { RootState } from "../../app/store";
 
 const Cart = () => {
-  const { cartItems, removeFromCart, updateCartItemQuantity } = useCart()
-  const [isEditing, setIsEditing] = useState<boolean>(false)
-  const [quantityInput, setQuantityInput] = useState<number>(0)
-  const [selectedItemId, setSelectedItemId] = useState<number | null>(null)
+  const { cartItems, removeFromCart, updateCartItemQuantity } = useCart();
+  const [isEditing, setIsEditing] = useState<boolean>(false);
+  const [quantityInput, setQuantityInput] = useState<number>(0);
+  const [selectedItemId, setSelectedItemId] = useState<number | null>(null);
 
   const handleEditClick = (id: number) => {
-    const selectedItem = cartItems.find((item) => item.product.id === id)
+    const selectedItem = cartItems.find((item) => item.product.id === id);
 
     if (selectedItem) {
       if (selectedItem) {
-        setQuantityInput(selectedItem.quantity) // Set initial quantity input to current quantity
-        setSelectedItemId(id)
-        setIsEditing(true)
+        setQuantityInput(selectedItem.quantity); // Set initial quantity input to current quantity
+        setSelectedItemId(id);
+        setIsEditing(true);
       }
     }
-  }
+  };
 
   const handleCancelEdit = () => {
-    setSelectedItemId(null)
-    setIsEditing(false)
-  }
+    setSelectedItemId(null);
+    setIsEditing(false);
+  };
 
   const handleUpdateQuantity = () => {
     if (selectedItemId !== null) {
-      updateCartItemQuantity(selectedItemId, quantityInput) // Call updateCartItemQuantity from useCart with itemId and quantityInput
-      setSelectedItemId(null)
-      setIsEditing(false)
+      updateCartItemQuantity(selectedItemId, quantityInput); // Call updateCartItemQuantity from useCart with itemId and quantityInput
+      setSelectedItemId(null);
+      setIsEditing(false);
     }
-  }
-  const shippingFee = 1.55
-  const auth = useAuth()
+  };
+  const shippingFee = 1.55;
+  const auth = useAppSelector((state: RootState) => state.auth.data);
 
   const totalItemsCost = cartItems.reduce((acc, item) => {
-    const itemPrice = item.product.price
-    const quantity = item.quantity
+    const itemPrice = item.product.price;
+    const quantity = item.quantity;
 
-    const initialTotal = itemPrice * quantity
+    const initialTotal = itemPrice * quantity;
 
-    return acc + initialTotal
-  }, 0)
+    return acc + initialTotal;
+  }, 0);
 
-  console.log(totalItemsCost)
+  console.log(totalItemsCost);
 
   return (
     <Fragment>
@@ -91,19 +91,13 @@ const Cart = () => {
                 ) : (
                   <div className="mt-8">
                     <div className="flow-root">
-                      <ul
-                        role="list"
-                        className="-my-6 divide-y divide-gray-200"
-                      >
+                      <ul role="list" className="-my-6 divide-y divide-gray-200">
                         {cartItems.map((item) => (
                           <li key={item?.product.id} className="flex py-6">
                             <div className="h-24 w-24 flex-shrink-0 overflow-hidden rounded-md border border-gray-200">
                               <img
-                                src={
-                                  item?.product.images &&
-                                  item?.product.images[0]
-                                }
-                                alt={''}
+                                src={item?.product.images && item?.product.images[0]}
+                                alt={""}
                                 className="h-full w-full object-cover object-center"
                               />
                             </div>
@@ -114,31 +108,21 @@ const Cart = () => {
                                   <h3 className="text-gray-800 font-semibold text-xl">
                                     {item?.product.title}
                                   </h3>
-                                  <p className="ml-4 text-xl">
-                                    {formatPrice(item?.product.price)}
-                                  </p>
+                                  <p className="ml-4 text-xl">{formatPrice(item?.product.price)}</p>
                                 </div>
                               </div>
                               <div className="flex flex-1 items-end justify-between text-sm">
-                                {selectedItemId === item.product.id &&
-                                isEditing ? (
+                                {selectedItemId === item.product.id && isEditing ? (
                                   <div className="flex items-center space-x-4">
                                     <fieldset>
-                                      <label
-                                        htmlFor="quantity"
-                                        className="sr-only"
-                                      >
+                                      <label htmlFor="quantity" className="sr-only">
                                         quantity
                                       </label>
                                       <input
                                         id="quantity"
                                         type="number"
                                         value={quantityInput}
-                                        onChange={(e) =>
-                                          setQuantityInput(
-                                            parseInt(e.target.value),
-                                          )
-                                        }
+                                        onChange={(e) => setQuantityInput(parseInt(e.target.value))}
                                         className="border border-gray-300 rounded-md p-1 text-sm w-16"
                                       />
                                     </fieldset>
@@ -159,33 +143,23 @@ const Cart = () => {
                                   </div>
                                 ) : (
                                   <>
-                                    <p className="text-gray-500">
-                                      Qty {item?.quantity}
-                                    </p>
+                                    <p className="text-gray-500">Qty {item?.quantity}</p>
                                     <div className="flex space-x-4 items-center">
                                       <Button
                                         type="button"
                                         onClick={() => {
-                                          removeFromCart(item.product?.id)
+                                          removeFromCart(item.product?.id);
                                         }}
                                         className="font-medium text-red-600 hover:text-red-500"
                                       >
-                                        <IconType
-                                          icon={faTrashAlt}
-                                          className="h-6"
-                                        />
+                                        <IconType icon={faTrashAlt} className="h-6" />
                                       </Button>
                                       <Button
                                         type="button"
-                                        onClick={() =>
-                                          handleEditClick(item.product.id)
-                                        }
+                                        onClick={() => handleEditClick(item.product.id)}
                                         className="font-medium text-indigo-600 hover:text-indigo-500"
                                       >
-                                        <IconType
-                                          icon={faEdit}
-                                          className="h-6"
-                                        />
+                                        <IconType icon={faEdit} className="h-6" />
                                       </Button>
                                     </div>
                                   </>
@@ -205,20 +179,14 @@ const Cart = () => {
             <div className="p-6 bg-white rounded-md shadow-md">
               <div className="container border-b border-b-blue-gray-700 pb-8 space-y-4">
                 <div className="flex justify-between items-center">
-                  <h2 className="text-2xl font-bold text-gray-800">
-                    Subtotal :{' '}
-                  </h2>
+                  <h2 className="text-2xl font-bold text-gray-800">Subtotal : </h2>
                   <p className="text-lg font-semibold text-gray-700">
                     {formatPrice(totalItemsCost)}
                   </p>
                 </div>
                 <div className="flex justify-between items-center">
-                  <h2 className="text-2xl font-medium text-gray-800">
-                    Shipping fee :
-                  </h2>
-                  <p className="text-lg font-semibold text-gray-700">
-                    {formatPrice(shippingFee)}
-                  </p>
+                  <h2 className="text-2xl font-medium text-gray-800">Shipping fee :</h2>
+                  <p className="text-lg font-semibold text-gray-700">{formatPrice(shippingFee)}</p>
                 </div>
               </div>
               <div className="container flex justify-between items-center mt-3">
@@ -247,7 +215,7 @@ const Cart = () => {
         </div>
       </section>
     </Fragment>
-  )
-}
+  );
+};
 
-export default Cart
+export default Cart;
