@@ -21,7 +21,7 @@ export const CartSlice = ApiService.injectEndpoints({
     >({
       query: (productId, ...patch) => ({
         url: `/carts/${productId}`,
-        method: "PUT",
+        method: "POST",
         body: patch,
       }),
       invalidatesTags: [{ type: "Cart", id: "CART_ITEM" }],
@@ -37,5 +37,32 @@ export const CartSlice = ApiService.injectEndpoints({
             ]
           : [{ type: "Cart", id: "CART_ITEM" }],
     }),
+
+    removeItemToCart: builder.mutation<
+      Response,
+      Pick<CartRequest, "productId"> & Partial<CartRequest>
+    >({
+      query: (productId, ...patch) => ({
+        url: `/carts/${productId}`,
+        method: "PUT",
+        body: patch,
+      }),
+      invalidatesTags: [{ type: "Cart", id: "CART_ITEM" }],
+    }),
+
+    clearCart: builder.mutation<Response, void>({
+      query: () => ({
+        url: `/carts/`,
+        method: "PUT",
+      }),
+      invalidatesTags: [{ type: "Cart", id: "CART_ITEM" }],
+    }),
   }),
 });
+
+export const {
+  useAddItemToCartMutation,
+  useGetUserCartQuery,
+  useRemoveItemToCartMutation,
+  useClearCartMutation,
+} = CartSlice;
