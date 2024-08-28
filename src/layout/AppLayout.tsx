@@ -1,36 +1,36 @@
-import { Fragment, useState } from 'react'
-import { Link, NavLink, Outlet } from 'react-router-dom'
-import { Disclosure, Menu, Transition } from '@headlessui/react'
+import { Fragment, useState } from "react";
+import { Link, NavLink, Outlet } from "react-router-dom";
+import { Disclosure, Menu, Transition } from "@headlessui/react";
 import {
   BellIcon,
   MagnifyingGlassIcon,
   XMarkIcon,
   Bars3Icon,
   UserIcon,
-} from '@heroicons/react/24/outline'
-import CartModal from '../components/modal/CartModal'
+} from "@heroicons/react/24/outline";
+// import CartModal from '../components/modal/CartModal'
 
 const navigation = [
-  { to: '/home', name: 'home', current: true },
-  { to: '/collections', name: 'collections', current: true },
-  { to: '/home', name: 'essentials', current: true },
-  { to: '/sales', name: 'best ', current: true },
-  { to: '/home', name: 'about us', current: true },
-]
+  { to: "/", name: "home", current: true },
+  { to: "/collections", name: "collections", current: true },
+  { to: "/home", name: "essentials", current: true },
+  { to: "/sales", name: "best ", current: true },
+  { to: "/home", name: "about us", current: true },
+];
 
 function classNames(...classes: string[]) {
-  return classes.filter(Boolean).join(' ')
+  return classes.filter(Boolean).join(" ");
 }
 
 const handleActive = ({ isActive }: { isActive: boolean }) => {
   return classNames(
-    isActive ? 'text-gray-800' : 'text-gray-600',
-    'block rounded-md px-3 py-2 text-2xl font-medium flex-shrink-0 capitalize',
-  )
-}
+    isActive ? "text-gray-800" : "text-gray-600",
+    "block rounded-md px-3 py-2 text-lg font-medium flex-shrink-0 capitalize",
+  );
+};
 
-export const AppLayout: React.FC = () => {
-  const [isOpen, setIsOpen] = useState<boolean>(false)
+const AppLayout: React.FC = () => {
+  const [isOpen, setIsOpen] = useState<boolean>(false);
 
   return (
     <>
@@ -40,10 +40,10 @@ export const AppLayout: React.FC = () => {
       >
         {({ open }) => (
           <>
-            <CartModal isOpen={isOpen} setIsOpen={setIsOpen} />
-            <div className="mx-auto max-w-9xl px-2 sm:px-2 lg:px-4">
+            {/* <CartModal isOpen={isOpen} setIsOpen={setIsOpen} /> */}
+            <div className="mx-auto max-w-7xl px-2 sm:px-2 lg:px-4 xl:p-0">
               <div className="relative">
-                <div className="flex items-center justify-end py-2 h-16 space-x-3">
+                <div className="flex items-center justify-end py-2 h-14 space-x-3">
                   <ul className="flex items-center space-x-4">
                     <li className="text-lg font-medium text-gray-800">
                       <Link to="#">Return</Link>
@@ -57,7 +57,7 @@ export const AppLayout: React.FC = () => {
                           <div>
                             <Menu.Button className="flex dark:text-white text-gray-900">
                               <span className="sr-only">Open auth menu</span>
-                              <span className="flex justify-center align-items-center border rounded-full overflow-hidden relative  h-10 w-10">
+                              <span className="flex justify-center align-items-center border rounded-full overflow-hidden relative h-10 w-10">
                                 <UserIcon className="text-gray-800 h-8 w-8 top-2 absolute" />
                               </span>
                             </Menu.Button>
@@ -77,8 +77,8 @@ export const AppLayout: React.FC = () => {
                                   <NavLink
                                     to="/"
                                     className={classNames(
-                                      active ? 'bg-gray-100' : '',
-                                      'block px-4 py-4 text-sm text-gray-700',
+                                      active ? "bg-gray-100" : "",
+                                      "block px-4 py-4 text-sm text-gray-700",
                                     )}
                                   >
                                     Register
@@ -90,8 +90,8 @@ export const AppLayout: React.FC = () => {
                                   <NavLink
                                     to="/login"
                                     className={classNames(
-                                      active ? 'bg-gray-100' : '',
-                                      'block px-4 py-4 text-sm text-gray-700',
+                                      active ? "bg-gray-100" : "",
+                                      "block px-4 py-4 text-sm text-gray-700",
                                     )}
                                   >
                                     Signin
@@ -106,10 +106,10 @@ export const AppLayout: React.FC = () => {
                   </ul>
                 </div>
                 <hr className="border-[1px] border-gray-900/40" />
-                <div className="relative flex items-center justify-between py-2 h-28">
+                <div className="relative flex items-center justify-between py-2 h-20">
                   <div>
                     <MagnifyingGlassIcon
-                      className="cursor-pointer h-10 w-10 text-gray-800"
+                      className="cursor-pointer h-8 w-8 text-gray-800"
                       onClick={() => {}}
                     />
                   </div>
@@ -121,7 +121,7 @@ export const AppLayout: React.FC = () => {
                           key={item.name}
                           to={item.to}
                           className={handleActive}
-                          aria-current={item.current ? 'page' : undefined}
+                          aria-current={item.current ? "page" : undefined}
                         >
                           {item.name}
                         </NavLink>
@@ -129,10 +129,10 @@ export const AppLayout: React.FC = () => {
                     </div>
                   </div>
 
-                  <div className="flex items-center gap-5 mr-20 lg:mr-0">
-                    <BellIcon className="h-10 w-10 relative before:absolute before:content-[''] before:h-4 before:w-4 before:rounded-full before:bg-red-600 before:top-2" />
+                  <div className="flex items-center gap-5 lg:mr-0">
+                    <BellIcon className="h-8 w-8 relative before:absolute before:content-[''] before:h-4 before:w-4 before:rounded-full before:bg-red-600 before:top-2" />
                     <button
-                      className="h-14 w-14 flex items-center justify-center rounded-full"
+                      className="h-10 w-10 flex items-center justify-center rounded-full"
                       onClick={() => setIsOpen(!isOpen)}
                     >
                       <span className="sr-only">cart button</span>
@@ -150,23 +150,17 @@ export const AppLayout: React.FC = () => {
                         />
                       </svg>
                     </button>
-                  </div>
 
-                  <div className="absolute inset-y-0 right-0 flex items-center lg:hidden">
-                    <Disclosure.Button className="inline-flex items-center justify-center rounded-md p-2 dark:text-white text-gray-900 bg-gray-50 hover:dark:text-white focus:outline-none focus:ring-2 focus:ring-inset focus:ring-black/20">
-                      <span className="sr-only">Open main menu</span>
-                      {open ? (
-                        <XMarkIcon
-                          className="block h-10 w-10"
-                          aria-hidden="true"
-                        />
-                      ) : (
-                        <Bars3Icon
-                          className="block h-10 w-10"
-                          aria-hidden="true"
-                        />
-                      )}
-                    </Disclosure.Button>
+                    <div className="flex items-center lg:hidden">
+                      <Disclosure.Button className="inline-flex items-center justify-center rounded-md p-1.5 dark:text-white text-gray-900 bg-gray-50 hover:dark:text-white focus:outline-none focus:ring-2 focus:ring-inset focus:ring-black/20">
+                        <span className="sr-only">Open main menu</span>
+                        {open ? (
+                          <XMarkIcon className="block h-8 w-8" aria-hidden="true" />
+                        ) : (
+                          <Bars3Icon className="block h-8 w-8" aria-hidden="true" />
+                        )}
+                      </Disclosure.Button>
+                    </div>
                   </div>
                 </div>
               </div>
@@ -179,7 +173,7 @@ export const AppLayout: React.FC = () => {
                     key={item.name}
                     to={item.to}
                     className={handleActive}
-                    aria-current={item.current ? 'page' : undefined}
+                    aria-current={item.current ? "page" : undefined}
                   >
                     {item.name}
                   </NavLink>
@@ -189,7 +183,11 @@ export const AppLayout: React.FC = () => {
           </>
         )}
       </Disclosure>
-      <Outlet />
+      <div className="max-w-7xl mx-auto mt-36">
+        <Outlet />
+      </div>
     </>
-  )
-}
+  );
+};
+
+export default AppLayout;

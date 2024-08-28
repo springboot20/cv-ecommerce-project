@@ -27,10 +27,10 @@ export const ProductSlice = ApiService.injectEndpoints({
     }),
 
     getAllProducts: builder.query<Response, ProductQuery>({
-      query: ({ limit = 10, featured = true, page = 1, name }) =>
-        `products?limit=${limit}&featured=${featured}&page=${page}&name=${name}`,
+      query: ({ limit = 10, page = 1, featured }) =>
+        `products?limit=${limit}&page=${page}&featured=${featured}`,
       providesTags: (result) =>
-        result?.data.products
+        result?.data?.products?.length
           ? [
               ...result?.data.products.map((p: ProductType) => ({
                 type: "Product" as const,
@@ -45,7 +45,7 @@ export const ProductSlice = ApiService.injectEndpoints({
       Response,
       Pick<ProductRequest, "_id"> & Partial<ProductRequest>
     >({
-      query: (_id, ...patch) => ({
+      query: ({ _id, ...patch }) => ({
         url: `/products/${_id}`,
         method: "PUT",
         body: patch,
@@ -54,8 +54,8 @@ export const ProductSlice = ApiService.injectEndpoints({
     }),
 
     getProductById: builder.query<Response, string>({
-      query: (productId) => `/products/${productId}`,
-      providesTags: (_, __, productId) => [{ type: "Product", id: productId }],
+      query: (id) => `/products/${id}`,
+      providesTags: (_, __, id) => [{ type: "Product", id }],
     }),
 
     getProductsByCategory: builder.query<Response, ProductQuery>({

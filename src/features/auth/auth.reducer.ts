@@ -1,17 +1,12 @@
 import { createSlice } from "@reduxjs/toolkit";
-import { InitialState, Token, User } from "../../types/redux/auth";
 import { LocalStorage } from "../../util";
+import { InitialState, Token, User } from "../../types/redux/auth";
 import { AuthSlice } from "./auth.slice";
 
 const initialState: InitialState = {
-  loading: "idle",
-  data: {
-    tokens: LocalStorage.get("tokens") ?? ({} as Token),
-    user: LocalStorage.get("user") ?? ({} as User),
-  },
-  requestedId: undefined,
+  tokens: LocalStorage.get("tokens") as Token,
+  user: LocalStorage.get("user") as  User,
   isAuthenticated: LocalStorage.get("authentified") as boolean,
-  error: null,
 };
 
 const authSlice = createSlice({
@@ -20,37 +15,20 @@ const authSlice = createSlice({
   reducers: {},
   extraReducers: (builder) => {
     /**
-     * Login build case matcher
+     * Login builder casing
      */
-
     builder.addMatcher(AuthSlice.endpoints.login.matchFulfilled, (state, { payload }) => {
       const { data } = payload;
 
       state.isAuthenticated = true;
-      state.data.user = data.user;
-      state.data.tokens = data.tokens;
-      state.isAuthenticated = data.user.isAuthenticated;
+      state.user = data.user;
+      state.tokens = data.tokens;
 
       LocalStorage.set("user", data.user);
+      LocalStorage.set("authentified", data.user.isAuthenticated);
       LocalStorage.set("tokens", data.tokens);
-      LocalStorage.set("authentified", data.isAuthenticated);
-    });
-
-    /**
-     * Logout build case matcher
-     */
-
-    builder.addMatcher(AuthSlice.endpoints.logout.matchFulfilled, (state) => {
-      state.isAuthenticated = true;
-      state.data.user = null;
-      state.data.tokens = null;
-
-      LocalStorage.remove("user");
-      LocalStorage.remove("tokens");
-      LocalStorage.remove("authentified");
     });
   },
 });
 
 export const authReducer = authSlice.reducer;
-export const {} = authSlice.actions;

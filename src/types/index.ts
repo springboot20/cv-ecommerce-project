@@ -5,7 +5,6 @@ export type UserTypes = {
   email: string;
 };
 
-
 export type AuthRegisterPayload = {
   avatar: string;
   name: string;
@@ -58,7 +57,9 @@ export type NavRoutesType = {
 };
 
 export interface SignUpInitialValues {
-  [key: string]: string;
+  username: string;
+  email: string;
+  password: string;
 }
 
 export interface SignInInitialValues {

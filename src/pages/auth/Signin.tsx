@@ -6,9 +6,10 @@ import { InputField } from "../../components/inputs/Input";
 import { loginSchema } from "../../schema/Schema";
 import { IconType } from "../../components/icon/IconType";
 import { SignInInitialValues } from "../../types";
-import AuthService from "../../api/AuthService";
 import { motion } from "framer-motion";
 import { Button } from "@material-tailwind/react";
+import { useLoginMutation } from "../../features/auth/auth.slice";
+import { toast } from "react-toastify";
 
 const initialValues: SignInInitialValues = {
   email: "",
@@ -33,32 +34,26 @@ const motionConfig = {
 
 const Signin = () => {
   const navigate = useNavigate();
+  const [login, { isLoading }] = useLoginMutation();
 
   const [showPassword, setShowPassword] = useState(false);
 
-  const { values, handleSubmit, handleBlur, handleChange, touched, errors, isSubmitting } =
-    useFormik({
-      initialValues,
-      validationSchema: loginSchema,
-      onSubmit: async (values, actions) => {
-        try {
-          const response = await AuthService.login(values);
-
-          if (response.status.toString().startsWith("2")) {
-            await Promise.resolve(setTimeout(() => navigate("/home"), 1200));
-
-            actions.resetForm();
-          }
-
-          console.log(response);
-        } catch (err) {
-          console.log(err);
-          if (err instanceof Error) {
-            console.log(`Error occur when signing: ${err.message}`);
-          }
-        }
-      },
-    });
+  const { values, handleSubmit, handleBlur, handleChange, touched, errors } = useFormik({
+    initialValues,
+    validationSchema: loginSchema,
+    onSubmit: async (values, actions) => {
+      await login(values)
+        .unwrap()
+        .then(async (res) => {
+          toast.success(res.data.message);
+          await Promise.resolve(setTimeout(() => navigate("/"), 2000));
+          actions.resetForm();
+        })
+        .catch((error) => {
+          console.log(error);
+        });
+    },
+  });
 
   return (
     <motion.div {...motionConfig}>
@@ -134,11 +129,11 @@ const Signin = () => {
           <div className="mt-6">
             <Button
               type="submit"
-              disabled={isSubmitting}
-              loading={isSubmitting}
+              disabled={isLoading}
+              loading={isLoading}
               className="rounded-md w-full flex items-center justify-center capitalizet bg-light-blue-600 px-3 py-3 text-xl font-semibold text-white shadow-sm hover:bg-light-blue-500 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-light-blue-600 disabled:opacity-70"
             >
-              {isSubmitting ? <span>Signing in...</span> : <span>Sign in</span>}
+              {isLoading ? <span>Signing in...</span> : <span>Sign in</span>}
             </Button>
           </div>
           <p className="mt-4 text-lg text-center font-medium text-gray-600">

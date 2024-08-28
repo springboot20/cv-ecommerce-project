@@ -13,17 +13,12 @@ export interface User {
 }
 
 export type InitialState = {
-  loading: "idle" | "pending" | "succeeded" | "failed";
+  user: User | null;
+  tokens: Token | null;
   isAuthenticated: boolean;
-  data: {
-    user: User | null;
-    tokens: Token | null;
-  };
-  requestedId?: string;
-  error: null;
 };
 
 export type Token = {
-  accessToken: string;
-  refreshToken: string;
+  access_token: string;
+  refresh_token: string;
 };

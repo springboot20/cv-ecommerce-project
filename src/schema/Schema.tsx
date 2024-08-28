@@ -1,63 +1,61 @@
-import * as yup from 'yup'
+import * as yup from "yup";
 
-const passwordRule = /^(?=.*\d)[a-zA-Z\d]{8,}$/
-const nameRule = /[\w\s@]+$/
+const passwordRule = /^(?=.*[a-z])(?=.*\d)(?=.*[-.+@_&])(?=.*[A-Z]*).{6,}$/;
+
+const nameRule = /[\w\s@]+$/;
 
 export const loginSchema = yup.object().shape({
   email: yup
     .string()
-    .email({ message: 'Enter a valid email address' })
-    .required('email is required'),
+    .email({ message: "Enter a valid email address" })
+    .required("email is required"),
 
   password: yup
     .string()
     .matches(passwordRule, {
       message:
-        'Password must be at least 8 digits characters long and contain at least one uppercase letter, one lowercase letter, and one number ',
+        "Password must be at least 8 digits characters long and contain at least one uppercase letter, one lowercase letter, and one number ",
     })
-    .required('password is required'),
-})
+    .required("password is required"),
+});
 
 export const orderSchema = yup.object().shape({
   firstname: yup
     .string()
     .matches(nameRule, {
-      message: 'only allow letters, number, and underscore',
+      message: "only allow letters, number, and underscore",
     })
-    .required('firstname is required'),
+    .required("firstname is required"),
   lastname: yup
     .string()
     .matches(nameRule, {
-      message: 'only allow letters, number, and underscore',
+      message: "only allow letters, number, and underscore",
     })
-    .required('lastname is required'),
-  streetAddress: yup.string().required('street address is required'),
-  country: yup.string().required('street address is required'),
-  city: yup.string().required('city is required'),
-  zipcode: yup.number().required('zipcode is required'),
-  phone: yup.string().required('zipcode is required'),
-})
+    .required("lastname is required"),
+  streetAddress: yup.string().required("street address is required"),
+  country: yup.string().required("street address is required"),
+  city: yup.string().required("city is required"),
+  zipcode: yup.number().required("zipcode is required"),
+  phone: yup.string().required("zipcode is required"),
+});
 
 export const registerSchema = yup.object().shape({
-  name: yup
+  username: yup
     .string()
     .matches(nameRule, {
-      message: 'only allow letters, number, and underscore',
+      message: "only allow letters, number, and underscore",
     })
-    .required('username is required'),
+    .required("username is required"),
 
-  avatar: yup.string().required('avatar is required'),
+  avatar: yup.string().required("avatar is required"),
 
-  email: yup
-    .string()
-    .email('Invalid email address')
-    .required('email is required'),
+  email: yup.string().email("Invalid email address").required("email is required"),
 
   password: yup
     .string()
     .matches(passwordRule, {
       message:
-        'Password must be at least 8 digits characters long and contain at least one letter, digit and special characters ',
+        "Password must be at least 8 digits characters long and contain at least one letter, digit and special characters ",
     })
-    .required('password is required'),
-})
+    .required("password is required"),
+});

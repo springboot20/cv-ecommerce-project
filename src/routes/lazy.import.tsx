@@ -1,8 +1,8 @@
-import { AppLayout } from "../layout/AppLayout";
 import { lazy } from "react";
 import { createBrowserRouter, Navigate } from "react-router-dom";
 import { Token, User } from "../types/redux/auth";
 
+const AppLayout = lazy(() => import("../layout/AppLayout"));
 const PrivateRoute = lazy(() => import("../components/Private.routes"));
 const Home = lazy(() => import("../pages/home/Home"));
 const Products = lazy(() => import("../pages/product/Products"));
@@ -40,16 +40,14 @@ const Router = (tokens: Token, user: User) => {
               <Products />
             </PrivateRoute>
           ),
-          children: [
-            {
-              path: ":id",
-              element: (
-                <PrivateRoute>
-                  <Product />
-                </PrivateRoute>
-              ),
-            },
-          ],
+        },
+        {
+          path: "collections/:id",
+          element: (
+            <PrivateRoute>
+            <Product />
+            </PrivateRoute>
+          ),
         },
         {
           path: "cart",

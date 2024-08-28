@@ -8,12 +8,11 @@ import { IconType } from "../../components/icon/IconType";
 import { SignUpInitialValues } from "../../types";
 import { motion } from "framer-motion";
 import { Button } from "@material-tailwind/react";
-import AuthService from "../../api/AuthService";
+import { useRegisterMutation } from "../../features/auth/auth.slice";
 
 const initialValues: SignUpInitialValues = {
-  name: "",
+  username: "",
   email: "",
-  avatar: "",
   password: "",
 };
 
@@ -35,18 +34,19 @@ const motionConfig = {
 
 const Signup = () => {
   const navigate = useNavigate();
+  const [register, { isLoading }] = useRegisterMutation();
 
   const [showPassword, setShowPassword] = useState(false);
 
-  const { values, handleSubmit, handleBlur, handleChange, touched, errors, isSubmitting } =
+  const { values, handleSubmit, handleBlur, handleChange, touched, errors } =
     useFormik({
       initialValues,
       validationSchema: registerSchema,
       onSubmit: async (values, actions) => {
         try {
-          const response = await AuthService.register(values);
+          const response = await register(values).unwrap();
 
-          if (response.status.toString().startsWith("2")) {
+          if (response.statusCode.toString().startsWith("2")) {
             await new Promise((resolve) => setTimeout(resolve, 1500));
             actions.resetForm();
             navigate("/", { replace: true });
@@ -82,38 +82,14 @@ const Signup = () => {
                   placeholder="enter your name  here..."
                   onChange={handleChange}
                   onBlur={handleBlur}
-                  value={values.name}
+                  value={values.username}
                   className={`block w-full rounded-md border-0 py-3 px-3  text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-light-blue-600 sm:text-lg font-base sm:leading-6 ${
-                    errors.name && touched.name ? "ring-red-600 ring-[0.15rem]" : ""
+                    errors.username && touched.username ? "ring-red-600 ring-[0.15rem]" : ""
                   }`}
                 />
               </div>
-              {errors.name && touched.name && (
-                <small className="text-base text-red-600">{errors.name}</small>
-              )}
-            </fieldset>
-
-            <fieldset className="mb-2 mt-2">
-              <label htmlFor="avatar" className="block text-xl font-medium leading-6 text-gray-700">
-                Avatar
-              </label>
-              <div className="mt-2">
-                <InputField
-                  id="avatar"
-                  name="avatar"
-                  type="text"
-                  autoComplete="name"
-                  placeholder="enter your avatar url here..."
-                  onChange={handleChange}
-                  onBlur={handleBlur}
-                  value={values.avatar}
-                  className={`block w-full rounded-md border-0 py-3 px-3  text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-light-blue-600 sm:text-lg font-base sm:leading-6 ${
-                    errors.avatar && touched.avatar ? "ring-red-600 ring-[0.15rem]" : ""
-                  }`}
-                />
-              </div>
-              {errors.avatar && touched.avatar && (
-                <small className="text-base text-red-600">{errors.avatar}</small>
+              {errors.username && touched.username && (
+                <small className="text-base text-red-600">{errors.username}</small>
               )}
             </fieldset>
 
@@ -182,11 +158,11 @@ const Signup = () => {
           <div className="mt-6">
             <Button
               type="submit"
-              disabled={isSubmitting}
-              loading={isSubmitting}
+              disabled={isLoading}
+              loading={isLoading}
               className="rounded-md w-full flex items-center justify-center capitalize bg-light-blue-600 px-3 py-3 text-xl font-semibold text-white shadow-sm hover:bg-light-blue-500 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-light-blue-600 disabled:opacity-70"
             >
-              {isSubmitting ? <span>Signing up...</span> : <span>Sign up</span>}
+              {isLoading ? <span>Signing up...</span> : <span>Sign up</span>}
             </Button>
           </div>
           <p className="mt-4 text-lg text-center font-medium text-gray-600">
