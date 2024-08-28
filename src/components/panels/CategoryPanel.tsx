@@ -1,16 +1,36 @@
 import { Disclosure } from "@headlessui/react";
-import { XMarkIcon } from "@heroicons/react/24/outline";
+import { MagnifyingGlassIcon, XMarkIcon } from "@heroicons/react/24/outline";
 import { List, ListItem } from "@material-tailwind/react";
+import { InputField } from "../inputs/Input";
+import React from "react";
 
-export const CategoryPanel = () => {
+export const CategoryPanel: React.FC<{
+  handleSearch: (e: React.ChangeEvent<HTMLInputElement>) => void;
+}> = ({ handleSearch }) => {
   return (
     <>
       <div className="fixed hidden lg:block flex-1 max-w-sm min-h-screen top-36 w-full flex-col z-10 border-r">
-        <div className="w-full h-full p-2">
+        <div className="w-full h-full p-3.5">
           <Disclosure.Button className="lg:hidden absolute right-8 top-4">
             <span className="sr-only">Close side panel</span>
             <XMarkIcon className="h-6" aria-hidden={true} />
           </Disclosure.Button>
+
+          <div className="relative mt-8">
+            <MagnifyingGlassIcon
+              className={`eye-icon absolute top-[50%] translate-y-[-50%] left-4 cursor-pointer text-xl text-gray-700 `}
+            />
+            <InputField
+              id="password"
+              name="search"
+              type="text"
+              placeholder="search for product here..."
+              autoComplete="password"
+              onChange={handleSearch}
+              className={`block w-full rounded-md border-0 py-3 pl-11 text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-light-blue-600 text-base font-base sm:leading-6 `}
+            />
+          </div>
+
           <div className="relative mt-8 pb-5 border-b">
             <h1 className="sm:text-lg lg:text-xl font-bold">Category</h1>
             <List className="p-0 mt-3">

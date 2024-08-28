@@ -27,8 +27,8 @@ export const ProductSlice = ApiService.injectEndpoints({
     }),
 
     getAllProducts: builder.query<Response, ProductQuery>({
-      query: ({ limit = 10, page = 1, featured }) =>
-        `products?limit=${limit}&page=${page}&featured=${featured}`,
+      query: ({ limit = 10, page = 1, featured, name }) =>
+        `products?limit=${limit}&page=${page}&featured=${featured}&name=${name}`,
       providesTags: (result) =>
         result?.data?.products?.length
           ? [

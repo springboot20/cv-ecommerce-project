@@ -57,7 +57,7 @@ const Products = () => {
   return (
     <Disclosure>
       <section className="relative flex items-stretch justify-between flex-shrink-0">
-        <CategoryPanel />
+        <CategoryPanel handleSearch={handleSearch} />
         <div
           className={classNames(
             isLoading ? "h-auto" : "min-h-screen",
@@ -79,6 +79,10 @@ const Products = () => {
           >
             {isLoading ? (
               <ProductsSkeletonLoading cardsNumber={9} />
+            ) : searchQuery && products.length === 0 ? (
+              <p className="font-semibold text-gray-700 text-xl text-center">
+                No country found for "{searchQuery}"
+              </p>
             ) : (
               products?.map((product: ProductType) => (
                 <Link to={`/collections/${product._id}`} key={product._id}>
