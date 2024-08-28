@@ -1,4 +1,4 @@
-import { Fragment, useState } from "react";
+import { Fragment } from "react";
 import { Link, NavLink, Outlet } from "react-router-dom";
 import { Disclosure, Menu, Transition } from "@headlessui/react";
 import {
@@ -8,7 +8,6 @@ import {
   Bars3Icon,
   UserIcon,
 } from "@heroicons/react/24/outline";
-// import CartModal from '../components/modal/CartModal'
 
 const navigation = [
   { to: "/", name: "home", current: true },
@@ -30,17 +29,14 @@ const handleActive = ({ isActive }: { isActive: boolean }) => {
 };
 
 const AppLayout: React.FC = () => {
-  const [isOpen, setIsOpen] = useState<boolean>(false);
-
   return (
     <>
       <Disclosure
         as="nav"
-        className={`fixed top-0 left-0 z-20 right-0 dark:bg-gray-800 bg-white border-b border-black/20`}
+        className={`fixed top-0 left-0 right-0 dark:bg-gray-800 bg-white border-b border-black/20`}
       >
         {({ open }) => (
           <>
-            {/* <CartModal isOpen={isOpen} setIsOpen={setIsOpen} /> */}
             <div className="mx-auto max-w-7xl px-2 sm:px-2 lg:px-4 xl:p-0">
               <div className="relative">
                 <div className="flex items-center justify-end py-2 h-14 space-x-3">
@@ -131,10 +127,7 @@ const AppLayout: React.FC = () => {
 
                   <div className="flex items-center gap-5 lg:mr-0">
                     <BellIcon className="h-8 w-8 relative before:absolute before:content-[''] before:h-4 before:w-4 before:rounded-full before:bg-red-600 before:top-2" />
-                    <button
-                      className="h-10 w-10 flex items-center justify-center rounded-full"
-                      onClick={() => setIsOpen(!isOpen)}
-                    >
+                    <button className="h-10 w-10 flex items-center justify-center rounded-full">
                       <span className="sr-only">cart button</span>
                       <svg
                         width="20"
@@ -183,7 +176,7 @@ const AppLayout: React.FC = () => {
           </>
         )}
       </Disclosure>
-      <div className="max-w-7xl mx-auto lg:mt-36">
+      <div className="max-w-7xl mx-auto mt-36">
         <Outlet />
       </div>
     </>

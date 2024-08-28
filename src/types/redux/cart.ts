@@ -1,7 +1,7 @@
 import { ProductType } from "./product";
 
 export interface InitialState {
-  cartItems: CartInterface[];
+  cartItems: CartInterface;
   isNewAddedToCart: boolean;
 }
 

@@ -7,7 +7,7 @@ interface CartRequest {
 }
 
 interface Response {
-  data: CartInterface[] | any;
+  data: CartInterface | any;
   statusCode: number;
   message: string;
   success: boolean;
@@ -19,10 +19,10 @@ export const CartSlice = ApiService.injectEndpoints({
       Response,
       Pick<CartRequest, "productId"> & Partial<CartRequest>
     >({
-      query: (productId, ...patch) => ({
+      query: ({ productId, quantity }) => ({
         url: `/carts/${productId}`,
         method: "POST",
-        body: patch,
+        body: { quantity },
       }),
       invalidatesTags: [{ type: "Cart", id: "CART_ITEM" }],
     }),
@@ -30,22 +30,15 @@ export const CartSlice = ApiService.injectEndpoints({
     getUserCart: builder.query<Response, void>({
       query: () => "/carts",
       providesTags: (result) =>
-        result
-          ? [
-              ...result.data.map(({ _id }: CartInterface) => ({ type: "Cart" as const, id: _id })),
-              { type: "Cart", id: "CART_ITEM" },
-            ]
+        result?.data?.cart
+          ? [{ type: "Cart", id: result?.data?.cart._id }]
           : [{ type: "Cart", id: "CART_ITEM" }],
     }),
 
-    removeItemToCart: builder.mutation<
-      Response,
-      Pick<CartRequest, "productId"> & Partial<CartRequest>
-    >({
-      query: (productId, ...patch) => ({
+    removeItemFromCart: builder.mutation<Response, string>({
+      query: (productId) => ({
         url: `/carts/${productId}`,
-        method: "PUT",
-        body: patch,
+        method: "PATCH",
       }),
       invalidatesTags: [{ type: "Cart", id: "CART_ITEM" }],
     }),
@@ -63,6 +56,6 @@ export const CartSlice = ApiService.injectEndpoints({
 export const {
   useAddItemToCartMutation,
   useGetUserCartQuery,
-  useRemoveItemToCartMutation,
+  useRemoveItemFromCartMutation,
   useClearCartMutation,
 } = CartSlice;

@@ -10,7 +10,6 @@ export const ApiService = createApi({
     baseUrl: "http://localhost:5050/api/v1",
     prepareHeaders: (headers) => {
       const tokens = LocalStorage.get("tokens") as Token;
-      console.log(tokens);
       if (tokens) {
         headers.set("authorization", `Bearer ${tokens?.access_token}`);
       }
