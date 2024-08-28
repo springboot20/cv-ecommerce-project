@@ -1,39 +1,38 @@
-import { Fragment, useState, useEffect } from 'react'
-import { ProductType } from '../types/'
-import { Link } from 'react-router-dom'
-import BusinessMan from '../assets/cover_img.png'
-import { instance } from '../api/ClientService'
-import { toast } from 'react-toastify'
-import { Loader } from '../components/Loader'
-import { classNames } from '../helpers'
-import Slider from 'react-slick'
-import { featuredCarouselSettings } from '../util/slickSlider.config'
+import { Fragment, useState, useEffect } from "react";
+import { ProductType } from "../../types/redux/product";
+import { Link } from "react-router-dom";
+import BusinessMan from "../assets/cover_img.png";
+import { toast } from "react-toastify";
+import { Loader } from "../../components/Loader";
+import { classNames } from "../../helpers";
+import Slider from "react-slick";
+import { featuredCarouselSettings } from "../../util/slickSlider.config";
 
 const Home = () => {
-  const [featuredProducts, setFeaturedProducts] = useState<ProductType[]>([])
-  const [isLoading, setIsLoading] = useState<boolean>(true)
+  const [featuredProducts, setFeaturedProducts] = useState<ProductType[]>([]);
+  const [isLoading, setIsLoading] = useState<boolean>(true);
 
   useEffect(() => {
     const fetchProduct = async () => {
       try {
-        setIsLoading && setIsLoading(false)
-        const featuredProductsResponse = await instance.get(`products/`)
+        setIsLoading && setIsLoading(false);
+        const featuredProductsResponse = await instance.get(`products/`);
 
-        if (featuredProductsResponse.status.toString().startsWith('2')) {
-          setFeaturedProducts(featuredProductsResponse.data)
+        if (featuredProductsResponse.status.toString().startsWith("2")) {
+          setFeaturedProducts(featuredProductsResponse.data);
         }
       } catch (err) {
-        setIsLoading && setIsLoading(true)
+        setIsLoading && setIsLoading(true);
         if (err instanceof Error) {
-          toast.error(err.message)
+          toast.error(err.message);
         }
       } finally {
-        setIsLoading && setIsLoading(false)
+        setIsLoading && setIsLoading(false);
       }
-    }
+    };
 
-    fetchProduct()
-  }, [])
+    fetchProduct();
+  }, []);
 
   return (
     <Fragment>
@@ -46,17 +45,14 @@ const Home = () => {
                   Providing Services at your Door
                 </h1>
                 <p className="text-2xl font-medium text-gray-700">
-                  <small className="text-3xl font-semibold text-gray-800">
-                    MACC Essentials
-                  </small>{' '}
-                  has an important role in making supplies and services
-                  available to customers and their patients during this critical
-                  time. This includes services from various domains. Our aim is
-                  to aid you. As much we can.
+                  <small className="text-3xl font-semibold text-gray-800">MACC Essentials</small>{" "}
+                  has an important role in making supplies and services available to customers and
+                  their patients during this critical time. This includes services from various
+                  domains. Our aim is to aid you. As much we can.
                 </p>
               </div>
               <Link
-                to={'#'}
+                to={"#"}
                 className="py-4 inline-block px-14 text-xl font-bold bg-red-500 text-white mt-8"
               >
                 Learn more
@@ -91,32 +87,22 @@ const Home = () => {
           {isLoading ? (
             <div
               className={classNames(
-                'grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-4 mt-4 h-[40vh] relative',
-                isLoading ? 'place-content-center ' : '',
+                "grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-4 mt-4 h-[40vh] relative",
+                isLoading ? "place-content-center " : "",
               )}
             >
               <Loader />
             </div>
           ) : (
-            <Slider
-              {...featuredCarouselSettings}
-              className="flex gap-4 mt-4 w-full"
-            >
+            <Slider {...featuredCarouselSettings} className="flex gap-4 mt-4 w-full">
               {featuredProducts.slice(0, 5).map((product, index) => (
-                <div
-                  className="h-[34rem] relative bg-[#d2d2d2]"
-                  key={product.id}
-                >
+                <div className="h-[34rem] relative bg-[#d2d2d2]" key={product.id}>
                   {index === 0 && (
                     <span className="absolute py-1.5 px-12 bg-[#e2342d] text-white text-xl font-semibold top-0 right-0 uppercase">
                       top seller
                     </span>
                   )}
-                  <img
-                    src={product.images[0]}
-                    alt=""
-                    className="absolute h-full w-full"
-                  />
+                  <img src={product.images[0]} alt="" className="absolute h-full w-full" />
                 </div>
               ))}
             </Slider>
@@ -143,34 +129,24 @@ const Home = () => {
               {isLoading ? (
                 <div
                   className={classNames(
-                    'grid grid-cols-1 sm:grid-cols-2 gap-4 mt-4 h-[40vh] relative',
-                    isLoading ? 'place-content-center' : '',
+                    "grid grid-cols-1 sm:grid-cols-2 gap-4 mt-4 h-[40vh] relative",
+                    isLoading ? "place-content-center" : "",
                   )}
                 >
                   <Loader />
                 </div>
               ) : (
-                <Slider
-                  {...featuredCarouselSettings}
-                  className="flex gap-4 mt-4 w-full"
-                >
+                <Slider {...featuredCarouselSettings} className="flex gap-4 mt-4 w-full">
                   {featuredProducts.slice(0, 5).map((product) => {
                     return (
-                      <div
-                        className="h-[36rem] bg-[#d2d2d2] relative"
-                        key={product.id}
-                      >
+                      <div className="h-[36rem] bg-[#d2d2d2] relative" key={product.id}>
                         <span className="absolute py-1.5 px-12 bg-[#e2342d] text-white text-xl font-semibold top-0 right-0 uppercase">
                           20% off
                         </span>
 
-                        <img
-                          src={product.images[0]}
-                          alt=""
-                          className="absolute h-full w-full"
-                        />
+                        <img src={product.images[0]} alt="" className="absolute h-full w-full" />
                       </div>
-                    )
+                    );
                   })}
                 </Slider>
               )}
@@ -179,6 +155,6 @@ const Home = () => {
         </div>
       </section>
     </Fragment>
-  )
-}
-export default Home
+  );
+};
+export default Home;
