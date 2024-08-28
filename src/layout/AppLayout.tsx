@@ -183,7 +183,7 @@ const AppLayout: React.FC = () => {
           </>
         )}
       </Disclosure>
-      <div className="max-w-7xl mx-auto mt-36">
+      <div className="max-w-7xl mx-auto lg:mt-36">
         <Outlet />
       </div>
     </>
