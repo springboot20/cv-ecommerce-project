@@ -1,4 +1,4 @@
-import { Fragment, useEffect, useState } from "react";
+import { useEffect, useState } from "react";
 import { classNames, formatPrice } from "../../helpers";
 import { motion } from "framer-motion";
 import { Pagination } from "../../components/Pagination";
@@ -12,10 +12,11 @@ import { ProductsSkeletonLoading } from "../../components/loaders/Skeleton";
 import { CategoryPanel } from "../../components/panels/CategoryPanel";
 import { Disclosure } from "@headlessui/react";
 import { Bars3Icon } from "@heroicons/react/24/outline";
+import { LocalStorage } from "../../util";
 
 const Products = () => {
   const [searchQuery, setSearchQuery] = useState<string>("");
-  const [featured, setFeatured] = useState<boolean>(false);
+  // const [featured, setFeatured] = useState<boolean>(false);
   const [page, setPage] = useState<number>(1);
 
   let limit = 10;
@@ -27,7 +28,7 @@ const Products = () => {
     name: searchQuery,
   });
 
-  let products = data?.data?.products;
+  let products = data?.data?.products ?? (LocalStorage.get("products") as ProductType[]);
 
   const totalPages = data?.data?.totalPages ?? 1;
   const hasNextPage = data?.data?.hasNextPage ?? false;
@@ -52,7 +53,7 @@ const Products = () => {
       toast.success(data?.message);
     }
     refetch();
-  }, []);
+  }, [data?.message]);
 
   return (
     <Disclosure>

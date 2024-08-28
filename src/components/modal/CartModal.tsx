@@ -1,17 +1,15 @@
-import { PencilSquareIcon, TrashIcon, XMarkIcon } from "@heroicons/react/24/outline";
+import { TrashIcon, XMarkIcon } from "@heroicons/react/24/outline";
 import { Link } from "react-router-dom";
 import { formatPrice } from "../../helpers/index";
 import Button from "../icon/Button";
 import { useAppSelector } from "../../hooks/redux/redux.hooks";
 import { RootState } from "../../app/store";
 import { useEffect, useState } from "react";
-import {
-  useAddItemToCartMutation,
-  useGetUserCartQuery,
-  useRemoveItemFromCartMutation,
-} from "../../features/cart/cart.slice";
+import { useGetUserCartQuery, useRemoveItemFromCartMutation } from "../../features/cart/cart.slice";
 import { CartInterface } from "../../types/redux/cart";
 import { Dialog } from "@headlessui/react";
+import { LocalStorage } from "../../util";
+import { toast } from "react-toastify";
 
 export default function CartModal({
   isOpen,
@@ -21,63 +19,29 @@ export default function CartModal({
   setIsOpen: React.Dispatch<React.SetStateAction<boolean>>;
 }) {
   const { data, refetch } = useGetUserCartQuery();
-  const [addItemToCart] = useAddItemToCartMutation();
   const [removeItemToCart] = useRemoveItemFromCartMutation();
   const { isNewAddedToCart } = useAppSelector((state: RootState) => state.cart);
-  
-  console.log(isNewAddedToCart);
-
   const [refreshTrigered, setRefreshTrigered] = useState(false);
-  const [isEditing, setIsEditing] = useState<boolean>(false);
-  const [quantityInput, setQuantityInput] = useState<number>(0);
-  const [selectedItemId, setSelectedItemId] = useState<string | null>(null);
 
-  const cartItems = data?.data?.cart as CartInterface;
-
-  const handleEditClick = (id: string) => {
-    const selectedItem = cartItems.items.find((item) => item.product._id === id);
-
-    if (selectedItem) {
-      if (selectedItem) {
-        setQuantityInput(selectedItem.quantity); // Set initial quantity input to current quantity
-        setSelectedItemId(id);
-        setIsEditing(true);
-      }
-    }
-  };
-
-  const handleCancelEdit = () => {
-    setSelectedItemId(null);
-    setIsEditing(false);
-  };
-
-  const handleUpdateQuantity = async (productId: string) => {
-    if (selectedItemId !== null && quantityInput > 0) {
-      try {
-        const response = await addItemToCart({ productId, quantity: quantityInput }).unwrap();
-        setRefreshTrigered(!refreshTrigered);
-
-        console.log(response);
-      } catch (error) {
-        console.log(error);
-      }
-      setSelectedItemId(null);
-      setIsEditing(false);
-    }
-  };
+  const cartItems = data?.data?.cart ?? (LocalStorage.get("cart") as CartInterface);
 
   const handleDelete = async (productId: string) => {
     try {
-      await removeItemToCart(productId).unwrap();
+      const response = await removeItemToCart(productId).unwrap();
       setRefreshTrigered(!refreshTrigered);
-    } catch (error) {
-      console.log(error);
+
+      if (response.message) {
+        toast.success(response.message);
+      }
+    } catch (error: any) {
+      if (error.data) {
+        toast.error(error.data.message);
+      }
     }
   };
-
   useEffect(() => {
     refetch();
-  }, [refreshTrigered]);
+  }, [refreshTrigered, isNewAddedToCart]);
 
   return (
     <Dialog open={isOpen} onClose={setIsOpen} className="relative z-20">
@@ -107,7 +71,7 @@ export default function CartModal({
                     <div className="py-3">
                       <div className="flow-root">
                         <ul role="list" className="-my-6 divide-y divide-gray-200">
-                          {cartItems?.items?.map((item) => (
+                          {cartItems?.items?.map((item: any) => (
                             <li key={item?.product._id} className="flex py-6">
                               <div className="h-24 w-24 flex-shrink-0 overflow-hidden rounded-md border border-gray-200">
                                 <img
@@ -129,60 +93,18 @@ export default function CartModal({
                                   </div>
                                 </div>
                                 <div className="flex flex-1 items-end justify-between text-sm">
-                                  {selectedItemId === item.product._id && isEditing ? (
-                                    <div className="flex items-center space-x-4">
-                                      <fieldset>
-                                        <label htmlFor="quantity" className="sr-only">
-                                          quantity
-                                        </label>
-                                        <input
-                                          id="quantity"
-                                          type="number"
-                                          value={quantityInput}
-                                          onChange={(e) =>
-                                            setQuantityInput(parseInt(e.target.value))
-                                          }
-                                          className="border border-gray-300 rounded-md p-1 text-sm w-14 text-center"
-                                        />
-                                      </fieldset>
-                                      <Button
-                                        type="button"
-                                        onClick={() => handleUpdateQuantity(item.product?._id)}
-                                        className="font-medium text-indigo-600 hover:text-indigo-500"
-                                      >
-                                        Save
-                                      </Button>
-                                      <Button
-                                        type="button"
-                                        onClick={handleCancelEdit}
-                                        className="font-medium text-gray-500 hover:text-gray-400"
-                                      >
-                                        Cancel
-                                      </Button>
-                                    </div>
-                                  ) : (
-                                    <>
-                                      <p className="text-gray-500">Qty ({item?.quantity})</p>
-                                      <div className="flex space-x-4 items-center">
-                                        <Button
-                                          type="button"
-                                          onClick={() => {
-                                            handleDelete(item.product?._id);
-                                          }}
-                                          className="text-red-600 hover:text-red-500"
-                                        >
-                                          <TrashIcon className="h-6" />
-                                        </Button>
-                                        <Button
-                                          type="button"
-                                          onClick={() => handleEditClick(item.product._id)}
-                                          className="text-indigo-600 hover:text-indigo-500"
-                                        >
-                                          <PencilSquareIcon className="h-6" />
-                                        </Button>
-                                      </div>
-                                    </>
-                                  )}
+                                  <p className="text-gray-500">Qty ({item?.quantity})</p>
+                                  <div className="flex space-x-4 items-center">
+                                    <Button
+                                      type="button"
+                                      onClick={() => {
+                                        handleDelete(item.product?._id);
+                                      }}
+                                      className="text-red-600 hover:text-red-500"
+                                    >
+                                      <TrashIcon className="h-6" />
+                                    </Button>
+                                  </div>
                                 </div>
                               </div>
                             </li>

@@ -9,7 +9,7 @@ export const CategoryPanel: React.FC<{
 }> = ({ handleSearch }) => {
   return (
     <>
-      <div className="fixed hidden lg:block flex-1 max-w-sm min-h-screen top-36 w-full flex-col z-10 border-r">
+      <div className="fixed hidden lg:block flex-1 max-w-sm min-h-screen top-36 w-full flex-col border-r">
         <div className="w-full h-full p-3.5">
           <Disclosure.Button className="lg:hidden absolute right-8 top-4">
             <span className="sr-only">Close side panel</span>

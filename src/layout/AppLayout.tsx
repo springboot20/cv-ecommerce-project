@@ -1,13 +1,15 @@
-import { Fragment } from "react";
+import { Fragment, useState } from "react";
 import { Link, NavLink, Outlet } from "react-router-dom";
 import { Disclosure, Menu, Transition } from "@headlessui/react";
 import {
   BellIcon,
-  MagnifyingGlassIcon,
   XMarkIcon,
   Bars3Icon,
   UserIcon,
 } from "@heroicons/react/24/outline";
+import CartModal from "../components/modal/CartModal";
+import { useAppSelector } from "../hooks/redux/redux.hooks";
+import { RootState } from "../app/store";
 
 const navigation = [
   { to: "/", name: "home", current: true },
@@ -17,7 +19,7 @@ const navigation = [
   { to: "/home", name: "about us", current: true },
 ];
 
-function classNames(...classes: string[]) {
+function classNames(...classes: (boolean | string)[]) {
   return classes.filter(Boolean).join(" ");
 }
 
@@ -29,14 +31,18 @@ const handleActive = ({ isActive }: { isActive: boolean }) => {
 };
 
 const AppLayout: React.FC = () => {
+  const [isOpen, setOpen] = useState(false);
+  const { cartItem } = useAppSelector((state: RootState) => state.cart);
+
   return (
     <>
       <Disclosure
         as="nav"
-        className={`fixed top-0 left-0 right-0 dark:bg-gray-800 bg-white border-b border-black/20`}
+        className={`fixed top-0 left-0 z-10 right-0 dark:bg-gray-800 bg-white border-b border-black/20`}
       >
         {({ open }) => (
           <>
+            <CartModal isOpen={isOpen} setIsOpen={setOpen} />
             <div className="mx-auto max-w-7xl px-2 sm:px-2 lg:px-4 xl:p-0">
               <div className="relative">
                 <div className="flex items-center justify-end py-2 h-14 space-x-3">
@@ -103,15 +109,8 @@ const AppLayout: React.FC = () => {
                 </div>
                 <hr className="border-[1px] border-gray-900/40" />
                 <div className="relative flex items-center justify-between py-2 h-20">
-                  <div>
-                    <MagnifyingGlassIcon
-                      className="cursor-pointer h-8 w-8 text-gray-800"
-                      onClick={() => {}}
-                    />
-                  </div>
-
-                  <div className="hidden sm:ml-4 lg:block">
-                    <div className="flex items-center space-x-10">
+                  <div className="hidden sm:ml-4 lg:block flex-1">
+                    <div className="flex items-center space-x-10 w-full justify-center">
                       {navigation.map((item) => (
                         <NavLink
                           key={item.name}
@@ -125,9 +124,24 @@ const AppLayout: React.FC = () => {
                     </div>
                   </div>
 
+                  <div className="flex items-center lg:hidden">
+                    <Disclosure.Button className="inline-flex items-center justify-center rounded-md p-1.5 dark:text-white text-gray-900 bg-gray-50 hover:dark:text-white focus:outline-none focus:ring-2 focus:ring-inset focus:ring-black/20">
+                      <span className="sr-only">Open main menu</span>
+                      {open ? (
+                        <XMarkIcon className="block h-8 w-8" aria-hidden="true" />
+                      ) : (
+                        <Bars3Icon className="block h-8 w-8" aria-hidden="true" />
+                      )}
+                    </Disclosure.Button>
+                  </div>
+
                   <div className="flex items-center gap-5 lg:mr-0">
-                    <BellIcon className="h-8 w-8 relative before:absolute before:content-[''] before:h-4 before:w-4 before:rounded-full before:bg-red-600 before:top-2" />
-                    <button className="h-10 w-10 flex items-center justify-center rounded-full">
+                    <button
+                      className={classNames(
+                        "h-10 w-10 flex relative items-center justify-center rounded-full",
+                      )}
+                      onClick={() => setOpen(true)}
+                    >
                       <span className="sr-only">cart button</span>
                       <svg
                         width="20"
@@ -142,18 +156,11 @@ const AppLayout: React.FC = () => {
                           fill="#222222"
                         />
                       </svg>
+                      <span className="absolute top-1 -right-2 text-white bg-gray-800 h-5 w-5 flex items-center justify-center rounded-full">
+                        {cartItem.items.length}
+                      </span>
                     </button>
-
-                    <div className="flex items-center lg:hidden">
-                      <Disclosure.Button className="inline-flex items-center justify-center rounded-md p-1.5 dark:text-white text-gray-900 bg-gray-50 hover:dark:text-white focus:outline-none focus:ring-2 focus:ring-inset focus:ring-black/20">
-                        <span className="sr-only">Open main menu</span>
-                        {open ? (
-                          <XMarkIcon className="block h-8 w-8" aria-hidden="true" />
-                        ) : (
-                          <Bars3Icon className="block h-8 w-8" aria-hidden="true" />
-                        )}
-                      </Disclosure.Button>
-                    </div>
+                    <BellIcon className="h-8 w-8 relative before:absolute before:content-[''] before:h-4 before:w-4 before:rounded-full before:bg-red-600 before:top-2" />
                   </div>
                 </div>
               </div>

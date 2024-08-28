@@ -4,7 +4,7 @@ import { CartInterface, InitialState } from "../../types/redux/cart";
 import { CartSlice } from "./cart.slice";
 
 const initialState: InitialState = {
-  cartItems: LocalStorage.get("cart") as CartInterface,
+  cartItem: LocalStorage.get("cart") as CartInterface,
   isNewAddedToCart: false,
 };
 
@@ -16,7 +16,25 @@ const cartSlice = createSlice({
     builder.addMatcher(CartSlice.endpoints.getUserCart.matchFulfilled, (state, { payload }) => {
       const { data } = payload;
 
-      state.cartItems = data.cart;
+      state.cartItem = data.cart;
+
+      LocalStorage.set("cart", data.cart);
+    });
+
+    builder.addMatcher(CartSlice.endpoints.addItemToCart.matchFulfilled, (state, { payload }) => {
+      const { data } = payload;
+
+      state.cartItem = data.cart;
+      state.isNewAddedToCart = true;
+      
+      LocalStorage.set("cart", data.cart);
+    });
+
+    builder.addMatcher(CartSlice.endpoints.removeItemFromCart.matchFulfilled, (state, { payload }) => {
+      const { data } = payload;
+
+      state.cartItem = data.cart;
+      state.isNewAddedToCart = false;
 
       LocalStorage.set("cart", data.cart);
     });

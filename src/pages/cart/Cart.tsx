@@ -9,6 +9,9 @@ import {
   useRemoveItemFromCartMutation,
 } from "../../features/cart/cart.slice";
 import { PencilSquareIcon, TrashIcon } from "@heroicons/react/24/outline";
+import { LocalStorage } from "../../util";
+import { CartInterface } from "../../types/redux/cart";
+import { toast } from "react-toastify";
 
 const Cart = () => {
   // Redux variables
@@ -21,7 +24,7 @@ const Cart = () => {
   const [selectedItemId, setSelectedItemId] = useState<string | null>(null);
   const [refreshTrigered, setRefreshTrigered] = useState(false);
 
-  const cart = data?.data?.cart;
+  const cart: CartInterface = data?.data?.cart ?? (LocalStorage.get("cart") as CartInterface);
 
   const handleEditClick = (id: string) => {
     const selectedItem = cart.items.find((item: any) => {
@@ -41,10 +44,14 @@ const Cart = () => {
   const handleUpdateQuantity = async (productId: string) => {
     if (selectedItemId !== null && quantityInput > 0) {
       try {
-        const response = await addItemToCart({ productId, quantity: quantityInput }).unwrap();
-        console.log(response);
-      } catch (error) {
-        console.error("Failed to update quantity:", error);
+        const { message } = await addItemToCart({ productId, quantity: quantityInput }).unwrap();
+        if (message) {
+          toast.success(message);
+        }
+      } catch (error: any) {
+        if (error?.data.message) {
+          toast.error(error?.data.message);
+        }
       }
 
       setRefreshTrigered(!refreshTrigered);
@@ -62,16 +69,30 @@ const Cart = () => {
 
   const handleDelete = async (productId: string) => {
     try {
-      await removeItemToCart(productId).unwrap();
+      const { message } = await removeItemToCart(productId).unwrap();
       setRefreshTrigered(!refreshTrigered);
-    } catch (error) {
-      console.log(error);
+
+      if (message) {
+        toast.success(message);
+      }
+    } catch (error: any) {
+      if (error?.data.message) {
+        toast.error(error?.data.message);
+      }
     }
   };
 
+  let shipping = 5.0;
+  const OrderTotal = (): number => {
+    return cart.totalCart * shipping;
+  };
+
   useEffect(() => {
+    if (data?.message) {
+      toast.success(data?.message);
+    }
     refetch();
-  }, [refreshTrigered]);
+  }, [refreshTrigered, data?.message]);
 
   return (
     <Fragment>
@@ -199,18 +220,24 @@ const Cart = () => {
               <ul className="mt-3">
                 <li className="border-b py-3 px-2 flex items-center justify-between">
                   <span className="text-gray-600 text-sm font-normal capitalize">subtotal</span>
-                  <span className="font-semibold text-sm text-gray-800">{formatPrice(90)}</span>
+                  <span className="font-semibold text-sm text-gray-800">
+                    {formatPrice(cart.totalCart)}
+                  </span>
                 </li>
                 <li className="border-b py-3 px-2 flex items-center justify-between">
                   <span className="text-gray-600 text-sm font-normal capitalize">
                     shipping estimate
                   </span>
-                  <span className="font-semibold text-sm text-gray-800">{formatPrice(5)}</span>
+                  <span className="font-semibold text-sm text-gray-800">
+                    {formatPrice(shipping)}
+                  </span>
                 </li>
               </ul>
               <div className="mt-4 flex items-center justify-between">
                 <h3 className="text-base sm:text-lg font-medium text-gray-800">Order total</h3>
-                <span className="font-semibold text-base text-gray-800">{formatPrice(112.32)}</span>
+                <span className="font-semibold text-base text-gray-800">
+                  {formatPrice(OrderTotal())}
+                </span>
               </div>
 
               <div className="mt-4">

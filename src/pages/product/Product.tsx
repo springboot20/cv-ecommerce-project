@@ -1,8 +1,8 @@
 import { useState, useEffect, Fragment } from "react";
-import {  PlusIcon, MinusIcon } from "@heroicons/react/24/outline";
+import { PlusIcon, MinusIcon } from "@heroicons/react/24/outline";
 import { Button, Rating } from "@material-tailwind/react";
 import { motion } from "framer-motion";
-import { useNavigate, useParams } from "react-router-dom";
+import { useParams } from "react-router-dom";
 import { Disclosure } from "@headlessui/react";
 import { gridVariants } from "../../util/framerMotion.config";
 import { formatPrice } from "../../helpers";
@@ -12,33 +12,36 @@ import { ProductType } from "../../types/redux/product";
 import { ProductSkeletonLoading } from "../../components/loaders/Skeleton";
 import { useAddItemToCartMutation } from "../../features/cart/cart.slice";
 import CartModal from "../../components/modal/CartModal";
+import { LocalStorage } from "../../util";
 
 const Product = () => {
   const { id } = useParams();
   const [addItemToCart] = useAddItemToCartMutation();
-  const navigate = useNavigate();
-  // const [favorite, setFavorite] = useState<boolean>(false);
   const { data, isLoading, refetch } = useGetProductByIdQuery(id as string);
   const [ratings, setRatings] = useState<number>(0);
   const [quantityInput, setQuantityInput] = useState<number>(1);
   const [open, setOpen] = useState(false);
+  const [refreshTrigered, setRefreshTrigered] = useState(false);
 
   const setRatingsValue = (rating: number) => setRatings(rating);
 
-  const product = data?.data.product as ProductType;
+  const product = data?.data.product ?? (LocalStorage.get("product") as ProductType);
 
   const handleAddItemToCart = async (productId: string) => {
     try {
-      console.log("Product ID:", productId);
-      console.log("Quantity:", quantityInput);
-
       const response = await addItemToCart({ productId, quantity: quantityInput }).unwrap();
-      
+      setRefreshTrigered(!refreshTrigered);
+
       setOpen(true);
-      await Promise.resolve(setTimeout(() => navigate("/cart"), 2000));
       console.log(response);
-    } catch (error) {
-      console.log(error);
+
+      if (response?.message) {
+        toast.success(response?.message);
+      }
+    } catch (error: any) {
+      if (error?.data) {
+        toast.warn(error?.data?.message);
+      }
     }
   };
 
@@ -47,7 +50,7 @@ const Product = () => {
       toast.success(data?.message);
     }
     refetch();
-  }, []);
+  }, [refreshTrigered, data?.message]);
 
   return (
     <Fragment>
@@ -59,12 +62,12 @@ const Product = () => {
             <ProductSkeletonLoading />
           ) : (
             <>
-              <div className="col-span-full lg:col-span-1 flex items-start gap-2">
-                <div className="bg-[#d2d2d2] h-[35rem] flex-1 relative rounded-2xl overflow-hidden w-full">
+              <div className="col-span-full lg:col-span-1 w-full flex items-start gap-2">
+                <div className="h-[35rem] flex-1 relative rounded-2xl overflow-hidden w-full">
                   <img
                     src={product?.imageSrc?.url}
                     alt=""
-                    className="object-cover object-center w-full"
+                    className="object-cover object-center w-full h-full"
                   />
                 </div>
               </div>
@@ -88,14 +91,14 @@ const Product = () => {
                 <div className="flex items-center space-x-5 mt-8">{/* Color buttons */}</div>
 
                 <div className="col-span-full">
-                  <div className="relative flex items-center">
+                  <div className="relative flex items-center space-x-3">
                     <Button
                       type="button"
                       id="minus-btn"
-                      variant="text"
+                      variant="outlined"
                       ripple={false}
                       onClick={() => setQuantityInput((prevQuantity) => prevQuantity - 1)}
-                      className="p-3 text-gray-800 focus:ring-offset-2 transition-all flex items-center dark:text-white"
+                      className="p-1 text-gray-800 focus:ring-offset-2 transition-all flex items-center dark:text-white"
                     >
                       <MinusIcon id="minus-icon" className="h-5 w-5" />
                     </Button>
@@ -114,9 +117,9 @@ const Product = () => {
                     <Button
                       type="button"
                       id="plus-btn"
-                      variant="text"
+                      variant="outlined"
                       ripple={false}
-                      className="p-3 text-gray-800 focus:ring-offset-2 transition-all flex items-center dark:text-white"
+                      className="p-1 text-gray-800 focus:ring-offset-2 transition-all flex items-center dark:text-white"
                       onClick={() => setQuantityInput((prevQuantity) => prevQuantity + 1)}
                     >
                       <PlusIcon id="plus-icon" className="h-5 w-5" />
