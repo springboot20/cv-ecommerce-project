@@ -1,4 +1,3 @@
-import { useEffect, Fragment } from "react";
 import { PlusIcon, MinusIcon, ArrowLeftCircleIcon } from "@heroicons/react/24/outline";
 import { Button, Rating } from "@material-tailwind/react";
 import { motion } from "framer-motion";
@@ -10,6 +9,7 @@ import { ProductSkeletonLoading } from "../../components/loaders/Skeleton";
 import CartModal from "../../components/modal/CartModal";
 import { useProduct } from "../../hooks/useProduct";
 import { useNavigate } from "react-router-dom";
+import { Fragment, useEffect } from "react";
 
 const Product = () => {
   const navigate = useNavigate();

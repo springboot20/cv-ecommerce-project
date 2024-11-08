@@ -1,10 +1,13 @@
 import { lazy } from "react";
 import { createBrowserRouter } from "react-router-dom";
+import { AdminDashboardLayout } from "../layout/admin/AdminLayout";
+import CreateNewProduct from "../pages/admin/product/create/CreateProduct";
 
-const AppLayout = lazy(() => import("../layout/AppLayout"));
+const AppLayout = lazy(() => import("../layout/app/AppLayout"));
+const AdminLayout = lazy(() => import("../layout/admin/AdminLayout"));
 const PrivateRoute = lazy(() => import("../components/Private.routes"));
 const Home = lazy(() => import("../pages/home/Home"));
-const Products = lazy(() => import("../pages/product/Products"));
+const Products = lazy(() => import("../pages/products/Products"));
 const Product = lazy(() => import("../pages/product/Product"));
 const Cart = lazy(() => import("../pages/cart/Cart"));
 const Payment = lazy(() => import("../pages/payment/Payment"));
@@ -63,6 +66,34 @@ const Router = () => {
               <Payment />
             </PrivateRoute>
           ),
+        },
+      ],
+    },
+
+    {
+      path: "/admin",
+      element: <AdminLayout />,
+      children: [
+        {
+          element: <AdminDashboardLayout />,
+          children: [
+            {
+              path: "product",
+              children: [
+                {
+                  path: "overview",
+                  element: <CreateNewProduct />,
+                },
+                {
+                  path: "create",
+                  element: <CreateNewProduct />,
+                },
+              ],
+            },
+          ],
+        },
+        {
+          path: "login",
         },
       ],
     },

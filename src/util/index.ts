@@ -3,6 +3,9 @@ import { toast } from "react-toastify";
 
 export const isBrowser = typeof window !== "undefined";
 
+export const  clx = (...classnames: (string | boolean)[]) =>
+  classnames?.filter(Boolean).join(' ');
+
 
 export class LocalStorage {
   static get(key: string) {

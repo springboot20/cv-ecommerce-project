@@ -2,9 +2,9 @@ import { Fragment, useState } from "react";
 import { Link, NavLink, Outlet } from "react-router-dom";
 import { Disclosure, Menu, Transition } from "@headlessui/react";
 import { BellIcon, XMarkIcon, Bars3Icon, UserIcon } from "@heroicons/react/24/outline";
-import CartModal from "../components/modal/CartModal";
-import { useAppSelector } from "../hooks/redux/redux.hooks";
-import { RootState } from "../app/store";
+import CartModal from "../../components/modal/CartModal";
+import { useAppSelector } from "../../hooks/redux/redux.hooks";
+import { RootState } from "../../app/store";
 
 const navigation = [
   { to: "/", name: "home", current: true },
