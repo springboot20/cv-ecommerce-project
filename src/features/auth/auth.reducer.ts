@@ -31,7 +31,9 @@ const authSlice = createSlice({
 
         state.isAuthenticated = true
         LocalStorage.set("authentified", state.isAuthenticated);
-      } catch (error) {}
+      } catch (error) {
+        console.log(error)
+      }
     },
   },
   extraReducers: (builder) => {

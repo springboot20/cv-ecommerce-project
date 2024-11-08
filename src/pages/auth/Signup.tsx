@@ -8,6 +8,7 @@ import { SignUpInitialValues } from "../../types";
 import { motion } from "framer-motion";
 import { Button } from "@material-tailwind/react";
 import { useRegisterMutation } from "../../features/auth/auth.slice";
+import { toast } from "react-toastify";
 
 const initialValues: SignUpInitialValues = {
   username: "",
@@ -45,12 +46,13 @@ const Signup = () => {
         const response = await register(values).unwrap();
 
         if (response.statusCode.toString().startsWith("2")) {
+          toast.success(response.data.message);
           await new Promise((resolve) => setTimeout(resolve, 1500));
-          actions.resetForm();
           navigate("/", { replace: true });
+          actions.resetForm();
         }
-      } catch (err) {
-        console.log(err);
+      } catch (err: any) {
+        toast.error(err.error);
       }
     },
   });
@@ -152,7 +154,7 @@ const Signup = () => {
               type="submit"
               disabled={isLoading}
               loading={isLoading}
-              className="rounded-md w-full flex items-center justify-center capitalize bg-light-blue-600 px-3 py-3 text-lg font-medium text-white shadow-sm hover:bg-light-blue-500 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-light-blue-600 disabled:opacity-70"
+              className="rounded-md w-full flex items-center justify-center uppercase bg-light-blue-600 px-3 py-3 text-lg font-medium text-white shadow-sm hover:bg-light-blue-500 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-light-blue-600 disabled:opacity-70"
             >
               {isLoading ? <span>Signing up...</span> : <span>Sign up</span>}
             </Button>
