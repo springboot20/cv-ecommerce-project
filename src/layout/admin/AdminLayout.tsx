@@ -110,7 +110,7 @@ export const AdminDashboardLayout = () => {
       </Disclosure.Panel>
 
       <main className="absolute left-0 lg:left-80 w-full lg:w-[calc(100%-20rem)] pt-20">
-        <div className="px-4 xl:px-0 mx-auto max-w-6xl">
+        <div className="px-4 xl:px-0">
           <Outlet />
         </div>
       </main>

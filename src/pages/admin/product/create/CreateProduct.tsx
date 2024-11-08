@@ -44,7 +44,7 @@ export default function CreateNewProduct() {
     <Formik initialValues={initialValues} onSubmit={onSubmit}>
       {({ errors, touched, setFieldValue }) => {
         return (
-          <Form className="mt-4 w-full bg-white p-6 border grid grid-cols-1 xl:grid-cols-3">
+          <Form className="mt-4 w-full bg-white p-6 border gap-10 grid grid-cols-1 xl:grid-cols-3 mx-auto max-w-6xl">
             <div className="col-span-full xl:col-span-2">
               <fieldset className="mt-2">
                 <label
@@ -59,8 +59,8 @@ export default function CreateNewProduct() {
                     name="name"
                     placeholder="product title.."
                     className={clx(
-                      "block w-full lg:w-[30rem] px-3 rounded border-0 py-3 text-gray-700 shadow-sm ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset text-sm outline-none",
-                      errors.name && touched.name ? "ring-red-600" : "focus:ring-indigo-500",
+                      "block w-full  px-3 rounded border-0 py-3 text-gray-700 ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset text-sm outline-none",
+                      errors.name && touched.name ? "ring-red-500" : "focus:ring-indigo-500",
                     )}
                   />
                 </div>
@@ -81,8 +81,8 @@ export default function CreateNewProduct() {
                     rows={3}
                     placeholder="description title.."
                     className={clx(
-                      "block w-full lg:w-[30rem] rounded border-0 p-3 text-gray-700 shadow-sm ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset text-sm outline-none",
-                      errors.name && touched.name ? "ring-red-600" : "focus:ring-indigo-500",
+                      "block w-full  rounded border-0 p-3 text-gray-700 ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset text-sm outline-none",
+                      errors.name && touched.name ? "ring-red-500" : "focus:ring-indigo-500",
                     )}
                   />
                 </div>
@@ -101,8 +101,8 @@ export default function CreateNewProduct() {
                     name="category"
                     as="select"
                     className={clx(
-                      "block w-full lg:w-[30rem] rounded border-0 p-3 text-gray-700 shadow-sm ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset text-sm outline-none",
-                      errors.name && touched.name ? "ring-red-600" : "focus:ring-indigo-500",
+                      "block w-full  rounded border-0 p-3 text-gray-700 ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset text-sm outline-none",
+                      errors.name && touched.name ? "ring-red-500" : "focus:ring-indigo-500",
                     )}
                   >
                     <option>select category</option>
@@ -136,11 +136,11 @@ export default function CreateNewProduct() {
                 </label>
                 <div
                   className={clx(
-                    errors.price && touched.price ? "ring-red-600" : "focus:ring-indigo-600",
-                    "flex items-stretch border rounded overflow-hidden focus-within:ring-2 focus-within:ring-indigo-600 focus-within:border-transparent h-12 lg:w-[30rem]",
+                    errors.price && touched.price ? "ring-red-500" : "focus:ring-indigo-500",
+                    "flex items-stretch border rounded overflow-hidden focus-within:ring-2 lg:w-[20rem] focus-within:ring-indigo-600 focus-within:border-transparent h-12 ",
                   )}
                 >
-                  <span className="relative flex items-center justify-center self-center w-12 border-r h-full bg-gray-100">
+                  <span className="relative flex items-center justify-center self-center w-12 border-r border-gray-300 h-full bg-gray-100">
                     <CurrencyDollarIcon className="text-gray-700 h-7" />
                   </span>
                   <Field
@@ -171,7 +171,7 @@ export default function CreateNewProduct() {
                     onDragLeave={handleDragLeave}
                     onDrop={handleDrop}
                     className={clx(
-                      "border-dashed px-6 h-full py-9 border-2 rounded-md flex items-center justify-center",
+                      "border-dashed px-6 h-full py-9 border-[0.15rem] mt-2 rounded-md flex items-center justify-center",
                       isDropping ? "border-indigo-400" : "border-gray-400",
                     )}
                   >
@@ -236,6 +236,15 @@ export default function CreateNewProduct() {
                   </fieldset>
                 )}
               </div>
+            </div>
+
+            <div className='flex items-center gap-4 mt-4'>
+              <button
+                type='submit'
+                // disabled={!dirty}
+                className='disabled:ring-gray-200 disabled:pointer-events-none disabled:text-indigo-300 disabled:bg-[#FAFAFA] disabled:ring-1 text-base capitalize font-semibold border-none ring-2 w-fit ring-gray-200 rounded-md py-2.5 px-6 text-white bg-indigo-500'>
+                create product
+              </button>
             </div>
           </Form>
         );
