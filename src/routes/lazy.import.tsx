@@ -1,10 +1,7 @@
 import { lazy } from "react";
 import { createBrowserRouter } from "react-router-dom";
-import { AdminDashboardLayout } from "../layout/admin/AdminLayout";
-import CreateNewProduct from "../pages/admin/product/create/CreateProduct";
 
-const AppLayout = lazy(() => import("../layout/app/AppLayout"));
-const AdminLayout = lazy(() => import("../layout/admin/AdminLayout"));
+import AppLayout from "../layout/app/AppLayout";
 const PrivateRoute = lazy(() => import("../components/Private.routes"));
 const Home = lazy(() => import("../pages/home/Home"));
 const Products = lazy(() => import("../pages/products/Products"));
@@ -16,6 +13,15 @@ const Notfound = lazy(() => import("../components/NotFound"));
 const PublicRoute = lazy(() => import("../components/Public.routes"));
 const Login = lazy(() => import("../pages/auth/Signin"));
 const Register = lazy(() => import("../pages/auth/Signup"));
+
+{
+  /** Admin routes */
+}
+const AdminLayout = lazy(() => import("../layout/admin/AdminLayout"));
+import CreateNewProduct from "../pages/admin/product/create/CreateProduct";
+import { AdminDashboardLayout } from "../layout/admin/AdminLayout";
+import AdminProducts from "../pages/admin/product/products/Products";
+import AdminLogin from "../pages/admin/login/Login";
 
 const Router = () => {
   return createBrowserRouter([
@@ -78,8 +84,12 @@ const Router = () => {
           element: <AdminDashboardLayout />,
           children: [
             {
-              path: "product",
+              path: "products",
               children: [
+                {
+                  path: "all",
+                  element: <AdminProducts />,
+                },
                 {
                   path: "overview",
                   element: <CreateNewProduct />,
@@ -94,6 +104,7 @@ const Router = () => {
         },
         {
           path: "login",
+          element: <AdminLogin />,
         },
       ],
     },

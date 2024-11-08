@@ -1,3 +1,245 @@
+import { Field, Form, Formik } from 'formik'
+import { CurrencyDollarIcon } from '@heroicons/react/24/outline'
+
+import { clx } from '../../../../util'
+import { useFile } from '../../../../hooks/useFile'
+
+interface InitialValuesInterface {
+  price: number;
+  description: string;
+  image: File | null;
+  category: string;
+  stock: number;
+  name: string;
+  featured: boolean;
+}
+
+const initialValues: InitialValuesInterface = {
+  price: 10,
+  description: "",
+  image: null,
+  category: "",
+  stock: 1,
+  featured: false,
+  name: "",
+};
+
+async function onSubmit(values: InitialValuesInterface) {
+  console.log(values);
+}
+
 export default function CreateNewProduct() {
-  return <div></div>;
+  const {
+    isDropping,
+    selectedFile,
+    setSelectedFile,
+    fileInputRef,
+    handleDragEnter,
+    handleDrop,
+    handleDragOver,
+    handleDragLeave,
+  } = useFile();
+
+  return (
+    <Formik initialValues={initialValues} onSubmit={onSubmit}>
+      {({ errors, touched, setFieldValue }) => {
+        return (
+          <Form className="mt-4 w-full bg-white p-6 border grid grid-cols-1 xl:grid-cols-3">
+            <div className="col-span-full xl:col-span-2">
+              <fieldset className="mt-2">
+                <label
+                  htmlFor="name"
+                  className="capitalize text-sm font-normal text-gray-700 sm:text-base"
+                >
+                  product name
+                </label>
+
+                <div className="mt-2 relative">
+                  <Field
+                    name="name"
+                    placeholder="product title.."
+                    className={clx(
+                      "block w-full lg:w-[30rem] px-3 rounded border-0 py-3 text-gray-700 shadow-sm ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset text-sm outline-none",
+                      errors.name && touched.name ? "ring-red-600" : "focus:ring-indigo-500",
+                    )}
+                  />
+                </div>
+              </fieldset>
+
+              <fieldset className="mt-2">
+                <label
+                  htmlFor="description"
+                  className="capitalize text-sm font-normal text-gray-700 sm:text-base"
+                >
+                  product description
+                </label>
+
+                <div className="mt-2 relative">
+                  <Field
+                    name="description"
+                    as="textarea"
+                    rows={3}
+                    placeholder="description title.."
+                    className={clx(
+                      "block w-full lg:w-[30rem] rounded border-0 p-3 text-gray-700 shadow-sm ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset text-sm outline-none",
+                      errors.name && touched.name ? "ring-red-600" : "focus:ring-indigo-500",
+                    )}
+                  />
+                </div>
+              </fieldset>
+
+              <fieldset className="mt-2 flex-1">
+                <label
+                  htmlFor="category"
+                  className="capitalize text-sm font-normal text-gray-700 sm:text-base"
+                >
+                  product category
+                </label>
+
+                <div className="mt-2 relative">
+                  <Field
+                    name="category"
+                    as="select"
+                    className={clx(
+                      "block w-full lg:w-[30rem] rounded border-0 p-3 text-gray-700 shadow-sm ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset text-sm outline-none",
+                      errors.name && touched.name ? "ring-red-600" : "focus:ring-indigo-500",
+                    )}
+                  >
+                    <option>select category</option>
+                    <option></option>
+                  </Field>
+                </div>
+              </fieldset>
+
+              <fieldset className="flex items-center gap-2 mt-2">
+                <Field
+                  name="featured"
+                  type="checkbox"
+                  className={clx(
+                    "h-5 w-5 border focus:outline-none focus:ring-0 rounded placeholder:text-gray-400",
+                  )}
+                />
+                <label
+                  htmlFor="featured"
+                  className="capitalize text-sm font-normal text-gray-700 sm:text-base"
+                >
+                  featured
+                </label>
+              </fieldset>
+
+              <fieldset className="mt-2">
+                <label
+                  htmlFor="price"
+                  className="capitalize text-sm font-normal text-gray-700 sm:text-base"
+                >
+                  product price
+                </label>
+                <div
+                  className={clx(
+                    errors.price && touched.price ? "ring-red-600" : "focus:ring-indigo-600",
+                    "flex items-stretch border rounded overflow-hidden focus-within:ring-2 focus-within:ring-indigo-600 focus-within:border-transparent h-12 lg:w-[30rem]",
+                  )}
+                >
+                  <span className="relative flex items-center justify-center self-center w-12 border-r h-full bg-gray-100">
+                    <CurrencyDollarIcon className="text-gray-700 h-7" />
+                  </span>
+                  <Field
+                    name="price"
+                    type="number"
+                    className={clx(
+                      "block w-full h-full px-4 flex-1 py-3 border-none focus:outline-none focus:ring-0 placeholder:text-gray-400 text-gray-700",
+                    )}
+                  />
+                </div>
+              </fieldset>
+            </div>
+
+            <div className="col-span-full xl:col-span-1">
+              <div
+                className={clx("col-span-full xl:col-span-1", !selectedFile ? "xl:h-64" : "h-fit")}
+              >
+                <fieldset className="h-full">
+                  <label
+                    htmlFor="image"
+                    className="capitalize font-medium font-nunito-sans text-base sm:text-lg mb-2"
+                  >
+                    product image
+                  </label>
+                  <div
+                    onDragEnter={handleDragEnter}
+                    onDragOver={handleDragOver}
+                    onDragLeave={handleDragLeave}
+                    onDrop={handleDrop}
+                    className={clx(
+                      "border-dashed px-6 h-full py-9 border-2 rounded-md flex items-center justify-center",
+                      isDropping ? "border-indigo-400" : "border-gray-400",
+                    )}
+                  >
+                    <div className="text-center">
+                      {selectedFile && (
+                        <div className="h-32 w-full ring-2 ring-offset-2 ring-indigo-500 rounded overflow-hidden mb-1 mx-auto">
+                          <img
+                            src={URL.createObjectURL(selectedFile)}
+                            alt="upload"
+                            className="object-cover h-full w-full"
+                          />
+                        </div>
+                      )}
+                      <div className="text-center">
+                        <label
+                          htmlFor="image"
+                          className="relative cursor-pointer rounded-md font-normal font-nunito-sans text-lg text-gray-400 hover:text-indigo-500 "
+                        >
+                          {!selectedFile && <span>Select product image or drag and drop</span>}
+                          <input
+                            type="file"
+                            id="image"
+                            name="image"
+                            hidden
+                            ref={fileInputRef}
+                            onChange={(event) => {
+                              if (event.target.files && event.target.files.length > 0) {
+                                const files = event.target.files;
+
+                                setFieldValue("image", files[0]);
+                                setSelectedFile(files[0]);
+                              }
+                            }}
+                          />
+                        </label>
+                      </div>
+                      {!selectedFile && (
+                        <div>
+                          <p className="text-lg font-nunito-sans font-normal text-gray-500 dark:text-gray-200">
+                            Recommended size
+                          </p>
+                          <p className="text-sm font-nunito-sans font-normal text-gray-500 dark:text-gray-200">
+                            1280 * 720
+                          </p>
+                        </div>
+                      )}
+                    </div>
+                  </div>
+                </fieldset>
+
+                {selectedFile && (
+                  <fieldset className="mt-4">
+                    <button
+                      type="button"
+                      onClick={() => {
+                        if (fileInputRef.current) fileInputRef.current.click();
+                      }}
+                      className="rounded bg-white px-2.5 py-2 text-sm font-medium text-gray-900 shadow ring-1 ring-inset ring-gray-300 hover:bg-gray-50"
+                    >
+                      Change product image
+                    </button>
+                  </fieldset>
+                )}
+              </div>
+            </div>
+          </Form>
+        );
+      }}
+    </Formik>
+  );
 }
