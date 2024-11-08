@@ -130,12 +130,13 @@
 
 .slick-slide {
   margin-top: 2rem;
-  width: 652px;
+  /* width: 652px; */
 }
 
 .slick-next::before,
 .slick-prev::before {
   color: #000000;
+  line-height: 3;
 }
 
 .slick-next {
@@ -145,6 +146,8 @@
 .slick-next,
 .slick-prev {
   z-index: 10;
+  height: 2rem;
+  width: 2rem;
 }
 
 .slick-prev {

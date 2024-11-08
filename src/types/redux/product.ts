@@ -17,3 +17,8 @@ export interface InitialState {
   requestedId?: string;
   error: null;
 }
+
+export interface ProductCategory {
+  _id: string;
+  name: string;
+}

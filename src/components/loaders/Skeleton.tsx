@@ -17,16 +17,16 @@ export const ProductsSkeletonLoading = ({ cardsNumber }: { cardsNumber: number }
             />
           </header>
           <div className="relative flex items-center justify-between gap-1.5 mt-2">
-            <h3 className="w-32 relative">
+            <h3 className="w-28 relative">
               <Skeleton
                 className="border border-gray-300 h-6"
-                containerClassName="w-full absolute"
+                containerClassName="w-full"
               />
             </h3>
-            <p className="w-32 relative">
+            <p className="w-20 relative">
               <Skeleton
                 className="border border-gray-300 h-6"
-                containerClassName="w-full absolute"
+                containerClassName="w-full"
               />
             </p>
           </div>
@@ -38,6 +38,7 @@ export const ProductsSkeletonLoading = ({ cardsNumber }: { cardsNumber: number }
 export const ProductSkeletonLoading = () => {
   return (
     <Fragment>
+
       <div className="h-[30rem] col-span-full lg:col-span-1 flex items-start gap-2 w-full">
         <header className="h-full w-full relative rounded-xl overflow-hidden">
           <Skeleton

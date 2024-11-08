@@ -1,86 +1,28 @@
-import { Fragment, useEffect, useState } from "react";
+import { Fragment, useEffect } from "react";
 import cartImage from "../../assets/cart-image.jpg";
 import { Link } from "react-router-dom";
 import Button from "../../components/icon/Button";
 import { formatPrice } from "../../helpers/index";
-import {
-  useAddItemToCartMutation,
-  useGetUserCartQuery,
-  useRemoveItemFromCartMutation,
-} from "../../features/cart/cart.slice";
 import { PencilSquareIcon, TrashIcon } from "@heroicons/react/24/outline";
-import { LocalStorage } from "../../util";
-import { CartInterface } from "../../types/redux/cart";
 import { toast } from "react-toastify";
+import { useCart } from "../../hooks/useCart";
 
 const Cart = () => {
   // Redux variables
-  const { data, refetch } = useGetUserCartQuery();
-  const [addItemToCart] = useAddItemToCartMutation();
-  const [removeItemToCart] = useRemoveItemFromCartMutation();
-
-  const [isEditing, setIsEditing] = useState<boolean>(false);
-  const [quantityInput, setQuantityInput] = useState<number>(0);
-  const [selectedItemId, setSelectedItemId] = useState<string | null>(null);
-  const [refreshTrigered, setRefreshTrigered] = useState(false);
-
-  const cart: CartInterface = data?.data?.cart ?? (LocalStorage.get("cart") as CartInterface);
-
-  const handleEditClick = (id: string) => {
-    const selectedItem = cart.items.find((item: any) => {
-      return item.product._id === id;
-    });
-
-    if (selectedItem) {
-      if (selectedItem) {
-        setQuantityInput(selectedItem.quantity); // Set initial quantity input to current quantity
-
-        setSelectedItemId(id);
-        setIsEditing(true);
-      }
-    }
-  };
-
-  const handleUpdateQuantity = async (productId: string) => {
-    if (selectedItemId !== null && quantityInput > 0) {
-      try {
-        const { message } = await addItemToCart({ productId, quantity: quantityInput }).unwrap();
-        if (message) {
-          toast.success(message);
-        }
-      } catch (error: any) {
-        if (error?.data.message) {
-          toast.error(error?.data.message);
-        }
-      }
-
-      setRefreshTrigered(!refreshTrigered);
-      setSelectedItemId(null);
-      setIsEditing(false);
-    } else {
-      console.error("Invalid quantity input.");
-    }
-  };
-
-  const handleCancelEdit = () => {
-    setSelectedItemId(null);
-    setIsEditing(false);
-  };
-
-  const handleDelete = async (productId: string) => {
-    try {
-      const { message } = await removeItemToCart(productId).unwrap();
-      setRefreshTrigered(!refreshTrigered);
-
-      if (message) {
-        toast.success(message);
-      }
-    } catch (error: any) {
-      if (error?.data.message) {
-        toast.error(error?.data.message);
-      }
-    }
-  };
+  const {
+    cart,
+    handleCancelEdit,
+    handleDelete,
+    handleEditClick,
+    handleUpdateQuantity,
+    isEditing,
+    refreshTrigered,
+    refetch,
+    selectedItemId,
+    setQuantityInput,
+    quantityInput,
+    message,
+  } = useCart();
 
   let shipping = 5.0;
   const OrderTotal = (): number => {
@@ -88,11 +30,13 @@ const Cart = () => {
   };
 
   useEffect(() => {
-    if (data?.message) {
-      toast.success(data?.message);
+    if (message) {
+      toast.success(message);
     }
+
+    console.log(message)
     refetch();
-  }, [refreshTrigered, data?.message]);
+  }, [refreshTrigered, message]);
 
   return (
     <Fragment>
@@ -148,6 +92,7 @@ const Cart = () => {
                                   {formatPrice(item?.product.price)}
                                 </p>
                               </div>
+                              <p className="text-gray-500">Qty ({item?.quantity})</p>
                             </div>
                             <div className="flex flex-1 items-end justify-between text-sm">
                               {selectedItemId === item.product._id && isEditing ? (
@@ -181,7 +126,7 @@ const Cart = () => {
                                 </div>
                               ) : (
                                 <>
-                                  <p className="text-gray-500">Qty ({item?.quantity})</p>
+                                  <div></div>
                                   <div className="flex space-x-4 items-center">
                                     <Button
                                       type="button"

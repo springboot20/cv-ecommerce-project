@@ -1,15 +1,14 @@
-import CheckOutForm from '../../components/check-out/CheckOutForm';
-import Shoe from '../assets/running-shoes-sneakers.png';
+import CheckOutForm from "../../components/check-out/CheckOutForm";
+import Shoe from "../../assets/running-shoes-sneakers.png";
 
 const CheckOut = () => {
   return (
-    <main className='mt-40 pt-8'>
-      <div className='container mx-auto px-12 max-w-[86rem] lg:max-w-[87rem] xl:max-w-[95rem] 2xl:max-w-[110rem] mb-12'>
-        <div className='grid grid-cols-1 md:grid-cols-2 gap-8'>
-          <CheckOutForm className='mb-12' />
-          <div>
-            <img src={Shoe} />
-          </div>
+    <main className="mx-auto max-w-7xl px-2 md:px-4 xl:px-0">
+      <h2 className="mb-2 text-base sm:text-xl lg:text-2xl font-semibold text-gray-700 uppercase">checkout</h2>
+      <div className="grid grid-cols-1 lg:grid-cols-2 gap-8">
+        <CheckOutForm className="mb-12 order-2" />
+        <div>
+          <img src={Shoe} className="w-full" />
         </div>
       </div>
     </main>

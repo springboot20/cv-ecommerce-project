@@ -1,6 +1,5 @@
 import { lazy } from "react";
-import { createBrowserRouter, Navigate } from "react-router-dom";
-import { Token, User } from "../types/redux/auth";
+import { createBrowserRouter } from "react-router-dom";
 
 const AppLayout = lazy(() => import("../layout/AppLayout"));
 const PrivateRoute = lazy(() => import("../components/Private.routes"));
@@ -15,7 +14,7 @@ const PublicRoute = lazy(() => import("../components/Public.routes"));
 const Login = lazy(() => import("../pages/auth/Signin"));
 const Register = lazy(() => import("../pages/auth/Signup"));
 
-const Router = (tokens: Token, user: User) => {
+const Router = () => {
   return createBrowserRouter([
     {
       path: "/",
@@ -23,15 +22,7 @@ const Router = (tokens: Token, user: User) => {
       children: [
         {
           index: true,
-          element: tokens && user._id ? <Navigate to="/" /> : <Navigate to="/login" />,
-        },
-        {
-          index: true,
-          element: (
-            <PublicRoute>
-              <Home />
-            </PublicRoute>
-          ),
+          element: <Home />,
         },
         {
           path: "collections",
@@ -45,7 +36,7 @@ const Router = (tokens: Token, user: User) => {
           path: "collections/:id",
           element: (
             <PrivateRoute>
-            <Product />
+              <Product />
             </PrivateRoute>
           ),
         },

@@ -17,7 +17,7 @@ export const ApiService = createApi({
       return headers;
     },
   }),
-  tagTypes: ["Auth", "Product", "Cart"],
+  tagTypes: ["Auth", "Product", "Cart", "Category"],
   endpoints: () => ({}),
 });
 

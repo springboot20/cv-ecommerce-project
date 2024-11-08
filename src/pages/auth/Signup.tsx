@@ -2,7 +2,6 @@ import { useState } from "react";
 import { useFormik } from "formik";
 import { Link, useNavigate } from "react-router-dom";
 import { faEyeSlash, faEye } from "@fortawesome/free-solid-svg-icons";
-import { InputField } from "../../components/inputs/Input";
 import { registerSchema } from "../../schema/Schema";
 import { IconType } from "../../components/icon/IconType";
 import { SignUpInitialValues } from "../../types";
@@ -74,7 +73,7 @@ const Signup = () => {
                 Username
               </label>
               <div className="mt-2">
-                <InputField
+                <input
                   id="name"
                   name="name"
                   type="text"
@@ -101,7 +100,7 @@ const Signup = () => {
                 Email
               </label>
               <div className="mt-2">
-                <InputField
+                <input
                   id="email"
                   name="email"
                   type="email"
@@ -128,7 +127,7 @@ const Signup = () => {
                 Password
               </label>
               <div className="mt-2 relative">
-                <InputField
+                <input
                   id="password"
                   name="password"
                   type={showPassword ? "text" : "password"}

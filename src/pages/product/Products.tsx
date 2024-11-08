@@ -7,26 +7,31 @@ import { gridVariants } from "../../util/framerMotion.config";
 import { Link } from "react-router-dom";
 import { toast } from "react-toastify";
 import { useGetAllProductsQuery } from "../../features/products/product.slice";
-import { ProductType } from "../../types/redux/product";
+import { ProductCategory, ProductType } from "../../types/redux/product";
 import { ProductsSkeletonLoading } from "../../components/loaders/Skeleton";
 import { CategoryPanel } from "../../components/panels/CategoryPanel";
 import { Disclosure } from "@headlessui/react";
 import { Bars3Icon } from "@heroicons/react/24/outline";
 import { LocalStorage } from "../../util";
+import { useGetAllCategoryQuery } from "../../features/category/category.slice";
 
 const Products = () => {
   const [searchQuery, setSearchQuery] = useState<string>("");
   // const [featured, setFeatured] = useState<boolean>(false);
   const [page, setPage] = useState<number>(1);
+  const [categoryQuery, setCategoryQuery] = useState<string>("");
 
   let limit = 10;
 
+  const { data: categoriedData } = useGetAllCategoryQuery();
   const { data, isLoading, refetch } = useGetAllProductsQuery({
     limit,
     page,
     featured: false,
     name: searchQuery,
   });
+
+  const categories = categoriedData?.data.categories as ProductCategory[];
 
   let products = data?.data?.products ?? (LocalStorage.get("products") as ProductType[]);
 
@@ -58,7 +63,7 @@ const Products = () => {
   return (
     <Disclosure>
       <section className="relative flex items-stretch justify-between flex-shrink-0">
-        <CategoryPanel handleSearch={handleSearch} />
+        <CategoryPanel handleSearch={handleSearch} categories={categories} />
         <div
           className={classNames(
             isLoading ? "h-auto" : "min-h-screen",
@@ -76,7 +81,7 @@ const Products = () => {
             initial="hidden"
             animate="visible"
             variants={gridVariants}
-            className="grid grid-cols-1 md:grid-cols-2 2xl:grid-cols-3 gap-5"
+            className="grid grid-cols-1 md:grid-cols-2 2xl:grid-cols-3 gap-5 mt-2"
           >
             {isLoading ? (
               <ProductsSkeletonLoading cardsNumber={9} />
@@ -86,13 +91,13 @@ const Products = () => {
               </p>
             ) : (
               products?.map((product: ProductType) => (
-                <Link to={`/collections/${product._id}`} key={product._id}>
+                <Link to={`/collections/${product._id}`} key={product._id} className="group">
                   <motion.div layout key={product._id}>
-                    <header className="h-52 w-full relative rounded-xl overflow-hidden">
+                    <header className="group-hover:opacity-60 transition-all h-52 w-full relative rounded-xl overflow-hidden">
                       <img
                         src={product?.imageSrc.url}
                         alt=""
-                        className="h-full absolute object-cover object-center w-full"
+                        className="h-full absolute object-cover object-center w-full group-hover:scale-110 transition"
                       />
                     </header>
                     <div className="relative flex pt-2 justify-between gap-1.5">

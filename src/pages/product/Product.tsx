@@ -1,62 +1,58 @@
-import { useState, useEffect, Fragment } from "react";
-import { PlusIcon, MinusIcon } from "@heroicons/react/24/outline";
+import { useEffect, Fragment } from "react";
+import { PlusIcon, MinusIcon, ArrowLeftCircleIcon } from "@heroicons/react/24/outline";
 import { Button, Rating } from "@material-tailwind/react";
 import { motion } from "framer-motion";
-import { useParams } from "react-router-dom";
 import { Disclosure } from "@headlessui/react";
 import { gridVariants } from "../../util/framerMotion.config";
 import { formatPrice } from "../../helpers";
-import { useGetProductByIdQuery } from "../../features/products/product.slice";
 import { toast } from "react-toastify";
-import { ProductType } from "../../types/redux/product";
 import { ProductSkeletonLoading } from "../../components/loaders/Skeleton";
-import { useAddItemToCartMutation } from "../../features/cart/cart.slice";
 import CartModal from "../../components/modal/CartModal";
-import { LocalStorage } from "../../util";
+import { useProduct } from "../../hooks/useProduct";
+import { useNavigate } from "react-router-dom";
 
 const Product = () => {
-  const { id } = useParams();
-  const [addItemToCart] = useAddItemToCartMutation();
-  const { data, isLoading, refetch } = useGetProductByIdQuery(id as string);
-  const [ratings, setRatings] = useState<number>(0);
-  const [quantityInput, setQuantityInput] = useState<number>(1);
-  const [open, setOpen] = useState(false);
-  const [refreshTrigered, setRefreshTrigered] = useState(false);
-
-  const setRatingsValue = (rating: number) => setRatings(rating);
-
-  const product = data?.data.product ?? (LocalStorage.get("product") as ProductType);
-
-  const handleAddItemToCart = async (productId: string) => {
-    try {
-      const response = await addItemToCart({ productId, quantity: quantityInput }).unwrap();
-      setRefreshTrigered(!refreshTrigered);
-
-      setOpen(true);
-      console.log(response);
-
-      if (response?.message) {
-        toast.success(response?.message);
-      }
-    } catch (error: any) {
-      if (error?.data) {
-        toast.warn(error?.data?.message);
-      }
-    }
-  };
+  const navigate = useNavigate();
+  const {
+    message,
+    refetch,
+    open,
+    setOpen,
+    refreshTrigered,
+    isLoading,
+    ratings,
+    setQuantityInput,
+    quantityInput,
+    handleAddItemToCart,
+    setRatingsValue,
+    product,
+  } = useProduct();
 
   useEffect(() => {
-    if (data?.message) {
-      toast.success(data?.message);
+    if (message) {
+      toast.success(message);
     }
     refetch();
-  }, [refreshTrigered, data?.message]);
+  }, [refreshTrigered, message]);
 
   return (
     <Fragment>
       <CartModal isOpen={open} setIsOpen={setOpen} />
 
       <motion.main layout initial="hidden" animate="visible" variants={gridVariants}>
+        <div className="mb-4">
+          <button
+            type="button"
+            onClick={() => navigate("/collections")}
+            className="py-2 px-4 bg-gray-200 rounded-md"
+          >
+            <span className="sr-only">Back to products</span>
+            <div className="flex items-center gap-2">
+              <ArrowLeftCircleIcon className="h-6 text-gray-600" />
+              <span className="text-sm font-normal text-gray-600">products</span>
+            </div>
+          </button>
+        </div>
         <section className="grid grid-cols-1 lg:grid-cols-2 max-w-2xl lg:max-w-full mx-auto place-items-center lg:place-items-start place-content-center gap-8 px-4 xl:px-0">
           {isLoading ? (
             <ProductSkeletonLoading />
@@ -74,13 +70,13 @@ const Product = () => {
               <div className="col-span-full lg:col-span-1 w-full">
                 <div className="space-y-3">
                   <div className="flex items-center justify-between w-full">
-                    <h3 className="uppercase text-2xl font-bold text-gray-800">{product?.name}</h3>
-                    <p className="text-2xl font-bold text-[#e2342d] uppercase">
+                    <h3 className="uppercase text-xl font-bold text-gray-800">{product?.name}</h3>
+                    <p className="text-lg font-bold text-[#e2342d] uppercase">
                       {formatPrice(product?.price ?? 0.0)}
                     </p>
                   </div>
                   <div className="flex items-center gap-1">
-                    <span className="text-base font-semibold text-gray-600">3.9</span>
+                    <span className="text-base font-semibold text-gray-600 inline-block">3.9</span>
                     <Rating
                       value={ratings}
                       className="h-8"
@@ -95,10 +91,10 @@ const Product = () => {
                     <Button
                       type="button"
                       id="minus-btn"
-                      variant="outlined"
+                      variant="text"
                       ripple={false}
                       onClick={() => setQuantityInput((prevQuantity) => prevQuantity - 1)}
-                      className="p-1 text-gray-800 focus:ring-offset-2 transition-all flex items-center dark:text-white"
+                      className="p-1 text-gray-800 border focus:ring-offset-2 transition-all flex items-center dark:text-white"
                     >
                       <MinusIcon id="minus-icon" className="h-5 w-5" />
                     </Button>
@@ -117,9 +113,9 @@ const Product = () => {
                     <Button
                       type="button"
                       id="plus-btn"
-                      variant="outlined"
+                      variant="text"
                       ripple={false}
-                      className="p-1 text-gray-800 focus:ring-offset-2 transition-all flex items-center dark:text-white"
+                      className="p-1 text-gray-800 border focus:ring-offset-2 transition-all flex items-center dark:text-white"
                       onClick={() => setQuantityInput((prevQuantity) => prevQuantity + 1)}
                     >
                       <PlusIcon id="plus-icon" className="h-5 w-5" />
@@ -128,7 +124,7 @@ const Product = () => {
 
                   <div className="flex items-center space-x-6 col-span-full">
                     <Button
-                      className="w-full uppercase text-center py-3.5 shadow-none text-base mt-14 bg-indigo-600 rounded font-semibold"
+                      className="w-full uppercase text-center py-3.5 shadow-none text-base mt-14 bg-gray-800 border hover:bg-gray-700 transition rounded font-semibold"
                       onClick={() => handleAddItemToCart(product?._id)}
                       fullWidth
                     >

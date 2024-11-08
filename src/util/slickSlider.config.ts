@@ -6,6 +6,8 @@ export const productCarouselSettings: Settings = {
   speed: 500,
   slidesToShow: 3,
   slidesToScroll: 1,
+  autoplay:true,
+  autoplaySpeed:2000,
   responsive: [
     {
       breakpoint: 1024,
@@ -16,16 +18,16 @@ export const productCarouselSettings: Settings = {
       },
     },
     {
-      breakpoint: 800,
+      breakpoint: 768,
       settings: {
         slidesToShow: 2,
         slidesToScroll: 1,
       },
     },
     {
-      breakpoint: 600,
+      breakpoint: 680,
       settings: {
-        slidesToShow: 2,
+        slidesToShow: 1,
         slidesToScroll: 1,
       },
     },

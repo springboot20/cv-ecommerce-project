@@ -45,7 +45,7 @@ export default function CartModal({
 
   return (
     <Dialog open={isOpen} onClose={setIsOpen} className="relative z-20">
-      <Dialog.Backdrop className="fixed inset-0 bg-gray-500 bg-opacity-75 transition-opacity duration-500 ease-in-out data-[closed]:opacity-0" />
+      <Dialog.Backdrop className="fixed inset-0 z-10 bg-gray-500 bg-opacity-75 transition-opacity duration-500 ease-in-out data-[closed]:opacity-0" />
       <div className="fixed inset-0 overflow-hidden">
         <div className="absolute inset-0 overflow-hidden">
           <div className="pointer-events-none fixed inset-y-0 right-0 flex max-w-full pl-10">
@@ -114,6 +114,7 @@ export default function CartModal({
                     </div>
                     <Link
                       to="/cart"
+                      onClick={() => setIsOpen(false)}
                       className="text-base font-semibold text-white py-2.5 px-2 rounded bg-gray-800 w-full block text-center"
                     >
                       Continue to checkout
