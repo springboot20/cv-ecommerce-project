@@ -29,17 +29,6 @@ export default function EditProduct() {
   const [updating, setUpdating] = useState<boolean>(false);
 
   const categories = categoriedData?.data.categories as ProductCategory[];
-
-  const initialValues: InitialValuesInterface = {
-    price: product.price ?? 10,
-    description: product.description ?? "",
-    image: product.imageSrc?.url ?? null,
-    category: product.category ?? "",
-    stock: product.stock ?? 1,
-    featured: product.featured ?? false,
-    name: product.name ?? "",
-  };
-
   const {
     isDropping,
     selectedFile,
@@ -50,6 +39,16 @@ export default function EditProduct() {
     handleDragOver,
     handleDragLeave,
   } = useFile();
+  
+   const initialValues: InitialValuesInterface = {
+    price: product.price ?? 10,
+    description: product.description ?? "",
+    image: product.imageSrc?.url ?? selectedFile,
+    category: product.category ?? "",
+    stock: product.stock ?? 1,
+    featured: product.featured ?? false,
+    name: product.name ?? "",
+  };
 
   async function onSubmit(values: InitialValuesInterface) {
     try {
