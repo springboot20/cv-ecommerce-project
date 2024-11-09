@@ -5,9 +5,11 @@ import { toast } from "react-toastify";
 import { LocalStorage } from "../../util";
 import { Token } from "../../types/redux/auth";
 
+const env = import.meta.env;
+
 export const ApiService = createApi({
   baseQuery: fetchBaseQuery({
-    baseUrl: "http://localhost:5050/api/v1",
+    baseUrl: env.MODE === "development" ? env.VITE_API_BASE_URL_DEV : env.VITE_API_BASE_URL_PROD,
     prepareHeaders: (headers) => {
       const tokens = LocalStorage.get("tokens") as Token;
       if (tokens) {
