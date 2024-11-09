@@ -19,7 +19,7 @@ const Products = () => {
   const [searchQuery, setSearchQuery] = useState<string>("");
   // const [featured, setFeatured] = useState<boolean>(false);
   const [page, setPage] = useState<number>(1);
-  const [categoryQuery, setCategoryQuery] = useState<string>("");
+  // const [categoryQuery, setCategoryQuery] = useState<string>("");
 
   let limit = 10;
 
