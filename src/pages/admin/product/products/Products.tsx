@@ -77,8 +77,10 @@ const AdminProducts = () => {
           toast.success(response.message);
         })
         .catch((error: any) => {
+          console.log(error);
           if (error) {
             toast.error(error.error);
+            toast.error(error.data.message);
           }
           setProductDeleted(true);
         });
@@ -193,7 +195,6 @@ const DeleteModal: React.FC<{
   deleteProductLoading: boolean;
   productDeleted: boolean;
 }> = ({ open, onClose, handleDelete, deleteProductLoading, productDeleted }) => {
-  console.log(productDeleted);
   return (
     <Transition show={open} as={Fragment}>
       <Dialog open={open} onClose={onClose} className="w-full relative z-30 " as="div">

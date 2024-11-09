@@ -42,6 +42,7 @@ const Signup = () => {
     initialValues,
     validationSchema: registerSchema,
     onSubmit: async (values, actions) => {
+
       try {
         const response = await register(values).unwrap();
 

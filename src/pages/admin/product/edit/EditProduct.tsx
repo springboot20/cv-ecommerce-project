@@ -1,7 +1,6 @@
 import { Field, Form, Formik } from "formik";
 import { ArrowLeftCircleIcon, CurrencyDollarIcon } from "@heroicons/react/24/outline";
 import { clx } from "../../../../util";
-import { useFile } from "../../../../hooks/useFile";
 import { Button } from "@material-tailwind/react";
 import { useNavigate } from "react-router-dom";
 import { useProduct } from "../../../../hooks/useProduct";
@@ -9,7 +8,7 @@ import { useGetAllCategoryQuery } from "../../../../features/category/category.s
 import { ProductCategory } from "../../../../types/redux/product";
 import { useUpdateProductMutation } from "../../../../features/products/product.slice";
 import { toast } from "react-toastify";
-import { useState } from "react";
+import { useEffect, useRef, useState } from "react";
 
 interface InitialValuesInterface {
   price: number;
@@ -29,21 +28,39 @@ export default function EditProduct() {
   const [updating, setUpdating] = useState<boolean>(false);
 
   const categories = categoriedData?.data.categories as ProductCategory[];
-  const {
-    isDropping,
-    selectedFile,
-    setSelectedFile,
-    fileInputRef,
-    handleDragEnter,
-    handleDrop,
-    handleDragOver,
-    handleDragLeave,
-  } = useFile();
-  
-   const initialValues: InitialValuesInterface = {
+  const [selectedFile, setSelectedFile] = useState<File | null>(
+    product.imageSrc?.url ? new File([], product.imageSrc?.url) : null,
+  );
+  const fileInputRef = useRef<HTMLInputElement | null>(null);
+
+  const [isDropping, setIsDropping] = useState<boolean>(false);
+
+  const handleDrop = (event: React.DragEvent<HTMLDivElement>) => {
+    event.preventDefault();
+    setIsDropping(false);
+    if (event.dataTransfer.files && event.dataTransfer.files.length > 0) {
+      setSelectedFile(event.dataTransfer.files[0]);
+      event.dataTransfer.clearData();
+    }
+  };
+
+  const handleDragOver = (event: React.DragEvent<HTMLDivElement>) => {
+    event.preventDefault();
+  };
+
+  const handleDragLeave = () => {
+    setIsDropping(false);
+  };
+
+  const handleDragEnter = (e: React.DragEvent<HTMLInputElement>) => {
+    e.preventDefault();
+    setIsDropping(true);
+  };
+
+  const initialValues: InitialValuesInterface = {
     price: product.price ?? 10,
     description: product.description ?? "",
-    image: product.imageSrc?.url ?? selectedFile,
+    image: selectedFile,
     category: product.category ?? "",
     stock: product.stock ?? 1,
     featured: product.featured ?? false,
@@ -51,8 +68,18 @@ export default function EditProduct() {
   };
 
   async function onSubmit(values: InitialValuesInterface) {
+    const formData = new FormData();
+
+    formData.append("description", values.description);
+    formData.append("price", values.price.toString());
+    formData.append("image", values.image as Blob);
+    formData.append("category", values.category);
+    formData.append("stock", values.stock.toString());
+    formData.append("featured", values.featured ? "true" : "false");
+    formData.append("name", values.name);
+
     try {
-      const response = await updateProduct({ _id: product._id, ...values }).unwrap();
+      const response = await updateProduct({ _id: product._id, formData }).unwrap();
       const data = await response.data;
 
       toast(response.message, {
@@ -70,6 +97,16 @@ export default function EditProduct() {
       toast.error(error.error);
     }
   }
+
+  useEffect(() => {
+    return () => {
+      if (selectedFile) {
+        URL.revokeObjectURL(selectedFile.name);
+      }
+    };
+  }, [selectedFile]);
+
+  console.log(product);
 
   return (
     <div className="mx-auto max-w-6xl mt-4 space-y-2">
@@ -226,10 +263,14 @@ export default function EditProduct() {
                       )}
                     >
                       <div className="text-center">
-                        {selectedFile && (
+                        {(product.imageSrc?.url || selectedFile) && (
                           <div className="h-32 w-full ring-2 ring-offset-2 ring-indigo-500 rounded overflow-hidden mb-1 mx-auto">
                             <img
-                              src={URL.createObjectURL(selectedFile)}
+                              src={
+                                selectedFile
+                                  ? URL.createObjectURL(selectedFile)
+                                  : product.imageSrc?.url
+                              }
                               alt="upload"
                               className="object-cover h-full w-full"
                             />

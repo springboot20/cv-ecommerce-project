@@ -23,6 +23,7 @@ export const ProductSlice = ApiService.injectEndpoints({
         url: "/products",
         method: "POST",
         body: data,
+        formData: true,
       }),
     }),
 
@@ -49,6 +50,7 @@ export const ProductSlice = ApiService.injectEndpoints({
         url: `/products/${_id}`,
         method: "PUT",
         body: patch,
+        formData: true,
       }),
       invalidatesTags: (_, __, { _id }) => [{ type: "Product", id: _id }],
     }),

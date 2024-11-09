@@ -1,8 +1,11 @@
-import { Field, Form, Formik } from 'formik'
-import { CurrencyDollarIcon } from '@heroicons/react/24/outline'
+import { Field, Form, Formik } from "formik";
+import { CurrencyDollarIcon } from "@heroicons/react/24/outline";
 
-import { clx } from '../../../../util'
-import { useFile } from '../../../../hooks/useFile'
+import { clx } from "../../../../util";
+import { useFile } from "../../../../hooks/useFile";
+import { useCreateProductMutation } from "../../../../features/products/product.slice";
+import { toast } from "react-toastify";
+import { useNavigate } from "react-router-dom";
 
 interface InitialValuesInterface {
   price: number;
@@ -24,10 +27,6 @@ const initialValues: InitialValuesInterface = {
   name: "",
 };
 
-async function onSubmit(values: InitialValuesInterface) {
-  console.log(values);
-}
-
 export default function CreateNewProduct() {
   const {
     isDropping,
@@ -39,6 +38,38 @@ export default function CreateNewProduct() {
     handleDragOver,
     handleDragLeave,
   } = useFile();
+  const [createProduct] = useCreateProductMutation();
+  const navigate = useNavigate();
+
+  async function onSubmit(values: InitialValuesInterface) {
+    console.log(values);
+    const formData = new FormData();
+
+    formData.append("description", values.description);
+    formData.append("price", values.price.toString());
+    formData.append("image", values.image as Blob);
+    formData.append("category", values.category);
+    formData.append("stock", values.stock.toString());
+    formData.append("featured", values.featured ? "true" : "false");
+    formData.append("name", values.name);
+
+    try {
+      const response = await createProduct(formData).unwrap();
+      const data = await response.data;
+
+      toast(response.message, {
+        type: "success",
+      });
+
+      await new Promise((resolve) => setTimeout(resolve, 1500));
+      navigate("/admin/products/all", { replace: true });
+
+      return data;
+    } catch (error: any) {
+      toast.error(error.error);
+      toast.error(error.data.message);
+    }
+  }
 
   return (
     <Formik initialValues={initialValues} onSubmit={onSubmit}>
@@ -238,11 +269,12 @@ export default function CreateNewProduct() {
               </div>
             </div>
 
-            <div className='flex items-center gap-4 mt-4'>
+            <div className="flex items-center gap-4 mt-4">
               <button
-                type='submit'
+                type="submit"
                 // disabled={!dirty}
-                className='disabled:ring-gray-200 disabled:pointer-events-none disabled:text-indigo-300 disabled:bg-[#FAFAFA] disabled:ring-1 text-base capitalize font-medium border-none ring-2 w-fit ring-gray-200 rounded-md py-2.5 px-6 text-white bg-indigo-500'>
+                className="disabled:ring-gray-200 disabled:pointer-events-none disabled:text-indigo-300 disabled:bg-[#FAFAFA] disabled:ring-1 text-base capitalize font-medium border-none ring-2 w-fit ring-gray-200 rounded-md py-2.5 px-6 text-white bg-indigo-500"
+              >
                 create product
               </button>
             </div>
