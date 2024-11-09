@@ -1,18 +1,20 @@
-import { Disclosure } from '@headlessui/react'
-import { Fragment } from 'react'
-import { Outlet } from 'react-router-dom'
-import { PlusCircleIcon, ServerStackIcon, Squares2X2Icon } from '@heroicons/react/24/outline'
+import { Disclosure } from "@headlessui/react";
+import { Fragment } from "react"  
+import { Outlet } from "react-router-dom";
+import {
+  PlusCircleIcon,
+  ServerStackIcon,
+  Squares2X2Icon,
+  UsersIcon,
+} from "@heroicons/react/24/outline";
 
-import { AdminNavigationComponent } from '../../components/navigation/AdminNavigation'
-import { NavItem } from '../../components/NavItem'
-import { clx } from '../../util'
+import { AdminNavigationComponent } from "../../components/navigation/AdminNavigation";
+import { NavItem } from "../../components/NavItem";
+import { clx } from "../../util";
 
 const AdminLayoutComponent = () => {
   return (
-    <Disclosure
-      as="div"
-      className="w-screen bg-gray-100 h-screen"
-    >
+    <Disclosure as="div" className="bg-gray-100 min-h-screen">
       {({ open }) => {
         return (
           <Fragment>
@@ -36,6 +38,12 @@ const routes = [
     to: "/admin/products/all",
     label: "products",
     Icon: ServerStackIcon,
+    current: true,
+  },
+  {
+    to: "/admin/products/users",
+    label: "users",
+    Icon: UsersIcon,
     current: true,
   },
   {
@@ -78,7 +86,7 @@ export const AdminDashboardLayout = () => {
         </div>
       </nav>
 
-      <Disclosure.Panel className="fixed transition-all lg:hidden left-0 right-0 w-full  bg-white top-20 border-r">
+      <Disclosure.Panel className="fixed z-10  transition-all lg:hidden left-0 right-0 w-full  bg-white top-20 border-r">
         <div className="">
           <div className="flex flex-col items-center w-full">
             {routes.map(({ label, Icon, to, current }) => (
@@ -110,7 +118,7 @@ export const AdminDashboardLayout = () => {
       </Disclosure.Panel>
 
       <main className="absolute left-0 lg:left-80 w-full lg:w-[calc(100%-20rem)] pt-20">
-        <div className="px-4 xl:px-0">
+        <div className="px-4">
           <Outlet />
         </div>
       </main>

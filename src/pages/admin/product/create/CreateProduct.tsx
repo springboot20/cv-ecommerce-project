@@ -242,7 +242,7 @@ export default function CreateNewProduct() {
               <button
                 type='submit'
                 // disabled={!dirty}
-                className='disabled:ring-gray-200 disabled:pointer-events-none disabled:text-indigo-300 disabled:bg-[#FAFAFA] disabled:ring-1 text-base capitalize font-semibold border-none ring-2 w-fit ring-gray-200 rounded-md py-2.5 px-6 text-white bg-indigo-500'>
+                className='disabled:ring-gray-200 disabled:pointer-events-none disabled:text-indigo-300 disabled:bg-[#FAFAFA] disabled:ring-1 text-base capitalize font-medium border-none ring-2 w-fit ring-gray-200 rounded-md py-2.5 px-6 text-white bg-indigo-500'>
                 create product
               </button>
             </div>

@@ -1,19 +1,19 @@
 import { useEffect, useState } from "react";
-import { classNames, formatPrice } from "../../../helpers";
+import { classNames, formatPrice } from "../../helpers";
 import { motion } from "framer-motion";
-import { Pagination } from "../../../components/Pagination";
-import { gridVariants } from "../../../util/framerMotion.config";
+import { Pagination } from "../../components/Pagination";
+import { gridVariants } from "../../util/framerMotion.config";
 // import { Loader } from "../../components/Loader";
 import { Link } from "react-router-dom";
 import { toast } from "react-toastify";
-import { useGetAllProductsQuery } from "../../../features/products/product.slice";
-import { ProductCategory, ProductType } from "../../../types/redux/product";
-import { ProductsSkeletonLoading } from "../../../components/loaders/Skeleton";
-import { CategoryPanel } from "../../../components/panels/CategoryPanel";
+import { useGetAllProductsQuery } from "../../features/products/product.slice";
+import { ProductCategory, ProductType } from "../../types/redux/product";
+import { ProductsSkeletonLoading } from "../../components/loaders/Skeleton";
+import { CategoryPanel } from "../../components/panels/CategoryPanel";
 import { Disclosure } from "@headlessui/react";
 import { Bars3Icon } from "@heroicons/react/24/outline";
-import { LocalStorage } from "../../../util";
-import { useGetAllCategoryQuery } from "../../../features/category/category.slice";
+import { LocalStorage } from "../../util";
+import { useGetAllCategoryQuery } from "../../features/category/category.slice";
 
 const Products = () => {
   const [searchQuery, setSearchQuery] = useState<string>("");

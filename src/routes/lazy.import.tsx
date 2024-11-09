@@ -5,10 +5,12 @@ import AppLayout from "../layout/app/AppLayout";
 import AdminLayout from "../layout/admin/AdminLayout";
 import AdminLogin from "../pages/admin/login/Login";
 import CreateNewProduct from "../pages/admin/product/create/CreateProduct";
+import EditProduct from "../pages/admin/product/edit/EditProduct";
 import AdminProducts from "../pages/admin/product/products/Products";
 import { AdminDashboardLayout } from "../layout/admin/AdminLayout";
 
 const AdminOverview = lazy(() => import("../pages/admin/overview/Overview"));
+const AdminUsers = lazy(() => import("../pages/admin/users/Users"));
 const PrivateRoute = lazy(() => import("../components/Private.routes"));
 const Home = lazy(() => import("../pages/home/Home"));
 const Products = lazy(() => import("../pages/products/Products"));
@@ -89,12 +91,20 @@ const Router = () => {
                   element: <AdminProducts />,
                 },
                 {
+                  path: "users",
+                  element: <AdminUsers />,
+                },
+                {
                   path: "overview",
                   element: <AdminOverview />,
                 },
                 {
                   path: "create",
                   element: <CreateNewProduct />,
+                },
+                {
+                  path: "edit/:id",
+                  element: <EditProduct />,
                 },
               ],
             },

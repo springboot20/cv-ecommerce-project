@@ -3,7 +3,7 @@ import { Bars3Icon, XMarkIcon } from "@heroicons/react/24/outline";
 
 export const AdminNavigationComponent: React.FC<{ open: boolean }> = ({ open }) => {
   return (
-    <nav className="fixed inset-0 h-20 bg-white border-b">
+    <nav className="fixed inset-0 h-20 bg-white border-b z-10">
       <div className="px-8 h-full flex items-center justify-between">
         <div className="flex items-center justify-center lg:justify-start">
           <h1 className="flex items-center space-x-0.5 text-2xl font-semibold capitalize">
