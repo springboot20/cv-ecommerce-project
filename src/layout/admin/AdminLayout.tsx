@@ -1,8 +1,9 @@
 import { Disclosure } from "@headlessui/react";
-import { Fragment } from "react"  
+import { Fragment } from "react";
 import { Outlet } from "react-router-dom";
 import {
   PlusCircleIcon,
+  PowerIcon,
   ServerStackIcon,
   Squares2X2Icon,
   UsersIcon,
@@ -52,6 +53,12 @@ const routes = [
     Icon: PlusCircleIcon,
     current: true,
   },
+  {
+    to: "/admin/login",
+    label: "logout",
+    Icon: PowerIcon,
+    current: true,
+  },
 ];
 
 export const AdminDashboardLayout = () => {
@@ -64,16 +71,24 @@ export const AdminDashboardLayout = () => {
               to={to}
               key={label}
               aria-current={current ? "page" : undefined}
-              className={clx(current ? "hover:bg-[#F8F8F8]" : "", "py-5 px-10 w-full transition")}
+              className={clx(
+                current ? "hover:bg-[#F8F8F8]" : "",
+                "py-5 px-10 w-full transition",
+              )}
             >
               {({ isActive }) => (
                 <>
                   <Icon
-                    className={clx(isActive ? "stroke-[#5932EA]" : "stroke-[#7B7B7B]", "h-6")}
+                    className={clx(
+                      isActive ? "stroke-[#5932EA]" : "stroke-[#7B7B7B]",
+                      "h-6",
+                      label === "logout" && "stroke-red-500",
+                    )}
                   />
                   <span
                     className={clx(
                       "text-base sm:text-lg font-roboto capitalize",
+                      label === "logout" && "text-red-500",
                       isActive ? "text-[#5932EA] font-medium" : "text-[#0C0C0D] font-normal",
                     )}
                   >

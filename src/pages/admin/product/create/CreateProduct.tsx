@@ -6,6 +6,7 @@ import { useFile } from "../../../../hooks/useFile";
 import { useCreateProductMutation } from "../../../../features/products/product.slice";
 import { toast } from "react-toastify";
 import { useNavigate } from "react-router-dom";
+import { useAddCategoryMutation } from "../../../../features/category/category.slice";
 
 interface InitialValuesInterface {
   price: number;
@@ -39,6 +40,7 @@ export default function CreateNewProduct() {
     handleDragLeave,
   } = useFile();
   const [createProduct] = useCreateProductMutation();
+  const [addCategory] = useAddCategoryMutation();
   const navigate = useNavigate();
 
   async function onSubmit(values: InitialValuesInterface) {
@@ -56,6 +58,7 @@ export default function CreateNewProduct() {
     try {
       const response = await createProduct(formData).unwrap();
       const data = await response.data;
+      await addCategory({ name: values.category }).unwrap();
 
       toast(response.message, {
         type: "success",
@@ -137,7 +140,11 @@ export default function CreateNewProduct() {
                     )}
                   >
                     <option>select category</option>
-                    <option></option>
+                    <option>fasion</option>
+                    <option>kitchen</option>
+                    <option>electronics</option>
+                    <option>office</option>
+                    <option>sneakers</option>
                   </Field>
                 </div>
               </fieldset>
@@ -158,31 +165,53 @@ export default function CreateNewProduct() {
                 </label>
               </fieldset>
 
-              <fieldset className="mt-2">
-                <label
-                  htmlFor="price"
-                  className="capitalize text-sm font-normal text-gray-700 sm:text-base"
-                >
-                  product price
-                </label>
-                <div
-                  className={clx(
-                    errors.price && touched.price ? "ring-red-500" : "focus:ring-indigo-500",
-                    "flex items-stretch border rounded overflow-hidden focus-within:ring-2 lg:w-[20rem] focus-within:ring-indigo-600 focus-within:border-transparent h-12 ",
-                  )}
-                >
-                  <span className="relative flex items-center justify-center self-center w-12 border-r border-gray-300 h-full bg-gray-100">
-                    <CurrencyDollarIcon className="text-gray-700 h-7" />
-                  </span>
-                  <Field
-                    name="price"
-                    type="number"
+              <div className="flex flex-col sm:flex-row sm:items-center gap-3 sm:gap-5">
+                <fieldset className="mt-2">
+                  <label
+                    htmlFor="stock"
+                    className="capitalize text-sm font-normal text-gray-700 sm:text-base"
+                  >
+                    product stock
+                  </label>
+
+                  <div className="mt-2 relative">
+                    <Field
+                      name="stock"
+                      type="number"
+                      className={clx(
+                        "block w-full  rounded border-0 p-3 text-gray-700 ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset text-sm outline-none",
+                        errors.name && touched.name ? "ring-red-500" : "focus:ring-indigo-500",
+                      )}
+                    />
+                  </div>
+                </fieldset>
+
+                <fieldset className="mt-2">
+                  <label
+                    htmlFor="price"
+                    className="capitalize text-sm font-normal text-gray-700 sm:text-base"
+                  >
+                    product price
+                  </label>
+                  <div
                     className={clx(
-                      "block w-full h-full px-4 flex-1 py-3 border-none focus:outline-none focus:ring-0 placeholder:text-gray-400 text-gray-700",
+                      errors.price && touched.price ? "ring-red-500" : "focus:ring-indigo-500",
+                      "flex items-stretch border rounded overflow-hidden focus-within:ring-2 lg:w-[20rem] focus-within:ring-indigo-600 focus-within:border-transparent h-11 mt-2",
                     )}
-                  />
-                </div>
-              </fieldset>
+                  >
+                    <span className="relative flex items-center justify-center self-center w-12 border-r border-gray-300 h-full bg-gray-100">
+                      <CurrencyDollarIcon className="text-gray-700 h-7" />
+                    </span>
+                    <Field
+                      name="price"
+                      type="number"
+                      className={clx(
+                        "block w-full h-full px-4 flex-1 py-3 border-none focus:outline-none focus:ring-0 placeholder:text-gray-400 text-gray-700",
+                      )}
+                    />
+                  </div>
+                </fieldset>
+              </div>
             </div>
 
             <div className="col-span-full xl:col-span-1">
@@ -219,7 +248,7 @@ export default function CreateNewProduct() {
                       <div className="text-center">
                         <label
                           htmlFor="image"
-                          className="relative cursor-pointer rounded-md font-normal font-nunito-sans text-lg text-gray-400 hover:text-indigo-500 "
+                          className="relative cursor-pointer rounded-md font-normal font-nunito-sans text-base text-gray-400 hover:text-indigo-400 "
                         >
                           {!selectedFile && <span>Select product image or drag and drop</span>}
                           <input
@@ -241,7 +270,7 @@ export default function CreateNewProduct() {
                       </div>
                       {!selectedFile && (
                         <div>
-                          <p className="text-lg font-nunito-sans font-normal text-gray-500 dark:text-gray-200">
+                          <p className="text-base font-nunito-sans font-normal text-gray-500 dark:text-gray-200">
                             Recommended size
                           </p>
                           <p className="text-sm font-nunito-sans font-normal text-gray-500 dark:text-gray-200">

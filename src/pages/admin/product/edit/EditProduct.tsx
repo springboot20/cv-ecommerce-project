@@ -29,7 +29,7 @@ export default function EditProduct() {
 
   const categories = categoriedData?.data.categories as ProductCategory[];
   const [selectedFile, setSelectedFile] = useState<File | null>(
-    product.imageSrc?.url ? new File([], product.imageSrc?.url) : null,
+    product.imageSrc?.url ? product.imageSrc?.url : null,
   );
   const fileInputRef = useRef<HTMLInputElement | null>(null);
 
@@ -211,31 +211,53 @@ export default function EditProduct() {
                   </label>
                 </fieldset>
 
-                <fieldset className="mt-2">
-                  <label
-                    htmlFor="price"
-                    className="capitalize text-sm font-normal text-gray-700 sm:text-base"
-                  >
-                    product price
-                  </label>
-                  <div
-                    className={clx(
-                      errors.price && touched.price ? "ring-red-500" : "focus:ring-indigo-500",
-                      "flex items-stretch border rounded overflow-hidden focus-within:ring-2 lg:w-[20rem] focus-within:ring-indigo-600 focus-within:border-transparent h-12 ",
-                    )}
-                  >
-                    <span className="relative flex items-center justify-center self-center w-12 border-r border-gray-300 h-full bg-gray-100">
-                      <CurrencyDollarIcon className="text-gray-700 h-7" />
-                    </span>
-                    <Field
-                      name="price"
-                      type="number"
+                <div className="flex flex-col sm:flex-row sm:items-center gap-3 sm:gap-5">
+                  <fieldset className="mt-2">
+                    <label
+                      htmlFor="stock"
+                      className="capitalize text-sm font-normal text-gray-700 sm:text-base"
+                    >
+                      product stock
+                    </label>
+
+                    <div className="mt-2 relative">
+                      <Field
+                        name="stock"
+                        type="number"
+                        className={clx(
+                          "block w-full  rounded border-0 p-3 text-gray-700 ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset text-sm outline-none",
+                          errors.name && touched.name ? "ring-red-500" : "focus:ring-indigo-500",
+                        )}
+                      />
+                    </div>
+                  </fieldset>
+
+                  <fieldset className="mt-2">
+                    <label
+                      htmlFor="price"
+                      className="capitalize text-sm font-normal text-gray-700 sm:text-base"
+                    >
+                      product price
+                    </label>
+                    <div
                       className={clx(
-                        "block w-full h-full px-4 flex-1 py-3 border-none focus:outline-none focus:ring-0 placeholder:text-gray-400 text-gray-700",
+                        errors.price && touched.price ? "ring-red-500" : "focus:ring-indigo-500",
+                        "flex items-stretch border rounded overflow-hidden focus-within:ring-2 lg:w-[20rem] focus-within:ring-indigo-600 focus-within:border-transparent h-11 mt-2",
                       )}
-                    />
-                  </div>
-                </fieldset>
+                    >
+                      <span className="relative flex items-center justify-center self-center w-12 border-r border-gray-300 h-full bg-gray-100">
+                        <CurrencyDollarIcon className="text-gray-700 h-7" />
+                      </span>
+                      <Field
+                        name="price"
+                        type="number"
+                        className={clx(
+                          "block w-full h-full px-4 flex-1 py-3 border-none focus:outline-none focus:ring-0 placeholder:text-gray-400 text-gray-700",
+                        )}
+                      />
+                    </div>
+                  </fieldset>
+                </div>
               </div>
 
               <div className="col-span-full xl:col-span-1">
@@ -267,9 +289,9 @@ export default function EditProduct() {
                           <div className="h-32 w-full ring-2 ring-offset-2 ring-indigo-500 rounded overflow-hidden mb-1 mx-auto">
                             <img
                               src={
-                                selectedFile
-                                  ? URL.createObjectURL(selectedFile)
-                                  : product.imageSrc?.url
+                                typeof selectedFile === "string"
+                                  ? selectedFile
+                                  : URL.createObjectURL(selectedFile!)
                               }
                               alt="upload"
                               className="object-cover h-full w-full"

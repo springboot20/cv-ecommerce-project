@@ -12,59 +12,44 @@ import {
   Tooltip,
   Checkbox,
 } from "@material-tailwind/react";
-
-const columns = ["User", "Role", "Status", "Created", "Action"];
-
-const data = [
-  {
-    img: "https://demos.creative-tim.com/test/corporate-ui-dashboard/assets/img/team-3.jpg",
-    name: "John Michael",
-    email: "john@creative-tim.com",
-    job: "Manager",
-    org: "Organization",
-    online: true,
-    date: "23/04/18",
-  },
-  {
-    img: "https://demos.creative-tim.com/test/corporate-ui-dashboard/assets/img/team-2.jpg",
-    name: "Alexa Liras",
-    email: "alexa@creative-tim.com",
-    job: "Programator",
-    org: "Developer",
-    online: false,
-    date: "23/04/18",
-  },
-  {
-    img: "https://demos.creative-tim.com/test/corporate-ui-dashboard/assets/img/team-1.jpg",
-    name: "Laurent Perrier",
-    email: "laurent@creative-tim.com",
-    job: "Executive",
-    org: "Projects",
-    online: false,
-    date: "19/09/17",
-  },
-  {
-    img: "https://demos.creative-tim.com/test/corporate-ui-dashboard/assets/img/team-4.jpg",
-    name: "Michael Levi",
-    email: "michael@creative-tim.com",
-    job: "Programator",
-    org: "Developer",
-    online: true,
-    date: "24/12/08",
-  },
-  {
-    img: "https://demos.creative-tim.com/test/corporate-ui-dashboard/assets/img/team-5.jpg",
-    name: "Richard Gran",
-    email: "richard@creative-tim.com",
-    job: "Manager",
-    org: "Executive",
-    online: false,
-    date: "04/10/21",
-  },
-];
+import { useGetAllUsersQuery } from "../../../features/users/users.slice";
+import { useEffect, useState } from "react";
+import { User } from "../../../types/redux/auth";
+import { toast } from "react-toastify";
 
 export default function Users() {
-  console.log(columns.length > 0 ? Object.keys(columns[0]) : []);
+  const { data, refetch } = useGetAllUsersQuery();
+  const [page, setPage] = useState<number>(1);
+
+  const users = data?.data?.users as User[];
+
+  const selectedHeaders = ["_id", "User", "Role", "CreatedAt"];
+
+  const columns =
+    users?.length > 0 ? Object.keys(users[0]).filter((key) => selectedHeaders.includes(key)) : [];
+
+  const totalPages = data?.data?.totalPages ?? 1;
+  const hasNextPage = data?.data?.hasNextPage ?? false;
+  const hasPrevPage = data?.data?.hasPrevPage ?? false;
+
+  const handleNextPage = () => {
+    if (hasNextPage) {
+      setPage((prevPage) => prevPage + 1);
+    }
+  };
+
+  const handlePreviousPage = () => {
+    if (hasPrevPage) {
+      setPage((prevPage) => Math.max(prevPage - 1, 1));
+    }
+  };
+
+  useEffect(() => {
+    if (data?.message) {
+      toast.success(data?.message);
+    }
+    refetch();
+  }, [data?.message]);
 
   return (
     <div className="mx-auto max-w-6xl mt-4">
@@ -73,22 +58,22 @@ export default function Users() {
           <table className="w-full min-w-max table-auto text-left">
             <thead>
               <tr>
-                {columns.map((head) => (
-                  <th key={head} className="border-y border-blue-gray-100 bg-blue-gray-50/50 p-4">
+                {[...columns, "Action"].map((column: string) => (
+                  <th key={column} className="border-y border-blue-gray-100 bg-blue-gray-50/50 p-4">
                     <Typography
                       variant="small"
                       color="blue-gray"
                       className="font-normal leading-none opacity-70"
                     >
-                      {head}
+                      {column}
                     </Typography>
                   </th>
                 ))}
               </tr>
             </thead>
             <tbody>
-              {data.map((d: any, index: number) => {
-                const isLast = index === data.length - 1;
+              {users?.map((d: any, index: number) => {
+                const isLast = index === users.length - 1;
                 const classes = isLast ? "p-4" : "p-4 border-b border-blue-gray-50";
 
                 return (
@@ -165,13 +150,13 @@ export default function Users() {
         </CardBody>
         <CardFooter className="flex items-center justify-between border-t border-blue-gray-50 p-4">
           <Typography variant="small" color="blue-gray" className="font-normal">
-            Page 1 of 10
+            Page {page} of {totalPages}
           </Typography>
           <div className="flex gap-2">
-            <Button variant="outlined" size="sm">
+            <Button variant="outlined" size="sm" onClick={handlePreviousPage} className="rounded">
               Previous
             </Button>
-            <Button variant="outlined" size="sm">
+            <Button variant="outlined" size="sm" onClick={handleNextPage} className="rounded">
               Next
             </Button>
           </div>
