@@ -12,6 +12,10 @@ interface UserRequest {
   [key: string]: any;
 }
 
+interface UserQuery {
+  [key: string]: any | undefined;
+}
+
 export const UsersSlice = ApiService.injectEndpoints({
   endpoints: (builder) => ({
     createUser: builder.mutation<Response, UserRequest>({
@@ -23,8 +27,8 @@ export const UsersSlice = ApiService.injectEndpoints({
       }),
     }),
 
-    getAllUsers: builder.query<Response, void>({
-      query: () => "/users",
+    getAllUsers: builder.query<Response, UserQuery>({
+      query: ({ limit = 10, page = 1 }) => `/users?limit=${limit}&page=${page}`,
       providesTags: (result) =>
         result?.data?.users?.length
           ? [
@@ -37,8 +41,8 @@ export const UsersSlice = ApiService.injectEndpoints({
           : [{ type: "User", id: "USER" }],
     }),
 
-    getVerifiedUsers: builder.query<Response, void>({
-      query: () => "/users/verified-users",
+    getVerifiedUsers: builder.query<Response, UserQuery>({
+      query: ({ limit = 10, page = 1 }) => `/users/verified-users?limit=${limit}&page=${page}`,
       providesTags: (result) =>
         result?.data?.users?.length
           ? [
@@ -58,7 +62,36 @@ export const UsersSlice = ApiService.injectEndpoints({
       }),
       invalidatesTags: (_, __, userId) => [{ type: "User", id: userId }],
     }),
+
+    assignUserRole: builder.mutation<Response, Pick<User, "_id" | "role">>({
+      query: ({ _id, role }) => ({
+        url: `/users/assign-role/${_id}`,
+        method: "POST",
+        body: role,
+      }),
+    }),
+
+    updateUser: builder.mutation<Response, Pick<User, "_id"> & Partial<UserRequest>>({
+      query: ({ _id, ...patch }) => ({
+        url: `/users/${_id}`,
+        method: "POST",
+        body: patch,
+      }),
+      invalidatesTags: (_, __, { _id }) => [{ type: "User", id: _id }],
+    }),
+
+    getCurrentUser: builder.query<Response, string>({
+      query: (userId) => `/users/currrnt-user/${userId}`,
+      providesTags: (_, __, userId) => [{ type: "User", id: userId }],
+    }),
   }),
 });
 
-export const { useCreateUserMutation, useGetAllUsersQuery, useDeleteUserMutation } = UsersSlice;
+export const {
+  useCreateUserMutation,
+  useGetAllUsersQuery,
+  useDeleteUserMutation,
+  useAssignUserRoleMutation,
+  useGetCurrentUserQuery,
+  useUpdateUserMutation,
+} = UsersSlice;

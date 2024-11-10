@@ -48,7 +48,7 @@ export const ProductSlice = ApiService.injectEndpoints({
     >({
       query: ({ _id, ...patch }) => ({
         url: `/products/${_id}`,
-        method: "PUT",
+        method: "PATCH",
         body: patch,
         formData: true,
       }),

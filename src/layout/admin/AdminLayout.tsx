@@ -15,7 +15,7 @@ import { clx } from "../../util";
 
 const AdminLayoutComponent = () => {
   return (
-    <Disclosure as="div" className="bg-gray-100 min-h-screen">
+    <Disclosure as="div">
       {({ open }) => {
         return (
           <Fragment>

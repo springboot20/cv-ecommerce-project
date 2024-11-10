@@ -12,18 +12,24 @@ import {
   Tooltip,
   Checkbox,
 } from "@material-tailwind/react";
-import { useGetAllUsersQuery } from "../../../features/users/users.slice";
-import { useEffect, useState } from "react";
+import { useDeleteUserMutation, useGetAllUsersQuery } from "../../../features/users/users.slice";
+import { useCallback, useEffect, useState } from "react";
 import { User } from "../../../types/redux/auth";
 import { toast } from "react-toastify";
 
 export default function Users() {
-  const { data, refetch } = useGetAllUsersQuery();
+  let limit = 10;
+
   const [page, setPage] = useState<number>(1);
+  const { data, refetch } = useGetAllUsersQuery({
+    limit,
+    page,
+  });
+  const [deleteUser] = useDeleteUserMutation();
 
   const users = data?.data?.users as User[];
 
-  const selectedHeaders = ["_id", "User", "Role", "CreatedAt"];
+  const selectedHeaders = ["_id", "username", "email", "role", "createdAt"];
 
   const columns =
     users?.length > 0 ? Object.keys(users[0]).filter((key) => selectedHeaders.includes(key)) : [];
@@ -51,24 +57,53 @@ export default function Users() {
     refetch();
   }, [data?.message]);
 
+  const handleUserDelete = useCallback(
+    async (userId: string) => {
+      try {
+        const response = await deleteUser(userId).unwrap();
+        const data = await response.data;
+
+        toast(response.message, {
+          type: "success",
+        });
+
+        return data;
+      } catch (error: any) {
+        toast.error(error.data.message);
+        toast.error(error.error);
+      }
+    },
+    [deleteUser],
+  );
+
   return (
     <div className="mx-auto max-w-6xl mt-4">
-      <Card className="h-full w-full !rounded-none !shadow !p-2">
+      <Card className="h-full w-full !rounded !shadow">
         <CardBody className="overflow-x-auto p-0">
           <table className="w-full min-w-max table-auto text-left">
             <thead>
               <tr>
-                {[...columns, "Action"].map((column: string) => (
-                  <th key={column} className="border-y border-blue-gray-100 bg-blue-gray-50/50 p-4">
-                    <Typography
-                      variant="small"
-                      color="blue-gray"
-                      className="font-normal leading-none opacity-70"
+                {[...columns, "Action"].map((column: string) => {
+                  let formattedText =
+                    column.charAt(0).toUpperCase() + column.slice(1, column.length).toLowerCase();
+                  return (
+                    <th
+                      key={column}
+                      className="border-y border-blue-gray-100 bg-blue-gray-50/50 p-4"
                     >
-                      {column}
-                    </Typography>
-                  </th>
-                ))}
+                      <div className="flex items-center space-x-3">
+                        {formattedText === "_id" && <Checkbox crossOrigin={undefined} />}
+                        <Typography
+                          variant="small"
+                          color="blue-gray"
+                          className="leading-none opacity-70 font-medium"
+                        >
+                          {formattedText === "_id" ? formattedText.split("_")[1] : formattedText}
+                        </Typography>
+                      </div>
+                    </th>
+                  );
+                })}
               </tr>
             </thead>
             <tbody>
@@ -76,61 +111,66 @@ export default function Users() {
                 const isLast = index === users.length - 1;
                 const classes = isLast ? "p-4" : "p-4 border-b border-blue-gray-50";
 
+                let date = new Date(d.createdAt);
+                const formattedDate = `${date.getDate()}/${
+                  date.getMonth() > 9 ? date.getMonth() : date.getMonth()
+                }/${date.getFullYear()}`;
+
                 return (
-                  <tr key={d.name}>
+                  <tr key={d._id}>
                     <td className={classes}>
                       <div className="flex items-center space-x-3">
                         <Checkbox crossOrigin={undefined} />
-                        <div className="flex items-center gap-3">
-                          <Avatar src={d.img} alt={d.name} size="sm" />
-                          <div className="flex flex-col">
-                            <Typography variant="small" color="blue-gray" className="font-normal">
-                              {d.name}
-                            </Typography>
-                            <Typography
-                              variant="small"
-                              color="blue-gray"
-                              className="font-normal opacity-70"
-                            >
-                              {d.email}
-                            </Typography>
-                          </div>
-                        </div>
-                      </div>
-                    </td>
-                    <td className={classes}>
-                      <div className="flex flex-col">
-                        <Typography variant="small" color="blue-gray" className="font-normal">
-                          {d.job}
-                        </Typography>
                         <Typography
                           variant="small"
                           color="blue-gray"
                           className="font-normal opacity-70"
                         >
-                          {d.org}
+                          {d._id}
                         </Typography>
                       </div>
                     </td>
+
+                    <td className={classes}>
+                      <div className="flex items-center gap-3">
+                        <Avatar src={d.avatar?.url} alt={d.username} size="sm" />
+                        <Typography variant="small" color="blue-gray" className="font-normal">
+                          {d.username}
+                        </Typography>
+                      </div>
+                    </td>
+
+                    <td className={classes}>
+                      <Typography
+                        variant="small"
+                        color="blue-gray"
+                        className="font-normal opacity-70"
+                      >
+                        {d.email}
+                      </Typography>
+                    </td>
+
                     <td className={classes}>
                       <div className="w-max">
                         <Chip
                           variant="ghost"
                           size="sm"
-                          value={d.online ? "online" : "offline"}
-                          color={d.online ? "green" : "blue-gray"}
+                          value={d.role}
+                          color={d.role === "ADMIN" ? "green" : "blue-gray"}
                         />
                       </div>
                     </td>
+
                     <td className={classes}>
                       <Typography variant="small" color="blue-gray" className="font-normal">
-                        {d.date}
+                        {formattedDate}
                       </Typography>
                     </td>
+
                     <td className={classes}>
                       <div className="flex space-x-5 items-center">
                         <Tooltip content="Delete User" className="bg-gray-600">
-                          <IconButton variant="text">
+                          <IconButton variant="text" onClick={() => handleUserDelete(d._id)}>
                             <TrashIcon className="h-5 w-5 text-red-500" />
                           </IconButton>
                         </Tooltip>

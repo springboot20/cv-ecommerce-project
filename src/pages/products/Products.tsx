@@ -66,7 +66,7 @@ const Products = () => {
         <CategoryPanel handleSearch={handleSearch} categories={categories} />
         <div
           className={classNames(
-            isLoading ? "h-auto" : "min-h-screen",
+            isLoading ? "h-auto" : "h-auto",
             "w-full absolute justify-between left-0 right-0 lg:left-[24rem] lg:w-[calc(100%-24rem)] px-4 xl:px-0 xl:pl-4",
           )}
         >
@@ -84,10 +84,10 @@ const Products = () => {
             className="grid grid-cols-1 md:grid-cols-2 2xl:grid-cols-3 gap-5 mt-2"
           >
             {isLoading ? (
-              <ProductsSkeletonLoading cardsNumber={9} />
+              <ProductsSkeletonLoading cardsNumber={6} />
             ) : searchQuery && products.length === 0 ? (
               <p className="font-semibold text-gray-700 text-xl text-center">
-                No country found for "{searchQuery}"
+                No product found for "{searchQuery}"
               </p>
             ) : (
               products?.map((product: ProductType) => (

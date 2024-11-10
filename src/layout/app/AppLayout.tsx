@@ -71,7 +71,8 @@ const AppLayout: React.FC = () => {
                               <Menu.Items className="absolute right-0 z-10 mt-4 w-48 origin-top-right rounded-md bg-white py-1 shadow-lg ring-1 ring-black ring-opacity-5 focus:outline-none">
                                 <Menu.Item>
                                   {({ active }) => (
-                                    <button
+                                    <Link
+                                      to="/"
                                       className={classNames(
                                         active ? "bg-gray-100" : "",
                                         "flex w-full items-center gap-2 px-4 py-2 text-sm text-gray-800 font-medium",
@@ -110,12 +111,13 @@ const AppLayout: React.FC = () => {
                                         </g>
                                       </svg>
                                       <span>Log Out</span>
-                                    </button>
+                                    </Link>
                                   )}
                                 </Menu.Item>
                                 <Menu.Item>
                                   {({ active }) => (
-                                    <button
+                                    <Link
+                                      to="/settings"
                                       className={classNames(
                                         active ? "bg-gray-100" : "",
                                         "flex items-center gap-2 px-4 py-2 text-sm text-gray-800 font-medium w-full",
@@ -155,7 +157,7 @@ const AppLayout: React.FC = () => {
                                       </svg>
 
                                       <span>Settings</span>
-                                    </button>
+                                    </Link>
                                   )}
                                 </Menu.Item>
                               </Menu.Items>

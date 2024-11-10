@@ -7,6 +7,7 @@ import AdminLogin from "../pages/admin/login/Login";
 import CreateNewProduct from "../pages/admin/product/create/CreateProduct";
 import EditProduct from "../pages/admin/product/edit/EditProduct";
 import AdminProducts from "../pages/admin/product/products/Products";
+import AdminUserEdit from "../pages/admin/users/edit/EditUser";
 import { AdminDashboardLayout } from "../layout/admin/AdminLayout";
 
 const AdminOverview = lazy(() => import("../pages/admin/overview/Overview"));
@@ -22,6 +23,7 @@ const Notfound = lazy(() => import("../components/NotFound"));
 const PublicRoute = lazy(() => import("../components/Public.routes"));
 const Login = lazy(() => import("../pages/auth/Signin"));
 const Register = lazy(() => import("../pages/auth/Signup"));
+const Settings = lazy(() => import("../pages/settings/Settings"));
 
 const Router = () => {
   return createBrowserRouter([
@@ -73,6 +75,15 @@ const Router = () => {
             </PrivateRoute>
           ),
         },
+        {
+          path: "settings",
+          element: (
+            <PrivateRoute>
+              <Settings />
+            </PrivateRoute>
+          ),
+          children: [{}],
+        },
       ],
     },
 
@@ -92,7 +103,16 @@ const Router = () => {
                 },
                 {
                   path: "users",
-                  element: <AdminUsers />,
+                  children: [
+                    {
+                      index: true,
+                      element: <AdminUsers />,
+                    },
+                    {
+                      path: "edit/:userId",
+                      element: <AdminUserEdit />,
+                    },
+                  ],
                 },
                 {
                   path: "overview",
