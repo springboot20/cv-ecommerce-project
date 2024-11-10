@@ -1,7 +1,23 @@
 import { Disclosure } from "@headlessui/react";
-import {  XMarkIcon } from "@heroicons/react/24/outline";
-import { List, ListItem } from "@material-tailwind/react";
+import { Cog6ToothIcon, UserIcon, XMarkIcon } from "@heroicons/react/24/outline";
 import React from "react";
+import { clx } from "../../util";
+import { NavItem } from "../NavItem";
+
+const settingsRoutes = [
+  {
+    to: "/settings/profile",
+    label: "public profile",
+    Icon: UserIcon,
+    current: true,
+  },
+  {
+    to: "/settings/account",
+    label: "account",
+    Icon: Cog6ToothIcon,
+    current: true,
+  },
+];
 
 export const SettingsPanel: React.FC = () => {
   return (
@@ -12,8 +28,37 @@ export const SettingsPanel: React.FC = () => {
             <span className="sr-only">Close side panel</span>
             <XMarkIcon className="h-6" aria-hidden={true} />
           </Disclosure.Button>
-          <div className="relative mt-4 pb-5 border-b">
+          <div className="relative mt-4 pb-3 border-b">
             <h1 className="sm:text-lg lg:text-xl font-medium">Settings</h1>
+            <div className="flex flex-col items-center w-full mt-4 space-y-1">
+              {settingsRoutes.map(({ label, Icon, to, current }) => (
+                <NavItem
+                  to={to}
+                  key={label}
+                  aria-current={current ? "page" : undefined}
+                  className={clx(
+                    current ? "hover:bg-[#F8F8F8]" : "",
+                    "py-2.5 px-4 w-full transition",
+                  )}
+                >
+                  {({ isActive }) => (
+                    <>
+                      <Icon
+                        className={clx(isActive ? "stroke-[#5932EA]" : "stroke-[#7B7B7B]", "h-6")}
+                      />
+                      <span
+                        className={clx(
+                          "text-base font-roboto capitalize",
+                          isActive ? "text-[#5932EA] font-medium" : "text-[#0C0C0D] font-normal",
+                        )}
+                      >
+                        {label}
+                      </span>
+                    </>
+                  )}
+                </NavItem>
+              ))}
+            </div>
           </div>
         </div>
       </div>
@@ -26,27 +71,37 @@ export const SettingsPanel: React.FC = () => {
               <XMarkIcon className="h-6" aria-hidden={true} />
             </Disclosure.Button>
 
-            <div className="relative mt-8 pb-5 border-b">
-              <h1 className="sm:text-lg lg:text-xl font-bold">Category</h1>
-              <List className="p-0 mt-3">
-                <ListItem className="group rounded-none py-1.5 px-3 text-sm font-medium text-blue-gray-700 hover:bg-gray-100 hover:text-gray-700 focus:bg-gray-200 focus:text-gary-700">
-                  All
-                </ListItem>
-                <ListItem className="group rounded-none py-1.5 px-3 text-sm font-medium text-blue-gray-700 hover:bg-gray-100 hover:text-gray-700 focus:bg-gray-200 focus:text-gary-700">
-                  Cloth
-                </ListItem>
-              </List>
-            </div>
             <div className="relative mt-4 pb-5 border-b">
-              <h1 className="sm:text-lg lg:text-xl font-bold">Category</h1>
-              <List className="p-0 mt-3">
-                <ListItem className="group rounded-none py-1.5 px-3 text-sm font-medium text-blue-gray-700 hover:bg-gray-100 hover:text-gray-700 focus:bg-gray-200 focus:text-gary-700">
-                  All
-                </ListItem>
-                <ListItem className="group rounded-none py-1.5 px-3 text-sm font-medium text-blue-gray-700 hover:bg-gray-100 hover:text-gray-700 focus:bg-gray-200 focus:text-gary-700">
-                  Cloth
-                </ListItem>
-              </List>
+              <h1 className="sm:text-lg lg:text-xl font-medium">Settings</h1>
+              <div className="flex flex-col items-center w-full mt-4 space-y-1">
+                {settingsRoutes.map(({ label, Icon, to, current }) => (
+                  <NavItem
+                    to={to}
+                    key={label}
+                    aria-current={current ? "page" : undefined}
+                    className={clx(
+                      current ? "hover:bg-[#F8F8F8]" : "",
+                      "py-2.5 px-4 w-full transition",
+                    )}
+                  >
+                    {({ isActive }) => (
+                      <>
+                        <Icon
+                          className={clx(isActive ? "stroke-[#5932EA]" : "stroke-[#7B7B7B]", "h-6")}
+                        />
+                        <span
+                          className={clx(
+                            "text-base font-roboto capitalize",
+                            isActive ? "text-[#5932EA] font-medium" : "text-[#0C0C0D] font-normal",
+                          )}
+                        >
+                          {label}
+                        </span>
+                      </>
+                    )}
+                  </NavItem>
+                ))}
+              </div>
             </div>
           </div>
         </div>

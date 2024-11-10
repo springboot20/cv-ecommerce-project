@@ -82,7 +82,14 @@ const Router = () => {
               <Settings />
             </PrivateRoute>
           ),
-          children: [{}],
+          children: [
+            {
+              path: "profile",
+            },
+            {
+              path: "account",
+            },
+          ],
         },
       ],
     },
