@@ -1,9 +1,8 @@
 import { Button, Radio, Typography } from '@material-tailwind/react';
-import { InputField } from '../components/inputs/Input';
 import { ChevronLeftIcon } from '@heroicons/react/24/outline';
 import { Link } from 'react-router-dom';
 import Shoe from '../assets/running-shoes-sneakers.png';
-import { SuccessModal } from '../components/modal/SuccessModal';
+import { SuccessModal } from '../../../components/modal/SuccessModal';
 import { useState } from 'react';
 
  const Payment = () => {

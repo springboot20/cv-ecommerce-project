@@ -179,7 +179,7 @@ export default function CreateNewProduct() {
                       name="stock"
                       type="number"
                       className={clx(
-                        "block w-full  rounded border-0 p-3 text-gray-700 ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset text-sm outline-none",
+                        "block w-full rounded border-0 p-3 text-gray-700 ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset text-sm outline-none",
                         errors.name && touched.name ? "ring-red-500" : "focus:ring-indigo-500",
                       )}
                     />

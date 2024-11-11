@@ -18,12 +18,14 @@ const Products = lazy(() => import("../pages/products/Products"));
 const Product = lazy(() => import("../pages/product/Product"));
 const Cart = lazy(() => import("../pages/cart/Cart"));
 const Payment = lazy(() => import("../pages/payment/Payment"));
-const CheckOut = lazy(() => import("../pages/check-out/CheckOut"));
+const CheckOut = lazy(() => import("../pages/check-out/Checkout"));
 const Notfound = lazy(() => import("../components/NotFound"));
 const PublicRoute = lazy(() => import("../components/Public.routes"));
 const Login = lazy(() => import("../pages/auth/Signin"));
 const Register = lazy(() => import("../pages/auth/Signup"));
+
 const Settings = lazy(() => import("../pages/settings/Settings"));
+const Profile = lazy(() => import("../pages/settings/profile/Profile"));
 
 const Router = () => {
   return createBrowserRouter([
@@ -62,9 +64,9 @@ const Router = () => {
         {
           path: "check-out",
           element: (
-            <PrivateRoute>
+            <PublicRoute>
               <CheckOut />
-            </PrivateRoute>
+            </PublicRoute>
           ),
         },
         {
@@ -85,6 +87,7 @@ const Router = () => {
           children: [
             {
               path: "profile",
+              element: <Profile />,
             },
             {
               path: "account",

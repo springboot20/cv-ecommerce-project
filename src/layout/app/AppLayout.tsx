@@ -189,13 +189,13 @@ const AppLayout: React.FC = () => {
                     </div>
                   </div>
 
-                  <div className="flex items-center lg:hidden">
-                    <Disclosure.Button className="inline-flex items-center justify-center rounded-md p-1.5 dark:text-white text-gray-900 bg-gray-50 hover:dark:text-white focus:outline-none focus:ring-2 focus:ring-inset focus:ring-black/20">
+                  <div className="flex items-center lg:hidden justify-end w-full">
+                    <Disclosure.Button className="inline-flex items-center justify-center rounded-md p-1 dark:text-white text-gray-900 bg-gray-50 hover:dark:text-white focus:outline-none focus:ring-2 focus:ring-inset focus:ring-black/20">
                       <span className="sr-only">Open main menu</span>
                       {open ? (
-                        <XMarkIcon className="block h-8 w-8" aria-hidden="true" />
+                        <XMarkIcon className="block h-6 w-6" aria-hidden="true" />
                       ) : (
-                        <Bars3Icon className="block h-8 w-8" aria-hidden="true" />
+                        <Bars3Icon className="block h-6 w-6" aria-hidden="true" />
                       )}
                     </Disclosure.Button>
                   </div>
@@ -250,7 +250,7 @@ const AppLayout: React.FC = () => {
           </>
         )}
       </Disclosure>
-      <div className="max-w-7xl mx-auto mt-36">
+      <div className="max-w-7xl mx-auto mt-[7.5rem]">
         <Outlet />
       </div>
     </>
