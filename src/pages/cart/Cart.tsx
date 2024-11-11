@@ -73,10 +73,10 @@ const Cart = () => {
                   <div className="flow-root">
                     <ul role="list" className="-my-6 divide-y divide-gray-200">
                       {cart?.items.map((item: any) => (
-                        <li key={item?.product._id} className="flex py-6">
+                        <li key={item?.product?._id} className="flex py-6">
                           <div className="h-36 w-44 flex-shrink-0 overflow-hidden rounded-md border border-gray-200">
                             <img
-                              src={item.product.imageSrc.url}
+                              src={item.product?.imageSrc?.url}
                               alt={"product image"}
                               className="h-full w-full object-cover object-center"
                             />
@@ -86,16 +86,16 @@ const Cart = () => {
                             <div>
                               <div className="flex justify-between  font-medium text-gray-900">
                                 <h3 className="text-gray-700 font-medium capitalize text-lg">
-                                  {item?.product.name}
+                                  {item?.product?.name}
                                 </h3>
                                 <p className="text-lg font-medium text-gray-700">
-                                  {formatPrice(item?.product.price)}
+                                  {formatPrice(item?.product?.price)}
                                 </p>
                               </div>
                               <p className="text-gray-500">Qty ({item?.quantity})</p>
                             </div>
                             <div className="flex flex-1 items-end justify-between text-sm">
-                              {selectedItemId === item.product._id && isEditing ? (
+                              {selectedItemId === item.product?._id && isEditing ? (
                                 <div className="flex items-center space-x-4">
                                   <fieldset>
                                     <label htmlFor="quantity" className="sr-only">
@@ -111,7 +111,7 @@ const Cart = () => {
                                   </fieldset>
                                   <Button
                                     type="button"
-                                    onClick={() => handleUpdateQuantity(item.product._id)}
+                                    onClick={() => handleUpdateQuantity(item.product?._id)}
                                     className="font-medium text-indigo-600 hover:text-indigo-500"
                                   >
                                     Save
@@ -139,7 +139,7 @@ const Cart = () => {
                                     </Button>
                                     <Button
                                       type="button"
-                                      onClick={() => handleEditClick(item.product._id)}
+                                      onClick={() => handleEditClick(item.product?._id)}
                                       className="text-indigo-600 hover:text-indigo-500"
                                     >
                                       <PencilSquareIcon className="h-6" />

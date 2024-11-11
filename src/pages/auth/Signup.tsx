@@ -4,11 +4,16 @@ import { Link, useNavigate } from "react-router-dom";
 import { faEyeSlash, faEye } from "@fortawesome/free-solid-svg-icons";
 import { registerSchema } from "../../schema/Schema";
 import { IconType } from "../../components/icon/IconType";
-import { SignUpInitialValues } from "../../types";
 import { motion } from "framer-motion";
 import { Button } from "@material-tailwind/react";
 import { useRegisterMutation } from "../../features/auth/auth.slice";
 import { toast } from "react-toastify";
+
+type SignUpInitialValues = {
+  email: string;
+  password: string;
+  username: string;
+};
 
 const initialValues: SignUpInitialValues = {
   username: "",
@@ -42,7 +47,6 @@ const Signup = () => {
     initialValues,
     validationSchema: registerSchema,
     onSubmit: async (values, actions) => {
-
       try {
         const response = await register(values).unwrap();
 
@@ -53,6 +57,7 @@ const Signup = () => {
           actions.resetForm();
         }
       } catch (err: any) {
+        toast.error(err.data.message);
         toast.error(err.error);
       }
     },

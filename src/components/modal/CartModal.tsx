@@ -72,10 +72,10 @@ export default function CartModal({
                       <div className="flow-root">
                         <ul role="list" className="-my-6 divide-y divide-gray-200">
                           {cartItems?.items?.map((item: any) => (
-                            <li key={item?.product._id} className="flex py-6">
+                            <li key={item?.product?._id} className="flex py-6">
                               <div className="h-24 w-24 flex-shrink-0 overflow-hidden rounded-md border border-gray-200">
                                 <img
-                                  src={item?.product.imageSrc.url}
+                                  src={item?.product?.imageSrc?.url}
                                   alt={""}
                                   className="h-full w-full object-cover object-center"
                                 />
@@ -85,10 +85,10 @@ export default function CartModal({
                                 <div>
                                   <div className="flex justify-between  font-medium text-gray-900">
                                     <h3 className="text-gray-700 font-medium capitalize text-lg">
-                                      {item?.product.name}
+                                      {item?.product?.name}
                                     </h3>
                                     <p className="text-lg font-medium text-gray-700">
-                                      {formatPrice(item?.product.price)}
+                                      {formatPrice(item?.product?.price)}
                                     </p>
                                   </div>
                                 </div>

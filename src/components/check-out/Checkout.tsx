@@ -1,12 +1,14 @@
 import { useFormik } from "formik";
 import { orderSchema } from "../../schema/Schema";
-// import { Button } from "@material-tailwind/react";
 import { ChevronUpDownIcon } from "@heroicons/react/24/outline";
 
 import countries from "../../data/countries";
 import { useState } from "react";
 import { Combobox } from "@headlessui/react";
 import { clx } from "../../util";
+import { useCreateAddressMutation } from "../../features/order/address.slice";
+import { toast } from "react-toastify";
+import { useCreatePaypalOrderMutation } from "../../features/order/order.slice";
 
 interface InitialValues {
   email: string;
@@ -18,8 +20,8 @@ interface InitialValues {
   cvc: string;
   firstname: string;
   lastname: string;
-  "address-line-one": string;
-  "address-line-two": string;
+  address_line_one: string;
+  address_line_two: string;
   "card-name": string;
   "card-number": string;
   "expiring-date": Date;
@@ -41,8 +43,8 @@ const initialValues: InitialValues = {
   cvc: "",
   firstname: "",
   lastname: "",
-  "address-line-one": "",
-  "address-line-two": "",
+  address_line_one: "",
+  address_line_two: "",
   "card-name": "",
   "card-number": "",
   "expiring-date": new Date(),
@@ -59,19 +61,77 @@ const Checkout: React.FC<{
   });
   const [selectedCountry, setSelectedCountry] = useState(countries[0]);
 
+  const [createAddress] = useCreateAddressMutation();
+  const [createPaypalOrder] = useCreatePaypalOrderMutation();
+
   const [query, setQuery] = useState("");
   const filteredCountries =
     query === ""
       ? countries
       : countries.filter((opt) => opt.name.toLowerCase().includes(query.toLowerCase()));
 
-  async function onSubmit() {
-    if (values) {
-      const btn = document.querySelector("button") as HTMLButtonElement;
-      btn.innerHTML = "checking out....";
-      btn.disabled = true;
-      await new Promise((resolve) => setTimeout(resolve, 2000));
+  const handleCreateOrderAddress = async (data: any) => {
+    try {
+      const reponse = await createAddress(data).unwrap();
+
+      toast(reponse.message, {
+        type: "success",
+      });
+
+      return reponse;
+    } catch (error: any) {
+      toast(error.error, { type: "error" });
+      toast(error.data.message, { type: "error" });
     }
+  };
+  const handleCreatePaypalOrder = async (data: any) => {
+    try {
+      const reponse = await createPaypalOrder(data).unwrap();
+
+      toast(reponse.message, {
+        type: "success",
+      });
+
+      return reponse;
+    } catch (error: any) {
+      toast(error.error, { type: "error" });
+      toast(error.data.message, { type: "error" });
+    }
+  };
+
+  async function onSubmit(values: InitialValues) {
+    const {
+      city,
+      country,
+      address_line_one,
+      address_line_two,
+      zipcode,
+      state,
+      phone,
+      firstname,
+      lastname,
+    } = values;
+    try {
+      const a_response = await handleCreateOrderAddress({
+        city,
+        country,
+        address_line_one,
+        address_line_two,
+        zipcode,
+        state,
+        phone,
+        firstname,
+        lastname,
+      });
+      const p_response = await handleCreatePaypalOrder(a_response?.data?.address._id);
+
+      if (
+        a_response?.statusCode.toString().startsWith("2") &&
+        p_response?.statusCode.toString().startsWith("2")
+      ) {
+        new Promise((resolve) => setTimeout(() => resolve, 2000));
+      }
+    } catch (error: any) {}
   }
 
   const handleSelectChange = (val: Option) => {
@@ -94,6 +154,7 @@ const Checkout: React.FC<{
           <input
             type="email"
             id="email"
+            value={values.email}
             onChange={handleChange}
             placeholder="contact address"
             className="block w-full rounded border-0 p-3 text-gray-700 ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset text-sm outline-none"
@@ -112,6 +173,7 @@ const Checkout: React.FC<{
             <input
               type="text"
               id="firstname"
+              value={values.firstname}
               onChange={handleChange}
               placeholder="first name"
               className="block w-full rounded border-0 p-3 text-gray-700 ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset text-sm outline-none"
@@ -126,6 +188,7 @@ const Checkout: React.FC<{
               type="text"
               id="lastname"
               placeholder="last name"
+              value={values.lastname}
               onChange={handleChange}
               className="block w-full rounded border-0 p-3 text-gray-700 ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset text-sm outline-none"
             />
@@ -133,15 +196,16 @@ const Checkout: React.FC<{
 
           <fieldset className="col-span-full">
             <label
-              htmlFor="address-line-one"
+              htmlFor="address_line_one"
               className="capitalize text-sm font-normal text-gray-700 sm:text-base"
             >
               address
             </label>
             <input
               type="text"
-              id="address-line-one"
+              id="address_line_one"
               placeholder="address"
+              value={values.address_line_one}
               onChange={handleChange}
               className="block w-full rounded border-0 p-3 text-gray-700 ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset text-sm outline-none"
             />
@@ -149,7 +213,7 @@ const Checkout: React.FC<{
 
           <fieldset className="col-span-full">
             <label
-              htmlFor="address-line-two"
+              htmlFor="address_line_two"
               className="text-sm font-normal text-gray-700 sm:text-base"
             >
               Apartment, suite, etc.
@@ -157,7 +221,8 @@ const Checkout: React.FC<{
             <input
               type="text"
               placeholder="apartment, suite, etc"
-              id="address-line-two"
+              id="address_line_two"
+              value={values.address_line_two}
               onChange={handleChange}
               className="block w-full rounded border-0 p-3 text-gray-700 ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset text-sm outline-none"
             />
@@ -173,6 +238,7 @@ const Checkout: React.FC<{
             <input
               type="text"
               onChange={handleChange}
+              value={values.city}
               placeholder="city"
               id="city"
               className="block w-full rounded border-0 p-3 text-gray-700 ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset text-sm outline-none"
@@ -236,9 +302,10 @@ const Checkout: React.FC<{
             </label>
             <input
               type="text"
-              onChange={handleChange}
-              placeholder="state"
               id="state"
+              placeholder="state"
+              value={values.state}
+              onChange={handleChange}
               className="block w-full rounded border-0 p-3 text-gray-700 ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset text-sm outline-none"
             />
           </fieldset>
@@ -248,10 +315,11 @@ const Checkout: React.FC<{
               Postal code
             </label>
             <input
+              id="zipcode"
               type="number"
               placeholder="12345"
+              value={values.zipcode}
               onChange={handleChange}
-              id="zipcode"
               className="block w-full appearance-none leading-normal rounded border-0 p-3 text-gray-700 ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset text-sm outline-none"
             />
           </fieldset>
@@ -267,6 +335,7 @@ const Checkout: React.FC<{
               type="tel"
               id="phone"
               placeholder="phone"
+              value={values.phone}
               onChange={handleChange}
               className="block w-full rounded border-0 p-3 text-gray-700 ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset text-sm outline-none"
             />

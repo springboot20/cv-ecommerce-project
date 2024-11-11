@@ -4,11 +4,15 @@ import { Link, useNavigate } from "react-router-dom";
 import { faEyeSlash, faEye } from "@fortawesome/free-solid-svg-icons";
 import { loginSchema } from "../../schema/Schema";
 import { IconType } from "../../components/icon/IconType";
-import { SignInInitialValues } from "../../types";
 import { motion } from "framer-motion";
 import { Button } from "@material-tailwind/react";
 import { useLoginMutation } from "../../features/auth/auth.slice";
 import { toast } from "react-toastify";
+
+type SignInInitialValues = {
+  email: string;
+  password: string;
+};
 
 const initialValues: SignInInitialValues = {
   email: "",
@@ -49,6 +53,7 @@ const Signin = () => {
           actions.resetForm();
         })
         .catch((error) => {
+          toast.error(error.data.message);
           toast.error(error.error);
         });
     },

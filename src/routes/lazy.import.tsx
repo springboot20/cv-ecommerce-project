@@ -17,7 +17,6 @@ const Home = lazy(() => import("../pages/home/Home"));
 const Products = lazy(() => import("../pages/products/Products"));
 const Product = lazy(() => import("../pages/product/Product"));
 const Cart = lazy(() => import("../pages/cart/Cart"));
-const Payment = lazy(() => import("../pages/payment/Payment"));
 const CheckOut = lazy(() => import("../pages/check-out/Checkout"));
 const Notfound = lazy(() => import("../components/NotFound"));
 const PublicRoute = lazy(() => import("../components/Public.routes"));
@@ -67,14 +66,6 @@ const Router = () => {
             <PublicRoute>
               <CheckOut />
             </PublicRoute>
-          ),
-        },
-        {
-          path: "payment",
-          element: (
-            <PrivateRoute>
-              <Payment />
-            </PrivateRoute>
           ),
         },
         {
