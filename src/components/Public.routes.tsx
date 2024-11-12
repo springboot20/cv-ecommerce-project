@@ -12,4 +12,14 @@ const PublicRoute: React.FC<{ children: React.ReactNode }> = ({ children }) => {
   return children;
 };
 
+export const AdminPublicRoute: React.FC<{ children: React.ReactNode }> = ({ children }) => {
+  const auth = useAppSelector((state: RootState) => state.auth);
+
+  if (auth.isAuthenticated) {
+    return <Navigate to="/admin/login" state={{ path: window.location.pathname }} replace={true} />;
+  }
+
+  return children;
+};
+
 export default PublicRoute;

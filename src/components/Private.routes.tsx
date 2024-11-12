@@ -20,3 +20,17 @@ export const ProtectedRoute: React.FC<ProtectedRouteProps> = ({ roles, children 
 
   return children;
 };
+
+export const AdminProtectedRoute: React.FC<ProtectedRouteProps> = ({ roles, children }) => {
+  const auth = useAppSelector((state: RootState) => state.auth);
+
+  const { pathname } = useLocation();
+
+  console.log(pathname);
+
+  if (!roles.includes(auth.user?.role!) || !auth.isAuthenticated) {
+    return <Navigate to="/admin/login" state={{ path: window.location.pathname }} replace={true} />;
+  }
+
+  return children;
+};

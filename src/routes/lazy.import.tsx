@@ -9,7 +9,8 @@ import EditProduct from "../pages/admin/product/edit/EditProduct";
 import AdminProducts from "../pages/admin/product/products/Products";
 import AdminUserEdit from "../pages/admin/users/edit/EditUser";
 import { AdminDashboardLayout } from "../layout/admin/AdminLayout";
-import { ProtectedRoute } from "../components/Private.routes";
+import { ProtectedRoute, AdminProtectedRoute } from "../components/Private.routes";
+import { AdminPublicRoute } from "../components/Public.routes";
 
 const AdminOverview = lazy(() => import("../pages/admin/overview/Overview"));
 const AdminUsers = lazy(() => import("../pages/admin/users/Users"));
@@ -40,7 +41,11 @@ const Router = () => {
       children: [
         {
           index: true,
-          element: <Home />,
+          element: (
+            <PublicRoute>
+              <Home />
+            </PublicRoute>
+          ),
         },
         {
           path: "collections",
@@ -100,9 +105,9 @@ const Router = () => {
       children: [
         {
           element: (
-            <ProtectedRoute roles={[AcceptedRoles.ADMIN, AcceptedRoles.MODERATOR]}>
+            <AdminProtectedRoute roles={[AcceptedRoles.ADMIN, AcceptedRoles.MODERATOR]}>
               <AdminDashboardLayout />
-            </ProtectedRoute>
+            </AdminProtectedRoute>
           ),
           children: [
             {
@@ -111,9 +116,9 @@ const Router = () => {
                 {
                   path: "all",
                   element: (
-                    <ProtectedRoute roles={[AcceptedRoles.ADMIN, AcceptedRoles.MODERATOR]}>
+                    <AdminProtectedRoute roles={[AcceptedRoles.ADMIN, AcceptedRoles.MODERATOR]}>
                       <AdminProducts />
-                    </ProtectedRoute>
+                    </AdminProtectedRoute>
                   ),
                 },
                 {
@@ -122,17 +127,17 @@ const Router = () => {
                     {
                       index: true,
                       element: (
-                        <ProtectedRoute roles={[AcceptedRoles.ADMIN, AcceptedRoles.MODERATOR]}>
+                        <AdminProtectedRoute roles={[AcceptedRoles.ADMIN, AcceptedRoles.MODERATOR]}>
                           <AdminUsers />
-                        </ProtectedRoute>
+                        </AdminProtectedRoute>
                       ),
                     },
                     {
                       path: "edit/:userId",
                       element: (
-                        <ProtectedRoute roles={[AcceptedRoles.ADMIN]}>
+                        <AdminProtectedRoute roles={[AcceptedRoles.ADMIN]}>
                           <AdminUserEdit />
-                        </ProtectedRoute>
+                        </AdminProtectedRoute>
                       ),
                     },
                   ],
@@ -140,25 +145,25 @@ const Router = () => {
                 {
                   path: "overview",
                   element: (
-                    <ProtectedRoute roles={[AcceptedRoles.ADMIN, AcceptedRoles.MODERATOR]}>
+                    <AdminProtectedRoute roles={[AcceptedRoles.ADMIN, AcceptedRoles.MODERATOR]}>
                       <AdminOverview />
-                    </ProtectedRoute>
+                    </AdminProtectedRoute>
                   ),
                 },
                 {
                   path: "create",
                   element: (
-                    <ProtectedRoute roles={[AcceptedRoles.ADMIN]}>
+                    <AdminProtectedRoute roles={[AcceptedRoles.ADMIN]}>
                       <CreateNewProduct />
-                    </ProtectedRoute>
+                    </AdminProtectedRoute>
                   ),
                 },
                 {
                   path: "edit/:id",
                   element: (
-                    <ProtectedRoute roles={[AcceptedRoles.ADMIN]}>
+                    <AdminProtectedRoute roles={[AcceptedRoles.ADMIN]}>
                       <EditProduct />
-                    </ProtectedRoute>
+                    </AdminProtectedRoute>
                   ),
                 },
               ],
@@ -168,9 +173,9 @@ const Router = () => {
         {
           path: "login",
           element: (
-            <PublicRoute>
+            <AdminPublicRoute>
               <AdminLogin />
-            </PublicRoute>
+            </AdminPublicRoute>
           ),
         },
       ],
