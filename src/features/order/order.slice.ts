@@ -11,7 +11,7 @@ export const OrderSlice = ApiService.injectEndpoints({
   endpoints: (builder) => ({
     createPaypalOrder: builder.mutation<Response, string>({
       query: (orderId) => ({
-        url: "/order/provider/paypal",
+        url: "/orders/provider/paypal",
         method: "POST",
         body: orderId,
       }),
@@ -19,14 +19,14 @@ export const OrderSlice = ApiService.injectEndpoints({
 
     verifyPaypalOrder: builder.mutation<Response, string>({
       query: (orderId) => ({
-        url: `/provider/paypal/verify-payment/${orderId}`,
+        url: `/orders/provider/paypal/verify-payment/${orderId}`,
         method: "POST",
       }),
     }),
 
     updatePaypalOrder: builder.mutation<Response, string>({
       query: (orderId) => ({
-        url: `/provider/paypal/verify-payment/${orderId}`,
+        url: `/orders/provider/paypal/verify-payment/${orderId}`,
         method: "PATCH",
       }),
     }),

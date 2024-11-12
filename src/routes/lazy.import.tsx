@@ -9,10 +9,10 @@ import EditProduct from "../pages/admin/product/edit/EditProduct";
 import AdminProducts from "../pages/admin/product/products/Products";
 import AdminUserEdit from "../pages/admin/users/edit/EditUser";
 import { AdminDashboardLayout } from "../layout/admin/AdminLayout";
+import { ProtectedRoute } from "../components/Private.routes";
 
 const AdminOverview = lazy(() => import("../pages/admin/overview/Overview"));
 const AdminUsers = lazy(() => import("../pages/admin/users/Users"));
-const PrivateRoute = lazy(() => import("../components/Private.routes"));
 const Home = lazy(() => import("../pages/home/Home"));
 const Products = lazy(() => import("../pages/products/Products"));
 const Product = lazy(() => import("../pages/product/Product"));
@@ -25,6 +25,12 @@ const Register = lazy(() => import("../pages/auth/Signup"));
 
 const Settings = lazy(() => import("../pages/settings/Settings"));
 const Profile = lazy(() => import("../pages/settings/profile/Profile"));
+
+enum AcceptedRoles {
+  ADMIN = "ADMIN",
+  USER = "USER",
+  MODERATOR = "MODERATOR",
+}
 
 const Router = () => {
   return createBrowserRouter([
@@ -39,41 +45,41 @@ const Router = () => {
         {
           path: "collections",
           element: (
-            <PrivateRoute>
+            <ProtectedRoute roles={[AcceptedRoles.USER]}>
               <Products />
-            </PrivateRoute>
+            </ProtectedRoute>
           ),
         },
         {
           path: "collections/:id",
           element: (
-            <PrivateRoute>
+            <ProtectedRoute roles={[AcceptedRoles.USER]}>
               <Product />
-            </PrivateRoute>
+            </ProtectedRoute>
           ),
         },
         {
           path: "cart",
           element: (
-            <PrivateRoute>
+            <ProtectedRoute roles={[AcceptedRoles.USER]}>
               <Cart />
-            </PrivateRoute>
+            </ProtectedRoute>
           ),
         },
         {
           path: "check-out",
           element: (
-            <PublicRoute>
+            <ProtectedRoute roles={[AcceptedRoles.USER]}>
               <CheckOut />
-            </PublicRoute>
+            </ProtectedRoute>
           ),
         },
         {
           path: "settings",
           element: (
-            <PrivateRoute>
+            <ProtectedRoute roles={[AcceptedRoles.USER]}>
               <Settings />
-            </PrivateRoute>
+            </ProtectedRoute>
           ),
           children: [
             {
@@ -89,43 +95,71 @@ const Router = () => {
     },
 
     {
-      path: "/admin",
+      path: "admin",
       element: <AdminLayout />,
       children: [
         {
-          element: <AdminDashboardLayout />,
+          element: (
+            <ProtectedRoute roles={[AcceptedRoles.ADMIN, AcceptedRoles.MODERATOR]}>
+              <AdminDashboardLayout />
+            </ProtectedRoute>
+          ),
           children: [
             {
               path: "products",
               children: [
                 {
                   path: "all",
-                  element: <AdminProducts />,
+                  element: (
+                    <ProtectedRoute roles={[AcceptedRoles.ADMIN, AcceptedRoles.MODERATOR]}>
+                      <AdminProducts />
+                    </ProtectedRoute>
+                  ),
                 },
                 {
                   path: "users",
                   children: [
                     {
                       index: true,
-                      element: <AdminUsers />,
+                      element: (
+                        <ProtectedRoute roles={[AcceptedRoles.ADMIN, AcceptedRoles.MODERATOR]}>
+                          <AdminUsers />
+                        </ProtectedRoute>
+                      ),
                     },
                     {
                       path: "edit/:userId",
-                      element: <AdminUserEdit />,
+                      element: (
+                        <ProtectedRoute roles={[AcceptedRoles.ADMIN]}>
+                          <AdminUserEdit />
+                        </ProtectedRoute>
+                      ),
                     },
                   ],
                 },
                 {
                   path: "overview",
-                  element: <AdminOverview />,
+                  element: (
+                    <ProtectedRoute roles={[AcceptedRoles.ADMIN, AcceptedRoles.MODERATOR]}>
+                      <AdminOverview />
+                    </ProtectedRoute>
+                  ),
                 },
                 {
                   path: "create",
-                  element: <CreateNewProduct />,
+                  element: (
+                    <ProtectedRoute roles={[AcceptedRoles.ADMIN]}>
+                      <CreateNewProduct />
+                    </ProtectedRoute>
+                  ),
                 },
                 {
                   path: "edit/:id",
-                  element: <EditProduct />,
+                  element: (
+                    <ProtectedRoute roles={[AcceptedRoles.ADMIN]}>
+                      <EditProduct />
+                    </ProtectedRoute>
+                  ),
                 },
               ],
             },
@@ -133,12 +167,16 @@ const Router = () => {
         },
         {
           path: "login",
-          element: <AdminLogin />,
+          element: (
+            <PublicRoute>
+              <AdminLogin />
+            </PublicRoute>
+          ),
         },
       ],
     },
     {
-      path: "/register",
+      path: "register",
       element: (
         <PublicRoute>
           <Register />
@@ -146,7 +184,7 @@ const Router = () => {
       ),
     },
     {
-      path: "/login",
+      path: "login",
       element: (
         <PublicRoute>
           <Login />

@@ -1,10 +1,6 @@
 import { ProductCategory } from "./../../types/redux/product";
 import { ApiService } from "../../app/services/api.service";
 
-// interface ProductQuery {
-//   [key: string]: any | undefined;
-// }
-
 interface Response {
   data: ProductCategory[] | any;
   statusCode: number;
@@ -18,7 +14,7 @@ export const CategorySlice = ApiService.injectEndpoints({
       query: ({ name }) => ({
         url: "/categories",
         method: "POST",
-        body: name,
+        body: { name },
       }),
     }),
 

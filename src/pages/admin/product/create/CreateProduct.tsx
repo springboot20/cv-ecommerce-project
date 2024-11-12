@@ -45,29 +45,31 @@ export default function CreateNewProduct() {
 
   async function onSubmit(values: InitialValuesInterface) {
     console.log(values);
-    const formData = new FormData();
-
-    formData.append("description", values.description);
-    formData.append("price", values.price.toString());
-    formData.append("imageSrc", values.imageSrc as Blob);
-    formData.append("category", values.category);
-    formData.append("stock", values.stock.toString());
-    formData.append("featured", values.featured ? "true" : "false");
-    formData.append("name", values.name);
-
     try {
-      const response = await createProduct(formData).unwrap();
-      const data = await response.data;
-      await addCategory({ name: values.category }).unwrap();
+      const formData = new FormData();
 
-      toast(response.message, {
-        type: "success",
-      });
+      const categoryReponse = await addCategory({ name: values.category }).unwrap();
 
-      await new Promise((resolve) => setTimeout(resolve, 1500));
-      navigate("/admin/products/all", { replace: true });
+      formData.append("description", values.description);
+      formData.append("price", values.price.toString());
+      formData.append("imageSrc", values.imageSrc as Blob);
+      formData.append("category", categoryReponse.data?._id);
+      formData.append("stock", values.stock.toString());
+      formData.append("featured", values.featured ? "true" : "false");
+      formData.append("name", values.name);
 
-      return data;
+      if (categoryReponse.statusCode.toString().startsWith("2")) {
+        const response = await createProduct(formData).unwrap();
+        const data = await response.data;
+
+        toast(response.message, {
+          type: "success",
+        });
+
+        await new Promise((resolve) => setTimeout(resolve, 1500));
+        navigate("/admin/products/all", { replace: true });
+        return data;
+      }
     } catch (error: any) {
       toast.error(error.error);
       toast.error(error.data.message);

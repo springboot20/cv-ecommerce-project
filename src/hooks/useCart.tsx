@@ -17,7 +17,7 @@ export const useCart = () => {
   const [quantityInput, setQuantityInput] = useState<number>(0);
   const [selectedItemId, setSelectedItemId] = useState<string | null>(null);
   const [refreshTrigered, setRefreshTrigered] = useState(false);
-  const [message, setMEssage] = useState<string>("");
+  const [message, setMessage] = useState<string>("");
   const cart: CartInterface = data?.data?.cart ?? (LocalStorage.get("cart") as CartInterface);
 
   const handleEditClick = (id: string) => {
@@ -41,12 +41,11 @@ export const useCart = () => {
         const { message } = await addItemToCart({ productId, quantity: quantityInput }).unwrap();
         if (message) {
           toast.success(message);
-          setMEssage(message);
+          setMessage(message);
         }
       } catch (error: any) {
-        if (error?.data.message) {
-          toast.error(error?.data.message);
-        }
+        toast.error(error.data?.message);
+        toast.error(error?.error);
       }
 
       setRefreshTrigered(!refreshTrigered);
@@ -71,9 +70,8 @@ export const useCart = () => {
         toast.success(message);
       }
     } catch (error: any) {
-      if (error?.data.message) {
-        toast.error(error?.data.message);
-      }
+      toast.error(error.error);
+      toast.error(error.data?.message);
     }
   };
 

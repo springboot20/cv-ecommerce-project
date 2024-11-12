@@ -1,14 +1,18 @@
 import { useState } from "react";
 import { useFormik } from "formik";
-import { Link, useNavigate } from "react-router-dom";
+import { useNavigate } from "react-router-dom";
 import { faEyeSlash, faEye } from "@fortawesome/free-solid-svg-icons";
 import { loginSchema } from "../../../schema/Schema";
 import { IconType } from "../../../components/icon/IconType";
-import { SignInInitialValues } from "../../../types";
 import { motion } from "framer-motion";
 import { Button } from "@material-tailwind/react";
 import { useLoginMutation } from "../../../features/auth/auth.slice";
 import { toast } from "react-toastify";
+
+interface SignInInitialValues {
+  email: string;
+  password: string;
+}
 
 const initialValues: SignInInitialValues = {
   email: "",
@@ -56,12 +60,12 @@ const AdminLogin = () => {
 
   return (
     <motion.div {...motionConfig}>
-      <div className="px-8 flex min-h-screen justify-center items-center flex-shrink-0">
+      <div className="flex min-h-screen justify-center items-center flex-shrink-0">
         <form
           onSubmit={handleSubmit}
-          className="max-w-xl w-full mx-auto border-2 bg-white rounded-lg p-6"
+          className="max-w-md w-full mx-auto border-2 bg-white rounded-lg p-4 sm:p-6"
         >
-          <legend className="my-5 text-center font-semibold text-3xl bg-gradient-to-l from-red-700 to-light-blue-500 bg-clip-text text-transparent">
+          <legend className="my-2 text-center font-semibold text-3xl bg-gradient-to-l from-red-700 to-light-blue-500 bg-clip-text text-transparent">
             Sign In
           </legend>
 

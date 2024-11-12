@@ -1,6 +1,6 @@
 import { Fragment, useEffect } from "react";
 import cartImage from "../../assets/cart-image.jpg";
-import { Link } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
 import Button from "../../components/icon/Button";
 import { formatPrice } from "../../helpers/index";
 import { PencilSquareIcon, TrashIcon } from "@heroicons/react/24/outline";
@@ -29,12 +29,14 @@ const Cart = () => {
     return cart.totalCart * shipping;
   };
 
+  const navigate = useNavigate();
+
   useEffect(() => {
     if (message) {
       toast.success(message);
     }
 
-    console.log(message)
+    console.log(message);
     refetch();
   }, [refreshTrigered, message]);
 
@@ -186,7 +188,12 @@ const Cart = () => {
               </div>
 
               <div className="mt-4">
-                <Button className="text-base font-semibold text-white py-2.5 px-2 rounded bg-gray-800 hover:bg-gray-600 w-full block focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-gray-600">
+                <Button
+                  onClick={() => {
+                    navigate('/check-out');
+                  }}
+                  className="text-base font-semibold text-white py-2.5 px-2 rounded bg-gray-800 hover:bg-gray-600 w-full block focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-gray-600"
+                >
                   checkout
                 </Button>
               </div>
