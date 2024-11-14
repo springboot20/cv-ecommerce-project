@@ -44,7 +44,7 @@ const Home = () => {
             </button>
           </div>
           <div className="col-span-full md:col-span-1 relative w-full">
-            <div className="lg:h-[30rem] xl:h-full w-full">
+            <div className="w-full">
               <img src={CollectionImage} alt="" className="object-top object-cover w-full h-full" />
             </div>
           </div>

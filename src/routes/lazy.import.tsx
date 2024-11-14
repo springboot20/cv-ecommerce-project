@@ -116,9 +116,9 @@ const Router = () => {
                 {
                   path: "all",
                   element: (
-                    <AdminProtectedRoute roles={[AcceptedRoles.ADMIN, AcceptedRoles.MODERATOR]}>
-                      <AdminProducts />
-                    </AdminProtectedRoute>
+                    <AdminProducts />
+                    // <AdminProtectedRoute roles={[AcceptedRoles.ADMIN, AcceptedRoles.MODERATOR]}>
+                    // </AdminProtectedRoute>
                   ),
                 },
                 {
