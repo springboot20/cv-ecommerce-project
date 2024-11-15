@@ -31,6 +31,10 @@ export const AddressSlice = ApiService.injectEndpoints({
       providesTags: (_, __, addressId) => [{ id: addressId, type: "Address" }],
     }),
 
+    getUserAddress: builder.query<Response, void>({
+      query: () => `/addresses/`,
+    }),
+
     getAllAddress: builder.query<Response, AddressQuery>({
       query: ({ limit = 10, page = 1 }) => `/addresses?limit=${limit}&page=${page}`,
       providesTags: (result) =>
@@ -72,5 +76,6 @@ export const {
   useGetAllAddressQuery,
   useUpdateAddressMutation,
   useGetAddressByIdQuery,
+  useGetUserAddressQuery,
   useDeleteAddressMutation,
 } = AddressSlice;

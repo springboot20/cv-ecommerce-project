@@ -1,14 +1,15 @@
 import { useFormik } from "formik";
 import { orderSchema } from "../../schema/Schema";
-import { ChevronUpDownIcon } from "@heroicons/react/24/outline";
-
-import countries from "../../data/countries";
-import { useState } from "react";
-import { Combobox } from "@headlessui/react";
-import { useCreateAddressMutation } from "../../features/order/address.slice";
+import countriesData from "../../data/countries";
+import React, { useEffect, useState } from "react";
+import {
+  useCreateAddressMutation,
+  useGetUserAddressQuery,
+} from "../../features/order/address.slice";
 import { toast } from "react-toastify";
 import { useCreatePaypalOrderMutation } from "../../features/order/order.slice";
 import { OrderSummary } from "../../pages/check-out/OrderSummary";
+import { AddressInterface } from "../../types/redux/order";
 
 export interface InitialValues {
   email: string;
@@ -52,21 +53,17 @@ const initialValues: InitialValues = {
 };
 
 const Checkout: React.FC = () => {
-  const { values, handleChange, setFieldValue } = useFormik({
+  const { values, handleChange, setValues } = useFormik({
     initialValues,
     validationSchema: orderSchema,
     onSubmit: (_) => {},
   });
-  const [selectedCountry, setSelectedCountry] = useState(countries[0]);
-
+  const [countries, setCountries] = useState<Option[]>(countriesData);
+  const { data, isSuccess } = useGetUserAddressQuery();
   const [createAddress] = useCreateAddressMutation();
   const [createPaypalOrder] = useCreatePaypalOrderMutation();
 
-  const [query, setQuery] = useState("");
-  const filteredCountries =
-    query === ""
-      ? countries
-      : countries.filter((opt) => opt.name.toLowerCase().includes(query.toLowerCase()));
+  const userAddress = data?.data?.address as AddressInterface;
 
   const handleCreateOrderAddress = async (data: any) => {
     try {
@@ -93,8 +90,7 @@ const Checkout: React.FC = () => {
 
       return reponse;
     } catch (error: any) {
-      toast(error.error, { type: "error" });
-      toast(error.data?.message, { type: "error" });
+      toast(error.error || error.data?.message, { type: "error" });
     }
   };
 
@@ -122,7 +118,7 @@ const Checkout: React.FC = () => {
       firstname,
       lastname,
     });
-    const p_response = await handleCreatePaypalOrder(a_response?.data?.address._id);
+    const p_response = await handleCreatePaypalOrder({ addressId: a_response?.data?.address._id });
 
     if (
       a_response?.statusCode.toString().startsWith("2") &&
@@ -132,11 +128,18 @@ const Checkout: React.FC = () => {
     }
   }
 
-  const handleSelectChange = (val: Option) => {
-    setSelectedCountry(val);
+  useEffect(() => {
+    if (isSuccess && userAddress) {
+      setValues({
+        ...initialValues,
+        ...userAddress,
+        country: userAddress?.country,
+      });
 
-    setFieldValue("country", val.name);
-  };
+      const selectedCountry = countries.find((country) => country.name === userAddress?.country)!;
+      setCountries(selectedCountry ? [selectedCountry] : countries);
+    }
+  }, []);
 
   return (
     <form name="form" className="grid grid-cols-1 lg:grid-cols-2 xl:grid-cols-3 gap-4 xl:gap-8">
@@ -254,45 +257,15 @@ const Checkout: React.FC = () => {
               >
                 country
               </label>
-              <Combobox
-                value={selectedCountry}
-                as="div"
-                onChange={(val) => handleSelectChange(val!)}
-                className={"w-full"}
-              >
-                <div className="relative">
-                  <div className="w-full relative">
-                    <Combobox.Input
-                      aria-label="countries"
-                      displayValue={(country: (typeof countries)[0]) => country?.name}
-                      onChange={(e) => setQuery(e.target.value)}
-                      id="country"
-                      className="border p-2 rounded focus:ring-1 outline-none font-satoshi font-normal text-sm !w-full h-11"
-                    />
-                    <Combobox.Button className="absolute top-1/2 -translate-y-1/2 z-10 right-0 flex items-center rounded-r-md px-2 focus:outline-none">
-                      <ChevronUpDownIcon className="h-6 w-6 text-gray-700" aria-hidden={true} />
-                    </Combobox.Button>
-                  </div>
+              <select name="country" id="country" value={values.country} onChange={handleChange}>
+                <option>select your country</option>
 
-                  <Combobox.Options className="border bg-white mt-2 p-2 max-h-60 overflow-y-auto rounded text-base shadow-lg ring-opacity-5 focus:outline-none sm:text-sm">
-                    {query !== "" ? (
-                      filteredCountries.map((country) => (
-                        <Combobox.Option
-                          key={country.name}
-                          value={country}
-                          className="flex items-center space-x-2 py-1.5 px-2 cursor-pointer relative"
-                        >
-                          <span>{country.name}</span>
-                        </Combobox.Option>
-                      ))
-                    ) : (
-                      <div className="relative cursor-default select-none px-4 py-1 text-gray-700 dark:text-white">
-                        Nothing found.
-                      </div>
-                    )}
-                  </Combobox.Options>
-                </div>
-              </Combobox>
+                {React.Children.toArray(
+                  countries.map((country) => {
+                    return <option value={country.name}>{country.name}</option>;
+                  }),
+                )}
+              </select>
             </fieldset>
 
             <fieldset className="col-span-full sm:col-span-1">

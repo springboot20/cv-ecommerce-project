@@ -50,7 +50,7 @@ const Router = () => {
         {
           path: "collections",
           element: (
-            <ProtectedRoute roles={[AcceptedRoles.USER]}>
+            <ProtectedRoute roles={[AcceptedRoles.USER, AcceptedRoles.ADMIN]}>
               <Products />
             </ProtectedRoute>
           ),
@@ -58,7 +58,7 @@ const Router = () => {
         {
           path: "collections/:id",
           element: (
-            <ProtectedRoute roles={[AcceptedRoles.USER]}>
+            <ProtectedRoute roles={[AcceptedRoles.USER, AcceptedRoles.ADMIN]}>
               <Product />
             </ProtectedRoute>
           ),
@@ -66,7 +66,7 @@ const Router = () => {
         {
           path: "cart",
           element: (
-            <ProtectedRoute roles={[AcceptedRoles.USER]}>
+            <ProtectedRoute roles={[AcceptedRoles.USER, AcceptedRoles.ADMIN]}>
               <Cart />
             </ProtectedRoute>
           ),
@@ -74,7 +74,7 @@ const Router = () => {
         {
           path: "check-out",
           element: (
-            <ProtectedRoute roles={[AcceptedRoles.USER]}>
+            <ProtectedRoute roles={[AcceptedRoles.USER, AcceptedRoles.ADMIN]}>
               <CheckOut />
             </ProtectedRoute>
           ),
@@ -82,7 +82,7 @@ const Router = () => {
         {
           path: "settings",
           element: (
-            <ProtectedRoute roles={[AcceptedRoles.USER]}>
+            <ProtectedRoute roles={[AcceptedRoles.USER, AcceptedRoles.ADMIN]}>
               <Settings />
             </ProtectedRoute>
           ),
@@ -116,9 +116,9 @@ const Router = () => {
                 {
                   path: "all",
                   element: (
+                    <AdminProtectedRoute roles={[AcceptedRoles.ADMIN, AcceptedRoles.MODERATOR]}>
                     <AdminProducts />
-                    // <AdminProtectedRoute roles={[AcceptedRoles.ADMIN, AcceptedRoles.MODERATOR]}>
-                    // </AdminProtectedRoute>
+</AdminProtectedRoute>
                   ),
                 },
                 {

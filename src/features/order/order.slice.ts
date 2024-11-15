@@ -9,11 +9,11 @@ interface Response {
 
 export const OrderSlice = ApiService.injectEndpoints({
   endpoints: (builder) => ({
-    createPaypalOrder: builder.mutation<Response, string>({
-      query: (orderId) => ({
+    createPaypalOrder: builder.mutation<Response, {addressId: string}>({
+      query: ({addressId}) => ({
         url: "/orders/provider/paypal",
         method: "POST",
-        body: orderId,
+        body: {addressId},
       }),
     }),
 
