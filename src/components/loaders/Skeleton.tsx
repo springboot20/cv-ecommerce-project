@@ -18,16 +18,10 @@ export const ProductsSkeletonLoading = ({ cardsNumber }: { cardsNumber: number }
           </header>
           <div className="relative flex items-center justify-between gap-1.5 mt-2">
             <h3 className="w-28 relative">
-              <Skeleton
-                className="border border-gray-300 h-6"
-                containerClassName="w-full"
-              />
+              <Skeleton className="border border-gray-300 h-6" />
             </h3>
             <p className="w-20 relative">
-              <Skeleton
-                className="border border-gray-300 h-6"
-                containerClassName="w-full"
-              />
+              <Skeleton className="border border-gray-300 h-6" />
             </p>
           </div>
         </motion.div>
@@ -38,7 +32,6 @@ export const ProductsSkeletonLoading = ({ cardsNumber }: { cardsNumber: number }
 export const ProductSkeletonLoading = () => {
   return (
     <Fragment>
-
       <div className="h-[30rem] col-span-full lg:col-span-1 flex items-start gap-2 w-full">
         <header className="h-full w-full relative rounded-xl overflow-hidden">
           <Skeleton
@@ -53,22 +46,22 @@ export const ProductSkeletonLoading = () => {
         <div>
           <div className="flex items-center justify-between w-full">
             <h3 className="w-52 relative">
-              <Skeleton className="border border-gray-300 h-7" containerClassName="w-full" />
+              <Skeleton className="border border-gray-300 h-7" />
             </h3>
             <p className="w-28 relative">
-              <Skeleton className="border border-gray-300 h-7" containerClassName="w-full" />
+              <Skeleton className="border border-gray-300 h-7" />
             </p>
           </div>
           <div className="flex items-center gap-1 mt-1">
             <span className="relative w-28">
-              <Skeleton className="border border-gray-300 h-7" containerClassName="w-full" />
+              <Skeleton className="border border-gray-300 h-7" />
             </span>
           </div>
         </div>
 
         <div className="flex flex-col gap-2 mt-10">
           <h1 className="relative w-32">
-            <Skeleton className="border border-gray-300 h-7" containerClassName="w-full" />
+            <Skeleton className="border border-gray-300 h-7" />
           </h1>
           <div className="flex items-start gap-2">
             <span className="relative h-10 w-10">
@@ -82,7 +75,7 @@ export const ProductSkeletonLoading = () => {
 
         <div className="flex flex-col gap-2 mt-10">
           <h1 className="relative w-32">
-            <Skeleton className="border border-gray-300 h-7" containerClassName="w-full" />
+            <Skeleton className="border border-gray-300 h-7" />
           </h1>
           <div className="grid grid-cols-6 gap-2">
             <span className="relative h-11 w-auto">

@@ -16,8 +16,8 @@ import { PayPalScriptProvider, PayPalButtons } from "@paypal/react-paypal-js";
 
 ReactDOM.createRoot(document.getElementById("root")!).render(
   <React.StrictMode>
-    <Provider store={store}>
-      <ThemeProvider>
+    <ThemeProvider>
+      <Provider store={store}>
         <SkeletonTheme>
           <ToastContainer />
           <Suspense fallback={<Loader />}>
@@ -31,7 +31,7 @@ ReactDOM.createRoot(document.getElementById("root")!).render(
             </PayPalScriptProvider>
           </Suspense>
         </SkeletonTheme>
-      </ThemeProvider>
-    </Provider>
+      </Provider>
+    </ThemeProvider>
   </React.StrictMode>,
 );
