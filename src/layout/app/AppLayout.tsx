@@ -1,11 +1,13 @@
 import { Fragment, useState } from "react";
-import { Link, NavLink, Outlet } from "react-router-dom";
+import { Link, NavLink, Outlet, useNavigate } from "react-router-dom";
 import { Disclosure, Menu, Transition } from "@headlessui/react";
 import { BellIcon, XMarkIcon, Bars3Icon, UserIcon } from "@heroicons/react/24/outline";
 import CartModal from "../../components/modal/CartModal";
 import { useAppSelector } from "../../hooks/redux/redux.hooks";
 import { RootState } from "../../app/store";
 import { clx } from "../../util";
+import { useLogoutMutation } from "../../features/auth/auth.slice";
+import { toast } from "react-toastify";
 
 const navigation = [
   { to: "/", name: "home", current: true },
@@ -28,6 +30,8 @@ const AppLayout: React.FC = () => {
   const [isOpen, setOpen] = useState(false);
   const { cartItem } = useAppSelector((state: RootState) => state.cart);
   const { isAuthenticated } = useAppSelector((state: RootState) => state.auth);
+  const navigate = useNavigate();
+  const [logout] = useLogoutMutation();
 
   return (
     <>
@@ -72,8 +76,23 @@ const AppLayout: React.FC = () => {
                               <Menu.Items className="absolute right-0 z-10 mt-4 w-48 origin-top-right rounded-md bg-white py-1 shadow-lg ring-1 ring-black ring-opacity-5 focus:outline-none">
                                 <Menu.Item>
                                   {({ active }) => (
-                                    <Link
-                                      to="/"
+                                    <button
+                                      onClick={async () => {
+                                        try {
+                                          const response = await logout().unwrap();
+
+                                          const data = response.data;
+
+                                          toast(data.message, { type: "success" });
+                                          new Promise((resolve) => setTimeout(() => resolve, 2000));
+                                          navigate("/");
+                                          return data;
+                                        } catch (error: any) {
+                                          toast(error?.error || error?.data.message, {
+                                            type: "error",
+                                          });
+                                        }
+                                      }}
                                       className={classNames(
                                         active ? "bg-gray-100" : "",
                                         "flex w-full items-center gap-2 px-4 py-2 text-sm text-gray-800 font-medium",
@@ -112,7 +131,7 @@ const AppLayout: React.FC = () => {
                                         </g>
                                       </svg>
                                       <span>Log Out</span>
-                                    </Link>
+                                    </button>
                                   )}
                                 </Menu.Item>
                                 <Menu.Item>

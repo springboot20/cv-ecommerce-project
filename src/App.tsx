@@ -10,6 +10,7 @@ function App() {
 
   useEffect(() => {
     const tokens = LocalStorage.get("tokens");
+
     if (tokens) {
       dispatch(authenticationExpires(tokens.access_token));
     }

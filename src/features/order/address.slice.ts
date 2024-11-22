@@ -32,7 +32,7 @@ export const AddressSlice = ApiService.injectEndpoints({
     }),
 
     getUserAddress: builder.query<Response, void>({
-      query: () => `/addresses/`,
+      query: () => `/addresses/current-user`,
     }),
 
     getAllAddress: builder.query<Response, AddressQuery>({

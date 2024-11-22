@@ -41,11 +41,7 @@ const Router = () => {
       children: [
         {
           index: true,
-          element: (
-            <PublicRoute>
-              <Home />
-            </PublicRoute>
-          ),
+          element: <Home />,
         },
         {
           path: "collections",
@@ -117,8 +113,8 @@ const Router = () => {
                   path: "all",
                   element: (
                     <AdminProtectedRoute roles={[AcceptedRoles.ADMIN, AcceptedRoles.MODERATOR]}>
-                    <AdminProducts />
-</AdminProtectedRoute>
+                      <AdminProducts />
+                    </AdminProtectedRoute>
                   ),
                 },
                 {
@@ -182,19 +178,11 @@ const Router = () => {
     },
     {
       path: "register",
-      element: (
-        <PublicRoute>
-          <Register />
-        </PublicRoute>
-      ),
+      element: <Register />,
     },
     {
       path: "login",
-      element: (
-        <PublicRoute>
-          <Login />
-        </PublicRoute>
-      ),
+      element: <Login />,
     },
     {
       path: "*",

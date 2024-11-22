@@ -6,7 +6,7 @@ import { useCart } from "../../hooks/useCart";
 import { toast } from "react-toastify";
 import { Link } from "react-router-dom";
 
-export const OrderSummary: React.FC<{ handleSubmit(): Promise<void> }> = ({ handleSubmit }) => {
+export const OrderSummary: React.FC = () => {
   const {
     cart,
     handleCancelEdit,
@@ -35,7 +35,7 @@ export const OrderSummary: React.FC<{ handleSubmit(): Promise<void> }> = ({ hand
   }, [refreshTrigered]);
 
   return (
-    <div className="relative w-full flex-col xl:col-span-1">
+    <div className="relative w-full flex-col lg:col-span-1">
       <h3 className="text-base sm:text-lg font-medium text-gray-600 capitalize">order summary</h3>
       <div className="rounded-md border w-full">
         {!cart?.items.length ? (
@@ -160,8 +160,7 @@ export const OrderSummary: React.FC<{ handleSubmit(): Promise<void> }> = ({ hand
 
         <div className="px-5 py-4">
           <button
-            onClick={handleSubmit}
-            type="button"
+            type="submit"
             className="text-base font-medium text-white py-2.5 px-2 rounded bg-gray-800 hover:bg-gray-600 w-full block focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-gray-600"
           >
             Confirm order

@@ -9,11 +9,11 @@ interface Response {
 
 export const OrderSlice = ApiService.injectEndpoints({
   endpoints: (builder) => ({
-    createPaypalOrder: builder.mutation<Response, {addressId: string}>({
-      query: ({addressId}) => ({
+    createPaypalOrder: builder.mutation<Response, { addressId: string }>({
+      query: ({ addressId }) => ({
         url: "/orders/provider/paypal",
         method: "POST",
-        body: {addressId},
+        body: { addressId },
       }),
     }),
 
@@ -24,10 +24,11 @@ export const OrderSlice = ApiService.injectEndpoints({
       }),
     }),
 
-    updatePaypalOrder: builder.mutation<Response, string>({
-      query: (orderId) => ({
-        url: `/orders/provider/paypal/verify-payment/${orderId}`,
+    updatePaypalOrder: builder.mutation<Response, {orderId:string, status:string}>({
+      query: ({orderId, status}) => ({
+        url: `/orders/status/${orderId}`,
         method: "PATCH",
+        body:{status}
       }),
     }),
   }),

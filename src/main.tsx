@@ -24,10 +24,12 @@ ReactDOM.createRoot(document.getElementById("root")!).render(
             <PayPalScriptProvider
               options={{
                 clientId: import.meta.env.VITE_PAYPAL_CLIENT_ID as string,
-                "enable-founding": "venom",
+                enableFunding: ["venom", "paypal"],
+                components: ["buttons"],
               }}
             >
               <App />
+              <PayPalButtons />
             </PayPalScriptProvider>
           </Suspense>
         </SkeletonTheme>

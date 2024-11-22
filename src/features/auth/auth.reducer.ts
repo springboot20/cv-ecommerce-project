@@ -29,10 +29,10 @@ const authSlice = createSlice({
           return;
         }
 
-        state.isAuthenticated = true
+        state.isAuthenticated = true;
         LocalStorage.set("authentified", state.isAuthenticated);
       } catch (error) {
-        console.log(error)
+        console.log(error);
       }
     },
   },
@@ -51,8 +51,21 @@ const authSlice = createSlice({
       LocalStorage.set("authentified", data.user.isAuthenticated);
       LocalStorage.set("tokens", data.tokens);
     });
+
+    /**
+     * Login builder casing
+     */
+    builder.addMatcher(AuthSlice.endpoints.logout.matchFulfilled, (state) => {
+      state.isAuthenticated = false;
+      state.user = null;
+      state.tokens = null;
+
+      LocalStorage.set("user", null);
+      LocalStorage.set("authentified", false);
+      LocalStorage.set("tokens", null);
+    });
   },
 });
 
 export const authReducer = authSlice.reducer;
-export const {authenticationExpires} = authSlice.actions
+export const { authenticationExpires } = authSlice.actions;
