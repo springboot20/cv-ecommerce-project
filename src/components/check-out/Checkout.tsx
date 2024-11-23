@@ -7,11 +7,15 @@ import {
   useGetUserAddressQuery,
 } from "../../features/order/address.slice";
 // import { toast } from "react-toastify";
-import { useCreatePaypalOrderMutation } from "../../features/order/order.slice";
+import {
+  useCreatePaypalOrderMutation,
+  useVerifyPaypalOrderMutation,
+} from "../../features/order/order.slice";
 import { OrderSummary } from "../../pages/check-out/OrderSummary";
 import { AddressInterface } from "../../types/redux/order";
 import { PayPalButtons, usePayPalScriptReducer } from "@paypal/react-paypal-js";
 import { Loader } from "../Loader";
+import { toast } from "react-toastify";
 
 export interface InitialValues {
   email: string;
@@ -42,6 +46,7 @@ const Checkout: React.FC = () => {
   const { data } = useGetUserAddressQuery();
   const [createAddress] = useCreateAddressMutation();
   const [createPaypalOrder] = useCreatePaypalOrderMutation();
+  const [verifyPaypalOrder] = useVerifyPaypalOrderMutation();
 
   const [paymentType, setPaymentType] = useState<string>("credit-card");
 
@@ -77,8 +82,17 @@ const Checkout: React.FC = () => {
 
       if (orderData.orderId) {
         return orderData.id;
+      } else {
+        const errorDetail = orderData?.details?.[0];
+        const errorMessage = errorDetail
+          ? `${errorDetail.issue} ${errorDetail.description} (${orderData.debug_id})`
+          : JSON.stringify(orderData);
+
+        console.log({ errorDetail, errorMessage });
       }
-    } catch (error) {}
+    } catch (error: any) {
+      toast(`Could not initiate PayPal Checkout...${error}`, { type: "error" });
+    }
   };
 
   return (
@@ -336,8 +350,49 @@ const Checkout: React.FC = () => {
                   <CardForm />
                 ) : paymentType === "paypal" ? (
                   <>
-                    {isPending ? <Loader /> : null}
-                    <PayPalButtons createOrder={createOrder} style={{ layout: "horizontal" }} />
+                    {isPending ? (
+                      <Loader />
+                    ) : (
+                      <PayPalButtons
+                        style={{
+                          shape: "rect",
+                          layout: "vertical",
+                          color: "gold",
+                          label: "paypal",
+                        }}
+                        createOrder={createOrder}
+                        onApprove={async (data, actions) => {
+                          try {
+                            const orderData = await verifyPaypalOrder(data.orderID).unwrap();
+
+                            // Three cases to handle:
+                            //   (1) Recoverable INSTRUMENT_DECLINED -> call actions.restart()
+                            //   (2) Other non-recoverable errors -> Show a failure message
+                            //   (3) Successful transaction -> Show confirmation or thank you message
+
+                            const errorDetail = orderData?.data?.orderBody?.details?.[0];
+
+                            if (errorDetail?.issue === "INSTRUMENT_DECLINED") {
+                              return actions.restart();
+                            } else if (errorDetail) {
+                              // (2) Other non-recoverable errors -> Show a failure message
+                              throw new Error(
+                                `${errorDetail.description} (${orderData?.data?.orderBody?.debug_id})`,
+                              );
+                            } else {
+                              // (3) Successful transaction -> Show confirmation or thank you message
+                              // Or go to another URL:  actions.redirect('thank_you.html');
+                              const transaction =
+                                orderData?.data?.orderBody?.purchase_units[0].payments.captures[0];
+
+                              console.log(transaction);
+                            }
+                          } catch (error: any) {
+                            console.log(error);
+                          }
+                        }}
+                      />
+                    )}
                   </>
                 ) : (
                   <div />

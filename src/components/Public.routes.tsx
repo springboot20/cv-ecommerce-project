@@ -5,7 +5,7 @@ import { useAppSelector } from "../hooks/redux/redux.hooks";
 const PublicRoute: React.FC<{ children: React.ReactNode }> = ({ children }) => {
   const auth = useAppSelector((state: RootState) => state.auth);
 
-  if (!auth.tokens) {
+  if (auth.tokens) {
     return <Navigate to="/" state={{ path: window.location.pathname }} replace={true} />;
   }
 
@@ -15,8 +15,14 @@ const PublicRoute: React.FC<{ children: React.ReactNode }> = ({ children }) => {
 export const AdminPublicRoute: React.FC<{ children: React.ReactNode }> = ({ children }) => {
   const auth = useAppSelector((state: RootState) => state.auth);
 
-  if (!auth.user || !auth.tokens) {
-    return <Navigate to="/admin/login" state={{ path: window.location.pathname }} replace={true} />;
+  if (auth.user || auth.tokens) {
+    return (
+      <Navigate
+        to="/admin/products/overview"
+        state={{ path: window.location.pathname }}
+        replace={true}
+      />
+    );
   }
 
   return children;

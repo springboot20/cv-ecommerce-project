@@ -41,7 +41,11 @@ const Router = () => {
       children: [
         {
           index: true,
-          element: <Home />,
+          element: (
+            <PublicRoute>
+              <Home />
+            </PublicRoute>
+          ),
         },
         {
           path: "collections",
@@ -178,11 +182,19 @@ const Router = () => {
     },
     {
       path: "register",
-      element: <Register />,
+      element: (
+        <PublicRoute>
+          <Register />
+        </PublicRoute>
+      ),
     },
     {
       path: "login",
-      element: <Login />,
+      element: (
+        <PublicRoute>
+          <Login />
+        </PublicRoute>
+      ),
     },
     {
       path: "*",

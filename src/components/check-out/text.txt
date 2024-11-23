@@ -1,0 +1,44 @@
+{
+  "additional_properties": {},
+  "body": {
+    "id": "7BG79707KB716343F",
+    "status": "CREATED",
+    "links": [
+      {
+        "href": "https://api.sandbox.paypal.com/v2/checkout/orders/7BG79707KB716343F",
+        "rel": "self",
+        "method": "GET"
+      },
+      {
+        "href": "https://www.sandbox.paypal.com/checkoutnow?token=7BG79707KB716343F",
+        "rel": "approve",
+        "method": "GET"
+      },
+      {
+        "href": "https://api.sandbox.paypal.com/v2/checkout/orders/7BG79707KB716343F",
+        "rel": "update",
+        "method": "PATCH"
+      },
+      {
+        "href": "https://api.sandbox.paypal.com/v2/checkout/orders/7BG79707KB716343F/capture",
+        "rel": "capture",
+        "method": "POST"
+      }
+    ]
+  },
+  "duration_time": 614,
+  "header": {
+    "APPLICATION_ID": "APP-80W284485P519543T",
+    "Access-Control-Expose-Headers": "xxxxxx",
+    "BORDER-IP": "xxxxxx",
+    "CALLER_ACCT_NUM": "8B7YXXB8JV3LC",
+    "Date": "Sat, 23 Nov 2024 05:32:34 GMT",
+    "Keep-Alive": "xxxxxx",
+    "PROCESSING-IP": "xxxxxx",
+    "PayPal-Gateway-Metadata": "xxxxxx",
+    "SERVER_INFO": "xxxxxx",
+    "Server-Timing": "xxxxxx",
+    "paypal-debug-id": "a45889d4dcc9d"
+  },
+  "status": 201
+}

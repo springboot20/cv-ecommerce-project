@@ -24,11 +24,11 @@ export const OrderSlice = ApiService.injectEndpoints({
       }),
     }),
 
-    updatePaypalOrder: builder.mutation<Response, {orderId:string, status:string}>({
-      query: ({orderId, status}) => ({
+    updatePaypalOrder: builder.mutation<Response, { orderId: string; status: string }>({
+      query: ({ orderId, status }) => ({
         url: `/orders/status/${orderId}`,
         method: "PATCH",
-        body:{status}
+        body: { status },
       }),
     }),
   }),
