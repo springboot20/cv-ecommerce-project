@@ -5,8 +5,13 @@ import { PencilSquareIcon, TrashIcon } from "@heroicons/react/24/outline";
 import { useCart } from "../../hooks/useCart";
 import { toast } from "react-toastify";
 import { Link } from "react-router-dom";
+import PayButton from "../../components/buttons/PayStackButton";
 
-export const OrderSummary: React.FC = () => {
+export const OrderSummary: React.FC<{ addressId: string; email: string; isLoading: boolean }> = ({
+  addressId,
+  email,
+  isLoading,
+}) => {
   const {
     cart,
     handleCancelEdit,
@@ -158,14 +163,16 @@ export const OrderSummary: React.FC = () => {
           </li>
         </ul>
 
-        <div className="px-5 py-4">
-          <button
-            type="submit"
-            className="text-base font-medium text-white py-2.5 px-2 rounded bg-gray-800 hover:bg-gray-600 w-full block focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-gray-600"
-          >
-            Confirm order
-          </button>
-        </div>
+        {isLoading && (
+          <div className="px-5 py-4">
+            <PayButton
+              requestData={{
+                email,
+                addressId,
+              }}
+            />
+          </div>
+        )}
       </div>
     </div>
   );

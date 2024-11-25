@@ -24,6 +24,8 @@ const authSlice = createSlice({
         const decodedToken = jwtDecode(action.payload);
         const expirationTime = decodedToken?.exp!;
 
+        console.log(Date.now() >= expirationTime * 1000)
+
         if (Date.now() >= expirationTime * 1000) {
           state.isAuthenticated = false;
           return;

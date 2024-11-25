@@ -12,7 +12,6 @@ import "slick-carousel/slick/slick.css";
 import "slick-carousel/slick/slick-theme.css";
 import "react-loading-skeleton/dist/skeleton.css";
 import { SkeletonTheme } from "react-loading-skeleton";
-import { PayPalScriptProvider } from "@paypal/react-paypal-js";
 
 ReactDOM.createRoot(document.getElementById("root")!).render(
   <React.StrictMode>
@@ -21,16 +20,7 @@ ReactDOM.createRoot(document.getElementById("root")!).render(
         <SkeletonTheme>
           <ToastContainer />
           <Suspense fallback={<Loader />}>
-            <PayPalScriptProvider
-              options={{
-                clientId: import.meta.env.VITE_PAYPAL_CLIENT_ID as string,
-                enableFunding: ["venom", "paypal"],
-                components: ["buttons"],
-                dataSdkIntegrationSource: "developer-studio",
-              }}
-            >
-              <App />
-            </PayPalScriptProvider>
+            <App />
           </Suspense>
         </SkeletonTheme>
       </Provider>

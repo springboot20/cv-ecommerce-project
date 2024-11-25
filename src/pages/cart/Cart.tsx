@@ -26,7 +26,7 @@ const Cart = () => {
 
   let shipping = 5.0;
   const OrderTotal = (): number => {
-    return cart.totalCart * shipping;
+    return cart?.totalCart * shipping;
   };
 
   const navigate = useNavigate();

@@ -13,16 +13,24 @@ const initialState: InitialState = {
   saveInfo: LocalStorage.get("user-address") as boolean,
 };
 
+type PayloadActionType = {
+  saveInfo: boolean;
+  user_address: AddressInterface;
+};
+
 const addressSlice = createSlice({
   name: "address",
   initialState,
   reducers: {
-    saveUserAddressInfo: (state, action: PayloadAction<boolean>) => {
+    saveUserAddressInfo: (state, action: PayloadAction<PayloadActionType>) => {
       const { payload } = action;
 
-      state.saveInfo = payload;
+      state.saveInfo = payload.saveInfo;
+      if (payload.saveInfo) {
+        LocalStorage.set("user-address", payload.user_address);
+      }
 
-      LocalStorage.set("user-address", payload);
+      LocalStorage.set("saveInfo", payload.saveInfo);
     },
   },
   extraReducers: (builder) => {
@@ -33,7 +41,7 @@ const addressSlice = createSlice({
 
         state.address = data.address;
 
-        LocalStorage.set("cart", data.address);
+        LocalStorage.set("user-address", data.address);
       },
     );
   },

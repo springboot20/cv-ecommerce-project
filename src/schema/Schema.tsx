@@ -32,11 +32,16 @@ export const orderSchema = yup.object().shape({
       message: "only allow letters, number, and underscore",
     })
     .required("lastname is required"),
-  streetAddress: yup.string().required("street address is required"),
+  email: yup
+    .string()
+    .email({ message: "Enter a valid email address" })
+    .required("email is required"),
+  address_line_one: yup.string().required("address is required"),
   country: yup.string().required("street address is required"),
   city: yup.string().required("city is required"),
+  state: yup.string().required("state is required"),
   zipcode: yup.number().required("zipcode is required"),
-  phone: yup.string().required("zipcode is required"),
+  phone: yup.string().required("phone is required"),
 });
 
 export const registerSchema = yup.object().shape({

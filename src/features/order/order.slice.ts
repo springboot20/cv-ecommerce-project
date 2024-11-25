@@ -9,22 +9,22 @@ interface Response {
 
 export const OrderSlice = ApiService.injectEndpoints({
   endpoints: (builder) => ({
-    createPaypalOrder: builder.mutation<Response, { addressId: string }>({
-      query: ({ addressId }) => ({
-        url: "/orders/provider/paypal",
+    createPaystackOrder: builder.mutation<Response, { addressId: string; email: string }>({
+      query: ({ addressId, email }) => ({
+        url: "/orders/provider/paystack",
         method: "POST",
-        body: { addressId },
+        body: { addressId, email },
       }),
     }),
 
-    verifyPaypalOrder: builder.mutation<Response, string>({
-      query: (orderId) => ({
-        url: `/orders/provider/paypal/verify-payment/${orderId}`,
+    verifyPaystackOrder: builder.mutation<Response, void>({
+      query: () => ({
+        url: `/orders/provider/paystack/webhook`,
         method: "POST",
       }),
     }),
 
-    updatePaypalOrder: builder.mutation<Response, { orderId: string; status: string }>({
+    updatePaystackOrder: builder.mutation<Response, { orderId: string; status: string }>({
       query: ({ orderId, status }) => ({
         url: `/orders/status/${orderId}`,
         method: "PATCH",
@@ -35,7 +35,7 @@ export const OrderSlice = ApiService.injectEndpoints({
 });
 
 export const {
-  useCreatePaypalOrderMutation,
-  useVerifyPaypalOrderMutation,
-  useUpdatePaypalOrderMutation,
+  useCreatePaystackOrderMutation,
+  useVerifyPaystackOrderMutation,
+  useUpdatePaystackOrderMutation,
 } = OrderSlice;

@@ -1,15 +1,20 @@
-import React, { useState } from "react";
-import axios from "axios";
+import React from "react";
 import { Loader } from "../Loader";
+import {
+  useCreatePaystackOrderMutation,
+  useVerifyPaystackOrderMutation,
+} from "../../features/order/order.slice";
 
-const PayButton: React.FC = () => {
-  const [loading, setLoading] = useState(false);
+const PayButton: React.FC<{ requestData: { addressId: string; email: string } }> = ({
+  requestData,
+}) => {
+  const [createPaystackOrder, { isLoading }] = useCreatePaystackOrderMutation();
+  const [verifyPaystackOrder] = useVerifyPaystackOrderMutation();
 
   const initializePayment = async () => {
-    setLoading(true);
     try {
       // Send a POST request to your server to create a Paystack checkout session
-      const response = await axios.post("/api/paystack/create-checkout-session");
+      const response = await createPaystackOrder({ ...requestData }).unwrap();
 
       const { authorizationUrl } = response.data;
 
@@ -26,17 +31,20 @@ const PayButton: React.FC = () => {
       } else {
         console.error("Failed to open payment window.");
       }
+
     } catch (error) {
       console.error("Error initializing payment:", error);
       // Handle the error, e.g., show a user-friendly error message to the user.
-    } finally {
-      setLoading(false);
     }
   };
 
   return (
-    <button className="cta" onClick={initializePayment}>
-      {loading ? <Loader /> : "pay with Paystack"}
+    <button
+      type="button"
+      onClick={initializePayment}
+      className="text-base font-medium text-white py-2.5 px-2 rounded bg-gray-800 hover:bg-gray-600 w-full block focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-gray-600"
+    >
+      {isLoading ? <Loader /> : "Confirm order | Pay with Paystack"}
     </button>
   );
 };
