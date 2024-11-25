@@ -48,119 +48,117 @@ const Cart = () => {
             Shopping Cart
           </h1>
         </div>
-        <div className="relative flex items-stretch flex-col xl:flex-row xl:justify-between flex-shrink-0 mt-8">
-          <div className="flex-shrink-0 relative left-0 right-0 flex-1 xl:right-[28rem] xl:w-[calc(100%-28rem)]">
-            <div className="flex-1">
-              <div className="rounded-md border bg-white border-gray-300 mb-12 p-6">
-                {!cart?.items.length ? (
-                  <div className="flex flex-col justify-center items-center text-center">
-                    <div className="mb-6">
-                      <img
-                        src={cartImage}
-                        alt=""
-                        className="max-w-full h-auto align-middle object-contain object-center block"
-                      />
-                    </div>
-                    <p className="text-xl font-semibold text-gray-800 mb-6">
-                      Your cart is empty. Keep shopping to find a product!
-                    </p>
-                    <Link
-                      to="/collections"
-                      className="bg-gray-800 hover:bg-gray-600 rounded-md px-5 py-2 text-lg font-medium text-white shadow-sm focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-gray-600"
-                    >
-                      Keep Shopping
-                    </Link>
+        <div className="relative grid grid-cols-1 lg:grid-cols-2 xl:grid-cols-3 gap-6 mt-8">
+          <div className="col-span-1 xl:col-span-2">
+            <div className="rounded-md border bg-white border-gray-300 mb-12 p-6">
+              {!cart?.items.length ? (
+                <div className="flex flex-col justify-center items-center text-center">
+                  <div className="mb-6">
+                    <img
+                      src={cartImage}
+                      alt=""
+                      className="max-w-full h-auto align-middle object-contain object-center block"
+                    />
                   </div>
-                ) : (
-                  <div className="flow-root">
-                    <ul role="list" className="-my-6 divide-y divide-gray-200">
-                      {cart?.items.map((item: any) => (
-                        <li key={item?.product?._id} className="flex py-6">
-                          <div className="h-36 w-44 flex-shrink-0 overflow-hidden rounded-md border border-gray-200">
-                            <img
-                              src={item.product?.imageSrc?.url}
-                              alt={"product image"}
-                              className="h-full w-full object-cover object-center"
-                            />
-                          </div>
+                  <p className="text-xl font-semibold text-gray-800 mb-6">
+                    Your cart is empty. Keep shopping to find a product!
+                  </p>
+                  <Link
+                    to="/collections"
+                    className="bg-gray-800 hover:bg-gray-600 rounded-md px-5 py-2 text-lg font-medium text-white shadow-sm focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-gray-600"
+                  >
+                    Keep Shopping
+                  </Link>
+                </div>
+              ) : (
+                <div className="flow-root">
+                  <ul role="list" className="-my-6 divide-y divide-gray-200">
+                    {cart?.items.map((item: any) => (
+                      <li key={item?.product?._id} className="flex py-6">
+                        <div className="h-36 w-44 flex-shrink-0 overflow-hidden rounded-md border border-gray-200">
+                          <img
+                            src={item.product?.imageSrc?.url}
+                            alt={"product image"}
+                            className="h-full w-full object-cover object-center"
+                          />
+                        </div>
 
-                          <div className="ml-4 flex flex-1 flex-col">
-                            <div>
-                              <div className="flex justify-between  font-medium text-gray-900">
-                                <h3 className="text-gray-700 font-medium capitalize text-lg">
-                                  {item?.product?.name}
-                                </h3>
-                                <p className="text-lg font-medium text-gray-700">
-                                  {formatPrice(item?.product?.price)}
-                                </p>
-                              </div>
-                              <p className="text-gray-500">Qty ({item?.quantity})</p>
+                        <div className="ml-4 flex flex-1 flex-col">
+                          <div>
+                            <div className="flex justify-between  font-medium text-gray-900">
+                              <h3 className="text-gray-700 font-medium capitalize text-sm">
+                                {item?.product?.name}
+                              </h3>
+                              <p className="text-sm font-medium text-gray-700">
+                                {formatPrice(item?.product?.price)}
+                              </p>
                             </div>
-                            <div className="flex flex-1 items-end justify-between text-sm">
-                              {selectedItemId === item.product?._id && isEditing ? (
-                                <div className="flex items-center space-x-4">
-                                  <fieldset>
-                                    <label htmlFor="quantity" className="sr-only">
-                                      quantity
-                                    </label>
-                                    <input
-                                      id="quantity"
-                                      type="number"
-                                      value={quantityInput}
-                                      onChange={(e) => setQuantityInput(parseInt(e.target.value))}
-                                      className="border border-gray-300 rounded-md p-1 text-sm w-14 text-center"
-                                    />
-                                  </fieldset>
+                            <p className="text-gray-500">Qty ({item?.quantity})</p>
+                          </div>
+                          <div className="flex flex-1 items-end justify-between text-sm">
+                            {selectedItemId === item.product?._id && isEditing ? (
+                              <div className="flex items-center space-x-4">
+                                <fieldset>
+                                  <label htmlFor="quantity" className="sr-only">
+                                    quantity
+                                  </label>
+                                  <input
+                                    id="quantity"
+                                    type="number"
+                                    value={quantityInput}
+                                    onChange={(e) => setQuantityInput(parseInt(e.target.value))}
+                                    className="border border-gray-300 rounded-md p-1 text-sm w-14 text-center"
+                                  />
+                                </fieldset>
+                                <Button
+                                  type="button"
+                                  onClick={() => handleUpdateQuantity(item.product?._id)}
+                                  className="font-medium text-indigo-600 hover:text-indigo-500"
+                                >
+                                  Save
+                                </Button>
+                                <Button
+                                  type="button"
+                                  onClick={handleCancelEdit}
+                                  className="font-medium text-gray-500 hover:text-gray-400"
+                                >
+                                  Cancel
+                                </Button>
+                              </div>
+                            ) : (
+                              <>
+                                <div></div>
+                                <div className="flex space-x-4 items-center">
                                   <Button
                                     type="button"
-                                    onClick={() => handleUpdateQuantity(item.product?._id)}
-                                    className="font-medium text-indigo-600 hover:text-indigo-500"
+                                    onClick={() => {
+                                      handleDelete(item.product?._id);
+                                    }}
+                                    className="text-red-600 hover:text-red-500"
                                   >
-                                    Save
+                                    <TrashIcon className="h-6" />
                                   </Button>
                                   <Button
                                     type="button"
-                                    onClick={handleCancelEdit}
-                                    className="font-medium text-gray-500 hover:text-gray-400"
+                                    onClick={() => handleEditClick(item.product?._id)}
+                                    className="text-indigo-600 hover:text-indigo-500"
                                   >
-                                    Cancel
+                                    <PencilSquareIcon className="h-6" />
                                   </Button>
                                 </div>
-                              ) : (
-                                <>
-                                  <div></div>
-                                  <div className="flex space-x-4 items-center">
-                                    <Button
-                                      type="button"
-                                      onClick={() => {
-                                        handleDelete(item.product?._id);
-                                      }}
-                                      className="text-red-600 hover:text-red-500"
-                                    >
-                                      <TrashIcon className="h-6" />
-                                    </Button>
-                                    <Button
-                                      type="button"
-                                      onClick={() => handleEditClick(item.product?._id)}
-                                      className="text-indigo-600 hover:text-indigo-500"
-                                    >
-                                      <PencilSquareIcon className="h-6" />
-                                    </Button>
-                                  </div>
-                                </>
-                              )}
-                            </div>
+                              </>
+                            )}
                           </div>
-                        </li>
-                      ))}
-                    </ul>
-                  </div>
-                )}
-              </div>
+                        </div>
+                      </li>
+                    ))}
+                  </ul>
+                </div>
+              )}
             </div>
           </div>
 
-          <div className="relative flex-1 max-w-md w-full flex-col right-0 left-0 xl:ml-3">
+          <div className="relative col-span-1 w-full">
             <div className="p-6 bg-white rounded-lg border w-full">
               <h3 className="text-base sm:text-lg font-medium text-gray-800">Order summary</h3>
 
@@ -190,7 +188,7 @@ const Cart = () => {
               <div className="mt-4">
                 <Button
                   onClick={() => {
-                    navigate('/check-out');
+                    navigate("/check-out");
                   }}
                   className="text-base font-semibold text-white py-2.5 px-2 rounded bg-gray-800 hover:bg-gray-600 w-full block focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-gray-600"
                 >

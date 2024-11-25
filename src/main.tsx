@@ -22,7 +22,6 @@ ReactDOM.createRoot(document.getElementById("root")!).render(
           <ToastContainer />
           <Suspense fallback={<Loader />}>
             <PayPalScriptProvider
-              deferLoading={true}
               options={{
                 clientId: import.meta.env.VITE_PAYPAL_CLIENT_ID as string,
                 enableFunding: ["venom", "paypal"],

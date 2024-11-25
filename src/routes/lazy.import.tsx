@@ -42,9 +42,7 @@ const Router = () => {
         {
           index: true,
           element: (
-            <PublicRoute>
-              <Home />
-            </PublicRoute>
+            <Home />
           ),
         },
         {
