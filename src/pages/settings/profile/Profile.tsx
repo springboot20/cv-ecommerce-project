@@ -24,7 +24,9 @@ export default function Profile() {
     handleDragOver,
   } = useFile();
 
-  async function onSubmit(values: InitialValuesInterface) {}
+  async function onSubmit(values: InitialValuesInterface) {
+    console.log(values)
+  }
 
   return (
     <Fragment>
