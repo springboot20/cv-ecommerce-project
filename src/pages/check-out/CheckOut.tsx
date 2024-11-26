@@ -2,10 +2,7 @@ import { useFormik } from "formik";
 import { orderSchema } from "../../schema/Schema";
 import countriesData from "../../data/countries";
 import React, { Fragment, useEffect, useState } from "react";
-import {
-  useCreateAddressMutation,
-  useGetUserAddressQuery,
-} from "../../features/order/address.slice";
+import { useCreateAddressMutation } from "../../features/order/address.slice";
 import { OrderSummary } from "../../pages/check-out/OrderSummary";
 import { AddressInterface } from "../../types/redux/order";
 import { classNames } from "../../helpers";
@@ -34,32 +31,30 @@ type Option = {
 };
 
 const CheckOut: React.FC = () => {
-  const { data } = useGetUserAddressQuery();
-  const [createAddress, { isLoading }] = useCreateAddressMutation();
+  const [createAddress] = useCreateAddressMutation();
   const [countries] = useState<Option[]>(countriesData);
-  const [addressId, setAddressId] = useState<string>("");
-  const [loading, setLoading] = useState(false);
+  const [done, setDone] = useState(false);
   const dispatch = useAppDispatch();
 
-  const userAddress = data?.data?.address as AddressInterface;
   const savedInfo = LocalStorage.get("saveInfo") as boolean;
+  const savedAddressInfo = LocalStorage.get("user-address") as AddressInterface;
 
   const initialValues: InitialValues = {
     email: "",
-    country: userAddress?.country || "",
-    city: userAddress?.city || "",
-    state: userAddress?.state || "",
-    zipcode: userAddress?.zipcode?.toString() || "", // Ensure zipcode is a string
-    phone: userAddress?.phone || "",
-    firstname: userAddress?.firstname || "",
-    lastname: userAddress?.lastname || "",
-    address_line_one: userAddress?.address_line_one || "",
-    address_line_two: userAddress?.address_line_two || "",
+    country: savedAddressInfo?.country || "",
+    city: savedAddressInfo?.city || "",
+    state: savedAddressInfo?.state || "",
+    zipcode: savedAddressInfo?.zipcode?.toString() || "", // Ensure zipcode is a string
+    phone: savedAddressInfo?.phone || "",
+    firstname: savedAddressInfo?.firstname || "",
+    lastname: savedAddressInfo?.lastname || "",
+    address_line_one: savedAddressInfo?.address_line_one || "",
+    address_line_two: savedAddressInfo?.address_line_two || "",
     saveinfo: savedInfo ?? false,
   };
 
   async function onSubmit(values: InitialValues) {
-    setLoading(true);
+    setDone(true);
     const {
       country,
       city,
@@ -89,16 +84,13 @@ const CheckOut: React.FC = () => {
         dispatch(
           saveUserAddressInfo({
             saveInfo: values.saveinfo,
-            user_address: address?.data?.address,
           }),
         );
         toast(address?.message, { type: "success" });
-        setAddressId(address?.data?.address._id as string);
       }
     } catch (error: any) {
+      setDone(false);
       toast(error?.error, { type: "error" });
-    } finally {
-      setLoading(false);
     }
   }
 
@@ -134,6 +126,7 @@ const CheckOut: React.FC = () => {
                     type="checkbox"
                     name="saveinfo"
                     id="saveinfo"
+                    checked={values.saveinfo}
                     className="relative w-12 h-6 rounded-2xl bg-gray-100 !appearance-none border shadow before:absolute before:h-6 before:w-6 before:content-[''] before:rounded-full before:border before:scale-75 before:top-1/2 before:-translate-y-1/2 checked:before:-translate-x-[calc(100%-3rem)] before:bg-white checked:!bg-none pointer-events-auto"
                     onChange={(e) => {
                       setFieldValue("saveinfo", e.target.checked);
@@ -411,6 +404,7 @@ const CheckOut: React.FC = () => {
           <div className="my-4 flex items-center justify-end">
             <button
               type="submit"
+              disabled={done}
               className={classNames(
                 "text-base font-normal text-white py-2.5 px-4 rounded-md bg-gray-800 hover:bg-gray-600 block focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-gray-600",
               )}
@@ -419,7 +413,7 @@ const CheckOut: React.FC = () => {
             </button>
           </div>
         </form>
-        <OrderSummary addressId={addressId} isLoading={isLoading} email={values.email} />
+        <OrderSummary email={values.email} done={done}/>
       </div>
     </main>
   );

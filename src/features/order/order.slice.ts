@@ -9,18 +9,11 @@ interface Response {
 
 export const OrderSlice = ApiService.injectEndpoints({
   endpoints: (builder) => ({
-    createPaystackOrder: builder.mutation<Response, { addressId: string; email: string }>({
-      query: ({ addressId, email }) => ({
+    createPaystackOrder: builder.mutation<Response, { email: string }>({
+      query: ({ email }) => ({
         url: "/orders/provider/paystack",
         method: "POST",
-        body: { addressId, email },
-      }),
-    }),
-
-    verifyPaystackOrder: builder.mutation<Response, void>({
-      query: () => ({
-        url: `/orders/provider/paystack/webhook`,
-        method: "POST",
+        body: { email },
       }),
     }),
 
@@ -36,6 +29,5 @@ export const OrderSlice = ApiService.injectEndpoints({
 
 export const {
   useCreatePaystackOrderMutation,
-  useVerifyPaystackOrderMutation,
   useUpdatePaystackOrderMutation,
 } = OrderSlice;

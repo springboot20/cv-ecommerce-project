@@ -1,41 +1,37 @@
 import React from "react";
 import { Loader } from "../Loader";
-import {
-  useCreatePaystackOrderMutation,
-  useVerifyPaystackOrderMutation,
-} from "../../features/order/order.slice";
+import { useCreatePaystackOrderMutation } from "../../features/order/order.slice";
 
-const PayButton: React.FC<{ requestData: { addressId: string; email: string } }> = ({
-  requestData,
-}) => {
+const PayButton: React.FC<{ requestData: { email: string } }> = ({ requestData }) => {
   const [createPaystackOrder, { isLoading }] = useCreatePaystackOrderMutation();
-  const [verifyPaystackOrder] = useVerifyPaystackOrderMutation();
+
+  console.log(requestData);
 
   const initializePayment = async () => {
-    try {
-      // Send a POST request to your server to create a Paystack checkout session
-      const response = await createPaystackOrder({ ...requestData }).unwrap();
+    createPaystackOrder({ ...requestData })
+      .unwrap()
+      .then((response) => {
+        const { authorizationUrl } = response.data;
 
-      const { authorizationUrl } = response.data;
+        console.log(response);
 
-      // Open Paystack payment page in a new tab
-      const paymentWindow = window.open(authorizationUrl);
+        // Open Paystack payment page in a new tab
+        const paymentWindow = window.open(authorizationUrl);
 
-      if (paymentWindow) {
-        const interval = setInterval(() => {
-          if (paymentWindow.closed) {
-            window.location.href = "/checkout-success";
-            clearInterval(interval);
-          }
-        }, 1000);
-      } else {
-        console.error("Failed to open payment window.");
-      }
-
-    } catch (error) {
-      console.error("Error initializing payment:", error);
-      // Handle the error, e.g., show a user-friendly error message to the user.
-    }
+        if (paymentWindow) {
+          const interval = setInterval(() => {
+            if (paymentWindow.closed) {
+              window.location.href = "/checkout-success";
+              clearInterval(interval);
+            }
+          }, 1000);
+        } else {
+          console.error("Failed to open payment window.");
+        }
+      })
+      .catch((error: any) => {
+        console.log(error);
+      });
   };
 
   return (

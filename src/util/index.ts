@@ -1,6 +1,3 @@
-import { ApiResponseObj } from "../types/api.types";
-import { toast } from "react-toastify";
-
 export const isBrowser = typeof window !== "undefined";
 
 export const  clx = (...classnames: (string | boolean)[]) =>
@@ -35,23 +32,3 @@ export class LocalStorage {
     localStorage.clear();
   }
 }
-
-
-export const apiRequestHandler = async ({
-  api,
-  setLoading,
-  onSuccess,
-  onError,
-}: ApiResponseObj) => {
-  setLoading && setLoading(true);
-  try {
-    const response = await api();
-    const { data } = response;
-
-    onSuccess(data, data.message, toast);
-  } catch (error: any) {
-    onError(error.message, toast);
-  } finally {
-    setLoading && setLoading(false);
-  }
-};

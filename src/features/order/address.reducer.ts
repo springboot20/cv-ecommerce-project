@@ -15,7 +15,6 @@ const initialState: InitialState = {
 
 type PayloadActionType = {
   saveInfo: boolean;
-  user_address: AddressInterface;
 };
 
 const addressSlice = createSlice({
@@ -26,9 +25,6 @@ const addressSlice = createSlice({
       const { payload } = action;
 
       state.saveInfo = payload.saveInfo;
-      if (payload.saveInfo) {
-        LocalStorage.set("user-address", payload.user_address);
-      }
 
       LocalStorage.set("saveInfo", payload.saveInfo);
     },
@@ -39,9 +35,13 @@ const addressSlice = createSlice({
       (state, { payload }) => {
         const { data } = payload;
 
-        state.address = data.address;
+        if (state.saveInfo) {
+          state.address = data.address;
 
-        LocalStorage.set("user-address", data.address);
+          LocalStorage.set("user-address", data.address);
+        }
+
+        console.log(state.saveInfo);
       },
     );
   },

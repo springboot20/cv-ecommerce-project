@@ -7,11 +7,7 @@ import { toast } from "react-toastify";
 import { Link } from "react-router-dom";
 import PayButton from "../../components/buttons/PayStackButton";
 
-export const OrderSummary: React.FC<{ addressId: string; email: string; isLoading: boolean }> = ({
-  addressId,
-  email,
-  isLoading,
-}) => {
+export const OrderSummary: React.FC<{ done: boolean; email: string }> = ({ done, email }) => {
   const {
     cart,
     handleCancelEdit,
@@ -68,17 +64,17 @@ export const OrderSummary: React.FC<{ addressId: string; email: string; isLoadin
                     />
                   </div>
 
-                  <div className="ml-4 flex flex-1 flex-col">
+                  <div className="ml-2 flex flex-1 flex-col">
                     <div>
-                      <div className="flex justify-between  font-medium text-gray-900">
-                        <h3 className="text-gray-700 font-medium capitalize text-lg">
+                      <div className="flex justify-between font-medium text-gray-900">
+                        <h3 className="text-gray-700 font-medium capitalize text-base">
                           {item?.product.name}
                         </h3>
-                        <p className="text-lg font-medium text-gray-700">
+                        <p className="text-base font-medium text-gray-700">
                           {formatPrice(item?.product.price)}
                         </p>
                       </div>
-                      <p className="text-gray-500">Qty ({item?.quantity})</p>
+                      <p className="text-gray-500 text-base">Qty ({item?.quantity})</p>
                     </div>
                     <div className="flex flex-1 items-end justify-between text-sm">
                       {selectedItemId === item.product?._id && isEditing ? (
@@ -163,12 +159,11 @@ export const OrderSummary: React.FC<{ addressId: string; email: string; isLoadin
           </li>
         </ul>
 
-        {isLoading && (
+        {done && (
           <div className="px-5 py-4">
             <PayButton
               requestData={{
                 email,
-                addressId,
               }}
             />
           </div>
