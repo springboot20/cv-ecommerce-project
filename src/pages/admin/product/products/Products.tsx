@@ -65,7 +65,9 @@ const AdminProducts = () => {
       toast.success(data?.message);
     }
 
-    if (productDeleted) refetch();
+    if (productDeleted) {
+      refetch();
+    }
   }, [data?.message]);
 
   const handleProductDelete = useCallback(
