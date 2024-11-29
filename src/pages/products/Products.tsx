@@ -14,6 +14,7 @@ import { Disclosure } from "@headlessui/react";
 import { Bars3Icon } from "@heroicons/react/24/outline";
 import { LocalStorage } from "../../util";
 import { useGetAllCategoryQuery } from "../../features/category/category.slice";
+import Skeleton from "react-loading-skeleton";
 
 const Products = () => {
   const [searchQuery, setSearchQuery] = useState<string>("");
@@ -91,20 +92,31 @@ const Products = () => {
               </p>
             ) : (
               products?.map((product: ProductType) => (
-                <Link to={`/collections/${product._id}`} key={product._id} className="group">
+                <Link to={`/collections/${product._id}`} key={product._id}>
                   <motion.div layout key={product._id}>
-                    <header className="group-hover:opacity-60 transition-all h-52 w-full relative rounded-xl overflow-hidden">
-                      <img
-                        src={product?.imageSrc.url}
-                        alt=""
-                        className="h-full absolute object-cover object-center w-full group-hover:scale-110 transition"
-                      />
+                    <header className="h-52 w-full relative rounded-xl overflow-hidden">
+                      {product?.imageSrc.url ? (
+                        <img
+                          src={product?.imageSrc.url}
+                          alt=""
+                          className="h-full absolute object-cover object-center w-full"
+                        />
+                      ) : (
+                        <Skeleton
+                          height={"100%"}
+                          style={{ position: "absolute", objectFit: "cover" }}
+                          borderRadius={0}
+                          className="border border-gray-300"
+                        />
+                      )}
                     </header>
                     <div className="relative flex pt-2 justify-between gap-1.5">
-                      <h3 className="capitalize text-lg font-semibold text-gray-700">
+                      <h3 className="capitalize text-base font-medium text-gray-700">
                         {product.name}
                       </h3>
-                      <p className="text-lg font-medium">{formatPrice(product.price)}</p>
+                      <p className="text-base text-gray-700 font-medium">
+                        {formatPrice(product.price)}
+                      </p>
                     </div>
                   </motion.div>
                 </Link>

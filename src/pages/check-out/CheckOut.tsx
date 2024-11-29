@@ -3,7 +3,7 @@ import { orderSchema } from "../../schema/Schema";
 import countriesData from "../../data/countries";
 import React, { Fragment, useEffect, useState } from "react";
 import { useCreateAddressMutation } from "../../features/order/address.slice";
-import { OrderSummary } from "../../pages/check-out/OrderSummary";
+import { OrderSummary } from "./OrderSummary";
 import { AddressInterface } from "../../types/redux/order";
 import { classNames } from "../../helpers";
 import { toast } from "react-toastify";

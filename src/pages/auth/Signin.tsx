@@ -48,13 +48,12 @@ const Signin = () => {
       await login(values)
         .unwrap()
         .then(async (res) => {
-          toast.success(res.data.message);
+          toast.success(res.message);
           await Promise.resolve(setTimeout(() => navigate("/"), 2000));
           actions.resetForm();
         })
         .catch((error) => {
-          toast.error(error.data.message);
-          toast.error(error.error);
+          toast.error(error.error || error.data.message);
         });
     },
   });
