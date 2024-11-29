@@ -15,6 +15,7 @@ export const ApiService = createApi({
       if (tokens) {
         headers.set("authorization", `Bearer ${tokens?.access_token}`);
       }
+
       return headers;
     },
   }),
