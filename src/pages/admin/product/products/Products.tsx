@@ -26,11 +26,11 @@ const AdminProducts = () => {
   const [searchQuery, setSearchQuery] = useState<string>("");
   const [page, setPage] = useState<number>(1);
   const [open, setOpen] = useState<{ [key: string]: boolean }>({});
-  const [deleteProduct, { isLoading: deleteProductLoading }] = useDeleteProductMutation();
+  const [deleteProduct, refetch, { isLoading: deleteProductLoading }] = useDeleteProductMutation();
   const [productDeleted, setProductDeleted] = useState<boolean>(false);
 
   let limit = 10;
-  const { data, isLoading, refetch } = useGetAllProductsQuery({
+  const { data, isLoading } = useGetAllProductsQuery({
     limit,
     page,
     featured: false,
