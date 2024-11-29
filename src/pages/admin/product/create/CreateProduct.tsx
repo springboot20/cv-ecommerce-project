@@ -1,4 +1,4 @@
-import { Field, Form, Formik } from "formik";
+import { Field, Form, Formik, FormikHelpers } from "formik";
 import { CurrencyDollarIcon } from "@heroicons/react/24/outline";
 
 import { clx } from "../../../../util";
@@ -43,7 +43,10 @@ export default function CreateNewProduct() {
   const [addCategory] = useAddCategoryMutation();
   const navigate = useNavigate();
 
-  async function onSubmit(values: InitialValuesInterface) {
+  async function onSubmit(
+    values: InitialValuesInterface,
+    { resetForm }: FormikHelpers<InitialValuesInterface>,
+  ) {
     console.log(values);
     try {
       const formData = new FormData();
@@ -53,7 +56,7 @@ export default function CreateNewProduct() {
       formData.append("description", values.description);
       formData.append("price", values.price.toString());
       formData.append("imageSrc", values.imageSrc as Blob);
-      formData.append("category", categoryReponse.data?._id);
+      formData.append("category", values.category);
       formData.append("stock", values.stock.toString());
       formData.append("featured", values.featured ? "true" : "false");
       formData.append("name", values.name);
@@ -67,6 +70,7 @@ export default function CreateNewProduct() {
         });
 
         await new Promise((resolve) => setTimeout(resolve, 1500));
+        resetForm();
         navigate("/admin/products/all", { replace: true });
         return data;
       }
