@@ -26,11 +26,11 @@ const AdminProducts = () => {
   const [searchQuery, setSearchQuery] = useState<string>("");
   const [page, setPage] = useState<number>(1);
   const [open, setOpen] = useState<{ [key: string]: boolean }>({});
-  const [deleteProduct, refetch, { isLoading: deleteProductLoading }] = useDeleteProductMutation();
+  const [deleteProduct, { isLoading: deleteProductLoading }] = useDeleteProductMutation();
   const [productDeleted, setProductDeleted] = useState<boolean>(false);
 
   let limit = 10;
-  const { data, isLoading } = useGetAllProductsQuery({
+  const { data, isLoading, refetch } = useGetAllProductsQuery({
     limit,
     page,
     featured: false,
@@ -64,7 +64,8 @@ const AdminProducts = () => {
     if (data?.message) {
       toast.success(data?.message);
     }
-    refetch();
+
+    if (productDeleted) refetch();
   }, [data?.message]);
 
   const handleProductDelete = useCallback(
