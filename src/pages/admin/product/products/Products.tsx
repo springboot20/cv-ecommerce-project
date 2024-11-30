@@ -252,7 +252,7 @@ const DeleteModal: React.FC<{
                       color="red"
                       disabled={deleteProductLoading}
                       onClick={async () => {
-                        handleDelete();
+                        await handleDelete();
                         if (productDeleted) {
                           setTimeout(() => onClose(), 2000);
                         }
