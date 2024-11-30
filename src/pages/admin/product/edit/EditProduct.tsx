@@ -291,10 +291,18 @@ export default function EditProduct() {
                               src={
                                 typeof selectedFile === "string"
                                   ? selectedFile
-                                  : URL.createObjectURL(selectedFile!)
+                                  : selectedFile instanceof Blob
+                                  ? URL.createObjectURL(selectedFile)
+                                  : product.imageSrc.url // Fallback to product image if selectedFile is invalid
                               }
                               alt="upload"
                               className="object-cover h-full w-full"
+                              onLoad={() => {
+                                if (selectedFile instanceof Blob) {
+                                  // Revoke the object URL to prevent memory leaks
+                                  URL.revokeObjectURL(URL.createObjectURL(selectedFile));
+                                }
+                              }}
                             />
                           </div>
                         )}
