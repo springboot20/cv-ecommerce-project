@@ -29,7 +29,7 @@ export default function EditProduct() {
 
   const categories = categoriedData?.data.categories as ProductCategory[];
   const [selectedFile, setSelectedFile] = useState<File | string | null>(
-    product.imageSrc?.url ? product.imageSrc?.url : null,
+    product?.imageSrc?.url || null,
   );
   const fileInputRef = useRef<HTMLInputElement | null>(null);
 
@@ -285,7 +285,7 @@ export default function EditProduct() {
                       )}
                     >
                       <div className="text-center">
-                        {(product.imageSrc?.url || selectedFile) && (
+                        {product?.imageSrc?.url && (
                           <div className="h-32 w-full ring-2 ring-offset-2 ring-indigo-500 rounded overflow-hidden mb-1 mx-auto">
                             <img
                               src={
@@ -298,6 +298,7 @@ export default function EditProduct() {
                             />
                           </div>
                         )}
+
                         <div className="text-center">
                           <label
                             htmlFor="imageSrc"
@@ -314,7 +315,6 @@ export default function EditProduct() {
                                 const files = event?.currentTarget.files;
 
                                 if (files && files.length > 0) {
-
                                   setFieldValue("imageSrc", files[0]);
                                   setSelectedFile(files[0]);
                                 }
