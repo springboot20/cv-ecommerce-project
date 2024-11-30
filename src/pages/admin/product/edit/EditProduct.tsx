@@ -13,7 +13,7 @@ import { useEffect, useRef, useState } from "react";
 interface InitialValuesInterface {
   price: number;
   description: string;
-  image: File | null;
+  image: File | string | null;
   category: string;
   stock: number;
   name: string;
@@ -28,7 +28,7 @@ export default function EditProduct() {
   const [updating, setUpdating] = useState<boolean>(false);
 
   const categories = categoriedData?.data.categories as ProductCategory[];
-  const [selectedFile, setSelectedFile] = useState<File | null>(
+  const [selectedFile, setSelectedFile] = useState<File | string | null>(
     product.imageSrc?.url ? product.imageSrc?.url : null,
   );
   const fileInputRef = useRef<HTMLInputElement | null>(null);
@@ -100,7 +100,7 @@ export default function EditProduct() {
 
   useEffect(() => {
     return () => {
-      if (selectedFile) {
+      if (selectedFile instanceof File) {
         URL.revokeObjectURL(selectedFile.name);
       }
     };

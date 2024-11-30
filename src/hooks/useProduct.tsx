@@ -18,7 +18,7 @@ export const useProduct = () => {
 
   const setRatingsValue = (rating: number) => setRatings(rating);
 
-  const product:ProductType = data?.data.product ?? (LocalStorage.get("product") as ProductType);
+  const product: ProductType = data?.data.product ?? (LocalStorage.get("product") as ProductType);
 
   const handleAddItemToCart = async (productId: string) => {
     try {
