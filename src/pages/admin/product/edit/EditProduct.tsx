@@ -10,10 +10,15 @@ import { useUpdateProductMutation } from "../../../../features/products/product.
 import { toast } from "react-toastify";
 import { useEffect, useRef, useState } from "react";
 
+type ImageSrcType = {
+  url: string;
+  public_id: string;
+};
+
 interface InitialValuesInterface {
   price: number;
   description: string;
-  imageSrc: File | string | null;
+  imageSrc: File | ImageSrcType | null;
   category: string;
   stock: number;
   name: string;
@@ -28,8 +33,8 @@ export default function EditProduct() {
   const [updating, setUpdating] = useState<boolean>(false);
 
   const categories = categoriedData?.data.categories as ProductCategory[];
-  const [selectedFile, setSelectedFile] = useState<File | string | null>(
-    product?.imageSrc?.url || null,
+  const [selectedFile, setSelectedFile] = useState<File | ImageSrcType | null>(
+    product?.imageSrc || null,
   );
   const fileInputRef = useRef<HTMLInputElement | null>(null);
 
@@ -68,17 +73,23 @@ export default function EditProduct() {
   };
 
   async function onSubmit(values: InitialValuesInterface) {
-    const formData = new FormData();
-
-    formData.append("description", values.description);
-    formData.append("price", values.price.toString());
-    formData.append("imageSrc", values.imageSrc as Blob);
-    formData.append("category", values.category);
-    formData.append("stock", values.stock.toString());
-    formData.append("featured", values.featured ? "true" : "false");
-    formData.append("name", values.name);
-
+    console.log(values);
     try {
+      const formData = new FormData();
+
+      formData.append("description", values.description);
+      formData.append("price", values.price.toString());
+
+      if (values.imageSrc instanceof File) {
+        formData.append("imageSrc", values.imageSrc);
+      } else if (values.imageSrc?.url) {
+        formData.append("imageSrc", values.imageSrc.url);
+      }
+      
+      formData.append("category", values.category);
+      formData.append("stock", values.stock.toString());
+      formData.append("featured", values.featured ? "true" : "false");
+      formData.append("name", values.name);
       const response = await updateProduct({ _id: product._id, formData }).unwrap();
       const data = await response.data;
 
@@ -89,6 +100,8 @@ export default function EditProduct() {
 
       await new Promise((resolve) => setTimeout(resolve, 1500));
       navigate("/admin/products/all", { replace: true });
+
+      console.log(formData);
 
       return data;
     } catch (error: any) {
@@ -183,7 +196,7 @@ export default function EditProduct() {
                         errors.name && touched.name ? "ring-red-500" : "focus:ring-indigo-500",
                       )}
                     >
-                      <option>select category</option>
+                      <option disabled>select category</option>
                       {(categories ?? []).map((category) => {
                         return (
                           <option key={category._id} value={category._id}>

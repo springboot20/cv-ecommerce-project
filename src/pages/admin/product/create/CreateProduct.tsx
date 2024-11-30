@@ -68,6 +68,7 @@ export default function CreateNewProduct() {
         toast(response.message, {
           type: "success",
         });
+        console.log(formData);
 
         await new Promise((resolve) => setTimeout(resolve, 1500));
         resetForm();
@@ -145,7 +146,7 @@ export default function CreateNewProduct() {
                       errors.name && touched.name ? "ring-red-500" : "focus:ring-indigo-500",
                     )}
                   >
-                    <option>select category</option>
+                    <option disabled>select category</option>
                     <option>fasion</option>
                     <option>kitchen</option>
                     <option>electronics</option>
@@ -267,7 +268,6 @@ export default function CreateNewProduct() {
                               const files = event?.currentTarget.files;
 
                               if (files && files.length > 0) {
-
                                 setFieldValue("imageSrc", files[0]);
                                 setSelectedFile(files[0]);
                               }

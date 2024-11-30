@@ -34,6 +34,17 @@ const productSlice = createSlice({
         LocalStorage.set("product", data.product);
       },
     );
+
+    builder.addMatcher(
+      ProductSlice.endpoints.updateProduct.matchFulfilled,
+      (state, { payload }) => {
+        const { data } = payload;
+
+        state.product = data.product;
+
+        LocalStorage.set("product", data.product);
+      },
+    );
   },
 });
 
