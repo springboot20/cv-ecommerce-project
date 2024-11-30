@@ -39,7 +39,7 @@ const AppLayout: React.FC = () => {
         as="nav"
         className={`fixed top-0 left-0 z-10 right-0 dark:bg-gray-800 bg-white border-b border-black/20`}
       >
-        {({ open }) => (
+        {({ open, close }) => (
           <>
             <CartModal isOpen={isOpen} setIsOpen={setOpen} />
             <div className="mx-auto max-w-7xl px-2 sm:px-2 lg:px-4 xl:p-0">
@@ -262,6 +262,9 @@ const AppLayout: React.FC = () => {
                     key={item.name}
                     to={item.to}
                     className={handleActive}
+                    onClick={() => {
+                      close();
+                    }}
                     aria-current={item.current ? "page" : undefined}
                   >
                     {item.name}
