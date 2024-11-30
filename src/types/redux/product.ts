@@ -6,8 +6,8 @@ export interface ProductType {
   stock: number;
   featured: boolean;
   description: string;
-  imageSrc: { url: string; localPath: string };
-  subImgs: { url: string; localPath: string }[];
+  imageSrc: { url: string; public_id: string };
+  subImgs: { url: string; public_id: string }[];
   category: string;
 }
 
