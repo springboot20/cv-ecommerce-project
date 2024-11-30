@@ -20,7 +20,7 @@ const AdminLayoutComponent = () => {
         return (
           <Fragment>
             <AdminNavigationComponent open={open} />
-            <Outlet context={[close]} />
+            <Outlet context={{ close }} />
           </Fragment>
         );
       }}
