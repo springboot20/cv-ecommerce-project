@@ -264,8 +264,9 @@ export default function CreateNewProduct() {
                             hidden
                             ref={fileInputRef}
                             onChange={(event) => {
-                              if (event.target.files && event.target.files.length > 0) {
-                                const files = event.target.files;
+                              const files = event?.currentTarget.files;
+
+                              if (files && files.length > 0) {
 
                                 setFieldValue("imageSrc", files[0]);
                                 setSelectedFile(files[0]);

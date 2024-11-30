@@ -269,7 +269,7 @@ export default function EditProduct() {
                 >
                   <fieldset className="h-full">
                     <label
-                      htmlFor="image"
+                      htmlFor="imageSrc"
                       className="capitalize font-medium font-nunito-sans text-base sm:text-lg mb-2"
                     >
                       product image
@@ -311,8 +311,9 @@ export default function EditProduct() {
                               hidden
                               ref={fileInputRef}
                               onChange={(event) => {
-                                if (event.target.files && event.target.files.length > 0) {
-                                  const files = event.target.files;
+                                const files = event?.currentTarget.files;
+
+                                if (files && files.length > 0) {
 
                                   setFieldValue("imageSrc", files[0]);
                                   setSelectedFile(files[0]);
