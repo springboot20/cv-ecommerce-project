@@ -13,7 +13,7 @@ import { useEffect, useRef, useState } from "react";
 interface InitialValuesInterface {
   price: number;
   description: string;
-  image: File | string | null;
+  imageSrc: File | string | null;
   category: string;
   stock: number;
   name: string;
@@ -60,7 +60,7 @@ export default function EditProduct() {
   const initialValues: InitialValuesInterface = {
     price: product.price ?? 10,
     description: product.description ?? "",
-    image: selectedFile,
+    imageSrc: selectedFile,
     category: product.category ?? "",
     stock: product.stock ?? 1,
     featured: product.featured ?? false,
@@ -72,7 +72,7 @@ export default function EditProduct() {
 
     formData.append("description", values.description);
     formData.append("price", values.price.toString());
-    formData.append("image", values.image as Blob);
+    formData.append("imageSrc", values.imageSrc as Blob);
     formData.append("category", values.category);
     formData.append("stock", values.stock.toString());
     formData.append("featured", values.featured ? "true" : "false");
@@ -300,21 +300,21 @@ export default function EditProduct() {
                         )}
                         <div className="text-center">
                           <label
-                            htmlFor="image"
+                            htmlFor="imageSrc"
                             className="relative cursor-pointer rounded-md font-normal text-base text-gray-400 hover:text-indigo-400 "
                           >
                             {!selectedFile && <span>Select product image or drag and drop</span>}
                             <input
                               type="file"
-                              id="image"
-                              name="image"
+                              id="imageSrc"
+                              name="imageSrc"
                               hidden
                               ref={fileInputRef}
                               onChange={(event) => {
                                 if (event.target.files && event.target.files.length > 0) {
                                   const files = event.target.files;
 
-                                  setFieldValue("image", files[0]);
+                                  setFieldValue("imageSrc", files[0]);
                                   setSelectedFile(files[0]);
                                 }
                               }}
