@@ -42,6 +42,8 @@ const productSlice = createSlice({
 
         state.product = data.product;
 
+        console.log(data.product);
+
         LocalStorage.set("product", data.product);
       },
     );

@@ -10,15 +10,10 @@ import { useUpdateProductMutation } from "../../../../features/products/product.
 import { toast } from "react-toastify";
 import { useEffect, useRef, useState } from "react";
 
-type ImageSrcType = {
-  url: string;
-  public_id: string;
-};
-
 interface InitialValuesInterface {
   price: number;
   description: string;
-  imageSrc: File | ImageSrcType | null;
+  imageSrc: File | string | null;
   category: string;
   stock: number;
   name: string;
@@ -33,9 +28,7 @@ export default function EditProduct() {
   const [updating, setUpdating] = useState<boolean>(false);
 
   const categories = categoriedData?.data.categories as ProductCategory[];
-  const [selectedFile, setSelectedFile] = useState<File | ImageSrcType | null>(
-    product?.imageSrc || null,
-  );
+  const [selectedFile, setSelectedFile] = useState<File>(null!);
   const fileInputRef = useRef<HTMLInputElement | null>(null);
 
   const [isDropping, setIsDropping] = useState<boolean>(false);
@@ -65,7 +58,7 @@ export default function EditProduct() {
   const initialValues: InitialValuesInterface = {
     price: product?.price ?? 10,
     description: product?.description ?? "",
-    imageSrc: selectedFile,
+    imageSrc: product?.imageSrc?.url ?? selectedFile,
     category: product?.category ?? "",
     stock: product?.stock ?? 1,
     featured: product?.featured ?? false,
@@ -79,17 +72,12 @@ export default function EditProduct() {
 
       formData.append("description", values.description);
       formData.append("price", values.price.toString());
-
-      if (values.imageSrc instanceof File) {
-        formData.append("imageSrc", values.imageSrc);
-      } else if (values.imageSrc?.url) {
-        formData.append("imageSrc", values.imageSrc.url);
-      }
-      
+      formData.append("imageSrc", values.imageSrc as Blob);
       formData.append("category", values.category);
       formData.append("stock", values.stock.toString());
       formData.append("featured", values.featured ? "true" : "false");
       formData.append("name", values.name);
+
       const response = await updateProduct({ _id: product._id, formData }).unwrap();
       const data = await response.data;
 

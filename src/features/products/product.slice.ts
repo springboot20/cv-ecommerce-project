@@ -42,10 +42,7 @@ export const ProductSlice = ApiService.injectEndpoints({
           : [{ type: "Product", id: "PRODUCT" }],
     }),
 
-    updateProduct: builder.mutation<
-      Response,
-      Pick<ProductRequest, "_id"> & Partial<ProductRequest>
-    >({
+    updateProduct: builder.mutation<Response, ProductRequest>({
       query: ({ _id, ...patch }) => ({
         url: `/products/${_id}`,
         method: "PATCH",
