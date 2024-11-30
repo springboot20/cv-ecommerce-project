@@ -58,13 +58,13 @@ export default function EditProduct() {
   };
 
   const initialValues: InitialValuesInterface = {
-    price: product.price ?? 10,
-    description: product.description ?? "",
+    price: product?.price ?? 10,
+    description: product?.description ?? "",
     imageSrc: selectedFile,
-    category: product.category ?? "",
-    stock: product.stock ?? 1,
-    featured: product.featured ?? false,
-    name: product.name ?? "",
+    category: product?.category ?? "",
+    stock: product?.stock ?? 1,
+    featured: product?.featured ?? false,
+    name: product?.name ?? "",
   };
 
   async function onSubmit(values: InitialValuesInterface) {
