@@ -43,12 +43,20 @@ export const ProductSlice = ApiService.injectEndpoints({
     }),
 
     updateProduct: builder.mutation<Response, ProductRequest>({
-      query: ({ _id, ...patch }) => ({
-        url: `/products/${_id}`,
-        method: "PATCH",
-        body: patch,
-        formData: true,
-      }),
+      query: ({ _id, ...patch }) => {
+        const formData = new FormData();
+
+        Object.keys(patch).forEach((key) => {
+          formData.append(key, patch[key]);
+        });
+
+        return {
+          url: `/products/${_id}`,
+          method: "PATCH",
+          body: formData,
+          formData: true,
+        };
+      },
       invalidatesTags: (_, __, { _id }) => [{ type: "Product", id: _id }],
     }),
 

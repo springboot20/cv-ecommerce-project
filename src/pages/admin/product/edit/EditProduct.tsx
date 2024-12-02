@@ -73,26 +73,8 @@ export default function EditProduct() {
   async function onSubmit(values: InitialValuesInterface) {
     console.log(values);
     try {
-      const formData = new FormData();
-
-      formData.append("description", values.description);
-      formData.append("price", values.price.toString());
-
-      if (values?.imageSrc instanceof File) {
-        formData.append("imageSrc", values?.imageSrc as Blob);
-      } else if (values?.imageSrc && typeof values?.imageSrc === "object") {
-        formData.append("imageSrc", JSON.stringify(values?.imageSrc));
-      }
-
-      formData.append("category", values.category);
-      formData.append("stock", values.stock.toString());
-      formData.append("featured", values.featured ? "true" : "false");
-      formData.append("name", values.name);
-
-      const response = await updateProduct({ _id: product._id, formData }).unwrap();
+      const response = await updateProduct({ _id: product._id, ...values }).unwrap();
       const data = await response.data;
-
-      console.log(`form data: ${formData}`);
 
       toast(response.message, {
         type: "success",
