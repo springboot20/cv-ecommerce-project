@@ -8,7 +8,7 @@ export interface ProductType {
   description: string;
   imageSrc: { url: string; public_id: string };
   subImgs: { url: string; public_id: string }[];
-  category: string;
+  category: ProductCategory;
 }
 
 export interface InitialState {

@@ -5,7 +5,6 @@ import { Button } from "@material-tailwind/react";
 import { useNavigate } from "react-router-dom";
 import { useProduct } from "../../../../hooks/useProduct";
 import { useGetAllCategoryQuery } from "../../../../features/category/category.slice";
-import { ProductCategory } from "../../../../types/redux/product";
 import { useUpdateProductMutation } from "../../../../features/products/product.slice";
 import { toast } from "react-toastify";
 import { useEffect, useRef, useState } from "react";
@@ -15,11 +14,16 @@ type ImageSrcType = {
   public_id: string;
 };
 
+interface ProductCategory {
+  _id: string;
+  name: string;
+}
+
 interface InitialValuesInterface {
   price: number;
   description: string;
   imageSrc: File | ImageSrcType | null;
-  category: string;
+  category: ProductCategory;
   stock: number;
   name: string;
   featured: boolean;
@@ -64,7 +68,7 @@ export default function EditProduct() {
     price: product?.price ?? 10,
     description: product?.description ?? "",
     imageSrc: product?.imageSrc ?? selectedFile,
-    category: product?.category ?? "",
+    category: product?.category ?? ({} as ProductCategory),
     stock: product?.stock ?? 1,
     featured: product?.featured ?? false,
     name: product?.name ?? "",
