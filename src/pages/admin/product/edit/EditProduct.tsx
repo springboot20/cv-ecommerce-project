@@ -10,10 +10,15 @@ import { useUpdateProductMutation } from "../../../../features/products/product.
 import { toast } from "react-toastify";
 import { useEffect, useRef, useState } from "react";
 
+type ImageSrcType = {
+  url: string;
+  public_id: string;
+};
+
 interface InitialValuesInterface {
   price: number;
   description: string;
-  imageSrc: File | string | null;
+  imageSrc: File | ImageSrcType | null;
   category: string;
   stock: number;
   name: string;
@@ -58,7 +63,7 @@ export default function EditProduct() {
   const initialValues: InitialValuesInterface = {
     price: product?.price ?? 10,
     description: product?.description ?? "",
-    imageSrc: product?.imageSrc?.url ?? selectedFile,
+    imageSrc: product?.imageSrc ?? selectedFile,
     category: product?.category ?? "",
     stock: product?.stock ?? 1,
     featured: product?.featured ?? false,
@@ -72,7 +77,13 @@ export default function EditProduct() {
 
       formData.append("description", values.description);
       formData.append("price", values.price.toString());
-      formData.append("imageSrc", values.imageSrc as Blob);
+
+      if (values.imageSrc instanceof File) {
+        formData.append("imageSrc", values.imageSrc as Blob);
+      } else if (values.imageSrc && typeof values.imageSrc === "object") {
+        formData.append("imageSrc", JSON.stringify(values.imageSrc));
+      }
+
       formData.append("category", values.category);
       formData.append("stock", values.stock.toString());
       formData.append("featured", values.featured ? "true" : "false");
@@ -89,8 +100,6 @@ export default function EditProduct() {
       await new Promise((resolve) => setTimeout(resolve, 1500));
       navigate("/admin/products/all", { replace: true });
 
-      console.log(formData);
-
       return data;
     } catch (error: any) {
       console.log(error);
@@ -98,6 +107,8 @@ export default function EditProduct() {
       toast.error(error.error);
     }
   }
+
+  console.log(initialValues);
 
   useEffect(() => {
     return () => {
@@ -286,27 +297,23 @@ export default function EditProduct() {
                       )}
                     >
                       <div className="text-center">
-                        {product?.imageSrc?.url && (
-                          <div className="h-32 w-full ring-2 ring-offset-2 ring-indigo-500 rounded overflow-hidden mb-1 mx-auto">
-                            <img
-                              src={
-                                typeof selectedFile === "string"
-                                  ? selectedFile
-                                  : selectedFile instanceof Blob
-                                  ? URL.createObjectURL(selectedFile)
-                                  : product.imageSrc.url // Fallback to product image if selectedFile is invalid
+                        <div className="h-32 w-full ring-2 ring-offset-2 ring-indigo-500 rounded overflow-hidden mb-1 mx-auto">
+                          <img
+                            src={
+                              selectedFile
+                                ? URL.createObjectURL(selectedFile)
+                                : product.imageSrc.url // Fallback to product image if selectedFile is invalid
+                            }
+                            alt="upload"
+                            className="object-cover h-full w-full"
+                            onLoad={() => {
+                              if (selectedFile instanceof Blob) {
+                                // Revoke the object URL to prevent memory leaks
+                                URL.revokeObjectURL(URL.createObjectURL(selectedFile));
                               }
-                              alt="upload"
-                              className="object-cover h-full w-full"
-                              onLoad={() => {
-                                if (selectedFile instanceof Blob) {
-                                  // Revoke the object URL to prevent memory leaks
-                                  URL.revokeObjectURL(URL.createObjectURL(selectedFile));
-                                }
-                              }}
-                            />
-                          </div>
-                        )}
+                            }}
+                          />
+                        </div>
 
                         <div className="text-center">
                           <label
