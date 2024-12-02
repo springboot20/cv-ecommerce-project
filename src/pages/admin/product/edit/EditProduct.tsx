@@ -78,10 +78,10 @@ export default function EditProduct() {
       formData.append("description", values.description);
       formData.append("price", values.price.toString());
 
-      if (values.imageSrc instanceof File) {
-        formData.append("imageSrc", values.imageSrc as Blob);
-      } else if (values.imageSrc && typeof values.imageSrc === "object") {
-        formData.append("imageSrc", JSON.stringify(values.imageSrc));
+      if (values?.imageSrc instanceof File) {
+        formData.append("imageSrc", values?.imageSrc as Blob);
+      } else if (values?.imageSrc && typeof values?.imageSrc === "object") {
+        formData.append("imageSrc", JSON.stringify(values?.imageSrc));
       }
 
       formData.append("category", values.category);
@@ -302,7 +302,7 @@ export default function EditProduct() {
                             src={
                               selectedFile
                                 ? URL.createObjectURL(selectedFile)
-                                : product.imageSrc.url // Fallback to product image if selectedFile is invalid
+                                : product?.imageSrc?.url // Fallback to product image if selectedFile is invalid
                             }
                             alt="upload"
                             className="object-cover h-full w-full"
