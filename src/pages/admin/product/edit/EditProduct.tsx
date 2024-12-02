@@ -92,8 +92,7 @@ export default function EditProduct() {
       const response = await updateProduct({ _id: product._id, formData }).unwrap();
       const data = await response.data;
 
-      console.log(formData);
-
+      console.log(`form data: ${formData}`);
 
       toast(response.message, {
         type: "success",
@@ -111,7 +110,7 @@ export default function EditProduct() {
     }
   }
 
-  console.log(initialValues);
+  console.log(`initial values: ${initialValues}`);
 
   useEffect(() => {
     return () => {
@@ -120,8 +119,6 @@ export default function EditProduct() {
       }
     };
   }, [selectedFile]);
-
-  console.log(product);
 
   return (
     <div className="mx-auto max-w-6xl mt-4 space-y-2">
