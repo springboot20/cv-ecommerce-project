@@ -180,7 +180,7 @@ export default function EditProduct() {
                       <option disabled>select category</option>
                       {(categories ?? []).map((category) => {
                         return (
-                          <option key={category._id} value={category._id}>
+                          <option key={category._id} value={category.name}>
                             {category.name}
                           </option>
                         );
