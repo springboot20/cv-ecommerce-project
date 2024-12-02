@@ -92,6 +92,9 @@ export default function EditProduct() {
       const response = await updateProduct({ _id: product._id, formData }).unwrap();
       const data = await response.data;
 
+      console.log(formData);
+
+
       toast(response.message, {
         type: "success",
       });
