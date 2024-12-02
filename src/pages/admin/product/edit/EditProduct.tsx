@@ -68,7 +68,7 @@ export default function EditProduct() {
     price: product?.price ?? 10,
     description: product?.description ?? "",
     imageSrc: product?.imageSrc ?? selectedFile,
-    category: product?.category ?? ({} as ProductCategory),
+    category: product?.category ?? ({_id:"", name:""}),
     stock: product?.stock ?? 1,
     featured: product?.featured ?? false,
     name: product?.name ?? "",
@@ -180,8 +180,14 @@ export default function EditProduct() {
                         "block w-full  rounded border-0 p-3 text-gray-700 ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset text-sm outline-none",
                         errors.name && touched.name ? "ring-red-500" : "focus:ring-indigo-500",
                       )}
+                      onChange={(event) => {
+                        const selectedCategory = categories?.find(
+                          (category) => category.name === event.target.value,
+                        );
+                        setFieldValue("category", selectedCategory);
+                      }}
                     >
-                      <option disabled>select category</option>
+                      <option>select category</option>
                       {(categories ?? []).map((category) => {
                         return (
                           <option key={category._id} value={category.name}>
