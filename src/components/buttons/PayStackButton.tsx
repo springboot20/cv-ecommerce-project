@@ -32,13 +32,15 @@ const PayButton: React.FC = () => {
       });
   };
 
-  return (
+  return isLoading ? (
+    <Loader />
+  ) : (
     <button
       type="button"
       onClick={initializePayment}
       className="text-base font-medium text-white py-2.5 px-2 rounded bg-gray-800 hover:bg-gray-600 w-full block focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-gray-600"
     >
-      {isLoading ? <Loader /> : "Confirm order | Pay with Paystack"}
+      "Confirm order | Pay with Paystack"
     </button>
   );
 };
