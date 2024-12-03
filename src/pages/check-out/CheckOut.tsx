@@ -39,6 +39,8 @@ const CheckOut: React.FC = () => {
   const savedInfo = LocalStorage.get("saveInfo") as boolean;
   const savedAddressInfo = LocalStorage.get("user-address") as AddressInterface;
 
+  const [addressId, setAddressId] = useState<string>(savedAddressInfo);
+
   const initialValues: InitialValues = {
     email: "",
     country: savedAddressInfo?.country || "",
@@ -81,6 +83,7 @@ const CheckOut: React.FC = () => {
       }).unwrap();
 
       if (address.statusCode.toString().startsWith("2")) {
+        setAddressId(address.data.address?._id);
         dispatch(
           saveUserAddressInfo({
             saveInfo: values.saveinfo,
@@ -413,7 +416,7 @@ const CheckOut: React.FC = () => {
             </button>
           </div>
         </form>
-        <OrderSummary done={done}/>
+        <OrderSummary done={done} />
       </div>
     </main>
   );
