@@ -96,7 +96,7 @@ export default function EditProduct() {
     }
   }
 
-  console.log(`initial values: ${initialValues}`);
+  console.log(`initial values: ${JSON.stringify(initialValues)}`);
 
   useEffect(() => {
     return () => {
@@ -118,7 +118,7 @@ export default function EditProduct() {
         back
       </Button>
       <Formik initialValues={initialValues} onSubmit={onSubmit}>
-        {({ errors, touched, setFieldValue }) => {
+        {({ errors, touched, values, setFieldValue }) => {
           return (
             <Form className="w-full bg-white p-6 border gap-10 grid grid-cols-1 xl:grid-cols-3">
               <div className="col-span-full xl:col-span-2">
@@ -177,9 +177,12 @@ export default function EditProduct() {
                       name="category"
                       as="select"
                       className={clx(
-                        "block w-full  rounded border-0 p-3 text-gray-700 ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset text-sm outline-none",
-                        errors.name && touched.name ? "ring-red-500" : "focus:ring-indigo-500",
+                        "block w-full rounded border-0 p-3 text-gray-700 ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset text-sm outline-none",
+                        errors.category && touched.category
+                          ? "ring-red-500"
+                          : "focus:ring-indigo-500",
                       )}
+                      value={values.category.name}
                       onChange={(event: any) => {
                         const selectedCategory = categories?.find(
                           (category) => category.name === event.target.value,
@@ -187,14 +190,12 @@ export default function EditProduct() {
                         setFieldValue("category", selectedCategory);
                       }}
                     >
-                      <option>select category</option>
-                      {(categories ?? []).map((category) => {
-                        return (
-                          <option key={category._id} value={category.name}>
-                            {category.name}
-                          </option>
-                        );
-                      })}
+                      <option disabled>select category</option>
+                      {(categories ?? []).map((category) => (
+                        <option key={category._id} value={category.name}>
+                          {category.name}
+                        </option>
+                      ))}
                     </Field>
                   </div>
                 </fieldset>
