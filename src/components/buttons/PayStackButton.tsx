@@ -9,12 +9,12 @@ const PayButton: React.FC = () => {
     createPaystackOrder()
       .unwrap()
       .then((response) => {
-        const { authorizationUrl } = response.data;
+        const { url } = response.data;
 
         console.log(response);
 
         // Open Paystack payment page in a new tab
-        const paymentWindow = window.open(authorizationUrl);
+        const paymentWindow = window.open(url);
 
         if (paymentWindow) {
           const interval = setInterval(() => {
