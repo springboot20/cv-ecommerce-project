@@ -9,10 +9,11 @@ interface Response {
 
 export const OrderSlice = ApiService.injectEndpoints({
   endpoints: (builder) => ({
-    createPaystackOrder: builder.mutation<Response, void>({
-      query: () => ({
+    createPaystackOrder: builder.mutation<Response, string>({
+      query: (addressId) => ({
         url: "/orders/provider/paystack",
         method: "POST",
+        body: { addressId },
       }),
     }),
 
@@ -26,7 +27,4 @@ export const OrderSlice = ApiService.injectEndpoints({
   }),
 });
 
-export const {
-  useCreatePaystackOrderMutation,
-  useUpdatePaystackOrderMutation,
-} = OrderSlice;
+export const { useCreatePaystackOrderMutation, useUpdatePaystackOrderMutation } = OrderSlice;

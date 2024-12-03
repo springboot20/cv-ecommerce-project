@@ -39,7 +39,7 @@ const CheckOut: React.FC = () => {
   const savedInfo = LocalStorage.get("saveInfo") as boolean;
   const savedAddressInfo = LocalStorage.get("user-address") as AddressInterface;
 
-  const [addressId, setAddressId] = useState<string>(savedAddressInfo);
+  const [addressId, setAddressId] = useState<string>(savedAddressInfo._id);
 
   const initialValues: InitialValues = {
     email: "",
@@ -416,7 +416,7 @@ const CheckOut: React.FC = () => {
             </button>
           </div>
         </form>
-        <OrderSummary done={done} />
+        <OrderSummary done={done} addressId={addressId}/>
       </div>
     </main>
   );
