@@ -20,7 +20,7 @@ const PayButton: React.FC<{ addressId: string }> = ({ addressId }) => {
         if (paymentWindow) {
           const interval = setInterval(() => {
             if (paymentWindow.closed) {
-              toast(data.message, { type: "success" });
+              toast(response?.message, { type: "success" });
               clearInterval(interval);
             }
           }, 1000);
