@@ -1,6 +1,7 @@
 import React from "react";
 import { Loader } from "../Loader";
 import { useCreatePaystackOrderMutation } from "../../features/order/order.slice";
+import { toast } from "react-toastify";
 
 const PayButton: React.FC<{ addressId: string }> = ({ addressId }) => {
   const [createPaystackOrder, { isLoading }] = useCreatePaystackOrderMutation();
@@ -19,7 +20,7 @@ const PayButton: React.FC<{ addressId: string }> = ({ addressId }) => {
         if (paymentWindow) {
           const interval = setInterval(() => {
             if (paymentWindow.closed) {
-              window.location.href = "/checkout-success";
+              toast(data.message, { type: "success" });
               clearInterval(interval);
             }
           }, 1000);
