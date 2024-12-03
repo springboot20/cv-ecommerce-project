@@ -413,7 +413,7 @@ const CheckOut: React.FC = () => {
             </button>
           </div>
         </form>
-        <OrderSummary email={values.email} done={done}/>
+        <OrderSummary done={done}/>
       </div>
     </main>
   );

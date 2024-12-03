@@ -7,7 +7,7 @@ import { toast } from "react-toastify";
 import { Link } from "react-router-dom";
 import PayButton from "../../components/buttons/PayStackButton";
 
-export const OrderSummary: React.FC<{ done: boolean; email: string }> = ({ done, email }) => {
+export const OrderSummary: React.FC<{ done: boolean }> = ({ done }) => {
   const {
     cart,
     handleCancelEdit,
@@ -161,11 +161,7 @@ export const OrderSummary: React.FC<{ done: boolean; email: string }> = ({ done,
 
         {done && (
           <div className="px-5 py-4">
-            <PayButton
-              requestData={{
-                email,
-              }}
-            />
+            <PayButton />
           </div>
         )}
       </div>

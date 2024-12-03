@@ -2,13 +2,11 @@ import React from "react";
 import { Loader } from "../Loader";
 import { useCreatePaystackOrderMutation } from "../../features/order/order.slice";
 
-const PayButton: React.FC<{ requestData: { email: string } }> = ({ requestData }) => {
+const PayButton: React.FC = () => {
   const [createPaystackOrder, { isLoading }] = useCreatePaystackOrderMutation();
 
-  console.log(requestData);
-
   const initializePayment = async () => {
-    createPaystackOrder({ ...requestData })
+    createPaystackOrder()
       .unwrap()
       .then((response) => {
         const { authorizationUrl } = response.data;
