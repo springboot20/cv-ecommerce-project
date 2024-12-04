@@ -59,7 +59,7 @@ export const ProductSlice = ApiService.injectEndpoints({
 
         return {
           url: `/products/${_id}`,
-          method: "PATCH",
+          method: "PUT",
           body: formData,
         };
       },
