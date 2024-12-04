@@ -44,6 +44,31 @@ export const orderSchema = yup.object().shape({
   phone: yup.string().required("phone is required"),
 });
 
+export const updateOrderSchema = yup.object().shape({
+  firstname: yup
+    .string()
+    .matches(nameRule, {
+      message: "only allow letters, number, and underscore",
+    })
+    .optional(),
+
+  lastname: yup
+    .string()
+    .matches(nameRule, {
+      message: "only allow letters, number, and underscore",
+    })
+    .optional(),
+
+  email: yup.string().email({ message: "Enter a valid email address" }).optional(),
+
+  address_line_one: yup.string().optional(),
+  country: yup.string().optional(),
+  city: yup.string().optional(),
+  state: yup.string().optional(),
+  zipcode: yup.number().optional(),
+  phone: yup.string().optional(),
+});
+
 export const registerSchema = yup.object().shape({
   username: yup
     .string()

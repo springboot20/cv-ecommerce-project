@@ -54,8 +54,8 @@ export const AddressSlice = ApiService.injectEndpoints({
       Pick<AddressInterface, "_id"> & Partial<AddressInterface>
     >({
       query: ({ _id, ...patch }) => ({
-        url: `/addresses/${_id}`,
-        method: "PATCH",
+        url: `/addresses`,
+        method: "PUT",
         body: patch,
       }),
       invalidatesTags: (_, __, { _id }) => [{ type: "Address", id: _id }],

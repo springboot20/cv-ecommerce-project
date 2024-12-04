@@ -7,7 +7,7 @@ const PayButton: React.FC<{ addressId: string }> = ({ addressId }) => {
   const [createPaystackOrder, { isLoading }] = useCreatePaystackOrderMutation();
 
   const initializePayment = async () => {
-   await createPaystackOrder(addressId)
+    await createPaystackOrder(addressId)
       .unwrap()
       .then((response) => {
         const { url } = response.data;
@@ -34,14 +34,16 @@ const PayButton: React.FC<{ addressId: string }> = ({ addressId }) => {
   };
 
   return isLoading ? (
-    <Loader />
+    <div className="relative p-4">
+      <Loader />
+    </div>
   ) : (
     <button
       type="button"
       onClick={initializePayment}
       className="text-base font-medium text-white py-2.5 px-2 rounded bg-gray-800 hover:bg-gray-600 w-full block focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-gray-600"
     >
-      "Confirm order | Pay with Paystack"
+      Confirm order | Pay with Paystack
     </button>
   );
 };
