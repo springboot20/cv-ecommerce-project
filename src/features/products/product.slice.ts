@@ -19,12 +19,19 @@ interface Response {
 export const ProductSlice = ApiService.injectEndpoints({
   endpoints: (builder) => ({
     createProduct: builder.mutation<Response, ProductRequest>({
-      query: (data) => ({
-        url: "/products",
-        method: "POST",
-        body: data,
-        formData: true,
-      }),
+      query: (data) => {
+        const formData = new FormData();
+
+        Object.keys(data).forEach((key) => {
+          formData.append(key, data[key]);
+        });
+
+        return {
+          url: "/products",
+          method: "POST",
+          body: formData,
+        };
+      },
     }),
 
     getAllProducts: builder.query<Response, ProductQuery>({
@@ -54,7 +61,6 @@ export const ProductSlice = ApiService.injectEndpoints({
           url: `/products/${_id}`,
           method: "PATCH",
           body: formData,
-          formData: true,
         };
       },
       invalidatesTags: (_, __, { _id }) => [{ type: "Product", id: _id }],

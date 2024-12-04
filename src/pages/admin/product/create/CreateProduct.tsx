@@ -49,32 +49,16 @@ export default function CreateNewProduct() {
   ) {
     console.log(values);
     try {
-      const formData = new FormData();
+      await addCategory({ name: values.category }).unwrap();
+      const response = await createProduct(values).unwrap();
 
-      const categoryReponse = await addCategory({ name: values.category }).unwrap();
+      toast(response.message, {
+        type: "success",
+      });
 
-      formData.append("description", values.description);
-      formData.append("price", values.price.toString());
-      formData.append("imageSrc", values.imageSrc as Blob);
-      formData.append("category", values.category);
-      formData.append("stock", values.stock.toString());
-      formData.append("featured", values.featured ? "true" : "false");
-      formData.append("name", values.name);
-
-      if (categoryReponse.statusCode.toString().startsWith("2")) {
-        const response = await createProduct(formData).unwrap();
-        const data = await response.data;
-
-        toast(response.message, {
-          type: "success",
-        });
-        console.log(formData);
-
-        await new Promise((resolve) => setTimeout(resolve, 1500));
-        resetForm();
-        navigate("/admin/products/all", { replace: true });
-        return data;
-      }
+      await new Promise((resolve) => setTimeout(resolve, 1500));
+      navigate("/admin/products/all", { replace: true });
+      resetForm();
     } catch (error: any) {
       toast.error(error.error);
       toast.error(error.data.message);
@@ -141,6 +125,9 @@ export default function CreateNewProduct() {
                   <Field
                     name="category"
                     as="select"
+                    onChange={(e: any) => {
+                      setFieldValue("category", e.target.value);
+                    }}
                     className={clx(
                       "block w-full  rounded border-0 p-3 text-gray-700 ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset text-sm outline-none",
                       errors.name && touched.name ? "ring-red-500" : "focus:ring-indigo-500",
