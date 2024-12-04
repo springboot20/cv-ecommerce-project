@@ -150,6 +150,7 @@ export default function CreateNewProduct() {
                     <option>fasion</option>
                     <option>kitchen</option>
                     <option>electronics</option>
+                    <option>cream</option>
                     <option>office</option>
                     <option>sneakers</option>
                   </Field>

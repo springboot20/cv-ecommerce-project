@@ -23,7 +23,7 @@ interface InitialValuesInterface {
   price: number;
   description: string;
   imageSrc: File | ImageSrcType | null;
-  category: ProductCategory;
+  category: string;
   stock: number;
   name: string;
   featured: boolean;
@@ -68,7 +68,7 @@ export default function EditProduct() {
     price: product?.price ?? 10,
     description: product?.description ?? "",
     imageSrc: product?.imageSrc ?? selectedFile,
-    category: product?.category ?? { _id: "", name: "" },
+    category: product?.category?.name ?? "",
     stock: product?.stock ?? 1,
     featured: product?.featured ?? false,
     name: product?.name ?? "",
@@ -182,12 +182,12 @@ export default function EditProduct() {
                           ? "ring-red-500"
                           : "focus:ring-indigo-500",
                       )}
-                      value={values.category.name}
+                      value={values.category}
                       onChange={(event: any) => {
                         const selectedCategory = categories?.find(
                           (category) => category.name === event.target.value,
                         );
-                        setFieldValue("category", selectedCategory);
+                        setFieldValue("category", selectedCategory?.name);
                       }}
                     >
                       <option disabled>select category</option>
