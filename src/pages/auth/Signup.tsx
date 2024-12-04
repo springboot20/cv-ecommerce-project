@@ -47,19 +47,21 @@ const Signup = () => {
     initialValues,
     validationSchema: registerSchema,
     onSubmit: async (values, actions) => {
-      try {
-        const response = await register(values).unwrap();
+      console.log(values);
 
-        if (response.statusCode.toString().startsWith("2")) {
+      await register(values)
+        .unwrap()
+        .then(async (response) => {
+          console.log(response);
+
           toast.success(response.data.message);
           await new Promise((resolve) => setTimeout(resolve, 1500));
-          navigate("/", { replace: true });
+          navigate("/login", { replace: true });
           actions.resetForm();
-        }
-      } catch (err: any) {
-        toast.error(err.data.message);
-        toast.error(err.error);
-      }
+        })
+        .catch((error) => {
+          toast.error(error.error || error.data.message);
+        });
     },
   });
 

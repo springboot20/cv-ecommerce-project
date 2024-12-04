@@ -26,7 +26,7 @@ const Cart = () => {
 
   let shipping = 5.0;
   const OrderTotal = (): number => {
-    return cart?.totalCart * shipping;
+    return cart?.totalCart ?? 1 * shipping;
   };
 
   const navigate = useNavigate();
@@ -166,7 +166,7 @@ const Cart = () => {
                 <li className="border-b py-3 px-2 flex items-center justify-between">
                   <span className="text-gray-600 text-sm font-normal capitalize">subtotal</span>
                   <span className="font-semibold text-sm text-gray-800">
-                    {formatPrice(cart.totalCart)}
+                    {formatPrice(cart?.totalCart ?? 0)}
                   </span>
                 </li>
                 <li className="border-b py-3 px-2 flex items-center justify-between">

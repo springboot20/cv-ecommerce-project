@@ -4,13 +4,14 @@ import { Form, Formik } from "formik";
 import { clx } from "../../../util";
 import { PhotoIcon } from "@heroicons/react/24/outline";
 
-interface InitialValuesInterface {
-  avatar: File | null;
+interface UserAvatarInterface {
+  url: string;
+  public_id: string;
 }
 
-const initialValues: InitialValuesInterface = {
-  avatar: null,
-};
+interface InitialValuesInterface {
+  avatar: File | UserAvatarInterface | null;
+}
 
 export default function Profile() {
   const {
@@ -24,8 +25,13 @@ export default function Profile() {
     handleDragOver,
   } = useFile();
 
+
+  const initialValues:InitialValuesInterface = {
+    avatar:selectedFile
+  }
+
   async function onSubmit(values: InitialValuesInterface) {
-    console.log(values)
+    console.log(values);
   }
 
   return (
