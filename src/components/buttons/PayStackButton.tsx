@@ -7,7 +7,7 @@ const PayButton: React.FC<{ addressId: string }> = ({ addressId }) => {
   const [createPaystackOrder, { isLoading }] = useCreatePaystackOrderMutation();
 
   const initializePayment = async () => {
-    createPaystackOrder(addressId)
+   await createPaystackOrder(addressId)
       .unwrap()
       .then((response) => {
         const { url } = response.data;
