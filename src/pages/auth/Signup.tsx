@@ -52,11 +52,8 @@ const Signup = () => {
       await register(values)
         .unwrap()
         .then(async (response) => {
-          console.log(response);
-
           toast.success(response.data.message);
-          await new Promise((resolve) => setTimeout(resolve, 1500));
-          navigate("/login", { replace: true });
+          await Promise.resolve(setTimeout(() => navigate("/login", { replace: true }), 1500));
           actions.resetForm();
         })
         .catch((error) => {
@@ -69,6 +66,7 @@ const Signup = () => {
     <motion.div {...motionConfig}>
       <div className="px-8 flex min-h-screen justify-center items-center bg-[#f2f2f2]">
         <form
+          id="form"
           onSubmit={handleSubmit}
           className="max-w-xl w-full mx-auto border bg-white rounded-lg p-6"
         >

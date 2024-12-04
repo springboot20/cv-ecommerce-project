@@ -15,7 +15,7 @@ const PublicRoute: React.FC<{ children: React.ReactNode }> = ({ children }) => {
 export const AdminPublicRoute: React.FC<{ children: React.ReactNode }> = ({ children }) => {
   const auth = useAppSelector((state: RootState) => state.auth);
 
-  if (auth.user || auth.tokens) {
+  if (auth.admin) {
     return (
       <Navigate
         to="/admin/products/overview"

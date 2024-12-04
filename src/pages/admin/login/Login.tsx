@@ -6,8 +6,10 @@ import { loginSchema } from "../../../schema/Schema";
 import { IconType } from "../../../components/icon/IconType";
 import { motion } from "framer-motion";
 import { Button } from "@material-tailwind/react";
-import { useLoginMutation } from "../../../features/auth/auth.slice";
+import { useAdminLoginMutation } from "../../../features/auth/auth.slice";
 import { toast } from "react-toastify";
+import { useAppDispatch } from "../../../hooks/redux/redux.hooks";
+import { setCredentials } from "../../../features/auth/auth.reducer";
 
 interface SignInInitialValues {
   email: string;
@@ -37,7 +39,8 @@ const motionConfig = {
 
 const AdminLogin = () => {
   const navigate = useNavigate();
-  const [login, { isLoading }] = useLoginMutation();
+  const [adminLogin, { isLoading }] = useAdminLoginMutation();
+  const dispatch = useAppDispatch();
 
   const [showPassword, setShowPassword] = useState(false);
 
@@ -45,9 +48,12 @@ const AdminLogin = () => {
     initialValues,
     validationSchema: loginSchema,
     onSubmit: async (values, actions) => {
-      await login(values)
+      await adminLogin(values)
         .unwrap()
         .then(async (res) => {
+          const { tokens, user } = res.data;
+          dispatch(setCredentials({ tokens, admin: user }));
+
           toast.success(res.data.message);
           await Promise.resolve(setTimeout(() => navigate("/admin/products/overview"), 2000));
           actions.resetForm();

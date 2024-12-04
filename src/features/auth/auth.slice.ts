@@ -36,6 +36,14 @@ export const AuthSlice = ApiService.injectEndpoints({
       }),
     }),
 
+    adminLogin: builder.mutation<Response, LoginRequest>({
+      query: (data) => ({
+        url: "/users/login",
+        method: "POST",
+        body: data,
+      }),
+    }),
+
     logout: builder.mutation<Response, void>({
       query: () => ({
         url: "/users/logout",
@@ -45,4 +53,4 @@ export const AuthSlice = ApiService.injectEndpoints({
   }),
 });
 
-export const { useRegisterMutation, useLoginMutation, useLogoutMutation } = AuthSlice;
+export const { useRegisterMutation, useLoginMutation, useLogoutMutation, useAdminLoginMutation } = AuthSlice;

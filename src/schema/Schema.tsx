@@ -51,11 +51,7 @@ export const registerSchema = yup.object().shape({
       message: "only allow letters, number, and underscore",
     })
     .required("username is required"),
-
-  avatar: yup.string().required("avatar is required"),
-
   email: yup.string().email("Invalid email address").required("email is required"),
-
   password: yup
     .string()
     .matches(passwordRule, {

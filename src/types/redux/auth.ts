@@ -14,6 +14,7 @@ export interface User {
 
 export type InitialState = {
   user: User | null;
+  admin: User | null;
   tokens: Token | null;
   isAuthenticated: boolean;
 };
