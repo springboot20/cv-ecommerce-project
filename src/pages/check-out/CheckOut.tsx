@@ -45,7 +45,13 @@ const CheckOut: React.FC = () => {
   const savedInfo = LocalStorage.get("saveInfo") as boolean;
   const savedAddressInfo = LocalStorage.get("user-address") as AddressInterface;
 
-  const [addressId, setAddressId] = useState<string>(savedAddressInfo?._id);
+  const [addressId, setAddressId] = useState<string>(() => {
+    if (savedAddressInfo?._id) {
+      return savedAddressInfo?._id;
+    } else {
+      return null!;
+    }
+  });
 
   const initialValues: InitialValues = {
     email: "",
