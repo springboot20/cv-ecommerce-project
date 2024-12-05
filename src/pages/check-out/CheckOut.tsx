@@ -1,5 +1,5 @@
 import { useFormik } from "formik";
-import { orderSchema, updateOrderSchema } from "../../schema/Schema";
+import { orderSchema } from "../../schema/Schema";
 import countriesData from "../../data/countries";
 import React, { Fragment, useCallback, useState } from "react";
 import {
@@ -7,12 +7,8 @@ import {
   useUpdateAddressMutation,
 } from "../../features/order/address.slice";
 import { OrderSummary } from "./OrderSummary";
-import { AddressInterface } from "../../types/redux/order";
 import { classNames } from "../../helpers";
 import { toast } from "react-toastify";
-import { useAppDispatch } from "../../hooks/redux/redux.hooks";
-import { saveUserAddressInfo } from "../../features/order/address.reducer";
-import { LocalStorage } from "../../util";
 import VerifyPaystackPayment from "./verify/VerifyPayment";
 
 export interface InitialValues {
@@ -26,7 +22,6 @@ export interface InitialValues {
   lastname: string;
   address_line_one: string;
   address_line_two: string;
-  saveinfo: boolean;
 }
 
 type Option = {
@@ -39,41 +34,26 @@ const CheckOut: React.FC = () => {
   const [updateAddress] = useUpdateAddressMutation();
   const [countries] = useState<Option[]>(countriesData);
   const [done, setDone] = useState(false);
-  const dispatch = useAppDispatch();
-
-  const [editInfo, setEditingInfo] = useState<boolean>(true);
-
-  const savedInfo = LocalStorage.get("saveInfo") as boolean;
-  const savedAddressInfo = LocalStorage.get("user-address") as AddressInterface;
-
-  const [addressId, setAddressId] = useState<string>(() => {
-    if (savedAddressInfo?._id) {
-      return savedAddressInfo?._id;
-    } else {
-      return null!;
-    }
-  });
+  const [addressId, setAddressId] = useState<string>("");
 
   const initialValues: InitialValues = {
     email: "",
-    country: savedAddressInfo?.country || "",
-    city: savedAddressInfo?.city || "",
-    state: savedAddressInfo?.state || "",
-    zipcode: savedAddressInfo?.zipcode?.toString() || "", // Ensure zipcode is a string
-    phone: savedAddressInfo?.phone || "",
-    firstname: savedAddressInfo?.firstname || "",
-    lastname: savedAddressInfo?.lastname || "",
-    address_line_one: savedAddressInfo?.address_line_one || "",
-    address_line_two: savedAddressInfo?.address_line_two || "",
-    saveinfo: savedInfo ?? false,
+    country: "",
+    city: "",
+    state: "",
+    zipcode: "", // Ensure zipcode is a string
+    phone: "",
+    firstname: "",
+    lastname: "",
+    address_line_one: "",
+    address_line_two: "",
   };
 
-  const { handleChange, values, handleBlur, touched, errors, handleSubmit, setFieldValue } =
-    useFormik({
-      initialValues,
-      validationSchema: editInfo ? updateOrderSchema : orderSchema,
-      onSubmit,
-    });
+  const { handleChange, values, handleBlur, touched, errors, handleSubmit } = useFormik({
+    initialValues,
+    validationSchema: orderSchema,
+    onSubmit,
+  });
 
   const handleAddressMutation = useCallback(
     async (data: InitialValues) => {
@@ -84,22 +64,15 @@ const CheckOut: React.FC = () => {
 
         if (response.statusCode.toString().startsWith("2")) {
           setAddressId(response.data.address?._id);
-          dispatch(saveUserAddressInfo({ saveInfo: values.saveinfo }));
-          toast(response?.message, { type: "success" });
-          setEditingInfo(!addressId); // Toggle based on action
           setDone(true);
+          toast(response?.message, { type: "success" });
         }
       } catch (error: any) {
         toast(error?.error || error?.data?.message, { type: "error" });
       }
     },
-    [addressId, values.saveinfo],
+    [addressId],
   );
-
-  const handleCancelEdit = () => {
-    setEditingInfo(false);
-    setDone(false);
-  };
 
   async function onSubmit(values: InitialValues) {
     await handleAddressMutation(values);
@@ -117,24 +90,6 @@ const CheckOut: React.FC = () => {
                   <h1 className="text-xl font-medium capitalize text-gray-600 mb-3">
                     contact information
                   </h1>
-                  <div className="space-x-3">
-                    <label
-                      htmlFor="saveinfo"
-                      className="capitalize text-sm font-normal text-gray-700 sm:text-base"
-                    >
-                      save info
-                    </label>
-                    <input
-                      type="checkbox"
-                      name="saveinfo"
-                      id="saveinfo"
-                      checked={values.saveinfo}
-                      className="relative w-12 h-6 rounded-2xl bg-gray-100 !appearance-none border shadow before:absolute before:h-6 before:w-6 before:content-[''] before:rounded-full before:border before:scale-75 before:top-1/2 before:-translate-y-1/2 checked:before:-translate-x-[calc(100%-3rem)] before:bg-white checked:!bg-none pointer-events-auto"
-                      onChange={(e) => {
-                        setFieldValue("saveinfo", e.target.checked);
-                      }}
-                    />
-                  </div>
                 </div>
 
                 <div className="space-y-1.5">
@@ -151,7 +106,6 @@ const CheckOut: React.FC = () => {
                     value={values.email}
                     onChange={handleChange}
                     onBlur={handleBlur}
-                    disabled={editInfo}
                     placeholder="contact address"
                     className={classNames(
                       "block w-full rounded border-0 p-3 text-gray-700 ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset text-sm outline-none disabled:bg-transparent disabled:text-gray-400",
@@ -183,7 +137,6 @@ const CheckOut: React.FC = () => {
                       value={values.firstname}
                       onBlur={handleBlur}
                       onChange={handleChange}
-                      disabled={editInfo}
                       placeholder="first name"
                       className={classNames(
                         "block w-full rounded border-0 p-3 text-gray-700 ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset text-sm outline-none disabled:bg-transparent disabled:text-gray-400",
@@ -210,7 +163,6 @@ const CheckOut: React.FC = () => {
                       onChange={handleChange}
                       placeholder="last name"
                       onBlur={handleBlur}
-                      disabled={editInfo}
                       className={classNames(
                         "block w-full rounded border-0 p-3 text-gray-700 ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset text-sm outline-none disabled:bg-transparent disabled:text-gray-400",
                         errors.lastname && touched.lastname ? "ring-red-600 ring-[0.15rem]" : "",
@@ -235,7 +187,6 @@ const CheckOut: React.FC = () => {
                       value={values.address_line_one}
                       onChange={handleChange}
                       onBlur={handleBlur}
-                      disabled={editInfo}
                       placeholder="address"
                       className={classNames(
                         "block w-full rounded border-0 p-3 text-gray-700 ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset text-sm outline-none disabled:bg-transparent disabled:text-gray-400",
@@ -263,7 +214,6 @@ const CheckOut: React.FC = () => {
                       value={values.address_line_two}
                       onBlur={handleBlur}
                       onChange={handleChange}
-                      disabled={editInfo}
                       placeholder="apartment, suite, etc"
                       className={classNames(
                         "block w-full rounded border-0 p-3 text-gray-700 ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset text-sm outline-none disabled:bg-transparent disabled:text-gray-400",
@@ -291,7 +241,6 @@ const CheckOut: React.FC = () => {
                       value={values.city}
                       onChange={handleChange}
                       onBlur={handleBlur}
-                      disabled={editInfo}
                       placeholder="city"
                       className={classNames(
                         "block w-full rounded border-0 p-3 text-gray-700 ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset text-sm outline-none disabled:bg-transparent disabled:text-gray-400",
@@ -314,7 +263,6 @@ const CheckOut: React.FC = () => {
                       name="country"
                       value={values.country}
                       onChange={handleChange}
-                      disabled={editInfo}
                       className={classNames(
                         "block w-full rounded border-0 p-3 text-gray-700 ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset text-sm outline-none disabled:bg-transparent disabled:text-gray-400",
                         errors.country && touched.country ? "ring-red-600 ring-[0.15rem]" : "",
@@ -347,7 +295,6 @@ const CheckOut: React.FC = () => {
                       value={values.state}
                       onChange={handleChange}
                       onBlur={handleBlur}
-                      disabled={editInfo}
                       placeholder="state"
                       className={classNames(
                         "block w-full rounded border-0 p-3 text-gray-700 ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset text-sm outline-none disabled:bg-transparent disabled:text-gray-400",
@@ -373,7 +320,6 @@ const CheckOut: React.FC = () => {
                       value={values.zipcode}
                       onChange={handleChange}
                       onBlur={handleBlur}
-                      disabled={editInfo}
                       placeholder="12345"
                       className={classNames(
                         "block w-full appearance-none leading-normal rounded border-0 p-3 text-gray-700 ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset text-sm outline-none disabled:bg-transparent disabled:text-gray-400",
@@ -399,7 +345,6 @@ const CheckOut: React.FC = () => {
                       value={values.phone}
                       onChange={handleChange}
                       onBlur={handleBlur}
-                      disabled={editInfo}
                       placeholder="phone"
                       className={classNames(
                         "block w-full rounded border-0 p-3 text-gray-700 ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset text-sm outline-none disabled:bg-transparent disabled:text-gray-400",
@@ -415,39 +360,6 @@ const CheckOut: React.FC = () => {
             </Fragment>
 
             <div className="mt-6 flex items-center justify-between space-x-3">
-              {/* Edit Button */}
-              {editInfo && !done && (
-                <button
-                  type="button"
-                  onClick={() => setEditingInfo(false)}
-                  className="px-4 py-2 bg-blue-600 text-white rounded-md hover:bg-blue-700 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:ring-offset-2"
-                >
-                  Edit
-                </button>
-              )}
-
-              {/* Cancel Button */}
-              {!editInfo && (
-                <button
-                  type="button"
-                  onClick={handleCancelEdit}
-                  className="px-4 py-2 bg-gray-300 text-gray-700 rounded-md hover:bg-gray-400 focus:outline-none focus:ring-2 focus:ring-gray-500 focus:ring-offset-2"
-                >
-                  Cancel
-                </button>
-              )}
-
-              {/* Save Button */}
-              {!editInfo && (
-                <button
-                  type="submit"
-                  className="px-4 py-2 bg-green-600 text-white rounded-md hover:bg-green-700 focus:outline-none focus:ring-2 focus:ring-green-500 focus:ring-offset-2"
-                >
-                  Save Changes
-                </button>
-              )}
-
-              {/* Submit Button */}
               {done && (
                 <button
                   type="submit"
