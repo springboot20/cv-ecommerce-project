@@ -10,5 +10,67 @@ export interface AddressInterface {
   phone: string;
   firstname: string;
   lastname: string;
-  createdAt:string
+  createdAt: string;
 }
+
+type ImageSrc = {
+  url: string;
+  public_id: string;
+  _id: string;
+};
+
+type Product = {
+  _id: string;
+  user: string;
+  name: string;
+  featured: boolean;
+  price: number;
+  description: string;
+  imageSrc: ImageSrc;
+  category: string;
+  stock: number;
+  subImgs: string[];
+  createdAt: string;
+  updatedAt: string;
+  __v: number;
+};
+
+type CartItem = {
+  _id: string;
+  product: Product;
+  quantity: number;
+};
+
+type Cart = {
+  _id: string;
+  items: CartItem[];
+  totalCart: number;
+};
+
+type OrderItem = {
+  quantity: number;
+  productId: string;
+  _id: string;
+};
+
+type Order = {
+  _id: string;
+  customer: string;
+  address: string;
+  items: OrderItem[];
+  orderStatus: string;
+  isPaymentDone: boolean;
+  paymentId: string;
+  paymentMethod: string;
+  orderPrice: number;
+  createdAt: string;
+  updatedAt: string;
+  __v: number;
+};
+
+export type OrderResponse = {
+  data: {
+    cart: Cart;
+    order: Order;
+  };
+};
