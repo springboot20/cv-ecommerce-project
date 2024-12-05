@@ -78,8 +78,18 @@ export default function Users() {
 
   return (
     <div className="mx-auto max-w-6xl mt-4">
-      <Card className="h-full w-full !rounded !shadow">
-        <CardBody className="overflow-x-auto p-0">
+      <Card
+        className="h-full w-full !rounded !shadow"
+        placeholder={undefined}
+        onPointerEnterCapture={undefined}
+        onPointerLeaveCapture={undefined}
+      >
+        <CardBody
+          className="overflow-x-auto p-0"
+          placeholder={undefined}
+          onPointerEnterCapture={undefined}
+          onPointerLeaveCapture={undefined}
+        >
           {(users || []).length || isLoading ? (
             <table className="w-full min-w-max table-auto text-left">
               <>
@@ -95,11 +105,20 @@ export default function Users() {
                           className="border-y border-blue-gray-100 bg-blue-gray-50/50 p-4"
                         >
                           <div className="flex items-center space-x-3">
-                            {formattedText === "_id" && <Checkbox crossOrigin={undefined} />}
+                            {formattedText === "_id" && (
+                              <Checkbox
+                                crossOrigin={undefined}
+                                onPointerEnterCapture={undefined}
+                                onPointerLeaveCapture={undefined}
+                              />
+                            )}
                             <Typography
                               variant="small"
                               color="blue-gray"
                               className="leading-none opacity-70 font-medium"
+                              placeholder={undefined}
+                              onPointerEnterCapture={undefined}
+                              onPointerLeaveCapture={undefined}
                             >
                               {formattedText === "_id"
                                 ? formattedText.split("_")[1]
@@ -125,11 +144,18 @@ export default function Users() {
                       <tr key={d._id}>
                         <td className={classes}>
                           <div className="flex items-center space-x-3">
-                            <Checkbox crossOrigin={undefined} />
+                            <Checkbox
+                              crossOrigin={undefined}
+                              onPointerEnterCapture={undefined}
+                              onPointerLeaveCapture={undefined}
+                            />
                             <Typography
                               variant="small"
                               color="blue-gray"
                               className="font-normal opacity-70"
+                              placeholder={undefined}
+                              onPointerEnterCapture={undefined}
+                              onPointerLeaveCapture={undefined}
                             >
                               {d._id}
                             </Typography>
@@ -138,8 +164,22 @@ export default function Users() {
 
                         <td className={classes}>
                           <div className="flex items-center gap-3">
-                            <Avatar src={d.avatar?.url} alt={d.username} size="sm" />
-                            <Typography variant="small" color="blue-gray" className="font-normal">
+                            <Avatar
+                              src={d.avatar?.url}
+                              alt={d.username}
+                              size="sm"
+                              placeholder={undefined}
+                              onPointerEnterCapture={undefined}
+                              onPointerLeaveCapture={undefined}
+                            />
+                            <Typography
+                              variant="small"
+                              color="blue-gray"
+                              className="font-normal"
+                              placeholder={undefined}
+                              onPointerEnterCapture={undefined}
+                              onPointerLeaveCapture={undefined}
+                            >
                               {d.username}
                             </Typography>
                           </div>
@@ -150,6 +190,9 @@ export default function Users() {
                             variant="small"
                             color="blue-gray"
                             className="font-normal opacity-70"
+                            placeholder={undefined}
+                            onPointerEnterCapture={undefined}
+                            onPointerLeaveCapture={undefined}
                           >
                             {d.email}
                           </Typography>
@@ -167,7 +210,14 @@ export default function Users() {
                         </td>
 
                         <td className={classes}>
-                          <Typography variant="small" color="blue-gray" className="font-normal">
+                          <Typography
+                            variant="small"
+                            color="blue-gray"
+                            className="font-normal"
+                            placeholder={undefined}
+                            onPointerEnterCapture={undefined}
+                            onPointerLeaveCapture={undefined}
+                          >
                             {formattedDate}
                           </Typography>
                         </td>
@@ -175,13 +225,24 @@ export default function Users() {
                         <td className={classes}>
                           <div className="flex space-x-5 items-center">
                             <Tooltip content="Delete User" className="bg-gray-600">
-                              <IconButton variant="text" onClick={() => handleUserDelete(d._id)}>
+                              <IconButton
+                                variant="text"
+                                onClick={() => handleUserDelete(d._id)}
+                                placeholder={undefined}
+                                onPointerEnterCapture={undefined}
+                                onPointerLeaveCapture={undefined}
+                              >
                                 <TrashIcon className="h-5 w-5 text-red-500" />
                               </IconButton>
                             </Tooltip>
 
                             <Tooltip content="Edit User" className="bg-gray-600">
-                              <IconButton variant="text">
+                              <IconButton
+                                variant="text"
+                                placeholder={undefined}
+                                onPointerEnterCapture={undefined}
+                                onPointerLeaveCapture={undefined}
+                              >
                                 <PencilIcon className="h-5 w-5" />
                               </IconButton>
                             </Tooltip>
@@ -209,15 +270,43 @@ export default function Users() {
             </div>
           )}
         </CardBody>
-        <CardFooter className="flex items-center justify-between border-t border-blue-gray-50 p-4">
-          <Typography variant="small" color="blue-gray" className="font-normal">
+        <CardFooter
+          className="flex items-center justify-between border-t border-blue-gray-50 p-4"
+          placeholder={undefined}
+          onPointerEnterCapture={undefined}
+          onPointerLeaveCapture={undefined}
+        >
+          <Typography
+            variant="small"
+            color="blue-gray"
+            className="font-normal"
+            placeholder={undefined}
+            onPointerEnterCapture={undefined}
+            onPointerLeaveCapture={undefined}
+          >
             Page {page} of {totalPages}
           </Typography>
           <div className="flex gap-2">
-            <Button variant="outlined" size="sm" onClick={handlePreviousPage} className="rounded">
+            <Button
+              variant="outlined"
+              size="sm"
+              onClick={handlePreviousPage}
+              className="rounded"
+              placeholder={undefined}
+              onPointerEnterCapture={undefined}
+              onPointerLeaveCapture={undefined}
+            >
               Previous
             </Button>
-            <Button variant="outlined" size="sm" onClick={handleNextPage} className="rounded">
+            <Button
+              variant="outlined"
+              size="sm"
+              onClick={handleNextPage}
+              className="rounded"
+              placeholder={undefined}
+              onPointerEnterCapture={undefined}
+              onPointerLeaveCapture={undefined}
+            >
               Next
             </Button>
           </div>

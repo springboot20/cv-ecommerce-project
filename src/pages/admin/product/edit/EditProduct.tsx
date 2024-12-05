@@ -113,6 +113,9 @@ export default function EditProduct() {
         className="flex items-center gap-3"
         variant="text"
         onClick={() => navigate("/admin/products/all")}
+        placeholder={undefined}
+        onPointerEnterCapture={undefined}
+        onPointerLeaveCapture={undefined}
       >
         <ArrowLeftCircleIcon className="h-6" />
         back
@@ -367,6 +370,9 @@ export default function EditProduct() {
                   variant="filled"
                   disabled={updating}
                   className="text-base capitalize font-medium border-none ring-2 w-fit ring-gray-200 rounded-md py-2.5 px-6 text-white bg-indigo-500"
+                  placeholder={undefined}
+                  onPointerEnterCapture={undefined}
+                  onPointerLeaveCapture={undefined}
                 >
                   {updating ? "updating..." : "update product"}
                 </Button>

@@ -38,6 +38,9 @@ const EditUser = () => {
         className="flex items-center gap-3"
         variant="text"
         onClick={() => navigate("/admin/products/all")}
+        placeholder={undefined}
+        onPointerEnterCapture={undefined}
+        onPointerLeaveCapture={undefined}
       >
         <ArrowLeftCircleIcon className="h-6" />
         back

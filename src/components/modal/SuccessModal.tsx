@@ -1,10 +1,10 @@
-import React from 'react';
-import { classNames } from '../../helpers';
-import CardBase from '../../assets/Card-Base.png';
-import { XMarkIcon } from '@heroicons/react/24/outline';
-import { Button } from '@material-tailwind/react';
-import { motion } from 'framer-motion';
-import { Link } from 'react-router-dom';
+import React from "react";
+import { classNames } from "../../helpers";
+import CardBase from "../../assets/Card-Base.png";
+import { XMarkIcon } from "@heroicons/react/24/outline";
+import { Button } from "@material-tailwind/react";
+import { motion } from "framer-motion";
+import { Link } from "react-router-dom";
 
 export const SuccessModal: React.FC<{
   open: boolean;
@@ -19,7 +19,7 @@ export const SuccessModal: React.FC<{
     animate: {
       opacity: 1,
       scale: 1,
-      x: '-50%',
+      x: "-50%",
       transition: {
         duration: 1,
       },
@@ -27,31 +27,38 @@ export const SuccessModal: React.FC<{
   };
 
   return (
-    <div className={classNames(open ? 'hidden' : 'block')}>
-      <div className='fixed inset-0 w-full min-h-screen bg-black/30 z-20'></div>
+    <div className={classNames(open ? "hidden" : "block")}>
+      <div className="fixed inset-0 w-full min-h-screen bg-black/30 z-20"></div>
       <motion.div
         {...motionConfig}
-        className={classNames('fixed w-[40rem] h-[45rem] bg-white top-28 left-1/2 z-30')}>
+        className={classNames("fixed w-[40rem] h-[45rem] bg-white top-28 left-1/2 z-30")}
+      >
         <button
           onClick={() => setOpen((prev) => !prev)}
-          className='absolute top-4 right-4 flex h-14 w-14 cursor-pointer bg-white/30  rounded-full items-center justify-center'>
-            <span className="sr-only">close </span>
-          <XMarkIcon className='h-10 text-white' />
+          className="absolute top-4 right-4 flex h-14 w-14 cursor-pointer bg-white/30  rounded-full items-center justify-center"
+        >
+          <span className="sr-only">close </span>
+          <XMarkIcon className="h-10 text-white" />
         </button>
-        <div className=''>
-          <img src={CardBase} alt='' />
+        <div className="">
+          <img src={CardBase} alt="" />
         </div>
 
-        <div className='p-8 flex items-center flex-col justify-between space-y-16'>
-          <div className='text-center'>
-            <h3 className='text-3xl font-semibold'>Order Placed Successfully</h3>
-            <p className='text-xl text-gray-700  mt-4 font-medium'>
+        <div className="p-8 flex items-center flex-col justify-between space-y-16">
+          <div className="text-center">
+            <h3 className="text-3xl font-semibold">Order Placed Successfully</h3>
+            <p className="text-xl text-gray-700  mt-4 font-medium">
               Your Order Has Been Placed Successfully We'll Try To Ship It To Your Door Step As Soon
               We Can. Cheers
             </p>
           </div>
-          <Link to='/products'>
-            <Button className='uppercase text-xl tracking-wider shadow-none rounded-none bg-[#004197]' placeholder={undefined} onPointerEnterCapture={undefined} onPointerLeaveCapture={undefined}>
+          <Link to="/products">
+            <Button
+              className="uppercase text-xl tracking-wider shadow-none rounded-none bg-[#004197]"
+              placeholder={undefined}
+              onPointerEnterCapture={undefined}
+              onPointerLeaveCapture={undefined}
+            >
               continue shopping
             </Button>
           </Link>

@@ -153,6 +153,9 @@ const AdminProducts = () => {
                         variant="outlined"
                         color="red"
                         className="flex items-center gap-2 rounded px-2"
+                        placeholder={undefined}
+                        onPointerEnterCapture={undefined}
+                        onPointerLeaveCapture={undefined}
                       >
                         <TrashIcon className="h-5 w-5" />
                         <span>delete product</span>
@@ -165,6 +168,9 @@ const AdminProducts = () => {
                           navigate(`/admin/products/edit/${product._id}`);
                         }}
                         className="flex items-center gap-2 rounded px-2"
+                        placeholder={undefined}
+                        onPointerEnterCapture={undefined}
+                        onPointerLeaveCapture={undefined}
                       >
                         <PencilIcon className="h-5 w-5" />
                         <span>edit product</span>
@@ -258,6 +264,9 @@ const DeleteModal: React.FC<{
                         }
                       }}
                       className="flex items-center gap-2 rounded px-2"
+                      placeholder={undefined}
+                      onPointerEnterCapture={undefined}
+                      onPointerLeaveCapture={undefined}
                     >
                       {deleteProductLoading ? (
                         <span>deleting product...</span>
@@ -274,6 +283,9 @@ const DeleteModal: React.FC<{
                       color="indigo"
                       onClick={onClose}
                       className="flex items-center gap-2 rounded px-2"
+                      placeholder={undefined}
+                      onPointerEnterCapture={undefined}
+                      onPointerLeaveCapture={undefined}
                     >
                       <XCircleIcon className="h-5 w-5" />
                       <span>cancel delete</span>
