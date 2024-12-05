@@ -18,6 +18,9 @@ export const Pagination: React.FC<{
           className="flex items-center gap-2 leading-[0]"
           onClick={handlePreviousPage}
           disabled={!hasPrevPage}
+          placeholder={undefined}
+          onPointerEnterCapture={undefined}
+          onPointerLeaveCapture={undefined}
         >
           <ArrowLeftIcon strokeWidth={2} className="h-4 w-4" />
           <span>Previous</span>
@@ -30,6 +33,9 @@ export const Pagination: React.FC<{
           className="flex items-center gap-2 leading-[0]"
           onClick={handleNextPage}
           disabled={!hasNextPage}
+          placeholder={undefined}
+          onPointerEnterCapture={undefined}
+          onPointerLeaveCapture={undefined}
         >
           <span>Next</span>
           <ArrowRightIcon strokeWidth={2} className="h-4 w-4" />

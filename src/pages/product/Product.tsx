@@ -81,6 +81,9 @@ const Product = () => {
                       value={ratings}
                       className="h-8"
                       onChange={(value) => setRatingsValue(value)}
+                      placeholder={undefined}
+                      onPointerEnterCapture={undefined}
+                      onPointerLeaveCapture={undefined}
                     />
                   </div>
                 </div>
@@ -95,6 +98,9 @@ const Product = () => {
                       ripple={false}
                       onClick={() => setQuantityInput((prevQuantity) => prevQuantity - 1)}
                       className="p-1 text-gray-800 border focus:ring-offset-2 transition-all flex items-center dark:text-white"
+                      placeholder={undefined}
+                      onPointerEnterCapture={undefined}
+                      onPointerLeaveCapture={undefined}
                     >
                       <MinusIcon id="minus-icon" className="h-5 w-5" />
                     </Button>
@@ -117,6 +123,9 @@ const Product = () => {
                       ripple={false}
                       className="p-1 text-gray-800 border focus:ring-offset-2 transition-all flex items-center dark:text-white"
                       onClick={() => setQuantityInput((prevQuantity) => prevQuantity + 1)}
+                      placeholder={undefined}
+                      onPointerEnterCapture={undefined}
+                      onPointerLeaveCapture={undefined}
                     >
                       <PlusIcon id="plus-icon" className="h-5 w-5" />
                     </Button>
@@ -127,6 +136,9 @@ const Product = () => {
                       className="w-full uppercase text-center py-3.5 shadow-none text-base mt-14 bg-gray-800 border hover:bg-gray-700 transition rounded font-semibold"
                       onClick={() => handleAddItemToCart(product?._id)}
                       fullWidth
+                      placeholder={undefined}
+                      onPointerEnterCapture={undefined}
+                      onPointerLeaveCapture={undefined}
                     >
                       add to cart
                     </Button>
