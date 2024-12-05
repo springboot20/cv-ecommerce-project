@@ -15,8 +15,18 @@ const UsersTable: React.FC<{ columns: string[]; data: any; children?: React.Reac
   children,
 }) => {
   return (
-    <Card className="h-full w-full !rounded-none !shadow !p-2">
-      <CardBody className="overflow-x-auto p-0">
+    <Card
+      className="h-full w-full !rounded-none !shadow !p-2"
+      placeholder={undefined}
+      onPointerEnterCapture={undefined}
+      onPointerLeaveCapture={undefined}
+    >
+      <CardBody
+        className="overflow-x-auto p-0"
+        placeholder={undefined}
+        onPointerEnterCapture={undefined}
+        onPointerLeaveCapture={undefined}
+      >
         <table className="w-full min-w-max table-auto text-left">
           <thead>
             <tr>
@@ -26,6 +36,9 @@ const UsersTable: React.FC<{ columns: string[]; data: any; children?: React.Reac
                     variant="small"
                     color="blue-gray"
                     className="font-normal leading-none opacity-70"
+                    placeholder={undefined}
+                    onPointerEnterCapture={undefined}
+                    onPointerLeaveCapture={undefined}
                   >
                     {head}
                   </Typography>
@@ -42,15 +55,32 @@ const UsersTable: React.FC<{ columns: string[]; data: any; children?: React.Reac
                 <tr key={d.name}>
                   <td className={classes}>
                     <div className="flex items-center gap-3">
-                      <Avatar src={d.img} alt={d.name} size="sm" />
+                      <Avatar
+                        src={d.img}
+                        alt={d.name}
+                        size="sm"
+                        placeholder={undefined}
+                        onPointerEnterCapture={undefined}
+                        onPointerLeaveCapture={undefined}
+                      />
                       <div className="flex flex-col">
-                        <Typography variant="small" color="blue-gray" className="font-normal">
+                        <Typography
+                          variant="small"
+                          color="blue-gray"
+                          className="font-normal"
+                          placeholder={undefined}
+                          onPointerEnterCapture={undefined}
+                          onPointerLeaveCapture={undefined}
+                        >
                           {d.name}
                         </Typography>
                         <Typography
                           variant="small"
                           color="blue-gray"
                           className="font-normal opacity-70"
+                          placeholder={undefined}
+                          onPointerEnterCapture={undefined}
+                          onPointerLeaveCapture={undefined}
                         >
                           {d.email}
                         </Typography>
@@ -59,13 +89,23 @@ const UsersTable: React.FC<{ columns: string[]; data: any; children?: React.Reac
                   </td>
                   <td className={classes}>
                     <div className="flex flex-col">
-                      <Typography variant="small" color="blue-gray" className="font-normal">
+                      <Typography
+                        variant="small"
+                        color="blue-gray"
+                        className="font-normal"
+                        placeholder={undefined}
+                        onPointerEnterCapture={undefined}
+                        onPointerLeaveCapture={undefined}
+                      >
                         {d.job}
                       </Typography>
                       <Typography
                         variant="small"
                         color="blue-gray"
                         className="font-normal opacity-70"
+                        placeholder={undefined}
+                        onPointerEnterCapture={undefined}
+                        onPointerLeaveCapture={undefined}
                       >
                         {d.org}
                       </Typography>
@@ -82,13 +122,25 @@ const UsersTable: React.FC<{ columns: string[]; data: any; children?: React.Reac
                     </div>
                   </td>
                   <td className={classes}>
-                    <Typography variant="small" color="blue-gray" className="font-normal">
+                    <Typography
+                      variant="small"
+                      color="blue-gray"
+                      className="font-normal"
+                      placeholder={undefined}
+                      onPointerEnterCapture={undefined}
+                      onPointerLeaveCapture={undefined}
+                    >
                       {d.date}
                     </Typography>
                   </td>
                   <td className={classes}>
                     <Tooltip content="Edit User">
-                      <IconButton variant="text">
+                      <IconButton
+                        variant="text"
+                        placeholder={undefined}
+                        onPointerEnterCapture={undefined}
+                        onPointerLeaveCapture={undefined}
+                      >
                         <PencilIcon className="h-4 w-4" />
                       </IconButton>
                     </Tooltip>
