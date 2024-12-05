@@ -67,85 +67,42 @@ const CheckOut: React.FC = () => {
     saveinfo: savedInfo ?? false,
   };
 
-  const updateOrderAddress = useCallback(async (data: InitialValues) => {
-    await updateAddress({ _id: addressId, ...data })
-      .unwrap()
-      .then((response) => {
-        if (response.statusCode.toString().startsWith("2")) {
-          setAddressId(response.data.address?._id);
-          dispatch(
-            saveUserAddressInfo({
-              saveInfo: values.saveinfo,
-            }),
-          );
-          setEditingInfo(false);
-          toast(response?.message, { type: "success" });
-        }
-      })
-      .catch((error) => {
-        toast(error?.error || error?.data?.message, { type: "error" });
-      });
-  }, []);
-
-  const createOrderAddress = useCallback(async (data: InitialValues) => {
-    const {
-      country,
-      city,
-      state,
-      zipcode,
-      phone,
-      firstname,
-      lastname,
-      address_line_one,
-      address_line_two,
-    } = data;
-
-    await createAddress({
-      country,
-      city,
-      state,
-      zipcode,
-      phone,
-      firstname,
-      lastname,
-      address_line_one,
-      address_line_two,
-    })
-      .unwrap()
-      .then((response) => {
-        if (response.statusCode.toString().startsWith("2")) {
-          setAddressId(response.data.address?._id);
-          dispatch(
-            saveUserAddressInfo({
-              saveInfo: values.saveinfo,
-            }),
-          );
-          setDone(true);
-          setEditingInfo(true);
-          toast(response?.message, { type: "success" });
-        }
-      })
-      .catch((error: any) => {
-        setDone(false);
-        toast(error?.error, { type: "error" });
-      });
-  }, []);
-
-  const handleCancelEdit = () => {
-    setEditingInfo(false);
-  };
-
-  async function onSubmit(values: InitialValues) {
-    await updateOrderAddress(values);
-    await createOrderAddress(values);
-  }
-
   const { handleChange, values, handleBlur, touched, errors, handleSubmit, setFieldValue } =
     useFormik({
       initialValues,
       validationSchema: editInfo ? updateOrderSchema : orderSchema,
       onSubmit,
     });
+
+  const handleAddressMutation = useCallback(
+    async (data: InitialValues) => {
+      try {
+        const response = addressId
+          ? await updateAddress({ _id: addressId, ...data }).unwrap()
+          : await createAddress(data).unwrap();
+
+        if (response.statusCode.toString().startsWith("2")) {
+          setAddressId(response.data.address?._id);
+          dispatch(saveUserAddressInfo({ saveInfo: values.saveinfo }));
+          toast(response?.message, { type: "success" });
+          setEditingInfo(!addressId); // Toggle based on action
+          setDone(true);
+        }
+      } catch (error: any) {
+        toast(error?.error || error?.data?.message, { type: "error" });
+      }
+    },
+    [addressId, values.saveinfo],
+  );
+
+  const handleCancelEdit = () => {
+    setEditingInfo(false);
+    setDone(false);
+  };
+
+  async function onSubmit(values: InitialValues) {
+    await handleAddressMutation(values);
+  }
 
   return (
     <main className="mx-auto max-w-7xl px-2 md:px-4 xl:px-0">
@@ -454,35 +411,46 @@ const CheckOut: React.FC = () => {
             </div>
           </Fragment>
 
-          <div className="my-4 flex items-center justify-end">
-            {editInfo ? (
-              <div className="flex items-center space-x-4">
-                <button
-                  type="submit"
-                  disabled={done}
-                  className={classNames(
-                    "text-base font-medium text-gray-700 rounded-md block focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-gray-600 disabled:bg-transparent disabled:text-gray-800 disabled:ring-1 disabled:ring-gray-800",
-                  )}
-                >
-                  Save and continue
-                </button>
-                <button
-                  type="button"
-                  onClick={handleCancelEdit}
-                  className="font-medium text-gray-700 hover:text-gray-400"
-                >
-                  Cancel
-                </button>
-              </div>
-            ) : (
+          <div className="mt-6 flex items-center justify-between space-x-3">
+            {/* Edit Button */}
+            {editInfo && !done && (
+              <button
+                type="button"
+                onClick={() => setEditingInfo(false)}
+                className="px-4 py-2 bg-blue-600 text-white rounded-md hover:bg-blue-700 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:ring-offset-2"
+              >
+                Edit
+              </button>
+            )}
+
+            {/* Cancel Button */}
+            {!editInfo && (
+              <button
+                type="button"
+                onClick={handleCancelEdit}
+                className="px-4 py-2 bg-gray-300 text-gray-700 rounded-md hover:bg-gray-400 focus:outline-none focus:ring-2 focus:ring-gray-500 focus:ring-offset-2"
+              >
+                Cancel
+              </button>
+            )}
+
+            {/* Save Button */}
+            {!editInfo && (
               <button
                 type="submit"
-                disabled={editInfo}
-                className={classNames(
-                  "text-base font-normal text-white py-2.5 px-4 rounded-md bg-gray-800 hover:bg-gray-600 block focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-gray-600 disabled:bg-transparent disabled:text-gray-800 disabled:ring-1 disabled:ring-gray-800",
-                )}
+                className="px-4 py-2 bg-green-600 text-white rounded-md hover:bg-green-700 focus:outline-none focus:ring-2 focus:ring-green-500 focus:ring-offset-2"
               >
-                Place order
+                Save Changes
+              </button>
+            )}
+
+            {/* Submit Button */}
+            {done && (
+              <button
+                type="submit"
+                className="px-4 py-2 bg-blue-600 text-white rounded-md hover:bg-blue-700 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:ring-offset-2"
+              >
+                Submit
               </button>
             )}
           </div>
