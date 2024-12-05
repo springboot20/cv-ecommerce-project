@@ -23,7 +23,7 @@ const Notfound = lazy(() => import("../components/NotFound"));
 const PublicRoute = lazy(() => import("../components/Public.routes"));
 const Login = lazy(() => import("../pages/auth/Signin"));
 const Register = lazy(() => import("../pages/auth/Signup"));
-
+const PaystackVerify = lazy(() => import("../pages/check-out/verify/VerifyPayment"));
 const Settings = lazy(() => import("../pages/settings/Settings"));
 const Profile = lazy(() => import("../pages/settings/profile/Profile"));
 
@@ -71,11 +71,23 @@ const Router = () => {
         },
         {
           path: "check-out",
-          element: (
-            <ProtectedRoute roles={[AcceptedRoles.USER, AcceptedRoles.ADMIN]}>
-              <CheckOut />
-            </ProtectedRoute>
-          ),
+          children:[
+            {
+              index:true,
+              element: (
+                <ProtectedRoute roles={[AcceptedRoles.USER, AcceptedRoles.ADMIN]}>
+                  <CheckOut />
+                </ProtectedRoute>
+              ),
+            },{
+              path:"paystack/verify-callback",
+              element: (
+                <ProtectedRoute roles={[AcceptedRoles.USER, AcceptedRoles.ADMIN]}>
+                  <PaystackVerify />
+                </ProtectedRoute>
+              ),
+            }
+          ]
         },
         {
           path: "settings",
