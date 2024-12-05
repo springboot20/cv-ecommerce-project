@@ -24,22 +24,22 @@ export const ProductCarousel: React.FC<CarouselProps> = ({ items }) => {
           <Card
             key={index}
             placeholder='carousel item'
-            className={classNames('h-auto rounded-xl', '')}>
+            className={classNames('h-auto rounded-xl', '')}  onPointerEnterCapture={undefined} onPointerLeaveCapture={undefined}>
             <CardHeader
               shadow={false}
               className={classNames(
                 'p-0 m-0 h-72 rounded-t-xl border-b border-black/20 rounded-b-none flex justify-center items-center'
-              )}>
+              )}  placeholder={undefined} onPointerEnterCapture={undefined} onPointerLeaveCapture={undefined}>
               <img src={item.img} alt='carousel img' className='h-44 w-44 rounded-full' />
             </CardHeader>
-            <CardBody className='flex flex-col items-center justify-center py-8'>
-              <Typography>{item.description}</Typography>
+            <CardBody className='flex flex-col items-center justify-center py-8'  placeholder={undefined} onPointerEnterCapture={undefined} onPointerLeaveCapture={undefined}>
+              <Typography  placeholder={undefined} onPointerEnterCapture={undefined} onPointerLeaveCapture={undefined}>{item.description}</Typography>
               <div className='flex w-full items-center justify-between mt-9'>
-                <Typography className='text-base text-gray-500 font-medium italic'>
+                <Typography className='text-base text-gray-500 font-medium italic'  placeholder={undefined} onPointerEnterCapture={undefined} onPointerLeaveCapture={undefined}>
                   $ {item.price}
                 </Typography>
                 <Link to='/'>
-                  <Button>explore</Button>
+                  <Button  placeholder={undefined} onPointerEnterCapture={undefined} onPointerLeaveCapture={undefined}>explore</Button>
                 </Link>
               </div>
             </CardBody>

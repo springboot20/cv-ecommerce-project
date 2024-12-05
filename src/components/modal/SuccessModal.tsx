@@ -51,7 +51,7 @@ export const SuccessModal: React.FC<{
             </p>
           </div>
           <Link to='/products'>
-            <Button className='uppercase text-xl tracking-wider shadow-none rounded-none bg-[#004197]'>
+            <Button className='uppercase text-xl tracking-wider shadow-none rounded-none bg-[#004197]' placeholder={undefined} onPointerEnterCapture={undefined} onPointerLeaveCapture={undefined}>
               continue shopping
             </Button>
           </Link>
