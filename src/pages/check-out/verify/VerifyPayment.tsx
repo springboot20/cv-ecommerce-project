@@ -31,7 +31,7 @@ export default function VerifyPaystackPayment() {
         setIsOpen(true);
       }
     } catch (error: any) {
-      
+      setIsOpen(false);
     }
   };
 
