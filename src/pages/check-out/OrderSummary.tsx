@@ -7,9 +7,8 @@ import { toast } from "react-toastify";
 import { Link } from "react-router-dom";
 import PayButton from "../../components/buttons/PayStackButton";
 
-export const OrderSummary: React.FC<{ done: boolean; addressId: string }> = ({
-  done,
-  addressId,
+export const OrderSummary: React.FC<{ done: boolean;  }> = ({
+  done
 }) => {
   const {
     cart,
@@ -164,7 +163,7 @@ export const OrderSummary: React.FC<{ done: boolean; addressId: string }> = ({
 
         {done && (
           <div className="px-5 py-4">
-            <PayButton addressId={addressId} />
+            <PayButton />
           </div>
         )}
       </div>

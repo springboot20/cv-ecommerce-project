@@ -3,11 +3,11 @@ import { Loader } from "../Loader";
 import { useCreatePaystackOrderMutation } from "../../features/order/order.slice";
 import { toast } from "react-toastify";
 
-const PayButton: React.FC<{ addressId: string }> = ({ addressId }) => {
+const PayButton: React.FC = () => {
   const [createPaystackOrder, { isLoading }] = useCreatePaystackOrderMutation();
 
   const initializePayment = async () => {
-    await createPaystackOrder(addressId)
+    await createPaystackOrder()
       .unwrap()
       .then((response) => {
         const { url } = response.data;

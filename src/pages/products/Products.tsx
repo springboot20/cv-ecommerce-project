@@ -1,4 +1,4 @@
-import { useEffect, useState } from "react";
+import { Fragment, useEffect, useState } from "react";
 import { classNames, formatPrice } from "../../helpers";
 import { motion } from "framer-motion";
 import { Pagination } from "../../components/Pagination";
@@ -11,15 +11,17 @@ import { ProductCategory, ProductType } from "../../types/redux/product";
 import { ProductsSkeletonLoading } from "../../components/loaders/Skeleton";
 import { CategoryPanel } from "../../components/panels/CategoryPanel";
 import { Disclosure } from "@headlessui/react";
-import { Bars3Icon } from "@heroicons/react/24/outline";
+import { Bars3Icon, EyeIcon } from "@heroicons/react/24/outline";
 import { LocalStorage } from "../../util";
 import { useGetAllCategoryQuery } from "../../features/category/category.slice";
 import Skeleton from "react-loading-skeleton";
+import ProductPreviewModal from "../../components/modal/PreviewProductModal";
 
 const Products = () => {
   const [searchQuery, setSearchQuery] = useState<string>("");
   // const [featured, setFeatured] = useState<boolean>(false);
   const [page, setPage] = useState<number>(1);
+  const [openPreview, setOpenPreview] = useState<{ [key: string]: boolean }>({});
   // const [categoryQuery, setCategoryQuery] = useState<string>("");
 
   let limit = 10;
@@ -61,6 +63,9 @@ const Products = () => {
     refetch();
   }, [data?.message]);
 
+  const handlePreviewOpen = (id: string) => setOpenPreview((prev) => ({ ...prev, [id]: true }));
+  const handlePreviewClose = (id: string) => setOpenPreview((prev) => ({ ...prev, [id]: false }));
+
   return (
     <Disclosure>
       <section className="relative flex items-stretch justify-between flex-shrink-0">
@@ -92,34 +97,50 @@ const Products = () => {
               </p>
             ) : (
               products?.map((product: ProductType) => (
-                <Link to={`/collections/${product._id}`} key={product._id}>
-                  <motion.div layout key={product._id}>
-                    <header className="h-52 w-full relative rounded-xl overflow-hidden">
-                      {product?.imageSrc.url ? (
-                        <img
-                          src={product?.imageSrc.url}
-                          alt=""
-                          className="h-full absolute object-cover object-center w-full"
-                        />
-                      ) : (
-                        <Skeleton
-                          height={"100%"}
-                          style={{ position: "absolute", objectFit: "cover" }}
-                          borderRadius={0}
-                          className="border border-gray-300"
-                        />
-                      )}
-                    </header>
-                    <div className="relative flex pt-2 justify-between gap-1.5">
-                      <h3 className="capitalize text-base font-medium text-gray-700">
-                        {product.name}
-                      </h3>
-                      <p className="text-base text-gray-700 font-medium">
-                        {formatPrice(product.price)}
-                      </p>
-                    </div>
-                  </motion.div>
-                </Link>
+                <Fragment key={product._id}>
+                  <ProductPreviewModal
+                    open={!!openPreview[product?._id]}
+                    onClose={() => handlePreviewClose(product?._id)}
+                  />
+
+                  <Link to={`/collections/${product?._id}`}>
+                    <motion.div layout className="relative">
+                      <header className="h-52 w-full relative rounded-xl overflow-hidden">
+                        {product?.imageSrc.url ? (
+                          <img
+                            src={product?.imageSrc?.url}
+                            alt=""
+                            className="h-full absolute object-cover object-center w-full"
+                          />
+                        ) : (
+                          <Skeleton
+                            height={"100%"}
+                            // style={{ position: "absolute", objectFit: "cover" }}
+                            borderRadius={0}
+                            className="border border-gray-300 absolute object-cover"
+                          />
+                        )}
+                      </header>
+                      <div className="relative flex pt-2 justify-between gap-1.5">
+                        <h3 className="capitalize text-base font-medium text-gray-700">
+                          {product?.name}
+                        </h3>
+                        <p className="text-base text-gray-700 font-medium">
+                          {formatPrice(product?.price)}
+                        </p>
+                      </div>
+                      <div className="absolute inset-0 h-full w-full flex items-center justify-center">
+                        <button
+                          type="button"
+                          onClick={() => handlePreviewOpen(product?._id)}
+                          className="bg-gray-100 text-gray-600 font-normal text-sm"
+                        >
+                          preview product <EyeIcon className="h-5" aria-hidden={true} />
+                        </button>
+                      </div>
+                    </motion.div>
+                  </Link>
+                </Fragment>
               ))
             )}
           </motion.div>

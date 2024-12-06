@@ -2,7 +2,7 @@ import { useEffect, useState } from "react";
 import axios from "axios";
 import { useAppSelector } from "../../../hooks/redux/redux.hooks";
 import { RootState } from "../../../app/store";
-import PaymentSuccessModal from "../../../components/modal/PaymentSuccessful";
+import PaymentSuccessModal from "../../../components/modal/PaymentSuccessfulModal";
 import { OrderResponse } from "../../../types/redux/order";
 
 let env = import.meta.env;

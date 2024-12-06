@@ -2,10 +2,7 @@ import { useFormik } from "formik";
 import { orderSchema } from "../../schema/Schema";
 import countriesData from "../../data/countries";
 import React, { Fragment, useCallback, useState } from "react";
-import {
-  useCreateAddressMutation,
-  useUpdateAddressMutation,
-} from "../../features/order/address.slice";
+import { useCreateAddressMutation } from "../../features/order/address.slice";
 import { OrderSummary } from "./OrderSummary";
 import { classNames } from "../../helpers";
 import { toast } from "react-toastify";
@@ -24,17 +21,9 @@ export interface InitialValues {
   address_line_two: string;
 }
 
-type Option = {
-  code: string;
-  name: string;
-};
-
 const CheckOut: React.FC = () => {
   const [createAddress] = useCreateAddressMutation();
-  const [updateAddress] = useUpdateAddressMutation();
-  const [countries] = useState<Option[]>(countriesData);
   const [done, setDone] = useState(false);
-  const [addressId, setAddressId] = useState<string>("");
 
   const initialValues: InitialValues = {
     email: "",
@@ -55,24 +44,18 @@ const CheckOut: React.FC = () => {
     onSubmit,
   });
 
-  const handleAddressMutation = useCallback(
-    async (data: InitialValues) => {
-      try {
-        const response = addressId
-          ? await updateAddress({ _id: addressId, ...data }).unwrap()
-          : await createAddress(data).unwrap();
+  const handleAddressMutation = useCallback(async (data: InitialValues) => {
+    try {
+      const response = await createAddress(data).unwrap();
 
-        if (response.statusCode.toString().startsWith("2")) {
-          setAddressId(response.data.address?._id);
-          setDone(true);
-          toast(response?.message, { type: "success" });
-        }
-      } catch (error: any) {
-        toast(error?.error || error?.data?.message, { type: "error" });
+      if (response.statusCode.toString().startsWith("2")) {
+        setDone(true);
+        toast(response?.message, { type: "success" });
       }
-    },
-    [addressId],
-  );
+    } catch (error: any) {
+      toast(error?.error || error?.data?.message, { type: "error" });
+    }
+  }, []);
 
   async function onSubmit(values: InitialValues) {
     await handleAddressMutation(values);
@@ -271,7 +254,7 @@ const CheckOut: React.FC = () => {
                       <option>select your country</option>
 
                       {React.Children.toArray(
-                        countries.map((country) => {
+                        countriesData.map((country) => {
                           return <option value={country.name}>{country.name}</option>;
                         }),
                       )}
@@ -370,7 +353,7 @@ const CheckOut: React.FC = () => {
               )}
             </div>
           </form>
-          <OrderSummary done={done} addressId={addressId} />
+          <OrderSummary done={done} />
         </div>
       </main>
     </Fragment>

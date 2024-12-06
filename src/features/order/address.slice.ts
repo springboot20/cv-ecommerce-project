@@ -49,16 +49,15 @@ export const AddressSlice = ApiService.injectEndpoints({
           : [{ type: "Address", id: "ADDRESS" }],
     }),
 
-    updateAddress: builder.mutation<
-      Response,
-      Pick<AddressInterface, "_id"> & Partial<AddressInterface>
-    >({
-      query: ({ _id, ...patch }) => ({
+    updateAddress: builder.mutation<Response, AddressRequest>({
+      query: (request) => ({
         url: `/addresses`,
         method: "PUT",
-        body: patch,
+        body: request,
       }),
-      invalidatesTags: (_, __, { _id }) => [{ type: "Address", id: _id }],
+      invalidatesTags: (response, __, ___) => [
+        { type: "Address", id: response?.data?.address?._id },
+      ],
     }),
 
     deleteAddress: builder.mutation<Response, string>({
