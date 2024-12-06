@@ -120,7 +120,7 @@ const ProductPreviewModal: React.FC<{ open: boolean; onClose: () => void; produc
                               key={rating}
                               aria-hidden="true"
                               className={classNames(
-                                product.ratings > rating ? "text-gray-900" : "text-gray-200",
+                                product?.ratings > rating ? "text-gray-900" : "text-gray-200",
                                 "size-5 shrink-0",
                               )}
                             />
