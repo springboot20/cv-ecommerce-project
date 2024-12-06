@@ -32,6 +32,8 @@ const Product = () => {
     if (message) {
       toast.success(message);
     }
+    if (!refreshTrigered) refetch();
+
     refetch();
   }, [refreshTrigered, message]);
 

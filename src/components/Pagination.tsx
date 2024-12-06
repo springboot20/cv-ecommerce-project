@@ -11,7 +11,7 @@ export const Pagination: React.FC<{
   handlePreviousPage: () => void;
 }> = ({ page, handleNextPage, handlePreviousPage, totalPages, hasNextPage, hasPrevPage }) => {
   return (
-    <div className="sticky top-full mb-2">
+    <div className="sticky top-full mb-2 mt-8">
       <div className="flex items-center justify-center max-w-sm mx-auto gap-4 rounded-lg bg-white border">
         <Button
           variant="text"

@@ -4,7 +4,6 @@ import { motion } from "framer-motion";
 import { Pagination } from "../../components/Pagination";
 import { gridVariants } from "../../util/framerMotion.config";
 // import { Loader } from "../../components/Loader";
-import { Link } from "react-router-dom";
 import { toast } from "react-toastify";
 import { useGetAllProductsQuery } from "../../features/products/product.slice";
 import { ProductCategory, ProductType } from "../../types/redux/product";
@@ -16,6 +15,7 @@ import { LocalStorage } from "../../util";
 import { useGetAllCategoryQuery } from "../../features/category/category.slice";
 import Skeleton from "react-loading-skeleton";
 import ProductPreviewModal from "../../components/modal/PreviewProductModal";
+import { Link } from "react-router-dom";
 
 const Products = () => {
   const [searchQuery, setSearchQuery] = useState<string>("");
@@ -87,7 +87,7 @@ const Products = () => {
             initial="hidden"
             animate="visible"
             variants={gridVariants}
-            className="grid grid-cols-1 md:grid-cols-2 2xl:grid-cols-3 gap-5 mt-2"
+            className="grid grid-cols-1 md:grid-cols-2 2xl:grid-cols-3 gap-5 mt-4"
           >
             {isLoading ? (
               <ProductsSkeletonLoading cardsNumber={6} />
@@ -101,45 +101,43 @@ const Products = () => {
                   <ProductPreviewModal
                     open={!!openPreview[product?._id]}
                     onClose={() => handlePreviewClose(product?._id)}
+                    productId={product?._id}
                   />
-
-                  <Link to={`/collections/${product?._id}`}>
-                    <motion.div layout className="relative">
-                      <header className="h-52 w-full relative rounded-xl overflow-hidden">
-                        {product?.imageSrc.url ? (
-                          <img
-                            src={product?.imageSrc?.url}
-                            alt=""
-                            className="h-full absolute object-cover object-center w-full"
-                          />
-                        ) : (
-                          <Skeleton
-                            height={"100%"}
-                            // style={{ position: "absolute", objectFit: "cover" }}
-                            borderRadius={0}
-                            className="border border-gray-300 absolute object-cover"
-                          />
-                        )}
-                      </header>
-                      <div className="relative flex pt-2 justify-between gap-1.5">
-                        <h3 className="capitalize text-base font-medium text-gray-700">
-                          {product?.name}
-                        </h3>
-                        <p className="text-base text-gray-700 font-medium">
-                          {formatPrice(product?.price)}
-                        </p>
-                      </div>
-                      <div className="absolute inset-0 h-full w-full flex items-center justify-center">
+                  <motion.div role="button" layout className="relative group overflow-hidden">
+                    <header className="h-52 w-full relative rounded-xl overflow-hidden">
+                      {product?.imageSrc.url ? (
+                        <img
+                          src={product?.imageSrc?.url}
+                          alt=""
+                          className="h-full absolute object-cover object-center w-full"
+                        />
+                      ) : (
+                        <Skeleton
+                          height={"100%"}
+                          // style={{ position: "absolute", objectFit: "cover" }}
+                          borderRadius={0}
+                          className="border border-gray-300 absolute object-cover"
+                        />
+                      )}
+                      <div className="group-hover:opacity-100 transition bg-black/50 z-20 opacity-0 absolute inset-0 h-full w-full flex items-center justify-center">
                         <button
                           type="button"
                           onClick={() => handlePreviewOpen(product?._id)}
-                          className="bg-gray-100 text-gray-600 font-normal text-sm"
+                          className="z-20 bg-gray-100 text-gray-600 font-normal text-sm flex items-center gap-4 rounded p-2"
                         >
                           preview product <EyeIcon className="h-5" aria-hidden={true} />
                         </button>
                       </div>
-                    </motion.div>
-                  </Link>
+                    </header>
+                    <div className="relative flex pt-2 justify-between gap-1.5">
+                      <h3 className="capitalize text-base font-medium text-gray-700">
+                        <Link to={`/collections/${product?._id}`}> {product?.name}</Link>
+                      </h3>
+                      <p className="text-base text-gray-700 font-medium">
+                        {formatPrice(product?.price)}
+                      </p>
+                    </div>
+                  </motion.div>
                 </Fragment>
               ))
             )}

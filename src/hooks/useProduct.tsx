@@ -10,7 +10,7 @@ export const useProduct = () => {
   const { id } = useParams();
   const [addItemToCart] = useAddItemToCartMutation();
   const { data, isLoading, refetch } = useGetProductByIdQuery(id as string);
-  const [ratings, setRatings] = useState<number>(0);
+  const [ratings, setRatings] = useState<number>(1);
   const [quantityInput, setQuantityInput] = useState<number>(1);
   const [open, setOpen] = useState(false);
   const [refreshTrigered, setRefreshTrigered] = useState(false);
