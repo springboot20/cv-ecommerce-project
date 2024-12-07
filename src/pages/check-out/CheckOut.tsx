@@ -3,16 +3,18 @@ import { orderSchema } from "../../schema/Schema";
 import React, { Fragment, useCallback, useState } from "react";
 import { useCreateAddressMutation } from "../../features/order/address.slice";
 import { OrderSummary } from "./OrderSummary";
-import { classNames } from "../../helpers";
 import { toast } from "react-toastify";
 import VerifyPaystackPayment from "./verify/VerifyPayment";
 import { InitialValues } from "../../types/formik";
 import { ShippingInformation } from "./forms/Address";
 import Payment from "./forms/Payment";
+import { motion } from "framer-motion";
+import Shipping from "./forms/Shipping";
 
 const CheckOut: React.FC = () => {
   const [createAddress] = useCreateAddressMutation();
   const [done, setDone] = useState(false);
+  const [currentStep, setCurrentStep] = useState(0);
 
   const initialValues: InitialValues = {
     email: "",
@@ -60,6 +62,7 @@ const CheckOut: React.FC = () => {
       values={values}
       key={"shipping-info"}
     />,
+    <Shipping key="shipping" />,
     <Payment handleChange={handleChange} values={values} key={"payment"} />,
   ];
 
@@ -67,23 +70,43 @@ const CheckOut: React.FC = () => {
     await handleAddressMutation(values);
   }
 
+  const variants = {
+    hidden: { opacity: 0, x: -100 },
+    visible: { opacity: 1, x: 0 },
+    exit: { opacity: 0, x: 100 },
+  };
+
   return (
     <Fragment>
       <VerifyPaystackPayment />
       <main className="mx-auto max-w-7xl px-2 md:px-4 xl:px-0">
         <div className="grid grid-cols-1 lg:grid-cols-2 xl:grid-cols-3 gap-4 xl:gap-8">
           <form id="form" onSubmit={handleSubmit} className="col-span-1 xl:col-span-2">
-            <Fragment></Fragment>
-
-            <div className="mt-6 flex items-center justify-between space-x-3">
-              {!done && (
-                <button
-                  type="submit"
-                  className="px-4 py-2 bg-blue-600 text-white rounded-md hover:bg-blue-700 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:ring-offset-2"
+            <StepIndicator currentStep={currentStep} />
+            <div className="">
+              <motion.div>
+                <motion.div
+                  key={currentStep}
+                  initial="hidden"
+                  animate="visible"
+                  exit="exit"
+                  variants={variants}
+                  transition={{ duration: 0.5 }}
                 >
-                  Submit
-                </button>
-              )}
+                  {formSteps[currentStep]}
+                </motion.div>
+              </motion.div>
+
+              <div className="mt-6 flex items-center justify-between space-x-3">
+                {!done && (
+                  <button
+                    type="submit"
+                    className="px-4 py-2 bg-blue-600 text-white rounded-md hover:bg-blue-700 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:ring-offset-2"
+                  >
+                    Submit
+                  </button>
+                )}
+              </div>
             </div>
           </form>
           <OrderSummary done={done} />
@@ -94,3 +117,24 @@ const CheckOut: React.FC = () => {
 };
 
 export default CheckOut;
+
+const steps = ["Address", "Shipping", "Payment"];
+
+const StepIndicator = ({ currentStep }: { currentStep: number }) => {
+  return (
+    <div className="flex justify-between items-center mb-6">
+      {steps.map((step, index) => (
+        <div key={index} className="flex-1">
+          <motion.div
+            className={`text-center ${index <= currentStep ? "text-blue-600" : "text-gray-400"}`}
+            initial={{ opacity: 0 }}
+            animate={{ opacity: 1 }}
+            transition={{ duration: 0.5 }}
+          >
+            {step}
+          </motion.div>
+        </div>
+      ))}
+    </div>
+  );
+};
