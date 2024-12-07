@@ -5,6 +5,7 @@ import {
   PlusCircleIcon,
   PowerIcon,
   ServerStackIcon,
+  ShoppingCartIcon,
   Squares2X2Icon,
   UsersIcon,
 } from "@heroicons/react/24/outline";
@@ -30,9 +31,15 @@ const AdminLayoutComponent = () => {
 
 const routes = [
   {
-    to: "/admin/products/overview",
+    to: "/admin/overview",
     label: "overview",
     Icon: Squares2X2Icon,
+    current: true,
+  },
+  {
+    to: "/admin/orders",
+    label: "orders",
+    Icon: ShoppingCartIcon,
     current: true,
   },
   {
@@ -42,7 +49,7 @@ const routes = [
     current: true,
   },
   {
-    to: "/admin/products/users",
+    to: "/admin/users",
     label: "users",
     Icon: UsersIcon,
     current: true,

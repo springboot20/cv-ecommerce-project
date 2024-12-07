@@ -62,13 +62,13 @@ export const PieOverview = () => {
     title: {
       text: "Order Status",
       style: {
-        fontFamily: "Roboto, sans-serif",
+        fontFamily: "Poppins, sans-serif",
       },
     },
     dataLabels: {
       enabled: true,
       style: {
-        fontFamily: "Roboto, sans-serif",
+        fontFamily: "Poppins, sans-serif",
         fontSize: "14px",
       },
     },
@@ -79,7 +79,7 @@ export const PieOverview = () => {
           y: 12,
           x: 20,
           fontSize: 16,
-          fontFamily: "Roboto",
+          fontFamily: "Poppins, sans-serif",
           fontWeight: "medium",
         },
       ],

@@ -78,7 +78,7 @@ const OrderCountsChart = () => {
     title: {
       text: "Order Counts",
       style: {
-        fontFamily: "Roboto, sans-serif",
+        fontFamily: "Poppins, sans-serif",
       },
     },
     colors: ["#28A745", "#FF5733"],
@@ -98,7 +98,7 @@ const OrderCountsChart = () => {
     },
     tooltip: {
       style: {
-        fontFamily: "Roboto, sans-serif",
+        fontFamily: "Poppins, sans-serif",
       },
     },
     dataLabels: {

@@ -23,4 +23,4 @@ export const StatisticsSlice = ApiService.injectEndpoints({
   }),
 });
 
-export const {useGetOrderStatsQuery} = StatisticsSlice;
+export const { useGetOrderStatsQuery, useGetAllStatsQuery } = StatisticsSlice;

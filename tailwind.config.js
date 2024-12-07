@@ -28,6 +28,9 @@ const config = withMT({
         "very-light-purple": "#C77FE8",
         ...defaultTheme.colors,
       },
+      fontFamily: {
+        poppins: ["Poppins", "sans-serif"],
+      },
     },
   },
   plugins: [require("@tailwindcss/forms")],

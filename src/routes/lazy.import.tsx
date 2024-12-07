@@ -11,6 +11,7 @@ import AdminUserEdit from "../pages/admin/users/edit/EditUser";
 import { AdminDashboardLayout } from "../layout/admin/AdminLayout";
 import { ProtectedRoute, AdminProtectedRoute } from "../components/Private.routes";
 import { AdminPublicRoute } from "../components/Public.routes";
+import AdminOrders from "../pages/admin/orders/Orders";
 
 const AdminOverview = lazy(() => import("../pages/admin/overview/Overview"));
 const AdminUsers = lazy(() => import("../pages/admin/users/Users"));
@@ -111,6 +112,22 @@ const Router = () => {
           ),
           children: [
             {
+              path: "overview",
+              element: (
+                <AdminProtectedRoute roles={[AcceptedRoles.ADMIN, AcceptedRoles.MODERATOR]}>
+                  <AdminOverview />
+                </AdminProtectedRoute>
+              ),
+            },
+            {
+              path: "orders",
+              element: (
+                <AdminProtectedRoute roles={[AcceptedRoles.ADMIN, AcceptedRoles.MODERATOR]}>
+                  <AdminOrders />
+                </AdminProtectedRoute>
+              ),
+            },
+            {
               path: "products",
               children: [
                 {
@@ -118,35 +135,6 @@ const Router = () => {
                   element: (
                     <AdminProtectedRoute roles={[AcceptedRoles.ADMIN, AcceptedRoles.MODERATOR]}>
                       <AdminProducts />
-                    </AdminProtectedRoute>
-                  ),
-                },
-                {
-                  path: "users",
-                  children: [
-                    {
-                      index: true,
-                      element: (
-                        <AdminProtectedRoute roles={[AcceptedRoles.ADMIN, AcceptedRoles.MODERATOR]}>
-                          <AdminUsers />
-                        </AdminProtectedRoute>
-                      ),
-                    },
-                    {
-                      path: "edit/:userId",
-                      element: (
-                        <AdminProtectedRoute roles={[AcceptedRoles.ADMIN]}>
-                          <AdminUserEdit />
-                        </AdminProtectedRoute>
-                      ),
-                    },
-                  ],
-                },
-                {
-                  path: "overview",
-                  element: (
-                    <AdminProtectedRoute roles={[AcceptedRoles.ADMIN, AcceptedRoles.MODERATOR]}>
-                      <AdminOverview />
                     </AdminProtectedRoute>
                   ),
                 },
@@ -163,6 +151,27 @@ const Router = () => {
                   element: (
                     <AdminProtectedRoute roles={[AcceptedRoles.ADMIN]}>
                       <EditProduct />
+                    </AdminProtectedRoute>
+                  ),
+                },
+              ],
+            },
+            {
+              path: "users",
+              children: [
+                {
+                  index: true,
+                  element: (
+                    <AdminProtectedRoute roles={[AcceptedRoles.ADMIN, AcceptedRoles.MODERATOR]}>
+                      <AdminUsers />
+                    </AdminProtectedRoute>
+                  ),
+                },
+                {
+                  path: "edit/:userId",
+                  element: (
+                    <AdminProtectedRoute roles={[AcceptedRoles.ADMIN]}>
+                      <AdminUserEdit />
                     </AdminProtectedRoute>
                   ),
                 },
