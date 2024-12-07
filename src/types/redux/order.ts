@@ -127,3 +127,24 @@ export interface AllStatsInterface {
   totalOrders: number;
   customers: number;
 }
+
+
+export type Customer = {
+  _id: string;
+  username: string;
+  email: string;
+};
+
+export type Orders = {
+  _id: string;
+  customer: Customer;
+  orderStatus: "COMPLETED" | "PENDING" | "CANCELLED"; // Adjust as needed
+  isPaymentDone: boolean;
+  paymentId: string;
+  paymentMethod: "PAYSTACK" | "OTHER_METHOD"; // Adjust as needed
+  orderPrice: number;
+  createdAt: string;
+  updatedAt: string;
+  __v: number;
+  totalItems: number;
+};

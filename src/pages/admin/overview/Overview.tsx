@@ -4,27 +4,39 @@ import { PieOverview } from "./orders/PieOverview";
 import { useGetAllStatsQuery } from "../../../features/statistics/statistics.slice";
 import { useEffect } from "react";
 import { LocalStorage } from "../../../util";
-import { AllStatsInterface } from "../../../types/redux/order";
+import { AllStatsInterface, Orders } from "../../../types/redux/order";
 import { formatPrice } from "../../../helpers";
 import { Link } from "react-router-dom";
 import { ProductStatisticsCardLoader } from "../../../components/loaders/Skeleton";
+import OrderTable from "../../../components/table/OrderTable";
+import { useGetAllOrdersQuery } from "../../../features/order/order.slice";
 
 export default function Overview() {
   const { data, refetch, isLoading } = useGetAllStatsQuery();
+  const {
+    data: ordersData,
+    refetch: orderRefecth,
+  } = useGetAllOrdersQuery({
+    page: 1,
+    limit: 10,
+  });
 
   const statistics = data?.data?.statistics ?? (LocalStorage.get("all-stats") as AllStatsInterface);
+  const orders: Orders[] = Array.isArray(ordersData?.data?.orders)
+    ? ordersData?.data?.orders
+    : [ordersData?.data?.orders];
+
+  const columns = ["id", "customer name", "customer email", "order price", "ordered at", "status"];
 
   useEffect(() => {
     refetch();
+    orderRefecth();
   }, []);
-
-  console.log(statistics);
 
   return (
     <Fragment>
       {isLoading ? (
-      
-            <ProductStatisticsCardLoader cardsNumber={4} />
+        <ProductStatisticsCardLoader cardsNumber={4} />
       ) : (
         <div className="grid grid-cols-1 sm:grid-cols-2 gap-5 lg:gap-3 xl:gap-5 xl:grid-cols-4 mt-4">
           <div className="border border-[#ECEEF6] bg-white p-4 rounded drop-shadow-[#DCE0F980]">
@@ -222,6 +234,8 @@ export default function Overview() {
           <PieOverview />
         </div>
       </div>
+
+      <OrderTable columns={columns} data={orders.slice(0, 6)} />
     </Fragment>
   );
 }

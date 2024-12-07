@@ -7,12 +7,23 @@ interface Response {
   success: boolean;
 }
 
+interface Query {
+  [key: string]: any;
+}
+
 export const OrderSlice = ApiService.injectEndpoints({
   endpoints: (builder) => ({
     createPaystackOrder: builder.mutation<Response, void>({
       query: () => ({
         url: "/orders/provider/paystack",
         method: "POST",
+      }),
+    }),
+
+    getAllOrders: builder.query<Response, Query>({
+      query: ({ status = "", page = 1, limit = 10 }) => ({
+        url: `/orders?status=${status}?page=${page}?limit=${limit}`,
+        method: "GET",
       }),
     }),
 
@@ -26,4 +37,8 @@ export const OrderSlice = ApiService.injectEndpoints({
   }),
 });
 
-export const { useCreatePaystackOrderMutation, useUpdatePaystackOrderMutation } = OrderSlice;
+export const {
+  useCreatePaystackOrderMutation,
+  useUpdatePaystackOrderMutation,
+  useGetAllOrdersQuery,
+} = OrderSlice;
