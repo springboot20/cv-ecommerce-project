@@ -1,5 +1,5 @@
 import { PlusIcon, MinusIcon, ArrowLeftCircleIcon } from "@heroicons/react/24/outline";
-import { Button, Rating, Tabs } from "@material-tailwind/react";
+import { Button, Rating } from "@material-tailwind/react";
 import { motion } from "framer-motion";
 import { Disclosure, Tab } from "@headlessui/react";
 import { gridVariants } from "../../util/framerMotion.config";
@@ -42,7 +42,13 @@ const Product = () => {
     <Fragment>
       <CartModal isOpen={open} setIsOpen={setOpen} />
 
-      <motion.main layout initial="hidden" animate="visible" variants={gridVariants}>
+      <motion.main
+        layout
+        initial="hidden"
+        animate="visible"
+        variants={gridVariants}
+        className=" px-4 xl:px-0"
+      >
         <div className="mb-4">
           <button
             type="button"
@@ -56,7 +62,7 @@ const Product = () => {
             </div>
           </button>
         </div>
-        <section className="grid grid-cols-1 lg:grid-cols-2 max-w-2xl lg:max-w-full mx-auto place-items-center lg:place-items-start place-content-center gap-8 px-4 xl:px-0">
+        <section className="grid grid-cols-1 lg:grid-cols-2 max-w-2xl lg:max-w-full mx-auto place-items-center lg:place-items-start place-content-center gap-8">
           {isLoading ? (
             <ProductSkeletonLoading />
           ) : (
@@ -164,7 +170,7 @@ const Product = () => {
 
         <div className="mt-7">
           <Tab.Group>
-            <Tab.List className="border max-w-xs flex items-center">
+            <Tab.List className="border border-b-0 max-w-xs flex items-center">
               <Tab as={React.Fragment}>
                 {({ selected }) => (
                   <button
@@ -193,7 +199,9 @@ const Product = () => {
             </Tab.List>
 
             <Tab.Panels className="border w-full">
-              <Tab.Panel></Tab.Panel>
+              <Tab.Panel as="div" className="p-3">
+                <p className="text-lg font-normal text-gray-700">{product?.description}</p>
+              </Tab.Panel>
 
               <Tab.Panel></Tab.Panel>
             </Tab.Panels>
