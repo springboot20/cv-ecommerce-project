@@ -8,7 +8,20 @@ const Payment: React.FC<FormikEvent> = ({ values, handleChange }) => {
   return (
     <>
       <Tab.Group>
-        <Tab.List className="border max-w-xs flex items-center">
+        <Tab.List className="border max-w-md flex items-center">
+          <Tab as={React.Fragment}>
+            {({ selected }) => (
+              <button
+                className={clx(
+                  selected && "text-gray-800 bg-[#EBEBEB]",
+                  "focus:outline-none text-lg font-satoshi font-normal p-3 w-full",
+                )}
+              >
+                credit card
+              </button>
+            )}
+          </Tab>
+
           <Tab as={React.Fragment}>
             {({ selected }) => (
               <button
@@ -30,7 +43,7 @@ const Payment: React.FC<FormikEvent> = ({ values, handleChange }) => {
                   "focus:outline-none text-lg font-satoshi font-normal p-3 w-full",
                 )}
               >
-                credit card
+                paystack
               </button>
             )}
           </Tab>
@@ -55,7 +68,7 @@ const Payment: React.FC<FormikEvent> = ({ values, handleChange }) => {
                   onChange={handleChange}
                   placeholder="card holder name"
                   className={classNames(
-                    "block w-full rounded border-0 px-3 py-3.5 text-gray-700 ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset text-sm outline-none disabled:bg-transparent disabled:text-gray-400",
+                    "block w-full rounded border-0 p-3 text-gray-700 ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset text-sm outline-none disabled:bg-transparent disabled:text-gray-400",
                   )}
                 />
               </fieldset>
@@ -75,26 +88,46 @@ const Payment: React.FC<FormikEvent> = ({ values, handleChange }) => {
                   onChange={handleChange}
                   placeholder="card number"
                   className={classNames(
-                    "block w-full rounded border-0 px-3 py-3.5 text-gray-700 ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset text-sm outline-none disabled:bg-transparent disabled:text-gray-400",
+                    "block w-full rounded border-0 p-3 text-gray-700 ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset text-sm outline-none disabled:bg-transparent disabled:text-gray-400",
                   )}
                 />
               </fieldset>
 
-              <div className="grid grid-cols-1 sm:grid-cols-2 gap-3 mt-4">
+              <div className="grid grid-cols-1 md:grid-cols-3 gap-3 mt-4">
                 <fieldset className="col-span-full md:col-span-1">
                   <label
-                    htmlFor="card-expiry"
+                    htmlFor="card-month"
                     className="text-sm font-normal text-gray-700 sm:text-base sr-only"
                   >
-                    card month
+                    Card Month
                   </label>
                   <input
-                    type="month"
-                    name="card-expiry"
-                    id="card-expiry"
-                    value={values["card-expiry"]}
+                    type="text"
+                    name="card-month"
+                    id="card-month"
+                    value={values["card-month"]}
                     onChange={handleChange}
-                    placeholder="month"
+                    placeholder="MM"
+                    className={classNames(
+                      "block w-full rounded border-0 px-3 py-3.5 text-gray-700 ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset text-sm outline-none disabled:bg-transparent disabled:text-gray-400",
+                    )}
+                  />
+                </fieldset>
+
+                <fieldset className="col-span-full md:col-span-1">
+                  <label
+                    htmlFor="card-year"
+                    className="text-sm font-normal text-gray-700 sm:text-base sr-only"
+                  >
+                    Card Year
+                  </label>
+                  <input
+                    type="text"
+                    name="card-year"
+                    id="card-year"
+                    value={values["card-year"]}
+                    onChange={handleChange}
+                    placeholder="YYYY"
                     className={classNames(
                       "block w-full rounded border-0 px-3 py-3.5 text-gray-700 ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset text-sm outline-none disabled:bg-transparent disabled:text-gray-400",
                     )}
@@ -116,7 +149,7 @@ const Payment: React.FC<FormikEvent> = ({ values, handleChange }) => {
                     onChange={handleChange}
                     placeholder="CVC"
                     className={classNames(
-                      "block w-full rounded border-0 px-3 py-3.5 text-gray-700 ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset text-sm outline-none disabled:bg-transparent disabled:text-gray-400",
+                      "block w-full rounded border-0 p-3 text-gray-700 ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset text-sm outline-none disabled:bg-transparent disabled:text-gray-400",
                     )}
                   />
                 </fieldset>

@@ -30,7 +30,9 @@ const CheckOut: React.FC = () => {
     "card-name": "",
     "card-number": "",
     cvc: "",
-    "card-expiry": "",
+    "card-year": "",
+    "card-month": "",
+    "shipping-method": "",
   };
 
   const { handleChange, values, handleBlur, touched, errors, handleSubmit } = useFormik({
@@ -61,13 +63,22 @@ const CheckOut: React.FC = () => {
       values={values}
       key={"shipping-info"}
     />,
-    <Shipping key="shipping" />,
+    <Shipping
+      key="shipping"
+      values={values}
+      handleChange={handleChange}
+      errors={errors}
+      handleBlur={handleBlur}
+      touched={touched}
+    />,
     <Payment handleChange={handleChange} values={values} key={"payment"} />,
   ];
 
   async function onSubmit(values: InitialValues) {
     if (currentStep === 0) {
       await handleAddressMutation(values);
+      setCurrentStep(currentStep + 1);
+    } else if (currentStep === 1) {
       setCurrentStep(currentStep + 1);
     } else {
       // Handle payment submission here console.log("Payment submitted", values);
@@ -113,7 +124,7 @@ const CheckOut: React.FC = () => {
               </motion.div>
 
               <div className="mt-6 flex items-center justify-between space-x-3">
-                {!done && (
+                {!done && currentStep < formSteps.length - 1 && (
                   <button
                     type={buttonType}
                     onClick={buttonType === "button" ? handleNextStep : undefined}
