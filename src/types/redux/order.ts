@@ -67,7 +67,6 @@ type Order = {
   updatedAt: string;
   __v: number;
 };
-
 export type OrderResponse = {
   data: {
     cart: Cart;
@@ -76,6 +75,18 @@ export type OrderResponse = {
 };
 
 type OrderStatus = "COMPLETED" | "PENDING";
+
+export type DailyStats = {
+  _id: {
+    day: number;
+    month: number;
+    year: number;
+    status: OrderStatus;
+  };
+  order_items: number;
+  total_amount: number;
+  count: number;
+};
 
 export type WeeklyStats = {
   _id: {
@@ -99,20 +110,10 @@ export type MonthlyStats = {
   count: number;
 };
 
-export type YearlyStats = {
-  _id: {
-    year: number;
-    status: OrderStatus;
-  };
-  order_items: number;
-  total_amount: number;
-  count: number;
-};
-
 export type Statistics = {
+  daily: DailyStats[];
   weekly: WeeklyStats[];
   monthly: MonthlyStats[];
-  yearly: YearlyStats[];
 };
 
 export type OrderStatsResponse = Statistics[];

@@ -1,15 +1,15 @@
 import { useEffect } from "react";
 import ChartComponent from "../../../../components/chart/Chart";
-import { Loader } from "../../../../components/Loader";
 import { useGetOrderStatsQuery } from "../../../../features/order/order.slice";
 import {
+  DailyStats,
   MonthlyStats,
   OrderStatsResponse,
   Statistics,
   WeeklyStats,
-  YearlyStats,
 } from "../../../../types/redux/order";
 import { LocalStorage } from "../../../../util";
+import { Loading } from "../../../../components/loaders/Loading";
 
 export const PieOverview = () => {
   const { data, isLoading, refetch } = useGetOrderStatsQuery();
@@ -22,28 +22,32 @@ export const PieOverview = () => {
   console.log(statistics);
 
   const initialStats: Statistics = {
+    daily: [] as DailyStats[],
     weekly: [] as WeeklyStats[],
     monthly: [] as MonthlyStats[],
-    yearly: [] as YearlyStats[],
   };
 
   const stats: Statistics = statistics?.reduce((acc: Statistics, s: any) => {
+    acc.daily = s?.daily;
     acc.weekly = s?.weekly;
     acc.monthly = s?.monthly;
-    acc.yearly = s?.yearly;
     return acc;
   }, initialStats);
 
+  const dailyStats = stats?.daily;
   const weeklyStats = stats?.weekly;
   const monthlyStats = stats?.monthly;
 
   const completedOrders = [
+    ...dailyStats?.filter((item) => item?._id?.status === "COMPLETED")?.map((item) => item?.count),
     ...weeklyStats?.filter((item) => item?._id?.status === "COMPLETED")?.map((item) => item?.count),
     ...monthlyStats
       ?.filter((item) => item?._id?.status === "COMPLETED")
       ?.map((item) => item?.count),
   ];
+
   const pendingOrders = [
+    ...dailyStats?.filter((item) => item?._id?.status === "PENDING")?.map((item) => item?.count),
     ...weeklyStats?.filter((item) => item?._id?.status === "PENDING")?.map((item) => item?.count),
     ...monthlyStats?.filter((item) => item?._id?.status === "PENDING")?.map((item) => item?.count),
   ];
@@ -65,30 +69,53 @@ export const PieOverview = () => {
       enabled: true,
       style: {
         fontFamily: "Roboto, sans-serif",
+        fontSize: "14px",
       },
     },
     colors: ["#28A745", "#FF5733"],
+    annotations: {
+      texts: [
+        {
+          y: 12,
+          x: 20,
+          fontSize: 16,
+          fontFamily: "Roboto",
+          fontWeight: "medium",
+        },
+      ],
+    },
   };
 
   useEffect(() => {
     refetch();
   }, []);
 
-  return (
-    <div className="max-w-full">
-      {isLoading ? (
-        <div className="flex items-center justify-center">
-          <Loader />
-        </div>
-      ) : (
-        <ChartComponent
-          type="pie"
-          options={pieOptions}
-          series={pieSeries}
-          height={350}
-          width={"100%"}
-        />
-      )}
+  return isLoading ? (
+    <div className="flex items-center justify-center h-full">
+      <Loading />
     </div>
+  ) : (
+    <ChartComponent
+      type="donut"
+      options={{
+        ...pieOptions,
+        legend: {
+          show: true,
+          position: "bottom",
+          horizontalAlign: "center",
+          fontSize: "16px",
+          fontFamily: "Roboto, sans-serif",
+        },
+        plotOptions: {
+          pie: {
+            donut: {
+              size: "50%",
+            },
+          },
+        },
+      }}
+      series={pieSeries}
+      height={"100%"}
+    />
   );
 };
