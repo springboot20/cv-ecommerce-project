@@ -117,3 +117,13 @@ export type Statistics = {
 };
 
 export type OrderStatsResponse = Statistics[];
+
+export interface AllStatsInterface {
+  totalProducts: number;
+  product: {
+    averagePrice: number;
+    totalSales: number;
+  };
+  totalOrders: number;
+  customers: number;
+}

@@ -23,17 +23,7 @@ export const OrderSlice = ApiService.injectEndpoints({
         body: { status },
       }),
     }),
-
-    getOrderStats: builder.query<Response, void>({
-      query: () => ({
-        url: `/statistics/orders-stats`,
-      }),
-    }),
   }),
 });
 
-export const {
-  useCreatePaystackOrderMutation,
-  useUpdatePaystackOrderMutation,
-  useGetOrderStatsQuery,
-} = OrderSlice;
+export const { useCreatePaystackOrderMutation, useUpdatePaystackOrderMutation } = OrderSlice;

@@ -1,6 +1,5 @@
 import { useEffect } from "react";
 import ChartComponent from "../../../../components/chart/Chart";
-import { useGetOrderStatsQuery } from "../../../../features/order/order.slice";
 import {
   DailyStats,
   MonthlyStats,
@@ -10,6 +9,7 @@ import {
 } from "../../../../types/redux/order";
 import { LocalStorage } from "../../../../util";
 import { Loading } from "../../../../components/loaders/Loading";
+import { useGetOrderStatsQuery } from "../../../../features/statistics/statistics.slice";
 
 const OrderCountsChart = () => {
   const { data, refetch, isLoading } = useGetOrderStatsQuery();
