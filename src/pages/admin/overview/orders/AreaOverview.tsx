@@ -34,27 +34,33 @@ const OrderCountsChart = () => {
     return acc;
   }, initialStats);
 
-  const dailyStats = stats?.daily;
-  const weeklyStats = stats?.weekly;
-  const monthlyStats = stats?.monthly;
+  const dailyStats = stats?.daily ?? [];
+  const weeklyStats = stats?.weekly ?? [];
+  const monthlyStats = stats?.monthly ?? [];
 
   const series = [
     {
       name: "Completed Orders",
       data: [
-        ...dailyStats?.filter((item) => item._id.status === "COMPLETED").map((item) => item.count),
-        ...weeklyStats?.filter((item) => item._id.status === "COMPLETED").map((item) => item.count),
+        ...dailyStats
+          ?.filter((item) => item?._id.status === "COMPLETED")
+          .map((item) => item?.count),
+        ...weeklyStats
+          ?.filter((item) => item?._id.status === "COMPLETED")
+          .map((item) => item?.count),
         ...monthlyStats
-          ?.filter((item) => item._id.status === "COMPLETED")
-          .map((item) => item.count),
+          ?.filter((item) => item?._id.status === "COMPLETED")
+          .map((item) => item?.count),
       ],
     },
     {
       name: "Pending Orders",
       data: [
-        ...dailyStats?.filter((item) => item._id.status === "PENDING").map((item) => item.count),
-        ...weeklyStats?.filter((item) => item._id.status === "PENDING").map((item) => item.count),
-        ...monthlyStats?.filter((item) => item._id.status === "PENDING").map((item) => item.count),
+        ...dailyStats?.filter((item) => item?._id.status === "PENDING").map((item) => item?.count),
+        ...weeklyStats?.filter((item) => item?._id.status === "PENDING").map((item) => item?.count),
+        ...monthlyStats
+          ?.filter((item) => item?._id?.status === "PENDING")
+          .map((item) => item?.count),
       ],
     },
   ];
@@ -62,13 +68,15 @@ const OrderCountsChart = () => {
   const options = {
     xaxis: {
       categories: [
-        ...dailyStats?.map((item) => `Day ${item._id.day}, ${item._id.month}/${item._id.year}`),
-        ...weeklyStats?.map((item) => `Week ${item._id.week}, ${item._id.year}`),
-        ...monthlyStats?.map((item) => `Month ${item._id.month}, ${item._id.year}`),
+        ...dailyStats?.map(
+          (item) => `Day ${item?._id?.day}, ${item?._id?.month}/${item?._id?.year}`,
+        ),
+        ...weeklyStats?.map((item) => `Week ${item?._id?.week}, ${item?._id?.year}`),
+        ...monthlyStats?.map((item) => `Month ${item?._id?.month}, ${item?._id?.year}`),
       ],
     },
     title: {
-      text: "Order Counts",
+      text: "Order? Counts",
       style: {
         fontFamily: "Roboto, sans-serif",
       },

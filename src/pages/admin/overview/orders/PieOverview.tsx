@@ -28,15 +28,15 @@ export const PieOverview = () => {
   };
 
   const stats: Statistics = statistics?.reduce((acc: Statistics, s: any) => {
-    acc.daily = s?.daily;
-    acc.weekly = s?.weekly;
-    acc.monthly = s?.monthly;
+    acc.daily = s?.daily ?? [];
+    acc.weekly = s?.weekly ?? [];
+    acc.monthly = s?.monthly ?? [];
     return acc;
   }, initialStats);
 
-  const dailyStats = stats?.daily;
-  const weeklyStats = stats?.weekly;
-  const monthlyStats = stats?.monthly;
+  const dailyStats = stats?.daily ?? [];
+  const weeklyStats = stats?.weekly ?? [];
+  const monthlyStats = stats?.monthly ?? [];
 
   const completedOrders = [
     ...dailyStats?.filter((item) => item?._id?.status === "COMPLETED")?.map((item) => item?.count),
