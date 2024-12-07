@@ -8,7 +8,7 @@ const Payment: React.FC<FormikEvent> = ({ values, handleChange }) => {
   return (
     <>
       <Tab.Group>
-        <Tab.List className="border border-b-0 max-w-xs flex items-center">
+        <Tab.List className="border max-w-xs flex items-center">
           <Tab as={React.Fragment}>
             {({ selected }) => (
               <button
@@ -38,12 +38,12 @@ const Payment: React.FC<FormikEvent> = ({ values, handleChange }) => {
 
         <Tab.Panels className="mt-4">
           <Tab.Panel as="div" className="p-3">
-            <h3>payment details</h3>
+            <h3 className="capitalize font-medium text-gray-700">payment details</h3>
             <div className="mt-3">
               <fieldset className="col-span-full sm:col-span-1">
                 <label
                   htmlFor="card-name"
-                  className="text-sm font-normal text-gray-700 sm:text-base"
+                  className="text-sm font-normal text-gray-700 sm:text-base sr-only"
                 >
                   card name
                 </label>
@@ -55,15 +55,15 @@ const Payment: React.FC<FormikEvent> = ({ values, handleChange }) => {
                   onChange={handleChange}
                   placeholder="card holder name"
                   className={classNames(
-                    "block w-full rounded border-0 p-3 text-gray-700 ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset text-sm outline-none disabled:bg-transparent disabled:text-gray-400",
+                    "block w-full rounded border-0 px-3 py-3.5 text-gray-700 ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset text-sm outline-none disabled:bg-transparent disabled:text-gray-400",
                   )}
                 />
               </fieldset>
 
-              <fieldset className="col-span-full sm:col-span-1">
+              <fieldset className="col-span-full sm:col-span-1 mt-4">
                 <label
                   htmlFor="card-number"
-                  className="text-sm font-normal text-gray-700 sm:text-base"
+                  className="text-sm font-normal text-gray-700 sm:text-base sr-only"
                 >
                   card number
                 </label>
@@ -75,48 +75,28 @@ const Payment: React.FC<FormikEvent> = ({ values, handleChange }) => {
                   onChange={handleChange}
                   placeholder="card number"
                   className={classNames(
-                    "block w-full rounded border-0 p-3 text-gray-700 ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset text-sm outline-none disabled:bg-transparent disabled:text-gray-400",
+                    "block w-full rounded border-0 px-3 py-3.5 text-gray-700 ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset text-sm outline-none disabled:bg-transparent disabled:text-gray-400",
                   )}
                 />
               </fieldset>
 
-              <div className="grid grid-cols-1 md:grid-cols-3 gap-3">
+              <div className="grid grid-cols-1 sm:grid-cols-2 gap-3 mt-4">
                 <fieldset className="col-span-full md:col-span-1">
                   <label
-                    htmlFor="card-month"
+                    htmlFor="card-expiry"
                     className="text-sm font-normal text-gray-700 sm:text-base sr-only"
                   >
                     card month
                   </label>
                   <input
                     type="month"
-                    name="card-month"
-                    id="card-month"
-                    value={values["card-month"]}
+                    name="card-expiry"
+                    id="card-expiry"
+                    value={values["card-expiry"]}
                     onChange={handleChange}
                     placeholder="month"
                     className={classNames(
-                      "block w-full rounded border-0 p-3 text-gray-700 ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset text-sm outline-none disabled:bg-transparent disabled:text-gray-400",
-                    )}
-                  />
-                </fieldset>
-
-                <fieldset className="col-span-full md:col-span-1">
-                  <label
-                    htmlFor="card-year"
-                    className="text-sm font-normal text-gray-700 sm:text-base sr-only"
-                  >
-                    card year
-                  </label>
-                  <input
-                    type="year"
-                    name="card-year"
-                    id="card-year"
-                    value={values["card-year"]}
-                    onChange={handleChange}
-                    placeholder="year"
-                    className={classNames(
-                      "block w-full rounded border-0 p-3 text-gray-700 ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset text-sm outline-none disabled:bg-transparent disabled:text-gray-400",
+                      "block w-full rounded border-0 px-3 py-3.5 text-gray-700 ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset text-sm outline-none disabled:bg-transparent disabled:text-gray-400",
                     )}
                   />
                 </fieldset>
@@ -136,7 +116,7 @@ const Payment: React.FC<FormikEvent> = ({ values, handleChange }) => {
                     onChange={handleChange}
                     placeholder="CVC"
                     className={classNames(
-                      "block w-full rounded border-0 p-3 text-gray-700 ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset text-sm outline-none disabled:bg-transparent disabled:text-gray-400",
+                      "block w-full rounded border-0 px-3 py-3.5 text-gray-700 ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset text-sm outline-none disabled:bg-transparent disabled:text-gray-400",
                     )}
                   />
                 </fieldset>

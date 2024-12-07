@@ -30,6 +30,5 @@ export interface InitialValues {
   "card-name": string;
   "card-number": string;
   cvc: string;
-  "card-year": string;
-  "card-month": string;
+  "card-expiry": string;
 }

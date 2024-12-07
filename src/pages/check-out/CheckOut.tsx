@@ -30,8 +30,7 @@ const CheckOut: React.FC = () => {
     "card-name": "",
     "card-number": "",
     cvc: "",
-    "card-year": "",
-    "card-month": "",
+    "card-expiry": "",
   };
 
   const { handleChange, values, handleBlur, touched, errors, handleSubmit } = useFormik({
@@ -67,7 +66,12 @@ const CheckOut: React.FC = () => {
   ];
 
   async function onSubmit(values: InitialValues) {
-    await handleAddressMutation(values);
+    if (currentStep === 0) {
+      await handleAddressMutation(values);
+      setCurrentStep(currentStep + 1);
+    } else {
+      // Handle payment submission here console.log("Payment submitted", values);
+    }
   }
 
   const variants = {
@@ -75,6 +79,17 @@ const CheckOut: React.FC = () => {
     visible: { opacity: 1, x: 0 },
     exit: { opacity: 0, x: 100 },
   };
+
+  const handleNextStep = () => {
+    if (currentStep < formSteps.length - 1) {
+      setCurrentStep(currentStep + 1);
+    } else {
+      handleSubmit();
+    }
+  };
+
+  const buttonText = currentStep === 0 ? "Continue to Shipping" : "Continue to Payment";
+  const buttonType = currentStep === formSteps.length - 1 ? "submit" : "button";
 
   return (
     <Fragment>
@@ -100,10 +115,11 @@ const CheckOut: React.FC = () => {
               <div className="mt-6 flex items-center justify-between space-x-3">
                 {!done && (
                   <button
-                    type="submit"
+                    type={buttonType}
+                    onClick={buttonType === "button" ? handleNextStep : undefined}
                     className="px-4 py-2 bg-blue-600 text-white rounded-md hover:bg-blue-700 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:ring-offset-2"
                   >
-                    Submit
+                    {buttonText}
                   </button>
                 )}
               </div>
