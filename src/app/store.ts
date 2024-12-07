@@ -4,6 +4,7 @@ import { ApiService } from "./services/api.service";
 import { cartReducer } from "../features/cart/cart.reducer";
 import { productReducer } from "../features/products/product.reducer";
 import { addressReducer } from "../features/order/address.reducer";
+import { ordersReducer } from "../features/order/order.reducer";
 
 const store = configureStore({
   reducer: {
@@ -11,6 +12,7 @@ const store = configureStore({
     cart: cartReducer,
     product: productReducer,
     address: addressReducer,
+    orders: ordersReducer,
     [ApiService.reducerPath]: ApiService.reducer,
   },
   middleware: (gMD) =>

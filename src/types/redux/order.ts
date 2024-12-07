@@ -115,8 +115,4 @@ export type Statistics = {
   yearly: YearlyStats[];
 };
 
-export type OrderStatsResponse = {
-  data: {
-    statistics: Statistics[];
-  };
-};
+export type OrderStatsResponse = Statistics[];
