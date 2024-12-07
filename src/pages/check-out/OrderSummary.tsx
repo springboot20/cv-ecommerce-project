@@ -5,11 +5,8 @@ import { PencilSquareIcon, TrashIcon } from "@heroicons/react/24/outline";
 import { useCart } from "../../hooks/useCart";
 import { toast } from "react-toastify";
 import { Link } from "react-router-dom";
-import PayButton from "../../components/buttons/PayStackButton";
 
-export const OrderSummary: React.FC<{ done: boolean;  }> = ({
-  done
-}) => {
+export const OrderSummary: React.FC = () => {
   const {
     cart,
     handleCancelEdit,
@@ -160,12 +157,6 @@ export const OrderSummary: React.FC<{ done: boolean;  }> = ({
             </span>
           </li>
         </ul>
-
-        {done && (
-          <div className="px-5 py-4">
-            <PayButton />
-          </div>
-        )}
       </div>
     </div>
   );

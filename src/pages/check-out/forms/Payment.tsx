@@ -3,8 +3,9 @@ import React from "react";
 import { clx } from "../../../util";
 import { FormikEvent } from "../../../types/formik";
 import { classNames } from "../../../helpers";
+import PayButton from "../../../components/buttons/PayStackButton";
 
-const Payment: React.FC<FormikEvent> = ({ values, handleChange }) => {
+const Payment: React.FC<FormikEvent & { done: boolean }> = ({ values, handleChange, done }) => {
   return (
     <>
       <Tab.Group>
@@ -158,6 +159,13 @@ const Payment: React.FC<FormikEvent> = ({ values, handleChange }) => {
           </Tab.Panel>
 
           <Tab.Panel></Tab.Panel>
+          <Tab.Panel>
+            {done && (
+              <div className="px-5 py-4">
+                <PayButton />
+              </div>
+            )}
+          </Tab.Panel>
         </Tab.Panels>
       </Tab.Group>
     </>

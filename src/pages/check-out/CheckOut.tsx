@@ -35,11 +35,12 @@ const CheckOut: React.FC = () => {
     "shipping-method": "",
   };
 
-  const { handleChange, values, handleBlur, touched, errors, handleSubmit } = useFormik({
-    initialValues,
-    validationSchema: orderSchema,
-    onSubmit,
-  });
+  const { handleChange, values, handleBlur, touched, errors, handleSubmit, validateForm } =
+    useFormik({
+      initialValues,
+      validationSchema: orderSchema,
+      onSubmit,
+    });
 
   const handleAddressMutation = useCallback(async (data: InitialValues) => {
     try {
@@ -71,14 +72,14 @@ const CheckOut: React.FC = () => {
       handleBlur={handleBlur}
       touched={touched}
     />,
-    <Payment handleChange={handleChange} values={values} key={"payment"} />,
+    <Payment handleChange={handleChange} values={values} key={"payment"} done={done} />,
   ];
 
   async function onSubmit(values: InitialValues) {
     if (currentStep === 0) {
-      await handleAddressMutation(values);
       setCurrentStep(currentStep + 1);
     } else if (currentStep === 1) {
+      await handleAddressMutation(values);
       setCurrentStep(currentStep + 1);
     } else {
       // Handle payment submission here console.log("Payment submitted", values);
@@ -91,16 +92,18 @@ const CheckOut: React.FC = () => {
     exit: { opacity: 0, x: 100 },
   };
 
-  const handleNextStep = () => {
-    if (currentStep < formSteps.length - 1) {
+  const handleNextStep = async (e: React.MouseEvent<HTMLButtonElement>) => {
+    e.preventDefault();
+    const errors = await validateForm();
+    if (Object.keys(errors).length === 0) {
       setCurrentStep(currentStep + 1);
     } else {
-      handleSubmit();
+      toast("input fields cannot be empty.", { type: "error" });
     }
   };
 
   const buttonText = currentStep === 0 ? "Continue to Shipping" : "Continue to Payment";
-  const buttonType = currentStep === formSteps.length - 1 ? "submit" : "button";
+  const buttonType = currentStep === 1 ? "submit" : "button";
 
   return (
     <Fragment>
@@ -136,7 +139,7 @@ const CheckOut: React.FC = () => {
               </div>
             </div>
           </form>
-          <OrderSummary done={done} />
+          <OrderSummary />
         </div>
       </main>
     </Fragment>
