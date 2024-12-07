@@ -1,7 +1,7 @@
 import { PlusIcon, MinusIcon, ArrowLeftCircleIcon } from "@heroicons/react/24/outline";
-import { Button, Rating } from "@material-tailwind/react";
+import { Button, Rating, Tabs } from "@material-tailwind/react";
 import { motion } from "framer-motion";
-import { Disclosure } from "@headlessui/react";
+import { Disclosure, Tab } from "@headlessui/react";
 import { gridVariants } from "../../util/framerMotion.config";
 import { formatPrice } from "../../helpers";
 import { toast } from "react-toastify";
@@ -9,7 +9,8 @@ import { ProductSkeletonLoading } from "../../components/loaders/Skeleton";
 import CartModal from "../../components/modal/CartModal";
 import { useProduct } from "../../hooks/useProduct";
 import { useNavigate } from "react-router-dom";
-import { Fragment, useEffect } from "react";
+import React, { Fragment, useEffect } from "react";
+import { clx } from "../../util";
 
 const Product = () => {
   const navigate = useNavigate();
@@ -78,17 +79,27 @@ const Product = () => {
                     </p>
                   </div>
                   <div className="flex items-center gap-1">
-                    <span className="text-base font-semibold text-gray-600 inline-block">3.9</span>
                     <Rating
                       value={ratings}
-                      className="h-8"
+                      className="h-8 !stroke-[1]"
                       onChange={(value) => setRatingsValue(value)}
                       placeholder={undefined}
                       onPointerEnterCapture={undefined}
                       onPointerLeaveCapture={undefined}
                     />
+                    <span className="text-sm font-normal text-gray-600 inline-block">(3.9)</span>
                   </div>
                 </div>
+
+                <div className="mt-6">
+                  <h1 className="text-base sm:text-lg font-medium">Desscription</h1>
+                  <p className="text-sm font-normal text-gray-700">{product?.description}</p>
+
+                  <Disclosure as="ul" className="mt-10 space-y-5">
+                    {/* Disclosure items */}
+                  </Disclosure>
+                </div>
+
                 <div className="flex items-center space-x-5 mt-8">{/* Color buttons */}</div>
 
                 <div className="col-span-full">
@@ -146,19 +157,48 @@ const Product = () => {
                     </Button>
                   </div>
                 </div>
-
-                <div className="mt-6">
-                  <h1 className="text-base sm:text-lg font-medium">Desscription</h1>
-                  <p className="text-sm font-normal text-gray-700">{product?.description}</p>
-
-                  <Disclosure as="ul" className="mt-10 space-y-5">
-                    {/* Disclosure items */}
-                  </Disclosure>
-                </div>
               </div>
             </>
           )}
         </section>
+
+        <div className="mt-7">
+          <Tab.Group>
+            <Tab.List className="border max-w-xs flex items-center">
+              <Tab as={React.Fragment}>
+                {({ selected }) => (
+                  <button
+                    className={clx(
+                      selected && "text-gray-800 bg-[#EBEBEB]",
+                      "focus:outline-none text-lg font-satoshi font-normal p-3 border-r w-full",
+                    )}
+                  >
+                    Description
+                  </button>
+                )}
+              </Tab>
+
+              <Tab as={React.Fragment}>
+                {({ selected }) => (
+                  <button
+                    className={clx(
+                      selected && "text-gray-800 bg-[#EBEBEB]",
+                      "focus:outline-none text-lg font-satoshi font-normal p-3 w-full",
+                    )}
+                  >
+                    Reviews ({0})
+                  </button>
+                )}
+              </Tab>
+            </Tab.List>
+
+            <Tab.Panels className="border w-full">
+              <Tab.Panel></Tab.Panel>
+
+              <Tab.Panel></Tab.Panel>
+            </Tab.Panels>
+          </Tab.Group>
+        </div>
       </motion.main>
     </Fragment>
   );
