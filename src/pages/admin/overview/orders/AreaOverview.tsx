@@ -76,13 +76,12 @@ const OrderCountsChart = () => {
       ],
     },
     title: {
-      text: "Order? Counts",
+      text: "Order Counts",
       style: {
         fontFamily: "Roboto, sans-serif",
       },
     },
     colors: ["#28A745", "#FF5733"],
-
     fill: {
       type: "gradient",
       gradient: {
