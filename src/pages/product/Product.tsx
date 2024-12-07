@@ -47,9 +47,9 @@ const Product = () => {
         initial="hidden"
         animate="visible"
         variants={gridVariants}
-        className=" px-4 xl:px-0"
+        className="max-w-2xl lg:max-w-full mx-auto px-4 xl:px-0"
       >
-        <div className="mb-4">
+        <div className="mb-4 w-max">
           <button
             type="button"
             onClick={() => navigate("/collections")}
@@ -62,7 +62,7 @@ const Product = () => {
             </div>
           </button>
         </div>
-        <section className="grid grid-cols-1 lg:grid-cols-2 max-w-2xl lg:max-w-full mx-auto place-items-center lg:place-items-start place-content-center gap-8">
+        <section className="grid grid-cols-1 lg:grid-cols-2 place-items-center lg:place-items-start place-content-center gap-8">
           {isLoading ? (
             <ProductSkeletonLoading />
           ) : (
