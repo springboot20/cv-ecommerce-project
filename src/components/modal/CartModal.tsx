@@ -115,7 +115,7 @@ export default function CartModal({
                     <Link
                       to="/cart"
                       onClick={() => setIsOpen(false)}
-                      className="text-base font-semibold text-white py-2.5 px-2 rounded bg-gray-800 w-full block text-center"
+                      className="text-base font-medium text-white py-2.5 px-2 rounded bg-gray-800 w-full block text-center"
                     >
                       Continue to checkout
                     </Link>
