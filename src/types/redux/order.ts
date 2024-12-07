@@ -74,3 +74,49 @@ export type OrderResponse = {
     order: Order;
   };
 };
+
+type OrderStatus = "COMPLETED" | "PENDING";
+
+export type WeeklyStats = {
+  _id: {
+    week: number;
+    year: number;
+    status: OrderStatus;
+  };
+  order_items: number;
+  total_amount: number;
+  count: number;
+};
+
+export type MonthlyStats = {
+  _id: {
+    month: number;
+    year: number;
+    status: OrderStatus;
+  };
+  order_items: number;
+  total_amount: number;
+  count: number;
+};
+
+export type YearlyStats = {
+  _id: {
+    year: number;
+    status: OrderStatus;
+  };
+  order_items: number;
+  total_amount: number;
+  count: number;
+};
+
+export type Statistics = {
+  weekly: WeeklyStats[];
+  monthly: MonthlyStats[];
+  yearly: YearlyStats[];
+};
+
+export type OrderStatsResponse = {
+  data: {
+    statistics: Statistics[];
+  };
+};

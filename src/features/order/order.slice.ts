@@ -12,7 +12,7 @@ export const OrderSlice = ApiService.injectEndpoints({
     createPaystackOrder: builder.mutation<Response, void>({
       query: () => ({
         url: "/orders/provider/paystack",
-        method: "POST"
+        method: "POST",
       }),
     }),
 
@@ -23,7 +23,17 @@ export const OrderSlice = ApiService.injectEndpoints({
         body: { status },
       }),
     }),
+
+    getOrderStats: builder.query<Response, void>({
+      query: () => ({
+        url: `/statistics/orders-stats`,
+      }),
+    }),
   }),
 });
 
-export const { useCreatePaystackOrderMutation, useUpdatePaystackOrderMutation } = OrderSlice;
+export const {
+  useCreatePaystackOrderMutation,
+  useUpdatePaystackOrderMutation,
+  useGetOrderStatsQuery,
+} = OrderSlice;
