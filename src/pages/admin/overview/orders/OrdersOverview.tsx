@@ -33,39 +33,25 @@ export const OrdersOverview = () => {
   const monthlyStats = stats?.monthly;
   const yearlyStats = stats?.yearly;
 
-  const apexBarChartOptions = {
-    series: [
-      {
-        name: "Weekly Orders",
-        data: weeklyStats?.map((stat) => ({
-          x: `Week ${stat._id.week} ${stat._id.year}`,
-          y: stat?.count,
-        })),
-      },
-      {
-        name: "Monthly Orders",
-        data: monthlyStats?.map((stat) => ({
-          x: `Month ${stat._id.month} ${stat._id.year}`,
-          y: stat?.count,
-        })),
-      },
-      {
-        name: "Yearly Orders",
-        data: yearlyStats?.map((stat) => ({
-          x: `Year ${stat._id.year}`,
-          y: stat?.count,
-        })),
-      },
-    ],
-    options: {
-      xaxis: {
-        categories: weeklyStats?.map((stat) => `Week ${stat._id.week} ${stat._id.year}`),
-        title: {
-          text: "Bar Chart: Weekly, Monthly and Yearl Orders",
-          align: "center",
-        },
-      },
-    },
+  const completedOrders = [
+    ...weeklyStats.filter((item) => item._id.status === "COMPLETED").map((item) => item.count),
+    ...monthlyStats.filter((item) => item._id.status === "COMPLETED").map((item) => item.count),
+    ...yearlyStats.filter((item) => item._id.status === "COMPLETED").map((item) => item.count),
+  ];
+  const pendingOrders = [
+    ...weeklyStats.filter((item) => item._id.status === "PENDING").map((item) => item.count),
+    ...monthlyStats.filter((item) => item._id.status === "PENDING").map((item) => item.count),
+    ...yearlyStats.filter((item) => item._id.status === "PENDING").map((item) => item.count),
+  ];
+
+  const pieSeries = [
+    completedOrders.reduce((acc, count) => acc + count, 0),
+    pendingOrders.reduce((acc, count) => acc + count, 0),
+  ];
+
+  const pieOptions = {
+    labels: ["Completed Orders", "Pending Orders"],
+    title: { text: "Order Status" },
   };
 
   return (
@@ -76,9 +62,9 @@ export const OrdersOverview = () => {
         </div>
       ) : (
         <ChartComponent
-          type="bar"
-          options={apexBarChartOptions.options}
-          series={apexBarChartOptions.series}
+          type="pie"
+          options={pieOptions}
+          series={pieSeries}
           height={350}
           width={1000}
         />
