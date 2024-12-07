@@ -119,3 +119,36 @@ export const ProductSkeletonLoading = () => {
     </Fragment>
   );
 };
+export const ProductStatisticsCardLoader = ({ cardsNumber }: { cardsNumber: number }) => {
+  return (
+    <div className="grid grid-cols-1 sm:grid-cols-2 gap-5 lg:gap-3 xl:gap-5 xl:grid-cols-4 mt-4">
+      {Array(cardsNumber)
+        .fill("-")
+        .map((_, i) => (
+          <div
+            className="border border-[#ECEEF6] bg-white p-4 rounded drop-shadow-[#DCE0F980]"
+            key={i}
+          >
+            <div className="flex flex-col space-y-7">
+              <div className="flex items-center justify-between">
+                <span className="relative h-5 w-auto">
+                  <Skeleton width={100} className="h-full w-auto" />
+                </span>
+                <span className="relative h-5 w-auto">
+                  <Skeleton width={65} className="h-full" />
+                </span>
+              </div>
+              <div className="flex items-center justify-between gap-4">
+                <span className="relative h-5 w-auto">
+                  <Skeleton width={100} className="h-full" />
+                </span>
+                <span className="relative h-11 w-auto">
+                  <Skeleton width={44} borderRadius={"50%"} className="h-full" />
+                </span>
+              </div>
+            </div>
+          </div>
+        ))}
+    </div>
+  );
+};

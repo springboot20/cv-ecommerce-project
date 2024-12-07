@@ -41,7 +41,7 @@ const PaymentSuccessModal: React.FC<{ isOpen: boolean; onClose: () => void } & O
                 <div className="mx-auto flex items-center justify-center h-12 w-12 rounded-full bg-green-100">
                   <CheckIcon className="h-6 w-6 text-green-600" aria-hidden="true" />
                 </div>
-                <div className="mt-3 text-center sm:mt-5">
+                <div className="mt-3 sm:mt-5">
                   <Dialog.Title as="h3" className="text-lg leading-6 font-medium text-gray-900">
                     Payment Successful
                   </Dialog.Title>
