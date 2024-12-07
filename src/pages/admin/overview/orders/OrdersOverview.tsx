@@ -34,14 +34,14 @@ export const OrdersOverview = () => {
   const yearlyStats = stats?.yearly;
 
   const completedOrders = [
-    ...weeklyStats.filter((item) => item._id.status === "COMPLETED").map((item) => item.count),
-    ...monthlyStats.filter((item) => item._id.status === "COMPLETED").map((item) => item.count),
-    ...yearlyStats.filter((item) => item._id.status === "COMPLETED").map((item) => item.count),
+    ...weeklyStats?.filter((item) => item._id.status === "COMPLETED").map((item) => item.count),
+    ...monthlyStats?.filter((item) => item._id.status === "COMPLETED").map((item) => item.count),
+    ...yearlyStats?.filter((item) => item._id.status === "COMPLETED").map((item) => item.count),
   ];
   const pendingOrders = [
-    ...weeklyStats.filter((item) => item._id.status === "PENDING").map((item) => item.count),
-    ...monthlyStats.filter((item) => item._id.status === "PENDING").map((item) => item.count),
-    ...yearlyStats.filter((item) => item._id.status === "PENDING").map((item) => item.count),
+    ...weeklyStats?.filter((item) => item._id.status === "PENDING").map((item) => item.count),
+    ...monthlyStats?.filter((item) => item._id.status === "PENDING").map((item) => item.count),
+    ...yearlyStats?.filter((item) => item._id.status === "PENDING").map((item) => item.count),
   ];
 
   const pieSeries = [
