@@ -16,6 +16,7 @@ export default function Overview() {
   const {
     data: ordersData,
     refetch: orderRefecth,
+    isLoading: orderLoading,
   } = useGetAllOrdersQuery({
     page: 1,
     limit: 10,
@@ -235,7 +236,24 @@ export default function Overview() {
         </div>
       </div>
 
-      <OrderTable columns={columns} data={orders.slice(0, 6)} />
+      <OrderTable
+        columns={columns}
+        data={orders.slice(0, 6)}
+        loading={orderLoading}
+        enableHeader={true}
+        Header={<OrderHeader />}
+      />
     </Fragment>
   );
 }
+
+const OrderHeader = () => {
+  return (
+    <div className="flex justify-between items-center my-3">
+      <h1 className="text-gray-700 font-medium text-xl capitalize">recent orders</h1>
+      <Link to="/admin/orders" className="text-blue-500 hover:underline capitalize font-medium">
+        show all orders
+      </Link>
+    </div>
+  );
+};

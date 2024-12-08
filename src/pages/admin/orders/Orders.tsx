@@ -48,6 +48,8 @@ export default function OrderLists() {
 
   const columns = ["id", "customer name", "customer email", "order price", "ordered at", "status"];
 
+  console.log(ordersData)
+
   const totalPages = ordersData?.data?.totalPages ?? 1;
   const hasNextPage = ordersData?.data?.hasNextPage ?? false;
   const hasPrevPage = ordersData?.data?.hasPrevPage ?? false;
@@ -63,6 +65,8 @@ export default function OrderLists() {
       setPage((prevPage) => Math.max(prevPage - 1, 1));
     }
   };
+
+  console.log(status)
 
   useEffect(() => {
     refetch();
