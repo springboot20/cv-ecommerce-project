@@ -23,7 +23,7 @@ export const OrderSlice = ApiService.injectEndpoints({
 
     getAllOrders: builder.query<Response, Query>({
       query: ({ status, page = 1, limit = 10 }) => ({
-        url: `/orders?status=${status}?page=${page}?limit=${limit}`,
+        url: `/orders?status=${status}&page=${page}&limit=${limit}`,
         method: "GET",
       }),
 
