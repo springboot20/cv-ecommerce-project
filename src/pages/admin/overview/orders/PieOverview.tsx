@@ -95,27 +95,30 @@ export const PieOverview = () => {
       <Loading />
     </div>
   ) : (
-    <ChartComponent
-      type="donut"
-      options={{
-        ...pieOptions,
-        legend: {
-          show: true,
-          position: "bottom",
-          horizontalAlign: "center",
-          fontSize: "16px",
-          fontFamily: "Roboto, sans-serif",
-        },
-        plotOptions: {
-          pie: {
-            donut: {
-              size: "55%",
+    <div className="w-[380px] h-[380px] lg:w-full lg:h-full">
+      <ChartComponent
+        type="donut"
+        options={{
+          ...pieOptions,
+          legend: {
+            show: true,
+            position: "bottom",
+            horizontalAlign: "center",
+            fontSize: "16px",
+            fontFamily: "Roboto, sans-serif",
+          },
+          plotOptions: {
+            pie: {
+              donut: {
+                size: "55%",
+              },
             },
           },
-        },
-      }}
-      series={pieSeries}
-      // height={"50%"}
-    />
+        }}
+        series={pieSeries}
+        height={"100%"}
+        width={"100%"}
+      />
+    </div>
   );
 };
