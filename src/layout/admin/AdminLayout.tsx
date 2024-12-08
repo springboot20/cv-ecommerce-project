@@ -15,10 +15,11 @@ import { NavItem } from "../../components/NavItem";
 import { clx } from "../../util";
 import { useLogoutMutation } from "../../features/auth/auth.slice";
 import { toast } from "react-toastify";
+import { classNames } from "../../helpers";
 
 const AdminLayoutComponent = () => {
   return (
-    <Disclosure as="div" className="bg-[#E1E1E1]">
+    <Disclosure as="div">
       {({ open, close }) => {
         return (
           <Fragment>
@@ -62,12 +63,6 @@ const routes = [
     Icon: PlusCircleIcon,
     current: true,
   },
-  {
-    to: "/admin/logout",
-    label: "logout",
-    Icon: PowerIcon,
-    current: true,
-  },
 ];
 
 interface OutletContext {
@@ -87,33 +82,16 @@ export const AdminDashboardLayout = () => {
               to={to}
               key={label}
               aria-current={current ? "page" : undefined}
-              onClick={async () => {
-                label === "logout" &&
-                  (await logout()
-                    .unwrap()
-                    .then((response) => {
-                      toast.success(response?.message);
-                      return <Navigate to="/admin/logout" replace />;
-                    })
-                    .catch((error: any) => {
-                      toast.error(error?.error || error?.data?.message);
-                    }));
-              }}
               className={clx(current ? "hover:bg-[#F8F8F8]" : "", "py-5 px-10 w-full transition")}
             >
               {({ isActive }) => (
                 <>
                   <Icon
-                    className={clx(
-                      isActive ? "stroke-[#5932EA]" : "stroke-[#7B7B7B]",
-                      "h-6",
-                      label === "logout" && "stroke-red-500",
-                    )}
+                    className={clx(isActive ? "stroke-[#5932EA]" : "stroke-[#7B7B7B]", "h-6")}
                   />
                   <span
                     className={clx(
                       "text-base sm:text-lg font-roboto capitalize",
-                      label === "logout" && "text-red-500",
                       isActive ? "text-[#5932EA] font-medium" : "text-[#0C0C0D] font-normal",
                     )}
                   >
@@ -123,6 +101,28 @@ export const AdminDashboardLayout = () => {
               )}
             </NavItem>
           ))}
+          <button
+            type="button"
+            onClick={async () => {
+              await logout()
+                .unwrap()
+                .then((response) => {
+                  toast.success(response?.message);
+                  return <Navigate to="/logout" replace />;
+                })
+                .catch((error: any) => {
+                  toast.error(error?.error || error?.data?.message);
+                });
+            }}
+            className={classNames(
+              "hover:bg-gray-100",
+              "flex w-full items-center gap-4 py-5 px-10 ",
+            )}
+          >
+            <PowerIcon className="h-6 stroke-red-500" />
+
+            <span className="text-base sm:text-lg capitalize">Log Out</span>
+          </button>
         </div>
       </nav>
 
@@ -166,6 +166,28 @@ export const AdminDashboardLayout = () => {
                 )}
               </NavItem>
             ))}
+            <button
+              type="button"
+              onClick={async () => {
+                await logout()
+                  .unwrap()
+                  .then((response) => {
+                    toast.success(response?.message);
+                    return <Navigate to="/logout" replace />;
+                  })
+                  .catch((error: any) => {
+                    toast.error(error?.error || error?.data?.message);
+                  });
+              }}
+              className={classNames(
+                "hover:bg-gray-100",
+                "flex w-full items-center gap-4 py-5 px-10 transition",
+              )}
+            >
+              <PowerIcon className="h-6 stroke-red-500" />
+
+              <span className="text-base sm:text-lg capitalize">Log Out</span>
+            </button>
           </div>
         </div>
       </Disclosure.Panel>

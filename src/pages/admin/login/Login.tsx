@@ -69,7 +69,7 @@ const AdminLogin = () => {
       <div className="flex min-h-screen justify-center items-center flex-shrink-0">
         <form
           onSubmit={handleSubmit}
-          className="max-w-md w-full mx-auto border-2 bg-white rounded-lg p-4 sm:p-6"
+          className="max-w-md w-full mx-auto border bg-white rounded-lg p-4 sm:p-6"
         >
           <legend className="my-2 text-center font-semibold text-3xl bg-gradient-to-l from-red-700 to-light-blue-500 bg-clip-text text-transparent">
             Sign In
