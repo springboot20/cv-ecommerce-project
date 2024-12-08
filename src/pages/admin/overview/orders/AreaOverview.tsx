@@ -71,8 +71,8 @@ const OrderCountsChart = () => {
         ...dailyStats?.map(
           (item) => `Day ${item?._id?.day}, ${item?._id?.month}/${item?._id?.year}`,
         ),
-        ...weeklyStats?.map((item) => `Week ${item?._id?.week}, ${item?._id?.year}`),
-        ...monthlyStats?.map((item) => `Month ${item?._id?.month}, ${item?._id?.year}`),
+        // ...weeklyStats?.map((item) => `Week ${item?._id?.week}, ${item?._id?.year}`),
+        // ...monthlyStats?.map((item) => `Month ${item?._id?.month}, ${item?._id?.year}`),
       ],
     },
     title: {

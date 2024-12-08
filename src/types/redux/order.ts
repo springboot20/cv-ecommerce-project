@@ -135,7 +135,7 @@ export type Customer = {
   email: string;
 };
 
-export type Orders = {
+export interface Orders {
   _id: string;
   customer: Customer;
   orderStatus: "COMPLETED" | "PENDING" | "CANCELLED"; // Adjust as needed
