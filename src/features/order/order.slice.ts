@@ -1,4 +1,5 @@
 import { ApiService } from "../../app/services/api.service";
+import { Orders } from "../../types/redux/order";
 
 interface Response {
   data: any;
@@ -25,6 +26,17 @@ export const OrderSlice = ApiService.injectEndpoints({
         url: `/orders?status=${status}?page=${page}?limit=${limit}`,
         method: "GET",
       }),
+
+      providesTags: (result) =>
+        result?.data?.orders?.length
+          ? [
+              ...result?.data.orders.map((order: Orders) => ({
+                type: "Product" as const,
+                id: order._id,
+              })),
+              { type: "Order", id: "ORDER" },
+            ]
+          : [{ type: "Order", id: "ORDER" }],
     }),
 
     updatePaystackOrder: builder.mutation<Response, { orderId: string; status: string }>({
