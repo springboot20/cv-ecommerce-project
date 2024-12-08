@@ -5,7 +5,6 @@ import {
   useRemoveItemFromCartMutation,
 } from "../features/cart/cart.slice";
 import { toast } from "react-toastify";
-import { LocalStorage } from "../util";
 import { CartInterface } from "../types/redux/cart";
 
 export const useCart = () => {
@@ -18,7 +17,9 @@ export const useCart = () => {
   const [selectedItemId, setSelectedItemId] = useState<string | null>(null);
   const [refreshTrigered, setRefreshTrigered] = useState(false);
   const [message, setMessage] = useState<string>("");
-  const cart: CartInterface = data?.data?.cart ?? (LocalStorage.get("cart") as CartInterface);
+  const cart: CartInterface = Array.isArray(data?.data?.cart)
+    ? data?.data?.cart
+    : [data?.data?.cart];
 
   const handleEditClick = (id: string) => {
     const selectedItem = cart.items.find((item: any) => {
