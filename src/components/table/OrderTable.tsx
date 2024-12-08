@@ -54,7 +54,7 @@ const OrderTable: React.FC<{
                       <Typography
                         variant="small"
                         color="blue-gray"
-                        className="font-normal leading-none capitalize opacity-70"
+                        className="font-medium leading-none capitalize opacity-70"
                         placeholder={undefined}
                         onPointerEnterCapture={undefined}
                         onPointerLeaveCapture={undefined}
@@ -101,7 +101,7 @@ const OrderTable: React.FC<{
                       <Typography
                         variant="small"
                         color="blue-gray"
-                        className="font-normal"
+                        className="font-normal opacity-70"
                         placeholder={undefined}
                         onPointerEnterCapture={undefined}
                         onPointerLeaveCapture={undefined}
@@ -114,7 +114,7 @@ const OrderTable: React.FC<{
                       <Typography
                         variant="small"
                         color="blue-gray"
-                        className="font-normal"
+                        className="font-normal opacity-70"
                         placeholder={undefined}
                         onPointerEnterCapture={undefined}
                         onPointerLeaveCapture={undefined}
@@ -127,7 +127,7 @@ const OrderTable: React.FC<{
                       <Typography
                         variant="small"
                         color="blue-gray"
-                        className="font-normal"
+                        className="font-normal opacity-70"
                         placeholder={undefined}
                         onPointerEnterCapture={undefined}
                         onPointerLeaveCapture={undefined}
@@ -140,7 +140,7 @@ const OrderTable: React.FC<{
                       <Typography
                         variant="small"
                         color="blue-gray"
-                        className="font-normal"
+                        className="font-normal opacity-70"
                         placeholder={undefined}
                         onPointerEnterCapture={undefined}
                         onPointerLeaveCapture={undefined}
