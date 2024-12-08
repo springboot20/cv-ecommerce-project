@@ -1,5 +1,5 @@
 import { lazy } from "react";
-import { createBrowserRouter } from "react-router-dom";
+import { createBrowserRouter, Navigate } from "react-router-dom";
 
 import AppLayout from "../layout/app/AppLayout";
 import AdminLayout from "../layout/admin/AdminLayout";
@@ -186,6 +186,10 @@ const Router = () => {
               <AdminLogin />
             </AdminPublicRoute>
           ),
+        },
+        {
+          path: "logout",
+          element: <Navigate to={"/admin/login"} replace state={{ path: window.location.pathname }} />,
         },
       ],
     },
