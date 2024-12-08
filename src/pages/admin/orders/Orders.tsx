@@ -101,7 +101,7 @@ export default function OrderLists() {
             variant="outlined"
             size="sm"
             onClick={handlePreviousPage}
-            disabled={page === 1}
+            disabled={hasPrevPage}
             className="rounded"
             placeholder={undefined}
             onPointerEnterCapture={undefined}
@@ -113,7 +113,7 @@ export default function OrderLists() {
             variant="outlined"
             size="sm"
             onClick={handleNextPage}
-            disabled={page < 1}
+            disabled={hasNextPage}
             className="rounded"
             placeholder={undefined}
             onPointerEnterCapture={undefined}

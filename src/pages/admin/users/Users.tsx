@@ -291,6 +291,7 @@ export default function Users() {
               variant="outlined"
               size="sm"
               onClick={handlePreviousPage}
+              disabled={hasPrevPage}
               className="rounded"
               placeholder={undefined}
               onPointerEnterCapture={undefined}
@@ -303,6 +304,7 @@ export default function Users() {
               size="sm"
               onClick={handleNextPage}
               className="rounded"
+              disabled={hasNextPage}
               placeholder={undefined}
               onPointerEnterCapture={undefined}
               onPointerLeaveCapture={undefined}

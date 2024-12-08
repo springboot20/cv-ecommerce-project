@@ -154,7 +154,7 @@ const OrderTable: React.FC<{
                         <Chip
                           variant="ghost"
                           size="sm"
-                          value={d?.orderStatus}
+                          value={d?.orderStatus ?? ""}
                           className={classNames(
                             d?.orderStatus === "PENDING"
                               ? "bg-[#FF5733]"
