@@ -31,7 +31,7 @@ export const OrderSlice = ApiService.injectEndpoints({
         result?.data?.orders?.length
           ? [
               ...result?.data.orders.map((order: Orders) => ({
-                type: "Product" as const,
+                type: "Order" as const,
                 id: order._id,
               })),
               { type: "Order", id: "ORDER" },
