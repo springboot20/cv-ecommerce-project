@@ -20,7 +20,7 @@ export default function CartModal({
 }) {
   const { data, refetch } = useGetUserCartQuery();
   const [removeItemToCart] = useRemoveItemFromCartMutation();
-  const { isNewAddedToCart } = useAppSelector((state: RootState) => state.cart);
+  const { isNewAddedToCart } = useAppSelector((state: RootState) => state.cart)
   const [refreshTrigered, setRefreshTrigered] = useState(false);
 
   const cartItems = data?.data?.cart ?? (LocalStorage.get("cart") as CartInterface);
