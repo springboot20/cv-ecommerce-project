@@ -3,7 +3,6 @@ import OrderCountsChart from "./orders/AreaOverview";
 import { PieOverview } from "./orders/PieOverview";
 import { useGetAllStatsQuery } from "../../../features/statistics/statistics.slice";
 import { useEffect } from "react";
-import { LocalStorage } from "../../../util";
 import { AllStatsInterface, Orders } from "../../../types/redux/order";
 import { formatPrice } from "../../../helpers";
 import { Link } from "react-router-dom";
@@ -22,7 +21,11 @@ export default function Overview() {
     limit: 10,
   });
 
-  const statistics = data?.data?.statistics ?? (LocalStorage.get("all-stats") as AllStatsInterface);
+  const statistics: AllStatsInterface =
+    typeof data?.data?.statistics === "object" && data?.data?.statistics;
+
+  console.log(statistics);
+
   const orders: Orders[] = Array.isArray(ordersData?.data?.orders)
     ? ordersData?.data?.orders
     : [ordersData?.data?.orders];

@@ -10,7 +10,7 @@ import {
 } from "../../../../features/products/product.slice";
 import { ProductType } from "../../../../types/redux/product";
 import { ProductsSkeletonLoading } from "../../../../components/loaders/Skeleton";
-import { clx, LocalStorage } from "../../../../util";
+import { clx } from "../../../../util";
 import {
   MagnifyingGlassIcon,
   PencilIcon,
@@ -37,7 +37,8 @@ const AdminProducts = () => {
     name: searchQuery,
   });
 
-  let products = data?.data?.products ?? (LocalStorage.get("products") as ProductType[]);
+  let response: ProductType[] = data?.data?.products;
+  let products = Array.isArray(response) ? response : [response];
 
   const totalPages = data?.data?.totalPages ?? 1;
   const hasNextPage = data?.data?.hasNextPage ?? false;

@@ -7,16 +7,13 @@ import {
   Statistics,
   WeeklyStats,
 } from "../../../../types/redux/order";
-import { LocalStorage } from "../../../../util";
 import { Loading } from "../../../../components/loaders/Loading";
 import { useGetOrderStatsQuery } from "../../../../features/statistics/statistics.slice";
 
 const OrderCountsChart = () => {
   const { data, refetch, isLoading } = useGetOrderStatsQuery();
 
-  const response =
-    data?.data?.statistics ?? (LocalStorage.get("order-stats") as OrderStatsResponse);
-
+  const response: OrderStatsResponse = data?.data?.statistics;
   const statistics = Array.isArray(response) ? response : [response];
 
   console.log(statistics);

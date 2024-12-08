@@ -2,7 +2,6 @@ import { useParams } from "react-router-dom";
 import { useAddItemToCartMutation } from "../features/cart/cart.slice";
 import { useGetProductByIdQuery } from "../features/products/product.slice";
 import { useState } from "react";
-import { LocalStorage } from "../util";
 import { ProductType } from "../types/redux/product";
 import { toast } from "react-toastify";
 
@@ -18,7 +17,7 @@ export const useProduct = () => {
 
   const setRatingsValue = (rating: number) => setRatings(rating);
 
-  const product: ProductType = data?.data.product ?? (LocalStorage.get("product") as ProductType);
+  const product: ProductType = typeof data?.data.product === "object" && data?.data.product;
 
   const handleAddItemToCart = async (productId: string) => {
     try {

@@ -7,15 +7,13 @@ import {
   Statistics,
   WeeklyStats,
 } from "../../../../types/redux/order";
-import { LocalStorage } from "../../../../util";
 import { Loading } from "../../../../components/loaders/Loading";
 import { useGetOrderStatsQuery } from "../../../../features/statistics/statistics.slice";
 
 export const PieOverview = () => {
   const { data, isLoading, refetch } = useGetOrderStatsQuery();
 
-  const response =
-    data?.data?.statistics ?? (LocalStorage.get("order-stats") as OrderStatsResponse);
+  const response: OrderStatsResponse = data?.data?.statistics;
 
   const statistics = Array.isArray(response) ? response : [response];
 
