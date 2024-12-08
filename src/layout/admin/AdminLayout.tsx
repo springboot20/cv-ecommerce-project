@@ -63,7 +63,7 @@ const routes = [
     current: true,
   },
   {
-    to: "/admin/login",
+    to: "/admin/logout",
     label: "logout",
     Icon: PowerIcon,
     current: true,
