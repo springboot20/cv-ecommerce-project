@@ -18,7 +18,7 @@ export const AdminPublicRoute: React.FC<{ children: React.ReactNode }> = ({ chil
   if (auth.admin) {
     return (
       <Navigate
-        to="/admin/products/overview"
+        to="/admin/overview"
         state={{ path: window.location.pathname }}
         replace={true}
       />
