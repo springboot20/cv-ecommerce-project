@@ -109,13 +109,13 @@ export const PieOverview = () => {
         plotOptions: {
           pie: {
             donut: {
-              size: "50%",
+              size: "55%",
             },
           },
         },
       }}
       series={pieSeries}
-      height={"100%"}
+      // height={"50%"}
     />
   );
 };
