@@ -39,6 +39,24 @@ export const OrderSlice = ApiService.injectEndpoints({
           : [{ type: "Order", id: "ORDER" }],
     }),
 
+    getUserOrders: builder.query<Response, Query>({
+      query: ({ status, page = 1, limit = 10 }) => ({
+        url: `/orders/user-orders?status=${status}page=${page}&limit=${limit}`,
+        method: "GET",
+      }),
+
+      providesTags: (result) =>
+        result?.data?.orders?.length
+          ? [
+              ...result?.data.orders.map((order: Orders) => ({
+                type: "Order" as const,
+                id: order._id,
+              })),
+              { type: "Order", id: "ORDER" },
+            ]
+          : [{ type: "Order", id: "ORDER" }],
+    }),
+
     updatePaystackOrder: builder.mutation<Response, { orderId: string; status: string }>({
       query: ({ orderId, status }) => ({
         url: `/orders/status/${orderId}`,
@@ -53,4 +71,5 @@ export const {
   useCreatePaystackOrderMutation,
   useUpdatePaystackOrderMutation,
   useGetAllOrdersQuery,
+  useGetUserOrdersQuery,
 } = OrderSlice;

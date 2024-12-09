@@ -13,6 +13,7 @@ const navigation = [
   { to: "/", name: "home", current: true },
   { to: "/collections", name: "collections", current: true },
   { to: "/sales", name: "best ", current: true },
+  { to: "/orders", name: "best ", current: true },
 ];
 
 function classNames(...classes: (boolean | string)[]) {

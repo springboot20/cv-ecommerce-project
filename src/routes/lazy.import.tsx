@@ -20,6 +20,8 @@ const Products = lazy(() => import("../pages/products/Products"));
 const Product = lazy(() => import("../pages/product/Product"));
 const Cart = lazy(() => import("../pages/cart/Cart"));
 const CheckOut = lazy(() => import("../pages/check-out/CheckOut"));
+const Orders = lazy(() => import("../pages/orders/Orders"));
+const OrderDetails = lazy(() => import("../pages/orders/orderDetails/OrderDetail"));
 const Notfound = lazy(() => import("../components/NotFound"));
 const PublicRoute = lazy(() => import("../components/Public.routes"));
 const Login = lazy(() => import("../pages/auth/Signin"));
@@ -75,6 +77,27 @@ const Router = () => {
               element: (
                 <ProtectedRoute roles={[AcceptedRoles.USER, AcceptedRoles.ADMIN]}>
                   <CheckOut />
+                </ProtectedRoute>
+              ),
+            },
+          ],
+        },
+        {
+          path: "orders",
+          children: [
+            {
+              index: true,
+              element: (
+                <ProtectedRoute roles={[AcceptedRoles.USER, AcceptedRoles.ADMIN]}>
+                  <Orders />
+                </ProtectedRoute>
+              ),
+            },
+            {
+              path: ":orderId",
+              element: (
+                <ProtectedRoute roles={[AcceptedRoles.USER, AcceptedRoles.ADMIN]}>
+                  <OrderDetails />
                 </ProtectedRoute>
               ),
             },
