@@ -32,5 +32,5 @@ export interface InitialValues {
   cvc: string;
   "card-year": string;
   "card-month": string;
-  "shipping-method": string;
+  shipping_method: string;
 }

@@ -6,7 +6,7 @@
 
 @layer base {
   body {
-    @apply font-poppins antialiased;
+    @apply font-poppins antialiased bg-gray-50;
   }
 }
 

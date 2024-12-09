@@ -28,6 +28,7 @@ const Login = lazy(() => import("../pages/auth/Signin"));
 const Register = lazy(() => import("../pages/auth/Signup"));
 const Settings = lazy(() => import("../pages/settings/Settings"));
 const Profile = lazy(() => import("../pages/settings/profile/Profile"));
+const EmailVerification = lazy(() => import("../pages/verifications/email/EmailVerification"));
 
 enum AcceptedRoles {
   ADMIN = "ADMIN",
@@ -119,6 +120,10 @@ const Router = () => {
               path: "account",
             },
           ],
+        },
+        {
+          path: "verify-email",
+          element: <EmailVerification />,
         },
       ],
     },

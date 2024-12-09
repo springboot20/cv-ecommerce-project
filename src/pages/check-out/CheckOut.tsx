@@ -31,7 +31,7 @@ const CheckOut: React.FC = () => {
     cvc: "",
     "card-year": "",
     "card-month": "",
-    "shipping-method": "",
+    shipping_method: "",
   };
 
   const { handleChange, values, handleBlur, touched, errors, handleSubmit, validateForm } =

@@ -3,6 +3,7 @@ import { useGetUserOrderByIdQuery } from "../../../features/order/order.slice";
 import { useEffect } from "react";
 import { OrderFetched } from "../../../types/redux/order";
 import { formatDate } from "../../../util";
+import { OrderSkeletonLoad } from "../../../components/loaders/Skeleton";
 
 export default function OrderDetails() {
   const { orderId } = useParams();
@@ -19,18 +20,20 @@ export default function OrderDetails() {
   }, [orderId, refetch]);
 
   return (
-    <div>
-      <header>
+    <div className="px-4 xl:px-0">
+      <header className="border-b-2 border-gray-300 py-2">
         <div className="space-y-1">
-          <h2>order details</h2>
-          <p>
+          <h2 className="font-medium capitalize text-xl text-gray-800">order details</h2>
+          <p className="text-lg">
             <span className="font-medium text-gray-700">
-              Order number <small>{order?.paymentId}</small>
+              Order number <small>{order?.paymentId ?? ""}</small>
             </span>
-            .<span>{formatDate(order?.createdAt)} </span>
+            .<span>{formatDate(order?.createdAt ?? "2014-02-11T11:30:30")}</span>
           </p>
         </div>
       </header>
+
+      <OrderSkeletonLoad />
     </div>
   );
 }

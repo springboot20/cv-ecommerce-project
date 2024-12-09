@@ -1,5 +1,5 @@
 import { Field, Form, Formik, FormikHelpers } from "formik";
-import { CurrencyDollarIcon } from "@heroicons/react/24/outline";
+import { CurrencyDollarIcon, XMarkIcon } from "@heroicons/react/24/outline";
 
 import { clx } from "../../../../util";
 import { useFile } from "../../../../hooks/useFile";
@@ -7,6 +7,11 @@ import { useCreateProductMutation } from "../../../../features/products/product.
 import { toast } from "react-toastify";
 import { useNavigate } from "react-router-dom";
 import { useAddCategoryMutation } from "../../../../features/category/category.slice";
+
+type Size = {
+  name: string;
+  inStock: boolean;
+};
 
 interface InitialValuesInterface {
   price: number;
@@ -16,6 +21,8 @@ interface InitialValuesInterface {
   stock: number;
   name: string;
   featured: boolean;
+  colors: string[];
+  sizes: Size[];
 }
 
 const initialValues: InitialValuesInterface = {
@@ -26,6 +33,13 @@ const initialValues: InitialValuesInterface = {
   stock: 1,
   featured: false,
   name: "",
+  colors: [],
+  sizes: [
+    {
+      name: "",
+      inStock: false,
+    },
+  ],
 };
 
 export default function CreateNewProduct() {
@@ -67,7 +81,8 @@ export default function CreateNewProduct() {
 
   return (
     <Formik initialValues={initialValues} onSubmit={onSubmit}>
-      {({ errors, touched, setFieldValue }) => {
+      {({ errors, touched, setFieldValue, values }) => {
+        console.log(values.colors);
         return (
           <Form className="mt-4 w-full bg-white p-6 border gap-10 grid grid-cols-1 xl:grid-cols-3 mx-auto max-w-6xl">
             <div className="col-span-full xl:col-span-2">
@@ -207,6 +222,105 @@ export default function CreateNewProduct() {
                   </div>
                 </fieldset>
               </div>
+
+              <fieldset className="mt-4">
+                <label
+                  htmlFor="colors"
+                  className="capitalize text-sm font-normal text-gray-700 sm:text-base"
+                >
+                  Product Colors
+                </label>
+                <div className="mt-2">
+                  <div className="flex gap-2 items-center">
+                    <Field
+                      type="text"
+                      name="colors"
+                      placeholder="Enter color"
+                      className="block w-full px-3 rounded border border-gray-300 py-2 text-gray-700 placeholder:text-gray-400 focus:ring-2 focus:ring-indigo-500 text-sm"
+                      onKeyDown={(e: React.KeyboardEvent<HTMLInputElement>) => {
+                        if (e.key === "Enter" && e.currentTarget.value.trim()) {
+                          e.preventDefault();
+
+                          const newColors = e.currentTarget.value.split(',').map((color)=> color.trim()).filter((color)=> color)
+
+                          setFieldValue("colors", [
+                            ...(Array.isArray(values.colors) ? values.colors : []),
+                            ...newColors,
+                          ]);
+                          e.currentTarget.value = "";
+                        }
+                      }}
+                    />
+                  </div>
+                  <div className="flex flex-wrap gap-2 mt-2">
+                    {Array.isArray(values?.colors) &&
+                      values?.colors?.map((color, index) => (
+                        <span
+                          key={index}
+                          className="bg-indigo-100 text-indigo-800 rounded-full px-3 py-1 text-sm flex items-center gap-2"
+                        >
+                          {color}
+                          <button
+                            type="button"
+                            className="text-red-500 hover:text-red-700"
+                            onClick={() =>
+                              setFieldValue(
+                                "colors",
+                                values?.colors?.filter((_, i) => i !== index),
+                              )
+                            }
+                          >
+                            <XMarkIcon className="h-6" />
+                          </button>
+                        </span>
+                      ))}
+                  </div>
+                </div>
+              </fieldset>
+
+              {/* Sizes Section */}
+              <fieldset className="mt-4">
+                <label
+                  htmlFor="sizes"
+                  className="capitalize text-sm font-normal text-gray-700 sm:text-base"
+                >
+                  Product Sizes
+                </label>
+                <div className="mt-2">
+                  {values.sizes.map((_, index) => (
+                    <div key={index} className="flex gap-2 items-center mb-2">
+                      <Field
+                        name={`sizes[${index}].name`}
+                        type="text"
+                        placeholder="Size name"
+                        className="block w-full px-3 rounded border border-gray-300 py-2 text-gray-700 placeholder:text-gray-400 focus:ring-2 focus:ring-indigo-500 text-sm"
+                      />
+                      <Field name={`sizes[${index}].inStock`} type="checkbox" className="h-5 w-5" />
+                      <button
+                        type="button"
+                        className="text-red-500 hover:text-red-700"
+                        onClick={() =>
+                          setFieldValue(
+                            "sizes",
+                            values.sizes.filter((_, i) => i !== index),
+                          )
+                        }
+                      >
+                        <XMarkIcon className="h-6" />
+                      </button>
+                    </div>
+                  ))}
+                  <button
+                    type="button"
+                    onClick={() =>
+                      setFieldValue("sizes", [...values.sizes, { name: "", inStock: false }])
+                    }
+                    className="mt-2 px-3 py-1 bg-indigo-500 text-white rounded text-sm"
+                  >
+                    Add Size
+                  </button>
+                </div>
+              </fieldset>
             </div>
 
             <div className="col-span-full xl:col-span-1">

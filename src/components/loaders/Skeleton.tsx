@@ -152,3 +152,76 @@ export const ProductStatisticsCardLoader = ({ cardsNumber }: { cardsNumber: numb
     </div>
   );
 };
+
+export const OrderSkeletonLoad = () => {
+  return (
+    <section className="mt-4">
+      <div className="flex flex-col sm:flex-row gap-4">
+        <div className="sm:max-w-xs w-full h-72 lg:max-w-sm lg:h-96">
+          <Skeleton className="w-full h-full" />
+        </div>
+
+        <div className="w-full h-max  grid grid-cols-1 sm:grid-cols-2">
+          <div className="mt-4 col-span-full">
+            <Skeleton height={30} width={300} />
+            <Skeleton height={30} width={100} />
+            <div className="mt-2">
+              <Skeleton height={20} className="w-full" count={2.5} />
+            </div>
+          </div>
+
+          <div className="mt-4">
+            <Skeleton height={30} width={200} />
+            <div className="mt-2">
+              <Skeleton height={20} width={150} count={3} />
+            </div>
+          </div>
+
+          <div className="mt-4">
+            <Skeleton height={30} width={200} />
+            <div className="mt-2">
+              <Skeleton height={20} width={150} count={2} />
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <div className="grid grid-cols-1 lg:grid-cols-2 xl:grid-cols-4 mt-8">
+        <div className="col-span-1">
+          <Skeleton height={30} width={200} />
+          <div className="mt-2">
+            <Skeleton height={20} width={150} count={3} />
+          </div>
+        </div>
+
+        <div className="col-span-1">
+          <Skeleton height={30} width={200} />
+          <div className="mt-2">
+            <Skeleton height={20} width={150} count={2} />
+          </div>
+        </div>
+
+        <div className="col-span-2">
+          <ul className="p-5 bg-white border-b">
+            <li className="pb-2 flex items-center justify-between border-b">
+              <Skeleton height={25} width={200} />
+              <Skeleton height={25} width={80} />
+            </li>
+            <li className="py-2 flex items-center justify-between border-b">
+              <Skeleton height={25} width={200} />
+              <Skeleton height={25} width={80} />
+            </li>
+            <li className="py-2 flex items-center justify-between border-b">
+              <Skeleton height={25} width={200} />
+              <Skeleton height={25} width={80} />
+            </li>
+            <li className="pt-3 flex items-center justify-between">
+              <Skeleton height={25} width={200} />
+              <Skeleton height={25} width={80} />
+            </li>
+          </ul>
+        </div>
+      </div>
+    </section>
+  );
+};

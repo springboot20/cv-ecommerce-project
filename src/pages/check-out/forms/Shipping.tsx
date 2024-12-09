@@ -11,7 +11,7 @@ const Shipping: React.FC<FormikEvent> = ({ values, handleChange, errors, handleB
             type="radio"
             name="shipping-method"
             value="standard"
-            checked={values["shipping-method"] === "standard"}
+            checked={values.shipping_method === "standard"}
             onChange={handleChange}
             onBlur={handleBlur}
             className=""
@@ -19,7 +19,7 @@ const Shipping: React.FC<FormikEvent> = ({ values, handleChange, errors, handleB
           <div
             className={classNames(
               "px-4 py-6 border rounded-md w-full",
-              values["shipping-method"] === "standard"
+              values.shipping_method === "standard"
                 ? "border-blue-600 bg-blue-100"
                 : "border-gray-300",
             )}
@@ -34,7 +34,7 @@ const Shipping: React.FC<FormikEvent> = ({ values, handleChange, errors, handleB
             type="radio"
             name="shipping-method"
             value="express"
-            checked={values["shipping-method"] === "express"}
+            checked={values.shipping_method === "express"}
             onChange={handleChange}
             onBlur={handleBlur}
             className=""
@@ -42,7 +42,7 @@ const Shipping: React.FC<FormikEvent> = ({ values, handleChange, errors, handleB
           <div
             className={classNames(
               "px-4 py-6 border rounded-md w-full",
-              values["shipping-method"] === "express"
+              values.shipping_method === "express"
                 ? "border-blue-600 bg-blue-100"
                 : "border-gray-300",
             )}
@@ -52,8 +52,8 @@ const Shipping: React.FC<FormikEvent> = ({ values, handleChange, errors, handleB
           </div>
         </label>
       </div>
-      {touched!["shipping-method"] && errors!["shipping-method"] && (
-        <p className="text-red-500 text-sm mt-1">{errors!["shipping-method"]}</p>
+      {touched!.shipping_method && errors!.shipping_method && (
+        <p className="text-red-500 text-sm mt-1">{errors!.shipping_method}</p>
       )}
     </fieldset>
   );
