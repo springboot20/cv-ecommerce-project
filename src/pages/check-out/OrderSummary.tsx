@@ -39,7 +39,7 @@ export const OrderSummary: React.FC = () => {
       <h3 className="text-base sm:text-lg font-medium text-gray-600 capitalize">order summary</h3>
       <div className="rounded-md border w-full">
         {!cart?.items?.length ? (
-          <>
+          <div className="p-4">
             <p className="text-xl font-semibold text-gray-800 mb-6">
               Your cart is empty. Keep shopping to find a product!
             </p>
@@ -49,7 +49,7 @@ export const OrderSummary: React.FC = () => {
             >
               Keep Shopping
             </Link>
-          </>
+          </div>
         ) : (
           <div className="border-b">
             <ul role="list" className="divide-y divide-gray-200">

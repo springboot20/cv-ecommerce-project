@@ -113,7 +113,7 @@ const authSlice = createSlice({
       state.tokens = null;
 
       LocalStorage.set("admin-user", null);
-      LocalStorage.set("authentified", false);
+      LocalStorage.set("authentified", state.isAuthenticated);
       LocalStorage.set("tokens", null);
     });
   },
