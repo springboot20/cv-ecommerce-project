@@ -91,7 +91,7 @@ const Products = () => {
           >
             {isLoading ? (
               <ProductsSkeletonLoading cardsNumber={6} />
-            ) : searchQuery && products.length === 0 ? (
+            ) : searchQuery && products?.length === 0 ? (
               <p className="font-semibold text-gray-700 text-xl text-center">
                 No product found for "{searchQuery}"
               </p>
@@ -119,11 +119,11 @@ const Products = () => {
                           className="border border-gray-300 absolute object-cover"
                         />
                       )}
-                      <div className="group-hover:opacity-100 transition bg-black/50 z-20 opacity-0 absolute inset-0 h-full w-full flex items-center justify-center">
+                      <div className="group-hover:opacity-100 transition z-20 opacity-0 absolute inset-0 h-full w-full flex flex-col py-4 items-center justify-end">
                         <button
                           type="button"
                           onClick={() => handlePreviewOpen(product?._id)}
-                          className="z-20 bg-gray-100 text-gray-600 font-normal text-sm flex items-center gap-4 rounded p-2"
+                          className="z-20 bg-gray-100/90 border text-gray-600 font-normal text-sm flex items-center gap-4 rounded p-2 capitalize"
                         >
                           preview product <EyeIcon className="h-5" aria-hidden={true} />
                         </button>
