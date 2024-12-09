@@ -1,8 +1,42 @@
+import { isValid, parseISO, format } from "date-fns";
+
 export const isBrowser = typeof window !== "undefined";
 
 export const  clx = (...classnames: (string | boolean)[]) =>
   classnames?.filter(Boolean).join(' ');
 
+
+export const formatDateTime = (date: string) => {
+  try {
+    const _date = parseISO(date);
+
+    if (!isValid(_date)) {
+      console.error("Invalid date:", date);
+      return "Invalid Date";
+    }
+
+    return format(_date, "hh:mm a");
+  } catch (error) {
+    console.error("Error parsing date:", date, error);
+    return "Invalid Date";
+  }
+};
+
+export const formatDate = (date: string) => {
+  try {
+    const _date = parseISO(date);
+
+    if (!isValid(_date)) {
+      console.error("Invalid date:", date);
+      return "Invalid Date";
+    }
+
+    return format(_date, "dd-MMM-yyyy");
+  } catch (error) {
+    console.error("Error parsing date:", date, error);
+    return "Invalid Date";
+  }
+};
 
 export class LocalStorage {
   static get(key: string) {
