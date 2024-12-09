@@ -4,7 +4,6 @@ import React, { Fragment, useCallback, useState } from "react";
 import { useCreateAddressMutation } from "../../features/order/address.slice";
 import { OrderSummary } from "./OrderSummary";
 import { toast } from "react-toastify";
-import VerifyPaystackPayment from "./verify/VerifyPayment";
 import { InitialValues } from "../../types/formik";
 import { ShippingInformation } from "./forms/Address";
 import Payment from "./forms/Payment";
@@ -107,7 +106,6 @@ const CheckOut: React.FC = () => {
 
   return (
     <Fragment>
-      <VerifyPaystackPayment />
       <main className="mx-auto max-w-7xl px-2 md:px-4 xl:px-0">
         <div className="grid grid-cols-1 lg:grid-cols-2 xl:grid-cols-3 gap-4 xl:gap-8">
           <form id="form" onSubmit={handleSubmit} className="col-span-1 xl:col-span-2">

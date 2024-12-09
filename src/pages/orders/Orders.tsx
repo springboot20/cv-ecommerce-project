@@ -1,8 +1,9 @@
-import { useEffect, useState } from "react";
+import { Fragment, useEffect, useState } from "react";
 import { useGetUserOrdersQuery } from "../../features/order/order.slice";
 import { Orders } from "../../types/redux/order";
 import OrderTable from "../../components/table/OrderTable";
 import { CardFooter, Typography, Button } from "@material-tailwind/react";
+import VerifyPaystackPayment from "./verify/VerifyPayment";
 
 const OrderHeader: React.FC<{
   setStatus: React.Dispatch<React.SetStateAction<string>>;
@@ -72,58 +73,61 @@ export default function OrderLists() {
   }, [page, status, limit, totalPages]);
 
   return (
-    <div className="mt-5">
-      <OrderTable
-        columns={columns}
-        data={orders}
-        Header={<OrderHeader status={status} setStatus={setStatus} />}
-        enableHeader={true}
-        loading={isLoading}
-      >
-        <CardFooter
-          className="flex items-center justify-between border-t border-blue-gray-50 p-4"
-          placeholder={undefined}
-          onPointerEnterCapture={undefined}
-          onPointerLeaveCapture={undefined}
+    <Fragment>
+      <VerifyPaystackPayment />
+      <div className="mt-5">
+        <OrderTable
+          columns={columns}
+          data={orders}
+          Header={<OrderHeader status={status} setStatus={setStatus} />}
+          enableHeader={true}
+          loading={isLoading}
         >
-          <Typography
-            variant="small"
-            color="blue-gray"
-            className="font-normal"
+          <CardFooter
+            className="flex items-center justify-between border-t border-blue-gray-50 p-4"
             placeholder={undefined}
             onPointerEnterCapture={undefined}
             onPointerLeaveCapture={undefined}
           >
-            Page {page} of {totalPages}
-          </Typography>
-          <div className="flex gap-2">
-            <Button
-              variant="outlined"
-              size="sm"
-              onClick={handlePreviousPage}
-              disabled={page === 1}
-              className="rounded"
+            <Typography
+              variant="small"
+              color="blue-gray"
+              className="font-normal"
               placeholder={undefined}
               onPointerEnterCapture={undefined}
               onPointerLeaveCapture={undefined}
             >
-              Previous
-            </Button>
-            <Button
-              variant="outlined"
-              size="sm"
-              onClick={handleNextPage}
-              disabled={!hasNextPage}
-              className="rounded"
-              placeholder={undefined}
-              onPointerEnterCapture={undefined}
-              onPointerLeaveCapture={undefined}
-            >
-              Next
-            </Button>
-          </div>
-        </CardFooter>
-      </OrderTable>
-    </div>
+              Page {page} of {totalPages}
+            </Typography>
+            <div className="flex gap-2">
+              <Button
+                variant="outlined"
+                size="sm"
+                onClick={handlePreviousPage}
+                disabled={page === 1}
+                className="rounded"
+                placeholder={undefined}
+                onPointerEnterCapture={undefined}
+                onPointerLeaveCapture={undefined}
+              >
+                Previous
+              </Button>
+              <Button
+                variant="outlined"
+                size="sm"
+                onClick={handleNextPage}
+                disabled={!hasNextPage}
+                className="rounded"
+                placeholder={undefined}
+                onPointerEnterCapture={undefined}
+                onPointerLeaveCapture={undefined}
+              >
+                Next
+              </Button>
+            </div>
+          </CardFooter>
+        </OrderTable>
+      </div>
+    </Fragment>
   );
 }
