@@ -46,7 +46,7 @@ const ProductPreviewModal: React.FC<{ open: boolean; onClose: () => void; produc
   const { data, refetch } = useGetProductByIdQuery(productId);
   const [refreshTrigered, setRefreshTrigered] = useState(false);
   const [message, setMessage] = useState<string>("");
-  const [quantityInput, setQuantityInput] = useState<number>(1)
+  const [quantityInput, setQuantityInput] = useState<number>(1);
 
   const product: ProductType = data?.data.product ?? (LocalStorage.get("product") as ProductType);
 
@@ -134,6 +134,11 @@ const ProductPreviewModal: React.FC<{ open: boolean; onClose: () => void; produc
                           {/* {product.reviewCount} reviews */}
                         </a>
                       </div>
+                    </div>
+
+                    <div className="mt-6">
+                      <h1 className="text-base sm:text-lg font-medium">Desscription</h1>
+                      <p className="text-sm font-normal text-gray-700">{product?.description}</p>
                     </div>
                   </section>
 

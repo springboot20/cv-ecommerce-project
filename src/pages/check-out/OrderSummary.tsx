@@ -24,7 +24,7 @@ export const OrderSummary: React.FC = () => {
 
   let shipping = 5.0;
   const OrderTotal = (): number => {
-    return cart.totalCart * shipping;
+    return cart?.totalCart * shipping;
   };
 
   useEffect(() => {
@@ -38,7 +38,7 @@ export const OrderSummary: React.FC = () => {
     <div className="relative w-full flex-col lg:col-span-1">
       <h3 className="text-base sm:text-lg font-medium text-gray-600 capitalize">order summary</h3>
       <div className="rounded-md border w-full">
-        {!cart?.items.length ? (
+        {!cart?.items?.length ? (
           <>
             <p className="text-xl font-semibold text-gray-800 mb-6">
               Your cart is empty. Keep shopping to find a product!
@@ -54,10 +54,10 @@ export const OrderSummary: React.FC = () => {
           <div className="border-b">
             <ul role="list" className="divide-y divide-gray-200">
               {cart?.items?.map((item: any) => (
-                <li key={item?.product._id} className="flex py-5 px-5">
+                <li key={item?.product?._id} className="flex py-5 px-5">
                   <div className="h-24 w-24 flex-shrink-0 overflow-hidden rounded-md border border-gray-200">
                     <img
-                      src={item?.product.imageSrc.url}
+                      src={item?.product?.imageSrc?.url}
                       alt=""
                       className="h-full w-full object-cover object-center"
                     />
@@ -70,7 +70,7 @@ export const OrderSummary: React.FC = () => {
                           {item?.product.name}
                         </h3>
                         <p className="text-base font-medium text-gray-700">
-                          {formatPrice(item?.product.price)}
+                          {formatPrice(item?.product?.price)}
                         </p>
                       </div>
                       <p className="text-gray-500 text-base">Qty ({item?.quantity})</p>
@@ -140,7 +140,7 @@ export const OrderSummary: React.FC = () => {
           <li className="pb-3 flex items-center justify-between">
             <span className="text-gray-600 text-sm font-normal capitalize">subtotal</span>
             <span className="font-medium italic text-sm text-gray-800">
-              {formatPrice(cart.totalCart)}
+              {formatPrice(cart?.totalCart)}
             </span>
           </li>
           <li className="border-b py-3 flex items-center justify-between">

@@ -95,7 +95,7 @@ const CheckOut: React.FC = () => {
   const handleNextStep = async (e: React.MouseEvent<HTMLButtonElement>) => {
     e.preventDefault();
     const errors = await validateForm();
-    if (Object.keys(errors).length === 0) {
+    if (Object.keys(errors)?.length === 0) {
       setCurrentStep(currentStep + 1);
     } else {
       toast("input fields cannot be empty.", { type: "error" });
