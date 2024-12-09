@@ -29,8 +29,6 @@ const Cart = () => {
     return cart?.totalCart ?? 1 * shipping;
   };
 
-  console.log(cart);
-
   const navigate = useNavigate();
 
   useEffect(() => {
@@ -40,7 +38,7 @@ const Cart = () => {
 
     console.log(message);
     refetch();
-  }, [refreshTrigered, message]);
+  }, [refreshTrigered, message, refetch]);
 
   return (
     <Fragment>

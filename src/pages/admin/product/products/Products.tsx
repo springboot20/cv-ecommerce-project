@@ -42,17 +42,16 @@ const AdminProducts = () => {
 
   const totalPages = data?.data?.totalPages ?? 1;
   const hasNextPage = data?.data?.hasNextPage ?? false;
-  const hasPrevPage = data?.data?.hasPrevPage ?? false;
 
   const handleNextPage = () => {
     if (hasNextPage) {
-      setPage((prevPage) => prevPage + 1);
+      setPage((prevPage) => Math.min(prevPage + 1, totalPages));
     }
   };
 
   const handlePreviousPage = () => {
-    if (hasPrevPage) {
-      setPage((prevPage) => Math.max(prevPage - 1, 1));
+    if (page > 1) {
+      setPage((prevPage) => prevPage - 1);
     }
   };
 
@@ -69,7 +68,7 @@ const AdminProducts = () => {
     if (productDeleted) {
       refetch();
     }
-  }, [data?.message]);
+  }, [data?.message, page, totalPages, refetch, productDeleted]);
 
   const handleProductDelete = useCallback(
     async (productId: string) => {
@@ -187,7 +186,6 @@ const AdminProducts = () => {
           page={page}
           totalPages={totalPages}
           hasNextPage={hasNextPage}
-          hasPrevPage={hasPrevPage}
           handlePreviousPage={handlePreviousPage}
           handleNextPage={handleNextPage}
         />

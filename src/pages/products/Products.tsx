@@ -40,7 +40,6 @@ const Products = () => {
 
   const totalPages = data?.data?.totalPages ?? 1;
   const hasNextPage = data?.data?.hasNextPage ?? false;
-  const hasPrevPage = data?.data?.hasPrevPage ?? false;
 
   const handleNextPage = () => {
     if (hasNextPage) {
