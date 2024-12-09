@@ -17,9 +17,9 @@ export const useCart = () => {
   const [selectedItemId, setSelectedItemId] = useState<string | null>(null);
   const [refreshTrigered, setRefreshTrigered] = useState(false);
   const [message, setMessage] = useState<string>("");
-  const cart: CartInterface = Array.isArray(data?.data?.cart)
-    ? data?.data?.cart
-    : [data?.data?.cart];
+  const cart: CartInterface = data?.data?.cart;
+
+  console.log(cart);
 
   const handleEditClick = (id: string) => {
     const selectedItem = cart.items.find((item: any) => {

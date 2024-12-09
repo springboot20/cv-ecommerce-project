@@ -29,6 +29,8 @@ const Cart = () => {
     return cart?.totalCart ?? 1 * shipping;
   };
 
+  console.log(cart);
+
   const navigate = useNavigate();
 
   useEffect(() => {
