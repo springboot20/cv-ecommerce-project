@@ -44,13 +44,13 @@ const Products = () => {
 
   const handleNextPage = () => {
     if (hasNextPage) {
-      setPage((prevPage) => prevPage + 1);
+      setPage((prevPage) => Math.min(prevPage + 1, totalPages));
     }
   };
 
   const handlePreviousPage = () => {
-    if (hasPrevPage) {
-      setPage((prevPage) => Math.max(prevPage - 1, 1));
+    if (page > 1) {
+      setPage((prevPage) => prevPage - 1);
     }
   };
 
@@ -61,7 +61,7 @@ const Products = () => {
       toast.success(data?.message);
     }
     refetch();
-  }, [data?.message]);
+  }, [data?.message, refetch]);
 
   const handlePreviewOpen = (id: string) => setOpenPreview((prev) => ({ ...prev, [id]: true }));
   const handlePreviewClose = (id: string) => setOpenPreview((prev) => ({ ...prev, [id]: false }));
@@ -146,7 +146,6 @@ const Products = () => {
             page={page}
             totalPages={totalPages}
             hasNextPage={hasNextPage}
-            hasPrevPage={hasPrevPage}
             handlePreviousPage={handlePreviousPage}
             handleNextPage={handleNextPage}
           />

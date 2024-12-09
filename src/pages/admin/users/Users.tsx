@@ -36,17 +36,16 @@ export default function Users() {
 
   const totalPages = data?.data?.totalPages ?? 1;
   const hasNextPage = data?.data?.hasNextPage ?? false;
-  const hasPrevPage = data?.data?.hasPrevPage ?? false;
 
   const handleNextPage = () => {
     if (hasNextPage) {
-      setPage((prevPage) => prevPage + 1);
+      setPage((prevPage) => Math.min(prevPage + 1, totalPages));
     }
   };
 
   const handlePreviousPage = () => {
-    if (hasPrevPage) {
-      setPage((prevPage) => Math.max(prevPage - 1, 1));
+    if (page > 1) {
+      setPage((prevPage) => prevPage - 1);
     }
   };
 
@@ -55,7 +54,7 @@ export default function Users() {
       toast.success(data?.message);
     }
     refetch();
-  }, [data?.message]);
+  }, [data?.message, refetch, page, limit, totalPages]);
 
   const handleUserDelete = useCallback(
     async (userId: string) => {
@@ -291,7 +290,7 @@ export default function Users() {
               variant="outlined"
               size="sm"
               onClick={handlePreviousPage}
-              disabled={hasPrevPage}
+              disabled={page === 1}
               className="rounded"
               placeholder={undefined}
               onPointerEnterCapture={undefined}
@@ -304,7 +303,7 @@ export default function Users() {
               size="sm"
               onClick={handleNextPage}
               className="rounded"
-              disabled={hasNextPage}
+              disabled={!hasNextPage}
               placeholder={undefined}
               onPointerEnterCapture={undefined}
               onPointerLeaveCapture={undefined}

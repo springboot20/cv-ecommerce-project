@@ -39,6 +39,7 @@ export default function OrderLists() {
   } = useGetUserOrdersQuery({
     page,
     limit,
+    status,
   });
 
   const orders: Orders[] = Array.isArray(ordersData?.data?.orders)
@@ -51,17 +52,16 @@ export default function OrderLists() {
 
   const totalPages = ordersData?.data?.totalPages ?? 1;
   const hasNextPage = ordersData?.data?.hasNextPage ?? false;
-  const hasPrevPage = ordersData?.data?.hasPrevPage ?? false;
 
   const handleNextPage = () => {
     if (hasNextPage) {
-      setPage((prevPage) => prevPage + 1);
+      setPage((prevPage) => Math.min(prevPage + 1, totalPages));
     }
   };
 
   const handlePreviousPage = () => {
-    if (hasPrevPage) {
-      setPage((prevPage) => Math.max(prevPage - 1, 1));
+    if (page > 1) {
+      setPage((prevPage) => prevPage - 1);
     }
   };
 
@@ -69,59 +69,61 @@ export default function OrderLists() {
 
   useEffect(() => {
     refetch();
-  }, []);
+  }, [page, status, limit, totalPages]);
 
   return (
-    <OrderTable
-      columns={columns}
-      data={orders}
-      Header={<OrderHeader status={status} setStatus={setStatus} />}
-      enableHeader={true}
-      loading={isLoading}
-    >
-      <CardFooter
-        className="flex items-center justify-between border-t border-blue-gray-50 p-4"
-        placeholder={undefined}
-        onPointerEnterCapture={undefined}
-        onPointerLeaveCapture={undefined}
+    <div className="mt-5">
+      <OrderTable
+        columns={columns}
+        data={orders}
+        Header={<OrderHeader status={status} setStatus={setStatus} />}
+        enableHeader={true}
+        loading={isLoading}
       >
-        <Typography
-          variant="small"
-          color="blue-gray"
-          className="font-normal"
+        <CardFooter
+          className="flex items-center justify-between border-t border-blue-gray-50 p-4"
           placeholder={undefined}
           onPointerEnterCapture={undefined}
           onPointerLeaveCapture={undefined}
         >
-          Page {page} of {totalPages}
-        </Typography>
-        <div className="flex gap-2">
-          <Button
-            variant="outlined"
-            size="sm"
-            onClick={handlePreviousPage}
-            disabled={hasPrevPage}
-            className="rounded"
+          <Typography
+            variant="small"
+            color="blue-gray"
+            className="font-normal"
             placeholder={undefined}
             onPointerEnterCapture={undefined}
             onPointerLeaveCapture={undefined}
           >
-            Previous
-          </Button>
-          <Button
-            variant="outlined"
-            size="sm"
-            onClick={handleNextPage}
-            disabled={hasNextPage}
-            className="rounded"
-            placeholder={undefined}
-            onPointerEnterCapture={undefined}
-            onPointerLeaveCapture={undefined}
-          >
-            Next
-          </Button>
-        </div>
-      </CardFooter>
-    </OrderTable>
+            Page {page} of {totalPages}
+          </Typography>
+          <div className="flex gap-2">
+            <Button
+              variant="outlined"
+              size="sm"
+              onClick={handlePreviousPage}
+              disabled={page === 1}
+              className="rounded"
+              placeholder={undefined}
+              onPointerEnterCapture={undefined}
+              onPointerLeaveCapture={undefined}
+            >
+              Previous
+            </Button>
+            <Button
+              variant="outlined"
+              size="sm"
+              onClick={handleNextPage}
+              disabled={!hasNextPage}
+              className="rounded"
+              placeholder={undefined}
+              onPointerEnterCapture={undefined}
+              onPointerLeaveCapture={undefined}
+            >
+              Next
+            </Button>
+          </div>
+        </CardFooter>
+      </OrderTable>
+    </div>
   );
 }

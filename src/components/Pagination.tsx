@@ -5,11 +5,10 @@ import { ArrowLeftIcon, ArrowRightIcon } from "@heroicons/react/24/outline";
 export const Pagination: React.FC<{
   page: number;
   totalPages: number;
-  hasPrevPage: boolean;
   hasNextPage: boolean;
   handleNextPage: () => void;
   handlePreviousPage: () => void;
-}> = ({ page, handleNextPage, handlePreviousPage, totalPages, hasNextPage, hasPrevPage }) => {
+}> = ({ page, handleNextPage, handlePreviousPage, totalPages, hasNextPage }) => {
   return (
     <div className="sticky top-full mb-2 mt-8">
       <div className="flex items-center justify-center max-w-sm mx-auto gap-4 rounded-lg bg-white border">
@@ -17,7 +16,7 @@ export const Pagination: React.FC<{
           variant="text"
           className="flex items-center gap-2 leading-[0]"
           onClick={handlePreviousPage}
-          disabled={!hasPrevPage}
+          disabled={page === 1}
           placeholder={undefined}
           onPointerEnterCapture={undefined}
           onPointerLeaveCapture={undefined}

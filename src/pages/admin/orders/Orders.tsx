@@ -48,29 +48,28 @@ export default function OrderLists() {
 
   const columns = ["id", "customer name", "customer email", "order price", "ordered at", "status"];
 
-  console.log(ordersData)
+  console.log(ordersData);
 
   const totalPages = ordersData?.data?.totalPages ?? 1;
   const hasNextPage = ordersData?.data?.hasNextPage ?? false;
-  const hasPrevPage = ordersData?.data?.hasPrevPage ?? false;
 
   const handleNextPage = () => {
     if (hasNextPage) {
-      setPage((prevPage) => prevPage + 1);
+      setPage((prevPage) => Math.min(prevPage + 1, totalPages));
     }
   };
 
   const handlePreviousPage = () => {
-    if (hasPrevPage) {
-      setPage((prevPage) => Math.max(prevPage - 1, 1));
+    if (page > 1) {
+      setPage((prevPage) => prevPage - 1);
     }
   };
 
-  console.log(status)
+  console.log(status);
 
   useEffect(() => {
     refetch();
-  }, []);
+  }, [status, refetch, page, limit, totalPages]);
 
   return (
     <OrderTable
@@ -101,7 +100,7 @@ export default function OrderLists() {
             variant="outlined"
             size="sm"
             onClick={handlePreviousPage}
-            disabled={hasPrevPage}
+            disabled={page  ===  1}
             className="rounded"
             placeholder={undefined}
             onPointerEnterCapture={undefined}
@@ -113,7 +112,7 @@ export default function OrderLists() {
             variant="outlined"
             size="sm"
             onClick={handleNextPage}
-            disabled={hasNextPage}
+            disabled={!hasNextPage}
             className="rounded"
             placeholder={undefined}
             onPointerEnterCapture={undefined}
