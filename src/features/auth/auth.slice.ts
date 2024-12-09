@@ -50,7 +50,20 @@ export const AuthSlice = ApiService.injectEndpoints({
         method: "POST",
       }),
     }),
+
+    adminLogout: builder.mutation<Response, void>({
+      query: () => ({
+        url: "/users/logout",
+        method: "POST",
+      }),
+    }),
   }),
 });
 
-export const { useRegisterMutation, useLoginMutation, useLogoutMutation, useAdminLoginMutation } = AuthSlice;
+export const {
+  useRegisterMutation,
+  useLoginMutation,
+  useLogoutMutation,
+  useAdminLoginMutation,
+  useAdminLogoutMutation,
+} = AuthSlice;

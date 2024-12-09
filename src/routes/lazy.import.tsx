@@ -189,7 +189,7 @@ const Router = () => {
         },
         {
           path: "logout",
-          element: <Navigate to={"/admin/login"} replace state={{ path: window.location.pathname }} />,
+          element: <Navigate to={"/admin/login"} />,
         },
       ],
     },

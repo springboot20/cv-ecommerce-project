@@ -55,7 +55,7 @@ const AdminLogin = () => {
           dispatch(setCredentials({ tokens, admin: user }));
 
           toast.success(res.data.message);
-          await Promise.resolve(setTimeout(() => navigate("/admin/products/overview"), 2000));
+          await Promise.resolve(setTimeout(() => navigate("/admin/overview"), 2000));
           actions.resetForm();
         })
         .catch((error) => {

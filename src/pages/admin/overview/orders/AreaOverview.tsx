@@ -1,4 +1,4 @@
-import { useEffect } from "react";
+import { useEffect, useState } from "react";
 import ChartComponent from "../../../../components/chart/Chart";
 import {
   DailyStats,
@@ -12,7 +12,7 @@ import { useGetOrderStatsQuery } from "../../../../features/statistics/statistic
 
 const OrderCountsChart = () => {
   const { data, refetch, isLoading } = useGetOrderStatsQuery();
-
+  const [activeTab, setActiveTab] = useState<"daily" | "weekly" | "monthly">("daily");
   const response: OrderStatsResponse = data?.data?.statistics;
   const statistics = Array.isArray(response) ? response : [response];
 
@@ -35,56 +35,54 @@ const OrderCountsChart = () => {
   const weeklyStats = stats?.weekly ?? [];
   const monthlyStats = stats?.monthly ?? [];
 
+  const activeStats =
+    activeTab === "daily"
+      ? dailyStats
+      : activeTab === "weekly"
+      ? weeklyStats
+      : activeTab === "monthly"
+      ? monthlyStats
+      : [];
+
   const series = [
     {
       name: "Completed Orders",
-      data: [
-        ...dailyStats
-          ?.filter((item) => item?._id.status === "COMPLETED")
-          .map((item) => item?.count),
-        ...weeklyStats
-          ?.filter((item) => item?._id.status === "COMPLETED")
-          .map((item) => item?.count),
-        ...monthlyStats
-          ?.filter((item) => item?._id.status === "COMPLETED")
-          .map((item) => item?.count),
-      ],
+      data: activeStats
+        ?.filter((item) => item?._id.status === "COMPLETED")
+        .map((item) => item?.count),
     },
     {
       name: "Pending Orders",
-      data: [
-        ...dailyStats?.filter((item) => item?._id.status === "PENDING").map((item) => item?.count),
-        ...weeklyStats?.filter((item) => item?._id.status === "PENDING").map((item) => item?.count),
-        ...monthlyStats
-          ?.filter((item) => item?._id?.status === "PENDING")
-          .map((item) => item?.count),
-      ],
+      data: activeStats
+        ?.filter((item) => item?._id.status === "PENDING")
+        .map((item) => item?.count),
     },
   ];
 
   const options = {
     xaxis: {
-      categories: [
-        ...dailyStats?.map(
-          (item) => `Day ${item?._id?.day}, ${item?._id?.month}/${item?._id?.year}`,
-        ),
-        // ...weeklyStats?.map((item) => `Week ${item?._id?.week}, ${item?._id?.year}`),
-        // ...monthlyStats?.map((item) => `Month ${item?._id?.month}, ${item?._id?.year}`),
-      ],
+      categories: activeStats.map((item) => {
+        const id = item?._id;
+
+        if (activeTab === "daily" && "day" in id && "month" in id) {
+          return `Day ${id.day}, ${id.month}/${id.year}`;
+        } else if (activeTab === "weekly" && "week" in id) {
+          return `Week ${id.week}, ${id.year}`;
+        } else if (activeTab === "monthly" && "month" in id) {
+          return `Month ${id.month}, ${id.year}`;
+        } else {
+          return ""; // Fallback in case of invalid data
+        }
+      }),
     },
     title: {
       text: "Order Counts",
       style: {
         fontFamily: "Poppins, sans-serif",
+        fontSize: "20px",
       },
     },
     colors: ["#28A745", "#FF5733"],
-    fill: {
-      type: "gradient",
-      gradient: {
-        type: "vertical",
-      },
-    },
     chart: {
       toolbar: {
         show: false,
@@ -112,14 +110,38 @@ const OrderCountsChart = () => {
       <Loading />
     </div>
   ) : (
-    <ChartComponent
-      options={{
-        ...options,
-      }}
-      series={series}
-      type="area"
-      height={350}
-    />
+    <div>
+      {/* Tabs for Switching Data */}
+      <div className="flex justify-end mb-2">
+        {["daily", "weekly", "monthly"].map((tab) => (
+          <button
+            key={tab}
+            className={`px-4 py-1.5 mx-2 font-semibold border rounded ${
+              activeTab === tab ? "bg-green-500 text-white" : "bg-white text-gray-700"
+            }`}
+            onClick={() => setActiveTab(tab as "daily" | "weekly" | "monthly")}
+          >
+            {tab.charAt(0).toUpperCase() + tab.slice(1)}
+          </button>
+        ))}
+      </div>
+      <ChartComponent
+        options={{
+          ...options,
+          chart: {
+            ...options.chart,
+            animations: {
+              animateGradually: {
+                delay: 300,
+              },
+            },
+          },
+        }}
+        series={series}
+        type="bar"
+        height={350}
+      />
+    </div>
   );
 };
 

@@ -39,9 +39,12 @@ const authSlice = createSlice({
       }
     },
 
-    setCredentials: (state, action: PayloadAction<{ tokens: Token; user?: User; admin?: User }>) => {
+    setCredentials: (
+      state,
+      action: PayloadAction<{ tokens: Token; user?: User; admin?: User }>,
+    ) => {
       state.tokens = action.payload.tokens;
-      
+
       if (action.payload.user) {
         state.user = action.payload.user;
         state.admin = null;
@@ -97,6 +100,19 @@ const authSlice = createSlice({
       state.tokens = null;
 
       LocalStorage.set("user", null);
+      LocalStorage.set("authentified", false);
+      LocalStorage.set("tokens", null);
+    });
+
+    /**
+     * Logout builder casing
+     */
+    builder.addMatcher(AuthSlice.endpoints.adminLogout.matchFulfilled, (state) => {
+      state.isAuthenticated = false;
+      state.admin = null;
+      state.tokens = null;
+
+      LocalStorage.set("admin-user", null);
       LocalStorage.set("authentified", false);
       LocalStorage.set("tokens", null);
     });

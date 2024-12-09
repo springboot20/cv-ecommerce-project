@@ -13,7 +13,7 @@ import {
 import { AdminNavigationComponent } from "../../components/navigation/AdminNavigation";
 import { NavItem } from "../../components/NavItem";
 import { clx } from "../../util";
-import { useLogoutMutation } from "../../features/auth/auth.slice";
+import { useAdminLogoutMutation } from "../../features/auth/auth.slice";
 import { toast } from "react-toastify";
 import { classNames } from "../../helpers";
 
@@ -71,7 +71,7 @@ interface OutletContext {
 
 export const AdminDashboardLayout = () => {
   const context = useOutletContext<OutletContext>();
-  const [logout] = useLogoutMutation();
+  const [adminLogout] = useAdminLogoutMutation();
 
   return (
     <div className="flex items-stretch justify-between flex-shrink-0">
@@ -104,7 +104,7 @@ export const AdminDashboardLayout = () => {
           <button
             type="button"
             onClick={async () => {
-              await logout()
+              await adminLogout()
                 .unwrap()
                 .then((response) => {
                   toast.success(response?.message);
@@ -136,18 +136,6 @@ export const AdminDashboardLayout = () => {
                 aria-current={current ? "page" : undefined}
                 className={clx(current ? "hover:bg-[#F8F8F8]" : "", "py-5 px-10 w-full transition")}
                 close={context.close}
-                onClick={async () => {
-                  label === "logout" &&
-                    (await logout()
-                      .unwrap()
-                      .then((response) => {
-                        toast.success(response?.message);
-                        return <Navigate to="/admin/logout" replace />;
-                      })
-                      .catch((error: any) => {
-                        toast.error(error?.error || error?.data?.message);
-                      }));
-                }}
               >
                 {({ isActive }) => (
                   <>
@@ -169,11 +157,10 @@ export const AdminDashboardLayout = () => {
             <button
               type="button"
               onClick={async () => {
-                await logout()
+                await adminLogout()
                   .unwrap()
                   .then((response) => {
                     toast.success(response?.message);
-                    return <Navigate to="/logout" replace />;
                   })
                   .catch((error: any) => {
                     toast.error(error?.error || error?.data?.message);

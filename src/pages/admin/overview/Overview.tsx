@@ -1,6 +1,4 @@
 import { Fragment } from "react/jsx-runtime";
-import OrderCountsChart from "./orders/AreaOverview";
-import { PieOverview } from "./orders/PieOverview";
 import { useGetAllStatsQuery } from "../../../features/statistics/statistics.slice";
 import { useEffect } from "react";
 import { AllStatsInterface, Orders } from "../../../types/redux/order";
@@ -9,6 +7,7 @@ import { Link } from "react-router-dom";
 import { ProductStatisticsCardLoader } from "../../../components/loaders/Skeleton";
 import OrderTable from "../../../components/table/OrderTable";
 import { useGetAllOrdersQuery } from "../../../features/order/order.slice";
+import { OrdersOverview } from "./orders/OrdersOverview";
 
 export default function Overview() {
   const { data, refetch, isLoading } = useGetAllStatsQuery();
@@ -230,14 +229,7 @@ export default function Overview() {
         </div>
       )}
 
-      <div className="max-w-7xl mx-auto mt-4 grid grid-cols-1 xl:grid-cols-3 gap-6">
-        <div className="bg-white rounded-lg p-4 col-span-1 xl:col-span-2 w-full border">
-          <OrderCountsChart />
-        </div>
-        <div className="bg-white rounded-lg p-4 col-span-1 border grid place-items-center xl:place-items-stretch">
-          <PieOverview />
-        </div>
-      </div>
+      <OrdersOverview />
 
       <OrderTable
         columns={columns}
