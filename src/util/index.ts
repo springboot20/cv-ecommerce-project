@@ -66,3 +66,14 @@ export class LocalStorage {
     localStorage.clear();
   }
 }
+
+export const AuthStorage = {
+  get: (key: string) => LocalStorage.get(key),
+  set: (key: string, value: any) => LocalStorage.set(key, value),
+  clear: () => {
+    LocalStorage.set("user", null);
+    LocalStorage.set("admin-user", null);
+    LocalStorage.set("authentified", false);
+    LocalStorage.set("tokens", null);
+  },
+};

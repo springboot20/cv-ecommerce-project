@@ -1,14 +1,40 @@
 import { createSlice, PayloadAction } from "@reduxjs/toolkit";
-import { LocalStorage } from "../../util";
+import { AuthStorage, LocalStorage } from "../../util";
 import { InitialState, Token, User } from "../../types/redux/auth";
 import { AuthSlice } from "./auth.slice";
 import { jwtDecode } from "jwt-decode";
 
-const initialState: InitialState = {
-  tokens: LocalStorage.get("tokens") as Token,
-  user: LocalStorage.get("user") as User,
-  admin: LocalStorage.get("admin-user") as User,
-  isAuthenticated: LocalStorage.get("authentified") as boolean,
+const getInitialState = (): InitialState => ({
+  tokens: AuthStorage.get("tokens") as Token,
+  user: AuthStorage.get("user") as User,
+  admin: AuthStorage.get("admin-user") as User,
+  isAuthenticated: AuthStorage.get("authentified") as boolean,
+});
+
+const initialState: InitialState = getInitialState();
+
+const updateAuthState = (
+  state: InitialState,
+  { tokens, user, admin }: { tokens: Token; user?: User; admin?: User },
+) => {
+  state.tokens = tokens;
+  state.user = user || null;
+  state.admin = admin || null;
+  state.isAuthenticated = true;
+
+  AuthStorage.set("tokens", tokens);
+  AuthStorage.set("user", user);
+  AuthStorage.set("admin-user", admin);
+  AuthStorage.set("authentified", state.isAuthenticated);
+};
+
+const clearAuthState = (state: InitialState) => {
+  state.isAuthenticated = false;
+  state.tokens = null;
+  state.user = null;
+  state.admin = null;
+
+  AuthStorage.clear();
 };
 
 const authSlice = createSlice({
@@ -22,20 +48,19 @@ const authSlice = createSlice({
           return;
         }
 
-        const decodedToken = jwtDecode(action.payload);
-        const expirationTime = decodedToken?.exp!;
+        const decodedToken = jwtDecode<{ exp: number }>(action.payload);
+        const expirationTime = decodedToken?.exp;
 
-        console.log(Date.now() >= expirationTime * 1000);
-
-        if (Date.now() >= expirationTime * 1000) {
+        if (!expirationTime || Date.now() >= expirationTime * 1000) {
           state.isAuthenticated = false;
-          return;
+        } else {
+          state.isAuthenticated = true;
         }
 
-        state.isAuthenticated = true;
-        LocalStorage.set("authentified", state.isAuthenticated);
+        AuthStorage.set("authentified", state.isAuthenticated);
       } catch (error) {
-        console.log(error);
+        console.error("Error decoding token:", error);
+        state.isAuthenticated = false;
       }
     },
 
@@ -65,56 +90,28 @@ const authSlice = createSlice({
      * Login builder casing
      */
     builder.addMatcher(AuthSlice.endpoints.login.matchFulfilled, (state, { payload }) => {
-      const { data } = payload;
-
-      state.isAuthenticated = true;
-      state.user = data.user;
-      state.tokens = data.tokens;
-
-      LocalStorage.set("user", data.user);
-      LocalStorage.set("authentified", data.user.isAuthenticated);
-      LocalStorage.set("tokens", data.tokens);
+      updateAuthState(state, { tokens: payload.data.tokens, user: payload.data.user });
     });
 
     /**
-     * Login builder casing
+     * Admin Login builder casing
      */
     builder.addMatcher(AuthSlice.endpoints.adminLogin.matchFulfilled, (state, { payload }) => {
-      const { data } = payload;
-
-      state.isAuthenticated = true;
-      state.user = data.user;
-      state.tokens = data.tokens;
-
-      LocalStorage.set("admin-user", data.user);
-      LocalStorage.set("authentified", data.user.isAuthenticated);
-      LocalStorage.set("tokens", data.tokens);
+      updateAuthState(state, { tokens: payload.data.tokens, admin: payload.data.user });
     });
 
     /**
      * Logout builder casing
      */
     builder.addMatcher(AuthSlice.endpoints.logout.matchFulfilled, (state) => {
-      state.isAuthenticated = false;
-      state.user = null;
-      state.tokens = null;
-
-      LocalStorage.set("user", null);
-      LocalStorage.set("authentified", false);
-      LocalStorage.set("tokens", null);
+      clearAuthState(state);
     });
 
     /**
-     * Logout builder casing
+     * Admin Logout builder casing
      */
     builder.addMatcher(AuthSlice.endpoints.adminLogout.matchFulfilled, (state) => {
-      state.isAuthenticated = false;
-      state.admin = null;
-      state.tokens = null;
-
-      LocalStorage.set("admin-user", null);
-      LocalStorage.set("authentified", state.isAuthenticated);
-      LocalStorage.set("tokens", null);
+      clearAuthState(state);
     });
   },
 });
