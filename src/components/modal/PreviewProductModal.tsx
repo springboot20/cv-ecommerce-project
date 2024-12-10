@@ -7,35 +7,9 @@ import { StarIcon } from "@heroicons/react/20/solid";
 import { classNames, formatPrice } from "../../helpers";
 import { useAddItemToCartMutation } from "../../features/cart/cart.slice";
 import { useGetProductByIdQuery } from "../../features/products/product.slice";
-import { LocalStorage } from "../../util";
 import { ProductType } from "../../types/redux/product";
 import { toast } from "react-toastify";
 import { Button } from "@material-tailwind/react";
-
-// const product = {
-//   name: "Basic Tee 6-Pack ",
-//   price: "$192",
-//   rating: 3.9,
-//   reviewCount: 117,
-//   href: "#",
-//   imageSrc: "https://tailwindui.com/plus/img/ecommerce-images/product-quick-preview-02-detail.jpg",
-//   imageAlt: "Two each of gray, white, and black shirts arranged on table.",
-//   colors: [
-//     { name: "White", class: "bg-white", selectedClass: "ring-gray-400" },
-//     { name: "Gray", class: "bg-gray-200", selectedClass: "ring-gray-400" },
-//     { name: "Black", class: "bg-gray-900", selectedClass: "ring-gray-900" },
-//   ],
-//   sizes: [
-//     { name: "XXS", inStock: true },
-//     { name: "XS", inStock: true },
-//     { name: "S", inStock: true },
-//     { name: "M", inStock: true },
-//     { name: "L", inStock: true },
-//     { name: "XL", inStock: true },
-//     { name: "XXL", inStock: true },
-//     { name: "XXXL", inStock: false },
-//   ],
-// };
 
 const ProductPreviewModal: React.FC<{ open: boolean; onClose: () => void; productId: string }> = ({
   open,
@@ -48,7 +22,7 @@ const ProductPreviewModal: React.FC<{ open: boolean; onClose: () => void; produc
   const [message, setMessage] = useState<string>("");
   const [quantityInput, setQuantityInput] = useState<number>(1);
 
-  const product: ProductType = data?.data.product ?? (LocalStorage.get("product") as ProductType);
+  const product: ProductType = data?.data.product
 
   const handleAddItemToCart = async (
     event: React.FormEvent<HTMLFormElement>,
@@ -142,7 +116,7 @@ const ProductPreviewModal: React.FC<{ open: boolean; onClose: () => void; produc
                     </div>
                   </section>
 
-                  <section aria-labelledby="options-heading" className="mt-10">
+                  <section aria-labelledby="options-heading" className="mt-5">
                     <h3 id="options-heading" className="sr-only">
                       Product options
                     </h3>
@@ -176,7 +150,7 @@ const ProductPreviewModal: React.FC<{ open: boolean; onClose: () => void; produc
                       )}
 
                       {product?.sizes && product?.sizes?.length !== 0 && (
-                        <fieldset aria-label="Choose a size" className="mt-10">
+                        <fieldset aria-label="Choose a size" className="mt-5">
                           <div className="flex items-center justify-between">
                             <div className="text-sm font-medium text-gray-900">Size</div>
                             <a
@@ -233,7 +207,7 @@ const ProductPreviewModal: React.FC<{ open: boolean; onClose: () => void; produc
                         </fieldset>
                       )}
 
-                      <div className="relative flex items-center space-x-3">
+                      <div className="relative flex items-center space-x-3 mt-5">
                         <Button
                           type="button"
                           id="minus-btn"
@@ -247,7 +221,7 @@ const ProductPreviewModal: React.FC<{ open: boolean; onClose: () => void; produc
                         >
                           <MinusIcon id="minus-icon" className="h-5 w-5" />
                         </Button>
-                        <fieldset>
+                        <fieldset aria-label="Product quantity">
                           <label htmlFor="quantity" className="sr-only">
                             quantity
                           </label>

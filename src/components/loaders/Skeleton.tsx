@@ -42,7 +42,7 @@ export const ProductSkeletonLoading = () => {
           />
         </header>
       </div>
-      <div className="col-span-full lg:col-span-1 w-full">
+      <div className="col-span-full lg:col-span-1 w-full relative">
         <div>
           <div className="flex items-center justify-between w-full">
             <h3 className="w-52 relative">
@@ -59,7 +59,7 @@ export const ProductSkeletonLoading = () => {
           </div>
         </div>
 
-        <div className="flex flex-col gap-2 mt-10">
+        <div className="flex flex-col gap-2 mt-5">
           <h1 className="relative w-32">
             <Skeleton className="border border-gray-300 h-7" />
           </h1>
@@ -73,7 +73,7 @@ export const ProductSkeletonLoading = () => {
           </div>
         </div>
 
-        <div className="flex flex-col gap-2 mt-10">
+        <div className="flex flex-col gap-2 mt-5">
           <h1 className="relative w-32">
             <Skeleton className="border border-gray-300 h-7" />
           </h1>
@@ -99,13 +99,13 @@ export const ProductSkeletonLoading = () => {
           </div>
         </div>
 
-        <div className="col-span-full mt-10">
+        <div className="col-span-full mt-5">
           <span className="block h-14 relative">
             <Skeleton className="border h-full w-full border-gray-300" />
           </span>
         </div>
 
-        <div className="flex flex-col gap-2 mt-10">
+        <div className="flex flex-col gap-2 mt-5">
           <h1 className="relative w-32">
             <Skeleton className="border border-gray-300 h-7" containerClassName="w-full " />
           </h1>
