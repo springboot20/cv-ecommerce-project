@@ -23,9 +23,15 @@ export const ProductSlice = ApiService.injectEndpoints({
         const formData = new FormData();
 
         Object.keys(data).forEach((key) => {
-          formData.append(key, data[key]);
+          if (key === "imageSrc" && data[key]) {
+            formData.append(key, data[key]);
+          } else if (Array.isArray(data[key]) || typeof data[key] === "object") {
+            formData.append(key, JSON.stringify(data[key]));
+          } else {
+            formData.append(key, data[key]);
+          }
         });
-
+        
         return {
           url: "/products",
           method: "POST",

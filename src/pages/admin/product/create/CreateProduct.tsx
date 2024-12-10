@@ -34,12 +34,7 @@ const initialValues: InitialValuesInterface = {
   featured: false,
   name: "",
   colors: [],
-  sizes: [
-    {
-      name: "",
-      inStock: false,
-    },
-  ],
+  sizes: [],
 };
 
 export default function CreateNewProduct() {
@@ -82,7 +77,7 @@ export default function CreateNewProduct() {
   return (
     <Formik initialValues={initialValues} onSubmit={onSubmit}>
       {({ errors, touched, setFieldValue, values }) => {
-        console.log(values.colors);
+        console.log(values.sizes);
         return (
           <Form className="mt-4 w-full bg-white p-6 border gap-10 grid grid-cols-1 xl:grid-cols-3 mx-auto max-w-6xl">
             <div className="col-span-full xl:col-span-2">
@@ -241,7 +236,10 @@ export default function CreateNewProduct() {
                         if (e.key === "Enter" && e.currentTarget.value.trim()) {
                           e.preventDefault();
 
-                          const newColors = e.currentTarget.value.split(',').map((color)=> color.trim()).filter((color)=> color)
+                          const newColors = e.currentTarget.value
+                            .split(",")
+                            .map((color) => color.trim())
+                            .filter((color) => color);
 
                           setFieldValue("colors", [
                             ...(Array.isArray(values.colors) ? values.colors : []),

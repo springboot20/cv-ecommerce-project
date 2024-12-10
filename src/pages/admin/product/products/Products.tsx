@@ -117,17 +117,17 @@ const AdminProducts = () => {
         >
           {isLoading ? (
             <ProductsSkeletonLoading cardsNumber={9} />
-          ) : searchQuery && products.length === 0 ? (
+          ) : searchQuery && products?.length === 0 ? (
             <p className="font-semibold text-gray-700 text-xl text-center">
               No country found for "{searchQuery}"
             </p>
           ) : (
             products?.map((product: ProductType) => (
-              <Fragment key={product._id}>
+              <Fragment key={product?._id}>
                 <DeleteModal
-                  open={!!open[product._id]}
-                  onClose={() => onClose(product._id)}
-                  handleDelete={() => handleProductDelete(product._id)}
+                  open={!!open[product?._id]}
+                  onClose={() => onClose(product?._id)}
+                  handleDelete={() => handleProductDelete(product?._id)}
                   deleteProductLoading={deleteProductLoading}
                   productDeleted={productDeleted}
                 />
@@ -135,7 +135,7 @@ const AdminProducts = () => {
                 <motion.div layout>
                   <header className=" transition-all h-52 w-full relative rounded-xl overflow-hidden border">
                     <img
-                      src={product?.imageSrc.url}
+                      src={product?.imageSrc?.url}
                       alt=""
                       className="h-full absolute object-cover object-center w-full transition"
                     />
@@ -143,13 +143,13 @@ const AdminProducts = () => {
                   <div className="p-2 space-y-3">
                     <div className="relative flex pt-2 justify-between gap-1.5">
                       <h3 className="capitalize text-lg font-medium text-gray-700">
-                        {product.name}
+                        {product?.name}
                       </h3>
-                      <p className="text-lg font-medium">{formatPrice(product.price)}</p>
+                      <p className="text-lg font-medium">{formatPrice(product?.price)}</p>
                     </div>
                     <div className="flex items-center justify-between">
                       <Button
-                        onClick={() => onOpen(product._id)}
+                        onClick={() => onOpen(product?._id)}
                         variant="outlined"
                         color="red"
                         className="flex items-center gap-2 rounded px-2"
@@ -165,7 +165,7 @@ const AdminProducts = () => {
                         variant="outlined"
                         color="indigo"
                         onClick={() => {
-                          navigate(`/admin/products/edit/${product._id}`);
+                          navigate(`/admin/products/edit/${product?._id}`);
                         }}
                         className="flex items-center gap-2 rounded px-2"
                         placeholder={undefined}

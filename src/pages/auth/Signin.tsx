@@ -50,15 +50,22 @@ const Signin = () => {
       await login(values)
         .unwrap()
         .then(async (res) => {
-          const { tokens, user } = res.data
-          dispatch(setCredentials({ tokens, user }))
+          const { tokens, user } = res.data;
+          dispatch(setCredentials({ tokens, user }));
 
-          toast.success(res.message);
+          const successMessage =
+            typeof res.message === "string" ? res.message : JSON.stringify(res.message);
+          toast.success(successMessage);
           await Promise.resolve(setTimeout(() => navigate("/"), 2000));
           actions.resetForm();
         })
         .catch((error) => {
-          toast.error(error.error || error.data.message);
+          const errorMessage =
+            error.error ||
+            (error.data && typeof error.data.message === "string"
+              ? error.data.message
+              : JSON.stringify(error.data?.message));
+          toast.error(errorMessage);
         });
     },
   });
@@ -136,7 +143,11 @@ const Signin = () => {
               type="submit"
               disabled={isLoading}
               loading={isLoading}
-              className="rounded-md w-full flex items-center justify-center uppercase bg-light-blue-600 px-3 py-3 text-lg font-medium text-white shadow-sm hover:bg-light-blue-500 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-light-blue-600 disabled:opacity-70"  placeholder={undefined} onPointerEnterCapture={undefined} onPointerLeaveCapture={undefined}            >
+              className="rounded-md w-full flex items-center justify-center uppercase bg-light-blue-600 px-3 py-3 text-lg font-medium text-white shadow-sm hover:bg-light-blue-500 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-light-blue-600 disabled:opacity-70"
+              placeholder={undefined}
+              onPointerEnterCapture={undefined}
+              onPointerLeaveCapture={undefined}
+            >
               {isLoading ? <span>Signing in...</span> : <span>Sign in</span>}
             </Button>
           </div>
