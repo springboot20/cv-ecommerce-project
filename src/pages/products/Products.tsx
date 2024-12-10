@@ -1,4 +1,4 @@
-import { Fragment, useEffect, useState } from "react";
+import { Fragment, useEffect, useRef, useState } from "react";
 import { classNames, formatPrice } from "../../helpers";
 import { motion } from "framer-motion";
 import { Pagination } from "../../components/Pagination";
@@ -11,7 +11,7 @@ import { ProductsSkeletonLoading } from "../../components/loaders/Skeleton";
 import { CategoryPanel } from "../../components/panels/CategoryPanel";
 import { Disclosure } from "@headlessui/react";
 import { Bars3Icon, EyeIcon } from "@heroicons/react/24/outline";
-import { LocalStorage } from "../../util";
+import {  LocalStorage } from "../../util";
 import { useGetAllCategoryQuery } from "../../features/category/category.slice";
 import Skeleton from "react-loading-skeleton";
 import ProductPreviewModal from "../../components/modal/PreviewProductModal";
@@ -23,11 +23,12 @@ const Products = () => {
   const [page, setPage] = useState<number>(1);
   const [openPreview, setOpenPreview] = useState<{ [key: string]: boolean }>({});
   // const [categoryQuery, setCategoryQuery] = useState<string>("");
+  const displayedMessages = useRef<Set<string>>(new Set());
 
   let limit = 10;
 
   const { data: categoriedData } = useGetAllCategoryQuery();
-  const { data, isLoading, refetch } = useGetAllProductsQuery({
+  const { data, isLoading } = useGetAllProductsQuery({
     limit,
     page,
     featured: false,
@@ -56,11 +57,11 @@ const Products = () => {
   const handleSearch = (e: React.ChangeEvent<HTMLInputElement>) => setSearchQuery(e.target.value);
 
   useEffect(() => {
-    if (data?.message) {
-      toast.success(data?.message);
+    if (data?.message && !displayedMessages.current.has(data.message)) {
+      toast.success(data.message);
+      displayedMessages.current.add(data.message);
     }
-    refetch();
-  }, [data?.message, refetch]);
+  }, [data?.message]);
 
   const handlePreviewOpen = (id: string) => setOpenPreview((prev) => ({ ...prev, [id]: true }));
   const handlePreviewClose = (id: string) => setOpenPreview((prev) => ({ ...prev, [id]: false }));
