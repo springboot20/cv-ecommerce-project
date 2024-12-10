@@ -9,7 +9,12 @@ export interface ProductType {
   imageSrc: { url: string; public_id: string };
   subImgs: { url: string; public_id: string }[];
   category: ProductCategory;
-  ratings:number
+  ratings: number;
+  sizes: {
+    name: string;
+    inStock: boolean;
+  }[];
+  colors: string[];
 }
 
 export interface InitialState {
