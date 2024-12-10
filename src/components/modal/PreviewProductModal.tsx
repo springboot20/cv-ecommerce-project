@@ -1,7 +1,7 @@
 "use client";
 
 import { useEffect, useState } from "react";
-import { Dialog } from "@headlessui/react";
+import { Dialog, RadioGroup } from "@headlessui/react";
 import { MinusIcon, PlusIcon, XMarkIcon } from "@heroicons/react/24/outline";
 import { StarIcon } from "@heroicons/react/20/solid";
 import { classNames, formatPrice } from "../../helpers";
@@ -149,96 +149,89 @@ const ProductPreviewModal: React.FC<{ open: boolean; onClose: () => void; produc
 
                     <form onSubmit={(event) => handleAddItemToCart(event, product?._id)}>
                       {/* Colors */}
-                      <fieldset aria-label="Choose a color">
-                        <legend className="text-sm font-medium text-gray-900">Color</legend>
+                      {product?.colors.length !== 0 && (
+                        <fieldset aria-label="Choose a color">
+                          <legend className="text-sm font-medium text-gray-900">Color</legend>
 
-                        {/* <RadioGroup
-                          value={selectedColor}
-                          onChange={setSelectedColor}
-                          className="mt-4 flex items-center space-x-3"
-                        >
-                          {product.colors.map((color) => (
-                            <RadioGroup.Option
-                              key={color.name}
-                              value={color}
-                              aria-label={color.name}
-                              className={classNames(
-                                color.selectedClass,
-                                "relative -m-0.5 flex cursor-pointer items-center justify-center rounded-full p-0.5 focus:outline-none data-[checked]:ring-2 data-[focus]:data-[checked]:ring data-[focus]:data-[checked]:ring-offset-1",
-                              )}
-                            >
-                              <span
-                                aria-hidden="true"
+                          <RadioGroup className="mt-4 flex items-center space-x-3">
+                            {product?.colors?.map((color) => (
+                              <RadioGroup.Option
+                                key={color}
+                                value={color}
+                                aria-label={color}
                                 className={classNames(
-                                  color.class,
-                                  "size-8 rounded-full border border-black/10",
+                                  "relative -m-0.5 flex cursor-pointer items-center justify-center rounded-full p-0.5 focus:outline-none data-[checked]:ring-2 data-[focus]:data-[checked]:ring data-[focus]:data-[checked]:ring-offset-1",
                                 )}
-                              />
-                            </RadioGroup.Option>
-                          ))}
-                        </RadioGroup> */}
-                      </fieldset>
-
-                      {/* Sizes */}
-                      <fieldset aria-label="Choose a size" className="mt-10">
-                        <div className="flex items-center justify-between">
-                          <div className="text-sm font-medium text-gray-900">Size</div>
-                          <a
-                            href="#"
-                            className="text-sm font-medium text-gray-600 hover:text-gray-500"
-                          >
-                            Size guide
-                          </a>
-                        </div>
-
-                        {/* <RadioGroup
-                          value={selectedSize}
-                          onChange={setSelectedSize}
-                          className="mt-4 grid grid-cols-4 gap-4"
-                        >
-                          {product.sizes.map((size) => (
-                            <RadioGroup.Option
-                              key={size.name}
-                              value={size}
-                              disabled={!size.inStock}
-                              className={classNames(
-                                size.inStock
-                                  ? "cursor-pointer bg-white text-gray-900 shadow-sm"
-                                  : "cursor-not-allowed bg-gray-50 text-gray-200",
-                                "group relative flex items-center justify-center rounded-md border px-4 py-3 text-sm font-medium uppercase hover:bg-gray-50 focus:outline-none data-[focus]:ring-2 data-[focus]:ring-gray-500 sm:flex-1",
-                              )}
-                            >
-                              <span>{size.name}</span>
-                              {size.inStock ? (
+                              >
                                 <span
                                   aria-hidden="true"
-                                  className="pointer-events-none absolute -inset-px rounded-md border-2 border-transparent group-data-[focus]:border group-data-[checked]:border-indigo-500"
+                                  className={classNames(
+                                    "size-8 rounded-full border border-black/10",
+                                  )}
                                 />
-                              ) : (
-                                <span
-                                  aria-hidden="true"
-                                  className="pointer-events-none absolute -inset-px rounded-md border-2 border-gray-200"
-                                >
-                                  <svg
-                                    stroke="currentColor"
-                                    viewBox="0 0 100 100"
-                                    preserveAspectRatio="none"
-                                    className="absolute inset-0 size-full stroke-2 text-gray-200"
+                              </RadioGroup.Option>
+                            ))}
+                          </RadioGroup>
+                        </fieldset>
+                      )}
+
+                      {product?.sizes && product?.sizes?.length !== 0 && (
+                        <fieldset aria-label="Choose a size" className="mt-10">
+                          <div className="flex items-center justify-between">
+                            <div className="text-sm font-medium text-gray-900">Size</div>
+                            <a
+                              href="#"
+                              className="text-sm font-medium text-gray-600 hover:text-gray-500"
+                            >
+                              Size guide
+                            </a>
+                          </div>
+
+                          <RadioGroup className="mt-4 grid grid-cols-4 gap-4">
+                            {product?.sizes?.map((size) => (
+                              <RadioGroup.Option
+                                key={size?.name}
+                                value={size}
+                                disabled={!size?.inStock}
+                                className={classNames(
+                                  size?.inStock
+                                    ? "cursor-pointer bg-white text-gray-900 shadow-sm"
+                                    : "cursor-not-allowed bg-gray-50 text-gray-200",
+                                  "group relative flex items-center justify-center rounded-md border px-4 py-3 text-sm font-medium uppercase hover:bg-gray-50 focus:outline-none data-[focus]:ring-2 data-[focus]:ring-gray-500 sm:flex-1",
+                                )}
+                              >
+                                <span>{size?.name}</span>
+                                {size?.inStock ? (
+                                  <span
+                                    aria-hidden="true"
+                                    className="pointer-events-none absolute -inset-px rounded-md border-2 border-transparent group-data-[focus]:border group-data-[checked]:border-indigo-500"
+                                  />
+                                ) : (
+                                  <span
+                                    aria-hidden="true"
+                                    className="pointer-events-none absolute -inset-px rounded-md border-2 border-gray-200"
                                   >
-                                    <line
-                                      x1={0}
-                                      x2={100}
-                                      y1={100}
-                                      y2={0}
-                                      vectorEffect="non-scaling-stroke"
-                                    />
-                                  </svg>
-                                </span>
-                              )}
-                            </RadioGroup.Option>
-                          ))}
-                        </RadioGroup> */}
-                      </fieldset>
+                                    <svg
+                                      stroke="currentColor"
+                                      viewBox="0 0 100 100"
+                                      preserveAspectRatio="none"
+                                      className="absolute inset-0 size-full stroke-2 text-gray-200"
+                                    >
+                                      <line
+                                        x1={0}
+                                        x2={100}
+                                        y1={100}
+                                        y2={0}
+                                        vectorEffect="non-scaling-stroke"
+                                      />
+                                    </svg>
+                                  </span>
+                                )}
+                              </RadioGroup.Option>
+                            ))}
+                          </RadioGroup>
+                        </fieldset>
+                      )}
 
                       <div className="relative flex items-center space-x-3">
                         <Button
