@@ -23,14 +23,14 @@ const OrderTable: React.FC<{
 }) => {
   const navigate = useNavigate();
 
+  console.log(canClickOrder);
+
   const { admin, user } = useAppSelector((state: RootState) => state.auth);
 
   const handleRowClick = (orderId: string) => {
-    if (canClickOrder) {
-      if (user) {
-        navigate(`/orders/${orderId}`); // Navigate to order detail page
-      } else if (admin) navigate(`/admin/orders/${orderId}`); // Navigate to order detail page
-    }
+    if (user) {
+      navigate(`/orders/${orderId}`); // Navigate to order detail page
+    } else if (admin) navigate(`/admin/orders/${orderId}`); // Navigate to order detail page
   };
 
   return (
@@ -102,7 +102,10 @@ const OrderTable: React.FC<{
                 return (
                   <tr
                     key={d?._id}
-                    onClick={() => handleRowClick(d?._id)}
+                    onClick={() => {
+                      console.log(data?.length);
+                      canClickOrder && data?.length !== 0 && handleRowClick(d?._id);
+                    }}
                     className="hover:bg-gray-50"
                   >
                     <td className={classes}>

@@ -29,7 +29,7 @@ const OrderHeader: React.FC<{
           <option>Failed</option>
         </select>
       </fieldset>
-      <StatusSwitch enabled={canClickOrder} setEnabled={setCanClickOrder} />
+      <StatusSwitch enabled={canClickOrder} bgClass="bg-gray-700" setEnabled={setCanClickOrder} />
     </div>
   );
 };

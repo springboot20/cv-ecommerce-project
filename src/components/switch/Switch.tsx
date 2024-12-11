@@ -17,12 +17,15 @@ export default function StatusSwitch({
       aria-label="Enable click"
       className={clx(
         bgClass,
-        "group relative flex h-6 w-12 cursor-pointer rounded-full p-1 transition-colors duration-200 ease-in-out focus:outline-none data-[focus]:outline-1 data-[focus]:outline-white",
+        "group relative flex h-6 w-12  cursor-pointer rounded-full transition-colors duration-200 ease-in-out focus:outline-none data-[focus]:outline-1 data-[focus]:outline-white",
       )}
     >
       <span
         aria-hidden="true"
-        className="pointer-events-none inline-block size-4 translate-x-0 rounded-full bg-white ring-0 shadow-lg transition duration-200 ease-in-out group-data-[checked]:translate-x-6"
+        className={clx(
+          "pointer-events-none inline-block size-6 scale-[.70] rounded-full bg-white ring-0 shadow-lg transition duration-200 ease-in-out",
+          enabled ? " translate-x-[1.45rem]": "translate-x-0",
+        )}
       />
     </Switch>
   );
