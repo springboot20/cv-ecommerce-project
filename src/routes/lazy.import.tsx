@@ -12,6 +12,7 @@ import { AdminDashboardLayout } from "../layout/admin/AdminLayout";
 import { ProtectedRoute, AdminProtectedRoute } from "../components/Private.routes";
 import { AdminPublicRoute } from "../components/Public.routes";
 import AdminOrders from "../pages/admin/orders/Orders";
+import AdminOrderDetails from "../pages/admin/orders/orderDetails/OrderDetail";
 
 const AdminOverview = lazy(() => import("../pages/admin/overview/Overview"));
 const AdminUsers = lazy(() => import("../pages/admin/users/Users"));
@@ -149,11 +150,24 @@ const Router = () => {
             },
             {
               path: "orders",
-              element: (
-                <AdminProtectedRoute roles={[AcceptedRoles.ADMIN, AcceptedRoles.MODERATOR]}>
-                  <AdminOrders />
-                </AdminProtectedRoute>
-              ),
+              children: [
+                {
+                  index: true,
+                  element: (
+                    <AdminProtectedRoute roles={[AcceptedRoles.ADMIN, AcceptedRoles.MODERATOR]}>
+                      <AdminOrders />
+                    </AdminProtectedRoute>
+                  ),
+                },
+                {
+                  path: ":orderId",
+                  element: (
+                    <AdminProtectedRoute roles={[AcceptedRoles.ADMIN, AcceptedRoles.MODERATOR]}>
+                      <AdminOrderDetails />
+                    </AdminProtectedRoute>
+                  ),
+                },
+              ],
             },
             {
               path: "products",

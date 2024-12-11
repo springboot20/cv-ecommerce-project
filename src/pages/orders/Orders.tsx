@@ -4,33 +4,39 @@ import { Orders } from "../../types/redux/order";
 import OrderTable from "../../components/table/OrderTable";
 import { CardFooter, Typography, Button } from "@material-tailwind/react";
 import VerifyPaystackPayment from "./verify/VerifyPayment";
+import StatusSwitch from "../../components/switch/Switch";
 
 const OrderHeader: React.FC<{
   setStatus: React.Dispatch<React.SetStateAction<string>>;
   status: string;
-}> = ({ setStatus, status }) => {
+  setCanClickOrder: React.Dispatch<React.SetStateAction<boolean>>;
+  canClickOrder: boolean;
+}> = ({ setStatus, status, setCanClickOrder, canClickOrder }) => {
   return (
     <div className="mb-3">
-      <label htmlFor="status" className="tetx-base font-normal text-gray-700 capitalize mr-4">
-        filter status
-      </label>
-      <select
-        value={status}
-        className="py-1.5 px-3 rounded max-w-xs w-full"
-        onChange={(evt) => setStatus(evt.target.value)}
-      >
-        <option>filter by status</option>
-        <option>Pending</option>
-        <option>Completed</option>
-        <option>Failed</option>
-      </select>
+      <fieldset>
+        <label htmlFor="status" className="tetx-base font-normal text-gray-700 capitalize mr-4">
+          filter status
+        </label>
+        <select
+          value={status}
+          className="py-1.5 px-3 rounded max-w-xs w-full"
+          onChange={(evt) => setStatus(evt.target.value)}
+        >
+          <option>filter by status</option>
+          <option>Pending</option>
+          <option>Completed</option>
+          <option>Failed</option>
+        </select>
+      </fieldset>
+      <StatusSwitch enabled={canClickOrder} setEnabled={setCanClickOrder} />
     </div>
   );
 };
 
 export default function OrderLists() {
   let limit = 10;
-
+  const [canClickOrder, setCanClickOrder] = useState(false); // State to allow clicking on orders
   const [page, setPage] = useState<number>(1);
   const [status, setStatus] = useState<string>("");
   const {
@@ -79,8 +85,16 @@ export default function OrderLists() {
         <OrderTable
           columns={columns}
           data={orders}
-          Header={<OrderHeader status={status} setStatus={setStatus} />}
+          Header={
+            <OrderHeader
+              status={status}
+              setStatus={setStatus}
+              canClickOrder={canClickOrder}
+              setCanClickOrder={setCanClickOrder}
+            />
+          }
           enableHeader={true}
+          canClickOrder={canClickOrder}
           loading={isLoading}
         >
           <CardFooter

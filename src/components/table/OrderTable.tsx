@@ -1,5 +1,8 @@
 import { Card, Typography, CardBody, Chip, Checkbox } from "@material-tailwind/react";
 import { classNames, formatPrice } from "../../helpers";
+import { useNavigate } from "react-router";
+import { useAppSelector } from "../../hooks/redux/redux.hooks";
+import { RootState } from "../../app/store";
 
 const OrderTable: React.FC<{
   columns: string[];
@@ -8,7 +11,28 @@ const OrderTable: React.FC<{
   enableHeader?: boolean;
   Header?: JSX.Element;
   loading: boolean;
-}> = ({ columns, data, children, enableHeader = false, Header, loading }) => {
+  canClickOrder?: boolean;
+}> = ({
+  columns,
+  data,
+  children,
+  enableHeader = false,
+  Header,
+  loading,
+  canClickOrder = false,
+}) => {
+  const navigate = useNavigate();
+
+  const { admin, user } = useAppSelector((state: RootState) => state.auth);
+
+  const handleRowClick = (orderId: string) => {
+    if (canClickOrder) {
+      if (user) {
+        navigate(`/orders/${orderId}`); // Navigate to order detail page
+      } else if (admin) navigate(`/admin/orders/${orderId}`); // Navigate to order detail page
+    }
+  };
+
   return (
     <Card
       className="h-full w-full !rounded-none !shadow !p-2 mt-4"
@@ -76,7 +100,11 @@ const OrderTable: React.FC<{
                 }/${date.getFullYear()}`;
 
                 return (
-                  <tr key={d?._id}>
+                  <tr
+                    key={d?._id}
+                    onClick={() => handleRowClick(d?._id)}
+                    className="hover:bg-gray-50"
+                  >
                     <td className={classes}>
                       <div className="flex items-center space-x-3">
                         <Checkbox
@@ -173,7 +201,6 @@ const OrderTable: React.FC<{
           </table>
         )}
       </CardBody>
-
       {children}
     </Card>
   );
