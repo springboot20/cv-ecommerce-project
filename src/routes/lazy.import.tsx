@@ -13,6 +13,10 @@ import { ProtectedRoute, AdminProtectedRoute } from "../components/Private.route
 import { AdminPublicRoute } from "../components/Public.routes";
 import AdminOrders from "../pages/admin/orders/Orders";
 import AdminOrderDetails from "../pages/admin/orders/orderDetails/OrderDetail";
+import { Email } from "../pages/auth/register/email/Email";
+
+const RegisterLayout = lazy(() => import("../layout/auth/register/RegisterLayout"));
+const ForgotLayout = lazy(() => import("../layout/auth/forgot/ForgotLayout"));
 
 const AdminOverview = lazy(() => import("../pages/admin/overview/Overview"));
 const AdminUsers = lazy(() => import("../pages/admin/users/Users"));
@@ -238,11 +242,23 @@ const Router = () => {
     },
     {
       path: "register",
-      element: (
-        <PublicRoute>
-          <Register />
-        </PublicRoute>
-      ),
+      element: <RegisterLayout />,
+      children: [
+        {
+          index: true,
+          element: (
+            <Register />
+            // <PublicRoute></PublicRoute>
+          ),
+        },
+        {
+          path:"email",
+          element: (
+            <Email />
+            // <PublicRoute></PublicRoute>
+          ),
+        },
+      ],
     },
     {
       path: "login",
@@ -254,11 +270,17 @@ const Router = () => {
     },
     {
       path: "forgot",
-      element: (
-        <PublicRoute>
-          <Forgot />
-        </PublicRoute>
-      ),
+      element: <ForgotLayout />,
+      children: [
+        {
+          index: true,
+          element: (
+            <PublicRoute>
+              <Forgot />
+            </PublicRoute>
+          ),
+        },
+      ],
     },
     {
       path: "*",

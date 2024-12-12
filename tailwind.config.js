@@ -7,7 +7,7 @@ const config = withMT({
   dark: "class",
   theme: {
     screens: {
-      xs: "480px",
+      xs: "425px",
       xlg: "992px",
       "2sxl": "1440px",
       ...defaultTheme.screens,

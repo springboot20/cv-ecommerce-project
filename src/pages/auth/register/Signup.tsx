@@ -63,12 +63,15 @@ const Signup = () => {
   });
 
   return (
-    <motion.div {...motionConfig}>
-      <div className="px-8 flex min-h-screen justify-center items-center bg-[#f2f2f2]">
-        <form
+    <>
+      <motion.div
+        className="sm:px-8 lg:px-0 flex min-h-[calc(100vh-10rem)] lg:min-h-screen justify-center items-center"
+        >
+        <motion.form
           id="form"
           onSubmit={handleSubmit}
           className="max-w-xl w-full mx-auto border bg-white rounded-lg p-6"
+          {...motionConfig}
         >
           <legend className="my-5 text-center font-semibold text-3xl bg-gradient-to-l from-red-700 to-light-blue-500 bg-clip-text text-transparent">
             Sign Up
@@ -174,9 +177,9 @@ const Signup = () => {
               Signin
             </Link>
           </p>
-        </form>
-      </div>
-    </motion.div>
+        </motion.form>
+      </motion.div>
+    </>
   );
 };
 export default Signup;
