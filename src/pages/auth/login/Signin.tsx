@@ -2,21 +2,21 @@ import { useState } from "react";
 import { useFormik } from "formik";
 import { Link, useNavigate } from "react-router-dom";
 import { faEyeSlash, faEye } from "@fortawesome/free-solid-svg-icons";
-import { registerSchema } from "../../schema/Schema";
-import { IconType } from "../../components/icon/IconType";
+import { loginSchema } from "../../../schema/Schema";
+import { IconType } from "../../../components/icon/IconType";
 import { motion } from "framer-motion";
 import { Button } from "@material-tailwind/react";
-import { useRegisterMutation } from "../../features/auth/auth.slice";
+import { useLoginMutation } from "../../../features/auth/auth.slice";
 import { toast } from "react-toastify";
+import { useAppDispatch } from "../../../hooks/redux/redux.hooks";
+import { setCredentials } from "../../../features/auth/auth.reducer";
 
-type SignUpInitialValues = {
+type SignInInitialValues = {
   email: string;
   password: string;
-  username: string;
 };
 
-const initialValues: SignUpInitialValues = {
-  username: "",
+const initialValues: SignInInitialValues = {
   email: "",
   password: "",
 };
@@ -37,27 +37,35 @@ const motionConfig = {
   },
 };
 
-const Signup = () => {
+const Signin = () => {
   const navigate = useNavigate();
-  const [register, { isLoading }] = useRegisterMutation();
-
+  const [login, { isLoading }] = useLoginMutation();
+  const dispatch = useAppDispatch();
   const [showPassword, setShowPassword] = useState(false);
 
   const { values, handleSubmit, handleBlur, handleChange, touched, errors } = useFormik({
     initialValues,
-    validationSchema: registerSchema,
+    validationSchema: loginSchema,
     onSubmit: async (values, actions) => {
-      console.log(values);
-
-      await register(values)
+      await login(values)
         .unwrap()
-        .then(async (response) => {
-          toast.success(response.data.message);
-          await Promise.resolve(setTimeout(() => navigate("/login", { replace: true }), 1500));
+        .then(async (res) => {
+          const { tokens, user } = res.data;
+          dispatch(setCredentials({ tokens, user }));
+
+          const successMessage =
+            typeof res.message === "string" ? res.message : JSON.stringify(res.message);
+          toast.success(successMessage);
+          await Promise.resolve(setTimeout(() => navigate("/"), 2000));
           actions.resetForm();
         })
         .catch((error) => {
-          toast.error(error.error || error.data.message);
+          const errorMessage =
+            error.error ||
+            (error.data && typeof error.data.message === "string"
+              ? error.data.message
+              : JSON.stringify(error.data?.message));
+          toast.error(errorMessage);
         });
     },
   });
@@ -66,60 +74,35 @@ const Signup = () => {
     <motion.div {...motionConfig}>
       <div className="px-8 flex min-h-screen justify-center items-center bg-[#f2f2f2]">
         <form
-          id="form"
           onSubmit={handleSubmit}
-          className="max-w-xl w-full mx-auto border bg-white rounded-lg p-6"
+          className="max-w-xl w-full mx-auto border-2 bg-white rounded-lg p-6"
         >
           <legend className="my-5 text-center font-semibold text-3xl bg-gradient-to-l from-red-700 to-light-blue-500 bg-clip-text text-transparent">
-            Sign Up
+            Sign In
           </legend>
 
           <div className="mt-4">
-            <fieldset className="mb-2.5 mt-2">
-              <label htmlFor="username" className="text-lg font-normal text-gray-700">
-                Username
-              </label>
-              <div className="mt-1">
-                <input
-                  id="username"
-                  name="username"
-                  type="text"
-                  autoComplete="name"
-                  placeholder="enter your name  here..."
-                  onChange={handleChange}
-                  onBlur={handleBlur}
-                  value={values.username}
-                  className={`block w-full rounded-md border-0 py-3 px-3  text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-light-blue-600 text-sm ${
-                    errors.username && touched.username ? "ring-red-600 ring-[0.15rem]" : ""
-                  }`}
-                />
-              </div>
-              {errors.username && touched.username && (
-                <small className="text-base text-red-600">{errors.username}</small>
-              )}
-            </fieldset>
-
-            <fieldset className="mb-2.5 mt-2">
-              <label htmlFor="username" className="text-lg font-normal text-gray-700">
-                Email
+            <fieldset className="mb-3 mt-5">
+              <label htmlFor="email" className="text-lg font-normal text-gray-700">
+                Email Address
               </label>
               <div className="mt-1">
                 <input
                   id="email"
                   name="email"
                   type="email"
-                  autoComplete="email"
-                  placeholder="enter your email  here..."
+                  autoComplete="name"
+                  placeholder="enter your email address here..."
                   onChange={handleChange}
                   onBlur={handleBlur}
                   value={values.email}
-                  className={`block w-full rounded-md border-0 py-3 px-3  text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-light-blue-600 text-sm ${
+                  className={`block w-full rounded-md border-0 py-3 px-3 text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-light-blue-600 text-sm ${
                     errors.email && touched.email ? "ring-red-600 ring-[0.15rem]" : ""
                   }`}
                 />
               </div>
               {errors.email && touched.email && (
-                <small className="text-base text-red-600">{errors.email}</small>
+                <small className="text-base block text-red-600">{errors.email}</small>
               )}
             </fieldset>
 
@@ -127,7 +110,7 @@ const Signup = () => {
               <label htmlFor="password" className="text-lg font-normal text-gray-700">
                 Password
               </label>
-              <div className="mt-2 relative">
+              <div className="mt-1 relative">
                 <input
                   id="password"
                   name="password"
@@ -150,7 +133,7 @@ const Signup = () => {
                 />
               </div>
               {errors.password && touched.password && (
-                <small className="text-base text-red-600">{errors.password}</small>
+                <small className="text-base block text-red-600">{errors.password}</small>
               )}
             </fieldset>
           </div>
@@ -158,25 +141,30 @@ const Signup = () => {
           <div className="mt-6">
             <Button
               type="submit"
-              disabled={isLoading}
+              disabled={!isLoading}
               loading={isLoading}
               className="rounded-md w-full flex items-center justify-center uppercase bg-light-blue-600 px-3 py-3 text-lg font-medium text-white shadow-sm hover:bg-light-blue-500 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-light-blue-600 disabled:opacity-70"
               placeholder={undefined}
               onPointerEnterCapture={undefined}
               onPointerLeaveCapture={undefined}
             >
-              {isLoading ? <span>Signing up...</span> : <span>Sign up</span>}
+              {isLoading ? <span>Signing in...</span> : <span>Sign in</span>}
             </Button>
           </div>
-          <p className="mt-4 text-lg text-center font-normal text-gray-600">
-            Already have an account?{" "}
-            <Link to="/login" className="text-[#167ece]">
-              Signin
+          <div className="flex items-center justify-between mt-4">
+            <Link to="/forgot" className="text-[#167ece] text-lg font-normal">
+              forgot password
             </Link>
-          </p>
+            <p className="text-lg font-normal text-gray-600">
+              Don't have an account?{" "}
+              <Link to="/register" className="text-[#167ece]">
+                Sign up
+              </Link>
+            </p>
+          </div>
         </form>
       </div>
     </motion.div>
   );
 };
-export default Signup;
+export default Signin;

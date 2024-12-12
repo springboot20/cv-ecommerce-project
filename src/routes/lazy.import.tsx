@@ -25,8 +25,9 @@ const Orders = lazy(() => import("../pages/orders/Orders"));
 const OrderDetails = lazy(() => import("../pages/orders/orderDetails/OrderDetail"));
 const Notfound = lazy(() => import("../components/NotFound"));
 const PublicRoute = lazy(() => import("../components/Public.routes"));
-const Login = lazy(() => import("../pages/auth/Signin"));
-const Register = lazy(() => import("../pages/auth/Signup"));
+const Login = lazy(() => import("../pages/auth/login/Signin"));
+const Forgot = lazy(() => import("../pages/auth/forgot/Forgot"));
+const Register = lazy(() => import("../pages/auth/register/Signup"));
 const Settings = lazy(() => import("../pages/settings/Settings"));
 const Profile = lazy(() => import("../pages/settings/profile/Profile"));
 const EmailVerification = lazy(() => import("../pages/verifications/email/EmailVerification"));
@@ -248,6 +249,14 @@ const Router = () => {
       element: (
         <PublicRoute>
           <Login />
+        </PublicRoute>
+      ),
+    },
+    {
+      path: "forgot",
+      element: (
+        <PublicRoute>
+          <Forgot />
         </PublicRoute>
       ),
     },

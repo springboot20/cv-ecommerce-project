@@ -5,10 +5,7 @@ const passwordRule = /^(?=.*[a-z])(?=.*\d)(?=.*[-.+@_&])(?=.*[A-Z]*).{6,}$/;
 const nameRule = /[\w\s@]+$/;
 
 export const loginSchema = yup.object().shape({
-  email: yup
-    .string()
-    .email({ message: "Enter a valid email address" })
-    .required("email is required"),
+  email: yup.string().email("Enter a valid email address").required("email is required"),
 
   password: yup
     .string()
@@ -32,10 +29,7 @@ export const orderSchema = yup.object().shape({
       message: "only allow letters, number, and underscore",
     })
     .required("lastname is required"),
-  email: yup
-    .string()
-    .email({ message: "Enter a valid email address" })
-    .required("email is required"),
+  email: yup.string().email("Enter a valid email address").required("email is required"),
   address_line_one: yup.string().required("address is required"),
   country: yup.string().required("street address is required"),
   city: yup.string().required("city is required"),
@@ -84,4 +78,8 @@ export const registerSchema = yup.object().shape({
         "Password must be at least 8 digits characters long and contain at least one letter, digit and special characters ",
     })
     .required("password is required"),
+});
+
+export const forgotSchema = yup.object().shape({
+  email: yup.string().email("Enter a valid email address").required("email is required"),
 });
