@@ -13,8 +13,7 @@ import { ProtectedRoute, AdminProtectedRoute } from "../components/Private.route
 import { AdminPublicRoute } from "../components/Public.routes";
 import AdminOrders from "../pages/admin/orders/Orders";
 import AdminOrderDetails from "../pages/admin/orders/orderDetails/OrderDetail";
-import { Email } from "../pages/auth/register/email/Email";
-
+import { FormProvider } from "../context/FormContext";
 const RegisterLayout = lazy(() => import("../layout/auth/register/RegisterLayout"));
 const ForgotLayout = lazy(() => import("../layout/auth/forgot/ForgotLayout"));
 
@@ -31,7 +30,7 @@ const Notfound = lazy(() => import("../components/NotFound"));
 const PublicRoute = lazy(() => import("../components/Public.routes"));
 const Login = lazy(() => import("../pages/auth/login/Signin"));
 const Forgot = lazy(() => import("../pages/auth/forgot/Forgot"));
-const Register = lazy(() => import("../pages/auth/register/Signup"));
+const Register = lazy(() => import("../pages/auth/register/Register"));
 const Settings = lazy(() => import("../pages/settings/Settings"));
 const Profile = lazy(() => import("../pages/settings/profile/Profile"));
 const EmailVerification = lazy(() => import("../pages/verifications/email/EmailVerification"));
@@ -242,19 +241,16 @@ const Router = () => {
     },
     {
       path: "register",
-      element: <RegisterLayout />,
+      element: (
+        <FormProvider>
+          <RegisterLayout />
+        </FormProvider>
+      ),
       children: [
         {
           index: true,
           element: (
             <Register />
-            // <PublicRoute></PublicRoute>
-          ),
-        },
-        {
-          path:"email",
-          element: (
-            <Email />
             // <PublicRoute></PublicRoute>
           ),
         },

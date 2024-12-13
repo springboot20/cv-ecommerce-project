@@ -80,8 +80,6 @@ const CheckOut: React.FC = () => {
     } else if (currentStep === 1) {
       await handleAddressMutation(values);
       setCurrentStep(currentStep + 1);
-    } else {
-      // Handle payment submission here console.log("Payment submitted", values);
     }
   }
 

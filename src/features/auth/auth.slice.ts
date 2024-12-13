@@ -3,7 +3,7 @@ import { ApiService } from "../../app/services/api.service";
 interface RegisterRequest {
   username: string;
   email: string;
-  password: string;
+  phone_number: string;
 }
 
 interface Response {

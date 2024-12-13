@@ -4,10 +4,12 @@ import { RootState } from "../../../../app/store";
 import { FormEvent, useEffect, useState } from "react";
 import { useOtp } from "../../../../hooks/useOtp";
 import { Button } from "@material-tailwind/react";
+import { useForm } from "../../../../hooks/useForm";
 
 export const Email = () => {
   const { admin } = useAppSelector((state: RootState) => state.auth);
   const [expiresIn, setExpiresIn] = useState<number>(200);
+  const { handlePrevStep } = useForm();
 
   useEffect(() => {
     if (expiresIn > 0) {
@@ -29,7 +31,7 @@ export const Email = () => {
   };
 
   return (
-    <div className="flex min-h-[calc(100vh-10rem)] lg:min-h-screen justify-center items-center px-2 sm:px-8 lg:px-0 flex-1 w-full">
+    <div className="flex justify-center items-center px-2 sm:px-8 lg:px-0 flex-1 w-full">
       <div className="w-full sm:w-fit">
         <div className="sm:mx-auto sm:w-full sm:max-w-xl flex justify-center items-center flex-col">
           <span className="flex items-center justify-center border size-12 rounded-full bg-white">
@@ -71,9 +73,7 @@ export const Email = () => {
             {expiresIn > 0 ? (
               <span>Expires in : {formatTime(expiresIn)} seconds</span>
             ) : (
-              <span className="text-red-500 text-right block">
-                {formatTime(expiresIn)} expires
-              </span>
+              <span className="text-red-500 text-right block">{formatTime(expiresIn)} expires</span>
             )}
           </div>
 
@@ -88,6 +88,45 @@ export const Email = () => {
           >
             <span>Verify email</span>
           </Button>
+
+          <div className="flex items-center justify-center space-x-2 mt-2">
+            <p className="text-[#475467] text-sm font-normal">Didn't recieve the email? </p>
+            <Button
+              variant="text"
+              type="button"
+              className="text-blue-500 font-medium p-0 hover:bg-transparent active:bg-transparent"
+              placeholder={undefined}
+              ripple={false}
+              onPointerEnterCapture={undefined}
+              onPointerLeaveCapture={undefined}
+            >
+              Click to resend
+            </Button>
+          </div>
+
+          <button
+            type="button"
+            onClick={handlePrevStep}
+            className="flex items-center justify-center space-x-2 mt-4"
+          >
+            <svg
+              width="23"
+              height="22"
+              viewBox="0 0 23 22"
+              fill="none"
+              xmlns="http://www.w3.org/2000/svg"
+            >
+              <path
+                d="M17.9167 11H5.08337M5.08337 11L11.5 17.4167M5.08337 11L11.5 4.58334"
+                stroke="#475467"
+                strokeWidth="2"
+                strokeLinecap="round"
+                strokeLinejoin="round"
+              />
+            </svg>
+
+            <span className="text-sm font-medium text-[#475467]">Back</span>
+          </button>
         </form>
       </div>
     </div>
