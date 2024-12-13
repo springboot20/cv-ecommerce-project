@@ -1,11 +1,12 @@
 import { useFormik } from "formik";
-import { Link, useNavigate } from "react-router-dom";
+import { Link } from "react-router-dom";
 import { registerSchema } from "../../../../schema/Schema";
 import { motion } from "framer-motion";
 import { Button } from "@material-tailwind/react";
 import { useRegisterMutation } from "../../../../features/auth/auth.slice";
 import { toast } from "react-toastify";
 import { UserIcon } from "@heroicons/react/24/outline";
+import { useForm } from "../../../../hooks/useForm";
 
 type SignUpInitialValues = {
   email: string;
@@ -21,7 +22,7 @@ const initialValues: SignUpInitialValues = {
 
 export const Details = () => {
   const [register, { isLoading }] = useRegisterMutation();
-  const navigate = useNavigate();
+  const { handleNextStep } = useForm();
 
   const { values, handleSubmit, handleBlur, handleChange, touched, errors } = useFormik({
     initialValues,
@@ -33,7 +34,7 @@ export const Details = () => {
         .unwrap()
         .then(async (response) => {
           toast.success(response.data.message);
-          await Promise.resolve(setTimeout(() => navigate("/login", { replace: true }), 1500));
+          await Promise.resolve(setTimeout(() => handleNextStep(), 1500));
           actions.resetForm();
         })
         .catch((error) => {
@@ -94,7 +95,7 @@ export const Details = () => {
                 name="email"
                 type="email"
                 autoComplete="email"
-                placeholder="enter your email  here..."
+                placeholder="enter your email here..."
                 onChange={handleChange}
                 onBlur={handleBlur}
                 value={values.email}
@@ -105,6 +106,30 @@ export const Details = () => {
             </div>
             {errors.email && touched.email && (
               <small className="text-base text-red-600">{errors.email}</small>
+            )}
+          </fieldset>
+
+          <fieldset className="mb-2.5 mt-2">
+            <label htmlFor="phone_number" className="text-lg font-normal text-gray-700">
+              Phone Number
+            </label>
+            <div className="mt-1">
+              <input
+                id="phone_number"
+                name="phone_number"
+                type="tel"
+                autoComplete="phone_number"
+                placeholder="+(234) 708 8680 7968"
+                onChange={handleChange}
+                onBlur={handleBlur}
+                value={values.phone_number}
+                className={`block w-full rounded-md border-0 py-3 px-3  text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-light-blue-600 text-sm ${
+                  errors.phone_number && touched.phone_number ? "ring-red-600 ring-[0.15rem]" : ""
+                }`}
+              />
+            </div>
+            {errors.phone_number && touched.phone_number && (
+              <small className="text-base text-red-600">{errors.phone_number}</small>
             )}
           </fieldset>
 
