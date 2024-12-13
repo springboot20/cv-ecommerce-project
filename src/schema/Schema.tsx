@@ -1,7 +1,6 @@
 import * as yup from "yup";
 
 const passwordRule = /^(?=.*[a-z])(?=.*\d)(?=.*[-.+@_&])(?=.*[A-Z]*).{6,}$/;
-
 const nameRule = /[\w\s@]+$/;
 
 export const loginSchema = yup.object().shape({

@@ -6,7 +6,7 @@ import { useOtp } from "../../../../hooks/useOtp";
 import { Button } from "@material-tailwind/react";
 
 export const Email = () => {
-  const { user } = useAppSelector((state: RootState) => state.auth);
+  const { admin } = useAppSelector((state: RootState) => state.auth);
   const [expiresIn, setExpiresIn] = useState<number>(200);
 
   useEffect(() => {
@@ -36,9 +36,9 @@ export const Email = () => {
             <EnvelopeIcon className="h-6 text-gray-600" strokeWidth={2} />
           </span>
           <h2 className="mt-2 text-xl text-center font-semibold text-gray-800">Check you inbox</h2>
-          <p className="text-center flex items-center">
+          <p className="text-center flex items-center flex-col">
             <span>We sent verification codes to</span>
-            <span>{user?.email}</span>
+            <span className="text-gray-600">{admin?.email}</span>
           </p>
         </div>
         <form className="w-full flex flex-col h-auto mt-4" onSubmit={handleSubmit}>
@@ -61,7 +61,7 @@ export const Email = () => {
                   onKeyUp={(event) => handleKeyDown(event, index)}
                   ref={(el) => el && (inputRefs.current[index] = el)}
                   onPaste={handlePaste}
-                  className="block h-12 w-12 xs:h-16 xs:w-16 md:h-12 md:w-12 text-center appearance-none px-3 text font-semibold rounded-md border-0 py-3 text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-blue-600 sm:text-lg sm:leading-6 outline-none"
+                  className="block h-12 w-12 xs:h-16 xs:w-16 md:h-12 md:w-12 text-center appearance-none px-3 text font-medium rounded-md border-0 py-3 text-gray-600 shadow-sm ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-blue-600 sm:text-lg sm:leading-6 outline-none"
                 />
               </fieldset>
             ))}
@@ -72,7 +72,6 @@ export const Email = () => {
               <span>Expires in : {formatTime(expiresIn)} seconds</span>
             ) : (
               <span className="text-red-500 text-right block">
-                {" "}
                 {formatTime(expiresIn)} expires
               </span>
             )}

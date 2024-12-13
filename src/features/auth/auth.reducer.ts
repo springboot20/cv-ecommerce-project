@@ -87,6 +87,20 @@ const authSlice = createSlice({
   },
   extraReducers: (builder) => {
     /**
+     * Register builder casing
+     */
+    builder.addMatcher(AuthSlice.endpoints.register.matchFulfilled, (state, { payload }) => {
+      updateAuthState(state, { tokens: null!, user: payload.data.user });
+    });
+
+    /**
+     * Create Password builder casing
+     */
+    builder.addMatcher(AuthSlice.endpoints.createPassword.matchFulfilled, (state, { payload }) => {
+      updateAuthState(state, { tokens: null!, user: payload.data.user });
+    });
+
+    /**
      * Login builder casing
      */
     builder.addMatcher(AuthSlice.endpoints.login.matchFulfilled, (state, { payload }) => {

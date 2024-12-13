@@ -28,6 +28,14 @@ export const AuthSlice = ApiService.injectEndpoints({
       }),
     }),
 
+    createPassword: builder.mutation<Response, { password: string }>({
+      query: (password) => ({
+        url: "/users/register/set-password",
+        method: "POST",
+        body: { password },
+      }),
+    }),
+
     login: builder.mutation<Response, LoginRequest>({
       query: (data) => ({
         url: "/users/login",
@@ -73,6 +81,7 @@ export const {
   useLoginMutation,
   useLogoutMutation,
   useAdminLoginMutation,
+  useCreatePasswordMutation,
   useAdminLogoutMutation,
   useForgotPasswordMutation,
 } = AuthSlice;
