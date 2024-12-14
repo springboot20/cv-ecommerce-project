@@ -33,7 +33,7 @@ const steps = [
 
 export default function RegisterLayout() {
   return (
-    <div className="flex items-stretch flex-col lg:justify-between lg:flex-row flex-shrink-0 overflow-hidden bg-[#f2f2f2]">
+    <div className="flex items-stretch flex-col lg:justify-between lg:flex-row flex-shrink-0 overflow-hidden bg-gray-100">
       <DesktopNavigation steps={steps} />
       <MobileNavigation steps={steps} />
 

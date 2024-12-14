@@ -120,7 +120,7 @@ export const Email = () => {
                 type="submit"
                 loading={expiresIn === 0}
                 disabled={expiresIn === 0}
-                className="flex items-center justify-center bg-blue-500 text-white text-sm font-semibold rounded-md transform hover:-translate-y-1.5 transition shadow-md hover:bg-blue-400 active:bg-blue-500 focus:ring-outline-none focus:ring-2 focus:ring-offset-2 focus:ring-blue-400 tracking-wider sm:mt-4 sm:py-2.5 disabled:bg-blue-400 disabled:hover:translate-y-0"
+                className="flex items-center justify-center bg-blue-500 text-white text-sm font-semibold rounded-3xl transform hover:-translate-y-1.5 transition shadow-md hover:bg-blue-400 active:bg-blue-500 focus:ring-outline-none focus:ring-2 focus:ring-offset-2 focus:ring-blue-400 tracking-wider sm:mt-4 sm:py-2.5 disabled:bg-blue-400 disabled:hover:translate-y-0"
                 placeholder={undefined}
                 onPointerEnterCapture={undefined}
                 onPointerLeaveCapture={undefined}
@@ -197,7 +197,7 @@ const EmailVerified = () => {
           onClick={() => {
             setTimeout(() => handleNextStep(), 1500);
           }}
-          className="rounded-md w-full bg-light-blue-600 px-3 py-2 text-lg font-medium text-white shadow-sm hover:bg-light-blue-500 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-light-blue-600 disabled:opacity-70"
+          className="rounded-3xl w-full bg-light-blue-600 px-3 py-2 text-lg font-medium text-white shadow-sm hover:bg-light-blue-500 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-light-blue-600 disabled:opacity-70"
         >
           Continue
         </button>
