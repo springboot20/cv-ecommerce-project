@@ -11,11 +11,11 @@ export const Success = () => {
           <span className="flex items-center justify-center border size-12 rounded-full bg-white">
             <CheckIcon className="h-6 text-gray-600" strokeWidth={2} />
           </span>
-          <h2 className="mt-2 text-xl text-center font-semibold text-gray-800">Successfully</h2>
-          <p className="text-center flex items-center flex-col">
+          <h2 className="mt-2 text-xl text-center font-semibold text-[#101828]">Successfully</h2>
+          <p className="text-center text-[#667085]">
             Your account has been successfully create
           </p>
-          <p className="text-center flex items-center flex-col">Click below to log in magically.</p>
+          <p className="text-center text-[#667085]">Click below to log in magically.</p>
         </div>
 
         <div className="flex items-center justify-center mt-4">

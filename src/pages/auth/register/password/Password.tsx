@@ -8,6 +8,9 @@ import { toast } from "react-toastify";
 import { IconType } from "../../../../components/icon/IconType";
 import { faEye, faEyeSlash } from "@fortawesome/free-solid-svg-icons";
 import { useState } from "react";
+import { useAppDispatch } from "../../../../hooks/redux/redux.hooks";
+import { setCredentials } from "../../../../features/auth/auth.reducer";
+import { useForm } from "../../../../hooks/useForm";
 
 interface InitialValues {
   password: string;
@@ -42,6 +45,8 @@ const validationSchema = yup.object().shape({
 export const Password = () => {
   const [createPassword, { isLoading }] = useCreatePasswordMutation();
   const [showPassword, setShowPassword] = useState(false);
+  const dispatch = useAppDispatch();
+  const { handleNextStep, handlePrevStep } = useForm();
 
   const { handleBlur, values, errors, touched, handleChange, handleSubmit } = useFormik({
     initialValues,
@@ -50,10 +55,25 @@ export const Password = () => {
       try {
         const response = await createPassword({ password: values.password }).unwrap();
 
-        toast.success(response.data.message);
-        await Promise.resolve(setTimeout(() => {}, 1500));
-        resetForm();
+        if (response.statusCode.toString().startsWith("2")) {
+          dispatch(setCredentials({ tokens: null!, user: response.data?.user }));
+          toast.success(response.data.message);
+
+          await Promise.resolve(
+            setTimeout(() => {
+              handleNextStep();
+            }, 1500),
+          );
+          resetForm();
+        }
       } catch (error: any) {
+        if ([404, 401, 500].includes(error?.statusCode)) {
+          await Promise.resolve(
+            setTimeout(() => {
+              handlePrevStep();
+            }, 1500),
+          );
+        }
         const errorMessage =
           error.error ||
           (error.data && typeof error.data.message === "string"
@@ -71,10 +91,8 @@ export const Password = () => {
           <span className="flex items-center justify-center border size-12 rounded-full bg-white">
             <ShieldCheckIcon className="h-6 text-gray-600" strokeWidth={2} />
           </span>
-          <h2 className="mt-2 text-xl text-center font-semibold text-gray-800">Set a password</h2>
-          <p className="text-center flex items-center flex-col">
-            <span>We sent verification codes to</span>
-          </p>
+          <h2 className="mt-2 text-xl text-center font-semibold text-[#101828]">Set a password</h2>
+          <p className="text-center text-[#667085]">We sent verification codes to</p>
         </div>
         <form className="w-full flex flex-col h-auto mt-4" onSubmit={handleSubmit}>
           <fieldset>

@@ -7,6 +7,8 @@ import { useRegisterMutation } from "../../../../features/auth/auth.slice";
 import { toast } from "react-toastify";
 import { UserIcon } from "@heroicons/react/24/outline";
 import { useForm } from "../../../../hooks/useForm";
+import { useAppDispatch } from "../../../../hooks/redux/redux.hooks";
+import { setCredentials } from "../../../../features/auth/auth.reducer";
 
 type SignUpInitialValues = {
   email: string;
@@ -22,23 +24,44 @@ const initialValues: SignUpInitialValues = {
 
 export const Details = () => {
   const [register, { isLoading }] = useRegisterMutation();
-  const { handleNextStep } = useForm();
+  const { handleNextStep, handlePrevStep } = useForm();
+  const dispatch = useAppDispatch();
 
   const { values, handleSubmit, handleBlur, handleChange, touched, errors } = useFormik({
     initialValues,
     validationSchema: registerSchema,
-    onSubmit: async (values, actions) => {
+    onSubmit: async (values, { resetForm }) => {
       console.log(values);
 
       await register(values)
         .unwrap()
         .then(async (response) => {
-          toast.success(response.data.message);
-          await Promise.resolve(setTimeout(() => handleNextStep(), 1500));
-          actions.resetForm();
+          if (response.statusCode.toString().startsWith("2")) {
+            dispatch(setCredentials({ tokens: null!, user: response.data?.user }));
+            toast.success(response.data.message);
+
+            await Promise.resolve(
+              setTimeout(() => {
+                handleNextStep();
+              }, 1500),
+            );
+            resetForm();
+          }
         })
-        .catch((error) => {
-          toast.error(error.error || error.data.message);
+        .catch(async (error: any) => {
+          if ([404, 401, 500].includes(error?.statusCode)) {
+            await Promise.resolve(
+              setTimeout(() => {
+                handlePrevStep();
+              }, 1500),
+            );
+          }
+          const errorMessage =
+            error.error ||
+            (error.data && typeof error.data.message === "string"
+              ? error.data.message
+              : JSON.stringify(error.data?.message));
+          toast.error(errorMessage);
         });
     },
   });
