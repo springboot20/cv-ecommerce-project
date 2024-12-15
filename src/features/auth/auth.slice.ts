@@ -1,9 +1,7 @@
 import { ApiService } from "../../app/services/api.service";
 
 interface RegisterRequest {
-  username: string;
-  email: string;
-  phone_number: string;
+  [key: string]: any;
 }
 
 interface Response {
@@ -21,11 +19,19 @@ interface LoginRequest {
 export const AuthSlice = ApiService.injectEndpoints({
   endpoints: (builder) => ({
     register: builder.mutation<Response, RegisterRequest>({
-      query: (data) => ({
-        url: "/users/register",
-        method: "POST",
-        body: data,
-      }),
+      query: (data) => {
+        const formData = new FormData();
+
+        Object.keys(data).forEach((key) => {
+          formData.append(key, data[key]);
+        });
+
+        return {
+          url: "/users/register",
+          method: "POST",
+          body: formData,
+        };
+      },
     }),
 
     createPassword: builder.mutation<Response, { password: string }>({
@@ -92,5 +98,5 @@ export const {
   useCreatePasswordMutation,
   useAdminLogoutMutation,
   useForgotPasswordMutation,
-  useVerifyEmailMutation
+  useVerifyEmailMutation,
 } = AuthSlice;
