@@ -27,7 +27,7 @@ export const Details = () => {
   const { handleNextStep, handlePrevStep } = useForm();
   const dispatch = useAppDispatch();
 
-  const { values, handleSubmit, handleBlur, handleChange, touched, errors, setFieldValue } =
+  const { values, handleSubmit, handleBlur, handleChange, touched, errors } =
     useFormik({
       initialValues,
       validationSchema: registerSchema,
@@ -141,12 +141,10 @@ export const Details = () => {
               <input
                 id="phone_number"
                 name="phone_number"
-                type="tel"
+                type="text"
                 autoComplete="phone_number"
                 placeholder="+(234) 708 8680 7968"
-                onChange={(e) => {
-                  setFieldValue("phone_number", e.target.value.toString());
-                }}
+                onChange={handleChange}
                 onBlur={handleBlur}
                 value={values.phone_number}
                 className={`block w-full rounded-md border-0 py-3 px-3  text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-light-blue-600 text-sm ${

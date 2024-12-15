@@ -2,7 +2,6 @@ import * as yup from "yup";
 
 const passwordRule = /^(?=.*[a-z])(?=.*\d)(?=.*[-.+@_&])(?=.*[A-Z]*).{6,}$/;
 const nameRule = /[\w\s@]+$/;
-const phoneRule = /^[+]*[(]{0,1}[0-9]{1,3}[)]{0,1}[-\s\./0-9]*$/g;
 
 export const loginSchema = yup.object().shape({
   email: yup.string().email("Enter a valid email address").required("email is required"),
@@ -71,10 +70,7 @@ export const registerSchema = yup.object().shape({
     })
     .required("username is required"),
   email: yup.string().email("Invalid email address").required("email is required"),
-  phone_number: yup
-    .string()
-    .matches(phoneRule, "Invalid phone number")
-    .required("phone number is required"),
+  phone_number: yup.string().required("phone number is required"),
 });
 
 export const forgotSchema = yup.object().shape({
