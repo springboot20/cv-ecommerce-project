@@ -20,16 +20,10 @@ export const AuthSlice = ApiService.injectEndpoints({
   endpoints: (builder) => ({
     register: builder.mutation<Response, RegisterRequest>({
       query: (data) => {
-        const formData = new FormData();
-
-        Object.keys(data).forEach((key) => {
-          formData.append(key, data[key]);
-        });
-
         return {
           url: "/users/register",
           method: "POST",
-          body: formData,
+          body: data,
         };
       },
     }),
