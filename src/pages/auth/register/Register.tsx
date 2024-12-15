@@ -1,9 +1,14 @@
 import { motion } from "framer-motion";
 import { useForm } from "../../../hooks/useForm";
 import { classNames } from "../../../helpers";
+import { useEffect } from "react";
+import { Details } from "./details/Details";
+import { Email } from "./email/Email";
+import { Password } from "./password/Password";
+import { Success } from "./success/Success";
 
 const Register = () => {
-  const { steps, currentStep, setCurrentStep } = useForm();
+  const { steps, setSteps, currentStep, setCurrentStep } = useForm();
 
   const variants = {
     hidden: { opacity: 0, x: -100 },
@@ -14,6 +19,10 @@ const Register = () => {
   const handleStepChange = (index: number) => {
     setCurrentStep(index);
   };
+
+  useEffect(() => {
+    setSteps([<Details />, <Email />, <Password />, <Success />]);
+  }, [setSteps]);
 
   return (
     <>

@@ -267,7 +267,11 @@ const Router = () => {
     },
     {
       path: "forgot",
-      element: <ForgotLayout />,
+      element: (
+        <FormProvider>
+          <ForgotLayout />
+        </FormProvider>
+      ),
       children: [
         {
           index: true,
