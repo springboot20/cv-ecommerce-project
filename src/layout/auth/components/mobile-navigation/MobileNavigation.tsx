@@ -1,23 +1,47 @@
 import React from "react";
 import { NavigationType } from "../../../../types";
-
-
+import { useForm } from "../../../../hooks/useForm";
+import { classNames } from "../../../../helpers";
 
 export const MobileNavigation: React.FC<{ steps: NavigationType[] }> = ({ steps }) => {
+  const { currentStep, setCurrentStep } = useForm();
+
   return (
-    <div className="lg:hidden h-40 bg-[#F9FAFB] w-full p-4">
+    <div className="lg:hidden h-36 bg-[#F9FAFB] w-full p-4">
       <ul className="flex items-center justify-center h-full" role="menu">
-        {steps.map(({ Icon, title }) => {
+        {steps.map(({ Icon, title }, index) => {
           return (
             <li
-              className="flex items-center flex-col gap-2 max-w-xl w-full"
+              className={classNames(
+                "flex items-center flex-col gap-2 max-w-xl w-full cursor-pointer relative",
+                // index === steps.length - 1 ? "before:w-0" : "before:w-24",
+              )}
               role="menuitem"
+              onClick={() => setCurrentStep(index)}
               key={title}
             >
-              <span className="flex items-center justify-center border size-12 rounded-full bg-white">
-                <Icon className="h-6 text-gray-600" strokeWidth={2} />
+              <span
+                className={classNames(
+                  currentStep === index ? "bg-white transition-all" : "bg-[#EAECF0]",
+                  "flex items-center justify-center border size-12 rounded-full bg-white",
+                )}
+              >
+                <Icon
+                  className={classNames(
+                    "h-6 transition-all",
+                    currentStep === index ? "" : "text-gray-600",
+                  )}
+                  strokeWidth={2}
+                />
               </span>
-              <h3 className="hidden sm:block text-sm font-normal text-[#344054]">{title}</h3>
+              <h3
+                className={classNames(
+                  currentStep === index ? "text-[#475467]" : "text-[#475467]/50",
+                  "hidden sm:block text-sm font-normal text-[#344054]",
+                )}
+              >
+                {title}
+              </h3>
             </li>
           );
         })}

@@ -10,10 +10,10 @@ import { toast } from "react-toastify";
 
 export const Email = () => {
   const { user } = useAppSelector((state: RootState) => state.auth);
-  const [expiresIn, setExpiresIn] = useState<number>(200);
+  const [expiresIn, setExpiresIn] = useState<number>(60);
   const { handlePrevStep, handleNextStep } = useForm();
   const [verifyEmail] = useVerifyEmailMutation();
-  const [isEmailVerified, setIsEmailVerified] = useState(true);
+  const [isEmailVerified, setIsEmailVerified] = useState(false);
 
   useEffect(() => {
     if (expiresIn > 0) {

@@ -13,7 +13,10 @@ export const DesktopNavigation: React.FC<{ steps: NavigationType[] }> = ({ steps
           {steps.map(({ Icon, description, title }, index) => {
             return (
               <li
-                className="flex items-start gap-2 cursor-pointer"
+                className={classNames(
+                  "flex items-start gap-2 cursor-pointer relative before:content-[''] before:absolute before:w-0.5 before:h-10 before:translate-x-[1.4rem] before:translate-y-12  before:bg-gray-400",
+                  index === steps.length - 1 ? "before:h-0" : ""
+                )}
                 onClick={() => setCurrentStep(index)}
                 role="menuitem"
                 key={title}

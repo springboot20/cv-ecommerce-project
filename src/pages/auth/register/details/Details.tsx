@@ -27,44 +27,45 @@ export const Details = () => {
   const { handleNextStep, handlePrevStep } = useForm();
   const dispatch = useAppDispatch();
 
-  const { values, handleSubmit, handleBlur, handleChange, touched, errors } = useFormik({
-    initialValues,
-    validationSchema: registerSchema,
-    onSubmit: async (values, { resetForm }) => {
-      console.log(values);
+  const { values, handleSubmit, handleBlur, handleChange, touched, errors, setFieldValue } =
+    useFormik({
+      initialValues,
+      validationSchema: registerSchema,
+      onSubmit: async (values, { resetForm }) => {
+        console.log(values);
 
-      await register(values)
-        .unwrap()
-        .then(async (response) => {
-          if (response.statusCode.toString().startsWith("2")) {
-            dispatch(setCredentials({ tokens: null!, user: response.data?.user }));
-            toast.success(response.data.message);
+        await register(values)
+          .unwrap()
+          .then(async (response) => {
+            if (response.statusCode.toString().startsWith("2")) {
+              dispatch(setCredentials({ tokens: null!, user: response.data?.user }));
+              toast.success(response.data.message);
 
-            await Promise.resolve(
-              setTimeout(() => {
-                handleNextStep();
-              }, 1500),
-            );
-            resetForm();
-          }
-        })
-        .catch(async (error: any) => {
-          if ([404, 401, 500].includes(error?.statusCode)) {
-            await Promise.resolve(
-              setTimeout(() => {
-                handlePrevStep();
-              }, 1500),
-            );
-          }
-          const errorMessage =
-            error.error ||
-            (error.data && typeof error.data.message === "string"
-              ? error.data.message
-              : JSON.stringify(error.data?.message));
-          toast.error(errorMessage);
-        });
-    },
-  });
+              await Promise.resolve(
+                setTimeout(() => {
+                  handleNextStep();
+                }, 1500),
+              );
+              resetForm();
+            }
+          })
+          .catch(async (error: any) => {
+            if ([404, 401, 500].includes(error?.statusCode)) {
+              await Promise.resolve(
+                setTimeout(() => {
+                  handlePrevStep();
+                }, 1500),
+              );
+            }
+            const errorMessage =
+              error.error ||
+              (error.data && typeof error.data.message === "string"
+                ? error.data.message
+                : JSON.stringify(error.data?.message));
+            toast.error(errorMessage);
+          });
+      },
+    });
 
   return (
     <div className="flex justify-center items-center px-2 sm:px-8 lg:px-0 flex-1 w-full">
@@ -82,7 +83,7 @@ export const Details = () => {
         <motion.form
           id="form"
           onSubmit={handleSubmit}
-          className="max-w-xl w-full mx-auto rounded-lg p-6"
+          className="max-w-xl w-full mx-auto rounded-lg sm:p-6"
         >
           <fieldset className="mb-2.5 mt-2">
             <label htmlFor="username" className="text-lg font-normal text-gray-700">
@@ -143,7 +144,9 @@ export const Details = () => {
                 type="tel"
                 autoComplete="phone_number"
                 placeholder="+(234) 708 8680 7968"
-                onChange={handleChange}
+                onChange={(e) => {
+                  setFieldValue("phone_number", e.target.value.toString());
+                }}
                 onBlur={handleBlur}
                 value={values.phone_number}
                 className={`block w-full rounded-md border-0 py-3 px-3  text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-light-blue-600 text-sm ${
