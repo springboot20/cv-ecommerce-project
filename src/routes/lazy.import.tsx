@@ -14,6 +14,7 @@ import { AdminPublicRoute } from "../components/Public.routes";
 import AdminOrders from "../pages/admin/orders/Orders";
 import AdminOrderDetails from "../pages/admin/orders/orderDetails/OrderDetail";
 import { FormProvider } from "../context/FormContext";
+
 const RegisterLayout = lazy(() => import("../layout/auth/register/RegisterLayout"));
 const ForgotLayout = lazy(() => import("../layout/auth/forgot/ForgotLayout"));
 
@@ -271,9 +272,8 @@ const Router = () => {
         {
           index: true,
           element: (
-            <PublicRoute>
-              <Forgot />
-            </PublicRoute>
+            <Forgot />
+            // <PublicRoute></PublicRoute>
           ),
         },
       ],
