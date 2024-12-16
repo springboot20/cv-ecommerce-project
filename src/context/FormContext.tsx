@@ -16,7 +16,13 @@ export const FormProvider = ({ children }: { children: React.ReactNode }) => {
 
   const [currentStep, setCurrentStep] = useState<number>(savedStep);
 
+  const [currentStep, setCurrentStep] = useState<number>(initialStep);
   const [steps, setSteps] = useState<JSX.Element[]>([]);
+
+  // Update localStorage whenever `currentStep` changes
+  useEffect(() => {
+    localStorage.setItem("currentStep", currentStep.toString());
+  }, [currentStep]);
 
   const handleNextStep = () => setCurrentStep((prev) => Math.min(prev + 1, steps.length - 1));
   const handlePrevStep = () => setCurrentStep((prev) => Math.max(prev - 1, 0));
