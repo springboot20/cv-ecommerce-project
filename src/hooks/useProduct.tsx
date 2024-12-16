@@ -1,5 +1,5 @@
 import { useParams } from "react-router-dom";
-import { useAddItemToCartMutation } from "../features/cart/cart.slice";
+import { useAddItemToCartMutation } from "../helpers/cart/cart.slice";
 import { useGetProductByIdQuery } from "../features/products/product.slice";
 import { useState } from "react";
 import { ProductType } from "../types/redux/product";

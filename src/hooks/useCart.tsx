@@ -3,7 +3,7 @@ import {
   useAddItemToCartMutation,
   useGetUserCartQuery,
   useRemoveItemFromCartMutation,
-} from "../features/cart/cart.slice";
+} from "../helpers/cart/cart.slice";
 import { toast } from "react-toastify";
 import { CartInterface } from "../types/redux/cart";
 

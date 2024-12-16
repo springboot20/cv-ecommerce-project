@@ -5,7 +5,7 @@ import Button from "../icon/Button";
 import { useAppSelector } from "../../hooks/redux/redux.hooks";
 import { RootState } from "../../app/store";
 import { useEffect, useState } from "react";
-import { useGetUserCartQuery, useRemoveItemFromCartMutation } from "../../features/cart/cart.slice";
+import { useGetUserCartQuery, useRemoveItemFromCartMutation } from "../../helpers/cart/cart.slice";
 import { CartInterface } from "../../types/redux/cart";
 import { Dialog } from "@headlessui/react";
 import { LocalStorage } from "../../util";

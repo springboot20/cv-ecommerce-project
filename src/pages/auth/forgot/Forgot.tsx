@@ -5,11 +5,10 @@ import { useEffect } from "react";
 import { Details } from "./details/Details";
 import { Success } from "./success/Success";
 import { classNames } from "../../../helpers";
-import { Email } from "./email/Email";
-import { Password } from "./password/Password";
+import { ResetPassword } from "./password/Password";
 
 const Forgot = () => {
-  const { steps, setSteps, currentStep, setCurrentStep } = useForm();
+  const { steps, setSteps, currentStep } = useForm();
 
   const variants = {
     hidden: { opacity: 0, x: -100 },
@@ -17,12 +16,8 @@ const Forgot = () => {
     exit: { opacity: 0, x: 100 },
   };
 
-  const handleStepChange = (index: number) => {
-    setCurrentStep(index);
-  };
-
   useEffect(() => {
-    setSteps([<Details />, <Email />, <Password />, <Success />]);
+    setSteps([<Details />, <ResetPassword />, <Success />]);
   }, [setSteps]);
 
   return (
@@ -44,12 +39,7 @@ const Forgot = () => {
             {Array(steps.length)
               .fill("-")
               .map((_, i) => {
-                return (
-                  <Stepper
-                    activeClass={currentStep === i ? "bg-blue-500" : "bg-gray-400"}
-                    handleStepChange={() => handleStepChange(i)}
-                  />
-                );
+                return <Stepper activeClass={currentStep === i ? "bg-blue-500" : "bg-gray-400"} />;
               })}
           </div>
         </div>
@@ -60,14 +50,6 @@ const Forgot = () => {
 
 export default Forgot;
 
-const Stepper: React.FC<{ activeClass: string; handleStepChange: () => void }> = ({
-  activeClass,
-  handleStepChange,
-}) => {
-  return (
-    <div
-      className={classNames(activeClass, "size-2 rounded-full block cursor-pointer")}
-      onClick={handleStepChange}
-    ></div>
-  );
+const Stepper: React.FC<{ activeClass: string }> = ({ activeClass }) => {
+  return <div className={classNames(activeClass, "size-2 rounded-full block")}></div>;
 };

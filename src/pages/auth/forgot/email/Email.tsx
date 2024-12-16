@@ -12,6 +12,7 @@ export const Email = () => {
   const handleSubmit = async (evt: FormEvent<HTMLFormElement>) => {
     evt.preventDefault();
     try {
+      
     } catch (error: any) {}
   };
 

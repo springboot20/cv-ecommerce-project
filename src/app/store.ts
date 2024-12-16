@@ -2,7 +2,7 @@ import { configureStore } from "@reduxjs/toolkit";
 import { authReducer } from "../features/auth/auth.reducer";
 import { ApiService } from "./services/api.service";
 import { addressReducer } from "../features/order/address.reducer";
-import { cartReducer } from "../features/cart/cart.reducer";
+import { cartReducer } from "../helpers/cart/cart.reducer";
 import { productReducer } from "../features/products/product.reducer";
 
 const store = configureStore({

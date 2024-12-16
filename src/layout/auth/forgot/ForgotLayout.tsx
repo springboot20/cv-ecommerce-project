@@ -3,7 +3,6 @@ import { DesktopNavigation } from "../components/desktop-navigation/DesktopNavig
 import { MobileNavigation } from "../components/mobile-navigation/MobileNavigation";
 import {
   CheckCircleIcon,
-  EnvelopeIcon,
   ShieldCheckIcon,
   UserIcon,
 } from "@heroicons/react/24/outline";
@@ -13,11 +12,6 @@ const steps = [
     title: "Your details",
     description: "please provide your details information",
     Icon: UserIcon,
-  },
-  {
-    title: "Check your inbox",
-    description: "Please check your email to get reset link",
-    Icon: EnvelopeIcon,
   },
   {
     title: "Choose a password",
