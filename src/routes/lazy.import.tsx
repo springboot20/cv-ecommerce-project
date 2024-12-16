@@ -1,4 +1,4 @@
-import { lazy } from "react";
+7import { lazy } from "react";
 import { createBrowserRouter, Navigate } from "react-router-dom";
 
 import AppLayout from "../layout/app/AppLayout";
@@ -251,8 +251,9 @@ const Router = () => {
         {
           index: true,
           element: (
-            <Register />
-            // <PublicRoute></PublicRoute>
+            <PublicRoute> 
+          				 <Register />
+										</PublicRoute>
           ),
         },
       ],
@@ -276,8 +277,9 @@ const Router = () => {
         {
           index: true,
           element: (
-            <Forgot />
-            // <PublicRoute></PublicRoute>
+           <PublicRoute>
+  										<Forgot /> 
+									</PublicRoute>
           ),
         },
       ],
