@@ -251,9 +251,9 @@ const Router = () => {
         {
           index: true,
           element: (
-            <PublicRoute> 
-          				 <Register />
-										</PublicRoute>
+            <PublicRoute>
+              <Register />
+            </PublicRoute>
           ),
         },
       ],
@@ -277,9 +277,9 @@ const Router = () => {
         {
           index: true,
           element: (
-           <PublicRoute>
-  										<Forgot /> 
-									</PublicRoute>
+            <PublicRoute>
+              <Forgot />
+            </PublicRoute>
           ),
         },
       ],
