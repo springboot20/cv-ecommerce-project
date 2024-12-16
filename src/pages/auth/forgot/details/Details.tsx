@@ -37,7 +37,7 @@ export const Details = () => {
   return (
     <div className="flex justify-center items-center px-2 sm:px-8 lg:px-0 flex-1 w-full">
       <div className="w-full max-w-xl">
-        <div className="sm:mx-auto sm:w-full sm:max-w-xl flex justify-center items-center flex-col">
+        <div className=" flex justify-center items-center flex-col">
           <span className="flex items-center justify-center border size-12 rounded-full bg-white">
             <UserIcon className="h-6 text-gray-600" strokeWidth={2} />
           </span>

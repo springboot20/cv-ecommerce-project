@@ -68,7 +68,7 @@ export const Email = () => {
           <EmailVerified />
         ) : (
           <>
-            <div className="sm:mx-auto sm:w-full sm:max-w-xl flex justify-center items-center flex-col">
+            <div className="flex justify-center items-center flex-col">
               <span className="flex items-center justify-center border size-12 rounded-full bg-white">
                 <EnvelopeIcon className="h-6 text-gray-600" strokeWidth={2} />
               </span>
@@ -180,7 +180,7 @@ const EmailVerified = () => {
   return (
     <>
       <div className="w-full sm:w-fit">
-        <div className="sm:mx-auto sm:w-full sm:max-w-xl flex justify-center items-center flex-col">
+        <div className=" flex justify-center items-center flex-col">
           <span className="flex items-center justify-center border size-12 rounded-full bg-white">
             <EnvelopeIcon className="h-6 text-gray-600" strokeWidth={2} />
           </span>

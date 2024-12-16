@@ -6,6 +6,7 @@ import { Details } from "./details/Details";
 import { Success } from "./success/Success";
 import { classNames } from "../../../helpers";
 import { Email } from "./email/Email";
+import { Password } from "./password/Password";
 
 const Forgot = () => {
   const { steps, setSteps, currentStep, setCurrentStep } = useForm();
@@ -21,7 +22,7 @@ const Forgot = () => {
   };
 
   useEffect(() => {
-    setSteps([<Details />, <Email />, <Success />]);
+    setSteps([<Details />, <Email />, <Password />, <Success />]);
   }, [setSteps]);
 
   return (

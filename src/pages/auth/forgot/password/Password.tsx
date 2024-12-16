@@ -3,7 +3,6 @@ import { useFormik } from "formik";
 import * as yup from "yup";
 import { useCreatePasswordMutation } from "../../../../features/auth/auth.slice";
 import { Button } from "@material-tailwind/react";
-import { Link } from "react-router-dom";
 import { toast } from "react-toastify";
 import { IconType } from "../../../../components/icon/IconType";
 import { faEye, faEyeSlash } from "@fortawesome/free-solid-svg-icons";
@@ -91,8 +90,12 @@ export const Password = () => {
           <span className="flex items-center justify-center border size-12 rounded-full bg-white">
             <ShieldCheckIcon className="h-6 text-gray-600" strokeWidth={2} />
           </span>
-          <h2 className="mt-2 text-xl text-center font-semibold text-[#101828]">Set a password</h2>
-          <p className="text-center text-[#667085]">We sent verification codes to</p>
+          <h2 className="mt-2 text-xl text-center font-semibold text-[#101828]">
+            Set a new password
+          </h2>
+          <p className="text-center text-[#667085]">
+            Your new Password must be different from the previously used passwords.
+          </p>
         </div>
         <form className="w-full flex flex-col h-auto mt-4" onSubmit={handleSubmit}>
           <fieldset>
@@ -172,12 +175,6 @@ export const Password = () => {
               {isLoading ? <span>Reseting...</span> : <span>Reset Password</span>}
             </Button>
           </div>
-          <p className="mt-4 text-lg text-center font-normal text-gray-600">
-            Already have an account?{" "}
-            <Link to="/login" className="text-[#167ece]">
-              Signin
-            </Link>
-          </p>
         </form>
       </div>
     </div>

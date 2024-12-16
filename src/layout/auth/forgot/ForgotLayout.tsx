@@ -16,7 +16,7 @@ const steps = [
   },
   {
     title: "Check your inbox",
-    description: " Verify codes delivered to your inbox",
+    description: "Please check your email to get reset link",
     Icon: EnvelopeIcon,
   },
   {
