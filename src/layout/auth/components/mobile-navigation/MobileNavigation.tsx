@@ -4,20 +4,18 @@ import { useForm } from "../../../../hooks/useForm";
 import { classNames } from "../../../../helpers";
 
 export const MobileNavigation: React.FC<{ steps: NavigationType[] }> = ({ steps }) => {
-  const { currentStep, setCurrentStep } = useForm();
+  const { currentStep } = useForm();
 
   return (
     <div className="lg:hidden h-36 bg-[#F9FAFB] w-full p-4">
-      <ul className="flex items-center justify-center h-full" role="menu">
+      <div className="flex items-center justify-center h-full" role="menu">
         {steps.map(({ Icon, title }, index) => {
           return (
-            <li
+            <button
               className={classNames(
                 "flex items-center flex-col gap-2 max-w-xl w-full cursor-pointer relative",
-                // index === steps.length - 1 ? "before:w-0" : "before:w-24",
               )}
               role="menuitem"
-              onClick={() => setCurrentStep(index)}
               key={title}
             >
               <span
@@ -42,10 +40,10 @@ export const MobileNavigation: React.FC<{ steps: NavigationType[] }> = ({ steps 
               >
                 {title}
               </h3>
-            </li>
+            </button>
           );
         })}
-      </ul>
+      </div>
     </div>
   );
 };

@@ -17,8 +17,7 @@ export const Email = () => {
 
   return (
     <div className="flex justify-center items-center px-2 sm:px-8 lg:px-0 flex-1 w-full">
-      <div className="w-full">
-        <>
+      <div className="w-full max-w-xl">
           <div className="flex justify-center items-center flex-col">
             <span className="flex items-center justify-center border size-12 rounded-full bg-white">
               <EnvelopeIcon className="h-6 text-gray-600" strokeWidth={2} />
@@ -34,7 +33,7 @@ export const Email = () => {
           <form className="w-full flex flex-col h-auto mt-4" onSubmit={handleSubmit}>
             <Button
               type="submit"
-              className="flex items-center justify-center bg-blue-500 text-white text-sm font-semibold rounded-3xl transform hover:-translate-y-1.5 transition shadow-md hover:bg-blue-400 active:bg-blue-500 focus:ring-outline-none focus:ring-2 focus:ring-offset-2 focus:ring-blue-400 tracking-wider sm:mt-4 sm:py-2.5 disabled:bg-blue-400 disabled:hover:translate-y-0"
+              className="flex items-center justify-center bg-blue-500 text-white text-sm font-semibold rounded-3xl shadow-md hover:bg-blue-400 active:bg-blue-500 focus:ring-outline-none focus:ring-2 focus:ring-offset-2 focus:ring-blue-400 tracking-wider sm:mt-4 sm:py-2.5 disabled:bg-blue-400"
               placeholder={undefined}
               onPointerEnterCapture={undefined}
               onPointerLeaveCapture={undefined}
@@ -81,7 +80,6 @@ export const Email = () => {
               <span className="text-sm font-medium text-[#475467]">Back</span>
             </button>
           </form>
-        </>
       </div>
     </div>
   );

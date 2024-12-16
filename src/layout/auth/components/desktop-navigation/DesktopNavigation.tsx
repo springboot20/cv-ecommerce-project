@@ -4,20 +4,19 @@ import { useForm } from "../../../../hooks/useForm";
 import { classNames } from "../../../../helpers";
 
 export const DesktopNavigation: React.FC<{ steps: NavigationType[] }> = ({ steps }) => {
-  const { currentStep, setCurrentStep } = useForm();
+  const { currentStep } = useForm();
 
   return (
     <div className="hidden lg:block h-screen bg-[#F9FAFB] max-w-[28rem] w-full p-4">
       <div className="flex flex-col justify-between h-full">
-        <ul className="space-y-8 mt-16" role="menu">
+        <div className="space-y-8 mt-16" role="menu">
           {steps.map(({ Icon, description, title }, index) => {
             return (
-              <li
+              <button
                 className={classNames(
-                  "flex items-start gap-2 cursor-pointer relative before:content-[''] before:absolute before:w-0.5 before:h-10 before:translate-x-[1.4rem] before:translate-y-12  before:bg-gray-400",
-                  index === steps.length - 1 ? "before:h-0" : ""
+                  "flex items-start gap-2 cursor-pointer relative before:content-[''] before:absolute before:w-0.5 before:h-10 before:translate-x-[1.4rem] before:translate-y-12 before:bg-gray-400",
+                  index === steps.length - 1 ? "before:h-0" : "",
                 )}
-                onClick={() => setCurrentStep(index)}
                 role="menuitem"
                 key={title}
               >
@@ -36,7 +35,7 @@ export const DesktopNavigation: React.FC<{ steps: NavigationType[] }> = ({ steps
                   />
                 </span>
 
-                <div className="-space-y-0.5">
+                <div className="-space-y-0.5 flex items-start flex-col">
                   <h3
                     className={classNames(
                       "text-lg font-medium transition-all",
@@ -55,10 +54,10 @@ export const DesktopNavigation: React.FC<{ steps: NavigationType[] }> = ({ steps
                     {description}
                   </span>
                 </div>
-              </li>
+              </button>
             );
           })}
-        </ul>
+        </div>
       </div>
     </div>
   );
