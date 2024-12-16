@@ -13,13 +13,13 @@ import { setCredentials } from "../../../../features/auth/auth.reducer";
 type SignUpInitialValues = {
   email: string;
   username: string;
-  phone_number: string;
+  phone_number: number | null;
 };
 
 const initialValues: SignUpInitialValues = {
   username: "",
   email: "",
-  phone_number: "",
+  phone_number: null,
 };
 
 export const Details = () => {
@@ -146,7 +146,7 @@ export const Details = () => {
                 placeholder="+(234) 708 8680 7968"
                 onChange={handleChange}
                 onBlur={handleBlur}
-                value={values.phone_number}
+                value={values.phone_number!}
                 className={`block w-full rounded-md border-0 py-3 px-3  text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-light-blue-600 text-sm ${
                   errors.phone_number && touched.phone_number ? "ring-red-600 ring-[0.15rem]" : ""
                 }`}
