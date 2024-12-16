@@ -1,7 +1,5 @@
 import { ShieldCheckIcon } from "@heroicons/react/24/outline";
 import { useFormik } from "formik";
-import { useAppSelector } from "../../../../hooks/redux/redux.hooks";
-import { RootState } from "../../../../app/store";
 import * as yup from "yup";
 import { useCreatePasswordMutation } from "../../../../features/auth/auth.slice";
 import { Button } from "@material-tailwind/react";

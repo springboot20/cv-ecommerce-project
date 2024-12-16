@@ -57,11 +57,8 @@ const validationSchema = yup.object().shape({
 
   confirm_password: yup
     .string()
-    .matches(passwordRule, {
-      message:
-        "Password must be at least 8 digits characters long and contain at least one uppercase letter, one lowercase letter, and one number ",
-    })
-    .required("password is required"),
+    .oneOf([yup.ref("password")], "Passwords must match")
+    .required("Confirm password is required"),
 });
 
 export const ResetPassword = () => {
@@ -94,59 +91,43 @@ export const ResetPassword = () => {
           dispatch(setCredentials({ tokens: null!, user: response.data?.user }));
           toast.success(response.data.message);
 
-          await Promise.resolve(
-            setTimeout(() => {
-              handleNextStep();
-            }, 1500),
-          );
+          setTimeout(() => handleNextStep(), 1500);
           resetForm();
         }
       } catch (error: any) {
-        if ([404, 401, 500].includes(error?.statusCode)) {
-          await Promise.resolve(
-            setTimeout(() => {
-              handlePrevStep();
-            }, 1500),
-          );
-        }
+        const defaultMessage = "An unexpected error occurred. Please try again.";
         const errorMessage =
-          error.error ||
-          (error.data && typeof error.data.message === "string"
-            ? error.data.message
-            : JSON.stringify(error.data?.message));
+          error?.data?.message ||
+          (error.error && typeof error.error === "string" ? error.error : defaultMessage);
         toast.error(errorMessage);
+
+        if ([404, 401, 500].includes(error?.statusCode)) {
+          setTimeout(() => handlePrevStep(), 1500);
+        }
       }
     },
   });
 
   return (
     <div className="flex justify-center items-center px-2 sm:px-8 lg:px-0 flex-1 w-full">
-      <div className={classNames("w-full", tokenEntered? "max-w-xl" : "sm:w-fit")}>
+      <div className={classNames("w-full", tokenEntered ? "max-w-xl" : "sm:w-fit")}>
         {tokenEntered ? (
-          <div className=" flex justify-center items-center flex-col">
-            <span className="flex items-center justify-center border size-12 rounded-full bg-white">
-              <ShieldCheckIcon className="h-6 text-gray-600" strokeWidth={2} />
-            </span>
-            <h2 className="mt-2 text-xl text-center font-semibold text-[#101828]">
-              Set a new password
-            </h2>
-            <p className="text-center text-[#667085]">
-              Your new Password must be different from the previously used passwords.
-            </p>
-          </div>
+          <FormHeader
+            icon={<EnvelopeIcon className="h-6 text-gray-600" strokeWidth={2} />}
+            title="Set a new password"
+            description="Your new password must be different from the previously used passwords."
+          />
         ) : (
-          <div className="flex justify-center items-center flex-col">
-            <span className="flex items-center justify-center border size-12 rounded-full bg-white">
-              <EnvelopeIcon className="h-6 text-gray-600" strokeWidth={2} />
-            </span>
-            <h2 className="mt-2 text-xl text-center font-semibold text-gray-800">
-              Check you inbox
-            </h2>
-            <p className="text-center flex items-center flex-col">
-              <span>We sent verification codes to</span>
-              <span className="text-gray-600">{user?.email}</span>
-            </p>
-          </div>
+          <FormHeader
+            icon={<ShieldCheckIcon className="h-6 text-gray-600" strokeWidth={2} />}
+            title="Check you inbox"
+            description={
+              <p className="text-center flex items-center flex-col">
+                <span>We sent verification codes to</span>
+                <span className="text-gray-600">{user?.email}</span>
+              </p>
+            }
+          />
         )}
         <form
           className="w-full flex flex-col h-auto mt-4"
@@ -432,3 +413,21 @@ const Email: React.FC<
     </>
   );
 };
+
+const FormHeader: React.FC<{
+  icon: JSX.Element;
+  title: string;
+  description: string | JSX.Element;
+}> = ({ icon, title, description }) => (
+  <div className="flex justify-center items-center flex-col">
+    <span className="flex items-center justify-center border size-12 rounded-full bg-white">
+      {icon}
+    </span>
+    <h2 className="mt-2 text-xl text-center font-semibold text-[#101828]">{title}</h2>
+    {typeof description === "string" ? (
+      <p className="text-center text-[#667085]">{description}</p>
+    ) : (
+      description
+    )}
+  </div>
+);
