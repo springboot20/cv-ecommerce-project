@@ -2,7 +2,7 @@ import * as yup from "yup";
 
 const passwordRule = /^(?=.*[a-z])(?=.*\d)(?=.*[-.+@_&])(?=.*[A-Z]*).{6,}$/;
 const nameRule = /[\w\s@]+$/;
-const phoneRule = /^\+?[1-9]\d{1,14}$/;
+const phoneRule = /^[+]*[(]{0,1}[0-9]{1,3}[)]{0,1}[-\s\./0-9]*$/;
 
 export const loginSchema = yup.object().shape({
   email: yup.string().email("Enter a valid email address").required("email is required"),
