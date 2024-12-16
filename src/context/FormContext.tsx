@@ -15,8 +15,6 @@ export const FormProvider = ({ children }: { children: React.ReactNode }) => {
   const savedStep = Number(localStorage.getItem("currentStep")) || 0;
 
   const [currentStep, setCurrentStep] = useState<number>(savedStep);
-
-  const [currentStep, setCurrentStep] = useState<number>(initialStep);
   const [steps, setSteps] = useState<JSX.Element[]>([]);
 
   // Update localStorage whenever `currentStep` changes
