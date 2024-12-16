@@ -8,9 +8,10 @@ import { toast } from "react-toastify";
 import { IconType } from "../../../../components/icon/IconType";
 import { faEye, faEyeSlash } from "@fortawesome/free-solid-svg-icons";
 import { useState } from "react";
-import { useAppDispatch } from "../../../../hooks/redux/redux.hooks";
+import { useAppDispatch, useAppSelector } from "../../../../hooks/redux/redux.hooks";
 import { setCredentials } from "../../../../features/auth/auth.reducer";
 import { useForm } from "../../../../hooks/useForm";
+import { RootState } from "../../../../app/store";
 
 interface InitialValues {
   password: string;
@@ -44,6 +45,7 @@ const validationSchema = yup.object().shape({
 
 export const Password = () => {
   const [createPassword, { isLoading }] = useCreatePasswordMutation();
+  const { user } = useAppSelector((state: RootState) => state.auth);
   const [showPassword, setShowPassword] = useState(false);
   const dispatch = useAppDispatch();
   const { handleNextStep, handlePrevStep } = useForm();
@@ -53,7 +55,10 @@ export const Password = () => {
     validationSchema,
     onSubmit: async (values, { resetForm }) => {
       try {
-        const response = await createPassword({ password: values.password }).unwrap();
+        const response = await createPassword({
+          password: values.password,
+          email: user?.email!,
+        }).unwrap();
 
         if (response.statusCode.toString().startsWith("2")) {
           dispatch(setCredentials({ tokens: null!, user: response.data?.user }));

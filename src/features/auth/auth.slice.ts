@@ -28,11 +28,11 @@ export const AuthSlice = ApiService.injectEndpoints({
       },
     }),
 
-    createPassword: builder.mutation<Response, { password: string }>({
-      query: (password) => ({
+    createPassword: builder.mutation<Response, { password: string; email: string }>({
+      query: ({ password, email }) => ({
         url: "/users/register/set-password",
         method: "POST",
-        body: { password },
+        body: { password, email },
       }),
     }),
 
