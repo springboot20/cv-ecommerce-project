@@ -8,16 +8,12 @@ import { Password } from "./password/Password";
 import { Success } from "./success/Success";
 
 const Register = () => {
-  const { steps, setSteps, currentStep, setCurrentStep } = useForm();
+  const { steps, setSteps, currentStep } = useForm();
 
   const variants = {
     hidden: { opacity: 0, x: -100 },
     visible: { opacity: 1, x: 0 },
     exit: { opacity: 0, x: 100 },
-  };
-
-  const handleStepChange = (index: number) => {
-    setCurrentStep(index);
   };
 
   useEffect(() => {
@@ -46,7 +42,6 @@ const Register = () => {
                 return (
                   <Stepper
                     activeClass={currentStep === i ? "bg-blue-500" : "bg-gray-400"}
-                    handleStepChange={() => handleStepChange(i)}
                   />
                 );
               })}
@@ -58,14 +53,12 @@ const Register = () => {
 };
 export default Register;
 
-const Stepper: React.FC<{ activeClass: string; handleStepChange: () => void }> = ({
+const Stepper: React.FC<{ activeClass: string;  }> = ({
   activeClass,
-  handleStepChange,
 }) => {
   return (
     <div
       className={classNames(activeClass, "size-2 rounded-full block cursor-pointer")}
-      onClick={handleStepChange}
     ></div>
   );
 };
