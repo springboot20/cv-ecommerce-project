@@ -69,7 +69,7 @@ export const AuthSlice = ApiService.injectEndpoints({
 
     verifyEmail: builder.mutation<Response, { token: string; email: string }>({
       query: ({ token, email }) => ({
-        url: "/users/forgot-password",
+        url: "/users/verify-email",
         method: "POST",
         body: { token, email },
       }),
