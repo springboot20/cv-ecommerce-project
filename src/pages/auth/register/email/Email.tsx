@@ -10,7 +10,13 @@ import { toast } from "react-toastify";
 
 export const Email = () => {
   const { user } = useAppSelector((state: RootState) => state.auth);
-  const [expiresIn, setExpiresIn] = useState<number>(60);
+
+  const timestamp = user?.emailVerificationTokenExpiry;
+
+  const date = new Date(timestamp!);
+  const minutes = date.getUTCMinutes(); // Minutes (UTC)
+
+  const [expiresIn, setExpiresIn] = useState<number>(Number(minutes) ?? 60);
   const { handlePrevStep, handleNextStep } = useForm();
   const [verifyEmail] = useVerifyEmailMutation();
   const [isEmailVerified, setIsEmailVerified] = useState(false);
