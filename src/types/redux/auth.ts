@@ -9,6 +9,8 @@ export interface User {
   };
   updatedAt: string;
   createdAt: string;
+  emailVerificationTokenExpiry?: string;
+  forgotPasswordTokenExpiry?: string;
   role: string;
 }
 
