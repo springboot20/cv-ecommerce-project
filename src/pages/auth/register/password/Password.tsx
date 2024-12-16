@@ -56,7 +56,7 @@ const { user } = useAppSelector((state: RootState) => state.auth);
     validationSchema,
     onSubmit: async (values, { resetForm }) => {
       try {
-        const response = await createPassword({ password: values.Password, email: user?.email!}).unwrap();
+        const response = await createPassword({ password: values.password, email: user?.email!}).unwrap();
 
         if (response.statusCode.toString().startsWith("2")) {
           dispatch(setCredentials({ tokens: null!, user: response.data?.user }));
