@@ -14,8 +14,8 @@ export const DesktopNavigation: React.FC<{ steps: NavigationType[] }> = ({ steps
             return (
               <button
                 className={classNames(
-                  "flex items-start gap-2 cursor-pointer relative before:content-[''] before:absolute before:w-0.5 before:h-10 before:translate-x-[1.4rem] before:translate-y-12 before:bg-gray-400",
-                  index === steps.length - 1 ? "before:h-0" : "",
+                  "flex items-start gap-2 cursor-pointer relative before:content-[''] before:absolute before:w-0.5 before:translate-x-[1.4rem] before:translate-y-12 before:bg-gray-400",
+                  index === steps.length - 1 ? "before:h-0" : "before:h-10",
                 )}
                 role="menuitem"
                 key={title}
