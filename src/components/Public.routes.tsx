@@ -19,7 +19,10 @@ export const AdminPublicRoute: React.FC<{ children: React.ReactNode }> = ({ chil
   const auth = useAppSelector((state: RootState) => state.auth);
 
   return (
-    redirectIfAuthenticated(auth.admin! && auth.isAuthenticated, "/admin/overview") || children
+    redirectIfAuthenticated(
+      auth.user! && ["AMIN", "MODERATOR"].includes(auth.user?.role!) && auth.isAuthenticated,
+      "/admin/overview",
+    ) || children
   );
 };
 

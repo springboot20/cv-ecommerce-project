@@ -28,7 +28,7 @@ export const AdminProtectedRoute: React.FC<ProtectedRouteProps> = ({ roles, chil
 
   console.log(pathname);
 
-  if (!roles.includes(auth.admin?.role!) || !auth.isAuthenticated) {
+  if (!roles.includes(auth.user?.role!) || !auth.isAuthenticated) {
     return <Navigate to="/admin/login" state={{ path: window.location.pathname }} replace={true} />;
   }
 
