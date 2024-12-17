@@ -8,8 +8,6 @@ import { motion } from "framer-motion";
 import { Button } from "@material-tailwind/react";
 import { useLoginMutation } from "../../../features/auth/auth.slice";
 import { toast } from "react-toastify";
-import { useAppDispatch } from "../../../hooks/redux/redux.hooks";
-import { setCredentials } from "../../../features/auth/auth.reducer";
 
 type SignInInitialValues = {
   email: string;
@@ -40,7 +38,6 @@ const motionConfig = {
 const Signin = () => {
   const navigate = useNavigate();
   const [login, { isLoading }] = useLoginMutation();
-  const dispatch = useAppDispatch();
   const [showPassword, setShowPassword] = useState(false);
 
   const { values, handleSubmit, handleBlur, handleChange, touched, errors } = useFormik({
@@ -50,9 +47,6 @@ const Signin = () => {
       await login(values)
         .unwrap()
         .then(async (res) => {
-          const { tokens, user } = res.data;
-          dispatch(setCredentials({ tokens, user }));
-
           const successMessage =
             typeof res.message === "string" ? res.message : JSON.stringify(res.message);
           toast.success(successMessage);
