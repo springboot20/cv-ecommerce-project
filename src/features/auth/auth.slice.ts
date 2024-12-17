@@ -44,14 +44,6 @@ export const AuthSlice = ApiService.injectEndpoints({
       }),
     }),
 
-    adminLogin: builder.mutation<Response, LoginRequest>({
-      query: (data) => ({
-        url: "/users/login",
-        method: "POST",
-        body: data,
-      }),
-    }),
-
     logout: builder.mutation<Response, void>({
       query: () => ({
         url: "/users/logout",
@@ -60,7 +52,7 @@ export const AuthSlice = ApiService.injectEndpoints({
     }),
 
     forgotPassword: builder.mutation<Response, { email: string }>({
-      query: (email) => ({
+      query: ({ email }) => ({
         url: "/users/forgot-password",
         method: "POST",
         body: { email },
@@ -82,13 +74,6 @@ export const AuthSlice = ApiService.injectEndpoints({
         body: { token, password },
       }),
     }),
-
-    adminLogout: builder.mutation<Response, void>({
-      query: () => ({
-        url: "/users/logout",
-        method: "POST",
-      }),
-    }),
   }),
 });
 
@@ -96,10 +81,8 @@ export const {
   useRegisterMutation,
   useLoginMutation,
   useLogoutMutation,
-  useAdminLoginMutation,
   useResetPasswordMutation,
   useCreatePasswordMutation,
-  useAdminLogoutMutation,
   useForgotPasswordMutation,
   useVerifyEmailMutation,
 } = AuthSlice;

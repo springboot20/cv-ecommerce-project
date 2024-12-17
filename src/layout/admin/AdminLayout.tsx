@@ -13,7 +13,7 @@ import {
 import { AdminNavigationComponent } from "../../components/navigation/AdminNavigation";
 import { NavItem } from "../../components/NavItem";
 import { clx } from "../../util";
-import { useAdminLogoutMutation } from "../../features/auth/auth.slice";
+import { useLogoutMutation } from "../../features/auth/auth.slice";
 import { toast } from "react-toastify";
 import { classNames } from "../../helpers";
 
@@ -71,7 +71,7 @@ interface OutletContext {
 
 export const AdminDashboardLayout = () => {
   const context = useOutletContext<OutletContext>();
-  const [adminLogout] = useAdminLogoutMutation();
+  const [adminLogout] = useLogoutMutation();
 
   return (
     <div className="flex items-stretch justify-between flex-shrink-0">

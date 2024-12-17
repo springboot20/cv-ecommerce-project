@@ -8,8 +8,7 @@ import { toast } from "react-toastify";
 import { IconType } from "../../../../components/icon/IconType";
 import { faEye, faEyeSlash } from "@fortawesome/free-solid-svg-icons";
 import { useState } from "react";
-import { useAppDispatch, useAppSelector } from "../../../../hooks/redux/redux.hooks";
-import { setCredentials } from "../../../../features/auth/auth.reducer";
+import { useAppSelector } from "../../../../hooks/redux/redux.hooks";
 import { useForm } from "../../../../hooks/useForm";
 import { RootState } from "../../../../app/store";
 
@@ -47,7 +46,6 @@ export const Password = () => {
   const [createPassword, { isLoading }] = useCreatePasswordMutation();
   const { user } = useAppSelector((state: RootState) => state.auth);
   const [showPassword, setShowPassword] = useState(false);
-  const dispatch = useAppDispatch();
   const { handleNextStep, handlePrevStep } = useForm();
 
   const { handleBlur, values, errors, touched, handleChange, handleSubmit } = useFormik({
@@ -61,7 +59,6 @@ export const Password = () => {
         }).unwrap();
 
         if (response.statusCode.toString().startsWith("2")) {
-          dispatch(setCredentials({ tokens: null!, user: response.data?.user }));
           toast.success(response.data.message);
 
           await Promise.resolve(

@@ -5,8 +5,6 @@ import { Button } from "@material-tailwind/react";
 import { toast } from "react-toastify";
 import { IconType } from "../../../../components/icon/IconType";
 import { faEye, faEyeSlash } from "@fortawesome/free-solid-svg-icons";
-import { useAppDispatch } from "../../../../hooks/redux/redux.hooks";
-import { setCredentials } from "../../../../features/auth/auth.reducer";
 import { useForm } from "../../../../hooks/useForm";
 import { EnvelopeIcon } from "@heroicons/react/24/outline";
 import { useAppSelector } from "../../../../hooks/redux/redux.hooks";
@@ -64,7 +62,6 @@ const validationSchema = yup.object().shape({
 export const ResetPassword = () => {
   const [tokenEntered, setTokenEntered] = useState(false);
   const [showPassword, setShowPassword] = useState(false);
-  const dispatch = useAppDispatch();
   const { user } = useAppSelector((state: RootState) => state.auth);
   const { handleNextStep, handlePrevStep } = useForm();
   const [resetPassword, { isLoading }] = useResetPasswordMutation();
@@ -88,7 +85,6 @@ export const ResetPassword = () => {
         }).unwrap();
 
         if (response.statusCode.toString().startsWith("2")) {
-          dispatch(setCredentials({ tokens: null!, user: response.data?.user }));
           toast.success(response.data.message);
 
           setTimeout(() => handleNextStep(), 1500);

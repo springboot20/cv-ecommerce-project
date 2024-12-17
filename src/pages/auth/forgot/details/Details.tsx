@@ -22,6 +22,8 @@ export const Details = () => {
         if (statusCode.toString().startsWith("2")) {
           toast.success(message);
         }
+
+        console.log(values)
       } catch (error: any) {
         const errorMessage =
           error.error ||
