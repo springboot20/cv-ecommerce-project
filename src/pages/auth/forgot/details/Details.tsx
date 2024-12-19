@@ -8,7 +8,7 @@ import { useForm } from "../../../../hooks/useForm";
 
 export const Details = () => {
   const [forgotPasword, { isLoading }] = useForgotPasswordMutation();
-
+const { handleNextStep } = useForm();
   const { values, handleBlur, handleSubmit, handleChange, errors, touched } = useFormik({
     initialValues: {
       email: "",
