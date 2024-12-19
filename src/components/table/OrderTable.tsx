@@ -25,12 +25,12 @@ const OrderTable: React.FC<{
 
   console.log(canClickOrder);
 
-  const { admin, user } = useAppSelector((state: RootState) => state.auth);
+  const { user } = useAppSelector((state: RootState) => state.auth);
 
   const handleRowClick = (orderId: string) => {
-    if (user) {
+    if (user?.role === "USER") {
       navigate(`/orders/${orderId}`); // Navigate to order detail page
-    } else if (admin) navigate(`/admin/orders/${orderId}`); // Navigate to order detail page
+    } else navigate(`/admin/orders/${orderId}`); // Navigate to order detail page
   };
 
   return (

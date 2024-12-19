@@ -7,8 +7,6 @@ import { useRegisterMutation } from "../../../../features/auth/auth.slice";
 import { toast } from "react-toastify";
 import { UserIcon } from "@heroicons/react/24/outline";
 import { useForm } from "../../../../hooks/useForm";
-import { useAppDispatch } from "../../../../hooks/redux/redux.hooks";
-import { setCredentials } from "../../../../features/auth/auth.reducer";
 
 type SignUpInitialValues = {
   email: string;
@@ -25,7 +23,6 @@ const initialValues: SignUpInitialValues = {
 export const Details = () => {
   const [register, { isLoading }] = useRegisterMutation();
   const { handleNextStep, handlePrevStep } = useForm();
-  const dispatch = useAppDispatch();
 
   const { values, handleSubmit, handleBlur, handleChange, touched, errors } =
     useFormik({
@@ -38,7 +35,6 @@ export const Details = () => {
           .unwrap()
           .then(async (response) => {
             if (response.statusCode.toString().startsWith("2")) {
-              dispatch(setCredentials({ tokens: null!, user: response.data?.user }));
               toast.success(response.data.message);
 
               await Promise.resolve(
