@@ -64,9 +64,7 @@ export const Email = () => {
     try {
       const response = await resendEmailForNewUser({ email: user?.email! }).unwrap();
       if (response.statusCode.toString().startsWith("2")) {
-        setIsEmailVerified(true);
         toast.success(response.data.message);
-        await Promise.resolve(setTimeout(() => handleNextStep(), 1500));
       }
     } catch (error: any) {
       const errorMessage =

@@ -12,7 +12,10 @@ import { RootState } from "../../../../app/store";
 import { useEffect, useState } from "react";
 import { useOtp } from "../../../../hooks/useOtp";
 import { User } from "../../../../types/redux/auth";
-import { useResetPasswordMutation } from "../../../../features/auth/auth.slice";
+import {
+  useForgotPasswordMutation,
+  useResetForgotPasswordMutation,
+} from "../../../../features/auth/auth.slice";
 import { classNames } from "../../../../helpers";
 
 interface InitialValues {
@@ -64,7 +67,7 @@ export const ResetPassword = () => {
   const [showPassword, setShowPassword] = useState(false);
   const { user } = useAppSelector((state: RootState) => state.auth);
   const { handleNextStep, handlePrevStep } = useForm();
-  const [resetPassword, { isLoading }] = useResetPasswordMutation();
+  const [resetForgotPassword, { isLoading }] = useResetForgotPasswordMutation();
   const {
     values: otpValues,
     handleChange: otpChange,
@@ -79,7 +82,7 @@ export const ResetPassword = () => {
     validationSchema,
     onSubmit: async (values, { resetForm }) => {
       try {
-        const response = await resetPassword({
+        const response = await resetForgotPassword({
           token: otpValues.join(""),
           password: values.password,
         }).unwrap();
@@ -301,10 +304,10 @@ const Email: React.FC<
   const timestamp = user?.emailVerificationTokenExpiry;
 
   const date = new Date(timestamp!);
-  const minutes = date.getUTCMinutes(); // Minutes (UTC)
-
-  const [expiresIn, setExpiresIn] = useState<number>(Number(minutes) ?? 60);
-  const { handlePrevStep, handleNextStep } = useForm();
+  const seconds = date.getUTCSeconds(); // Minutes (UTC)
+  const [forgotPassword] = useForgotPasswordMutation();
+  const [expiresIn, setExpiresIn] = useState<number>(Number(seconds) ?? 60);
+  const { handleNextStep } = useForm();
 
   useEffect(() => {
     if (expiresIn > 0) {
@@ -320,6 +323,23 @@ const Email: React.FC<
   const handleClick = () => {
     setTokenEntered(true);
     setTimeout(() => handleNextStep(), 1500);
+  };
+
+  const handleResendForgotPasswordEmail = async () => {
+    try {
+      const response = await forgotPassword({
+        email: user?.email as string,
+      }).unwrap();
+      if (response.statusCode.toString().startsWith("2")) {
+        toast.success(response.data.message);
+      }
+    } catch (error: any) {
+      const defaultMessage = "An unexpected error occurred. Please try again.";
+      const errorMessage =
+        error?.data?.message ||
+        (error.error && typeof error.error === "string" ? error.error : defaultMessage);
+      toast.error(errorMessage);
+    }
   };
 
   return (
@@ -373,39 +393,15 @@ const Email: React.FC<
         <Button
           variant="text"
           type="button"
-          className="text-blue-500 font-medium p-0 hover:bg-transparent active:bg-transparent"
+          onClick={handleResendForgotPasswordEmail}
+          className="text-blue-500 font-medium p-1 rounded hover:bg-transparent active:bg-transparent"
           placeholder={undefined}
-          ripple={false}
           onPointerEnterCapture={undefined}
           onPointerLeaveCapture={undefined}
         >
           Click to resend
         </Button>
       </div>
-
-      <button
-        type="button"
-        onClick={handlePrevStep}
-        className="flex items-center justify-center space-x-2 mt-4"
-      >
-        <svg
-          width="23"
-          height="22"
-          viewBox="0 0 23 22"
-          fill="none"
-          xmlns="http://www.w3.org/2000/svg"
-        >
-          <path
-            d="M17.9167 11H5.08337M5.08337 11L11.5 17.4167M5.08337 11L11.5 4.58334"
-            stroke="#475467"
-            strokeWidth="2"
-            strokeLinecap="round"
-            strokeLinejoin="round"
-          />
-        </svg>
-
-        <span className="text-sm font-medium text-[#475467]">Back</span>
-      </button>
     </>
   );
 };
