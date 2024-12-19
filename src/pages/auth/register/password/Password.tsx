@@ -173,7 +173,7 @@ export const Password = () => {
           </div>
           <p className="mt-4 text-lg text-center font-normal text-gray-600">
             Already have an account?{" "}
-            <Link to="/login" className="text-[#167ece]">
+            <Link to="/login" className="text-blue-500">
               Signin
             </Link>
           </p>

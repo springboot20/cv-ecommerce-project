@@ -146,12 +146,12 @@ const Signin = () => {
             </Button>
           </div>
           <div className="flex items-center justify-between mt-4">
-            <Link to="/forgot" className="text-[#167ece] text-lg font-normal">
-              forgot password
+            <Link to="/forgot" className="text-blue-500 hover:underline text-lg font-normal">
+              forgot password?
             </Link>
             <p className="text-lg font-normal text-gray-600">
               Don't have an account?{" "}
-              <Link to="/register" className="text-[#167ece]">
+              <Link to="/register" className="text-blue-500">
                 Sign up
               </Link>
             </p>

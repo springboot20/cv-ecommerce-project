@@ -24,44 +24,43 @@ export const Details = () => {
   const [register, { isLoading }] = useRegisterMutation();
   const { handleNextStep, handlePrevStep } = useForm();
 
-  const { values, handleSubmit, handleBlur, handleChange, touched, errors } =
-    useFormik({
-      initialValues,
-      validationSchema: registerSchema,
-      onSubmit: async (values, { resetForm }) => {
-        console.log(values);
+  const { values, handleSubmit, handleBlur, handleChange, touched, errors } = useFormik({
+    initialValues,
+    validationSchema: registerSchema,
+    onSubmit: async (values, { resetForm }) => {
+      console.log(values);
 
-        await register(values)
-          .unwrap()
-          .then(async (response) => {
-            if (response.statusCode.toString().startsWith("2")) {
-              toast.success(response.data.message);
+      await register(values)
+        .unwrap()
+        .then(async (response) => {
+          if (response.statusCode.toString().startsWith("2")) {
+            toast.success(response.data.message);
 
-              await Promise.resolve(
-                setTimeout(() => {
-                  handleNextStep();
-                }, 1500),
-              );
-              resetForm();
-            }
-          })
-          .catch(async (error: any) => {
-            if ([404, 401, 500].includes(error?.statusCode)) {
-              await Promise.resolve(
-                setTimeout(() => {
-                  handlePrevStep();
-                }, 1500),
-              );
-            }
-            const errorMessage =
-              error.error ||
-              (error.data && typeof error.data.message === "string"
-                ? error.data.message
-                : JSON.stringify(error.data?.message));
-            toast.error(errorMessage);
-          });
-      },
-    });
+            await Promise.resolve(
+              setTimeout(() => {
+                handleNextStep();
+              }, 1500),
+            );
+            resetForm();
+          }
+        })
+        .catch(async (error: any) => {
+          if ([404, 401, 500].includes(error?.statusCode)) {
+            await Promise.resolve(
+              setTimeout(() => {
+                handlePrevStep();
+              }, 1500),
+            );
+          }
+          const errorMessage =
+            error.error ||
+            (error.data && typeof error.data.message === "string"
+              ? error.data.message
+              : JSON.stringify(error.data?.message));
+          toast.error(errorMessage);
+        });
+    },
+  });
 
   return (
     <div className="flex justify-center items-center px-2 sm:px-8 lg:px-0 flex-1 w-full">
@@ -168,7 +167,7 @@ export const Details = () => {
           </div>
           <p className="mt-4 text-lg text-center font-normal text-gray-600">
             Already have an account?{" "}
-            <Link to="/login" className="text-[#167ece]">
+            <Link to="/login" className="text-blue-500">
               Signin
             </Link>
           </p>
