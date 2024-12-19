@@ -67,6 +67,14 @@ export const AuthSlice = ApiService.injectEndpoints({
       }),
     }),
 
+    resendEmailForNewUser: builder.mutation<Response, { email: string }>({
+      query: ({ email }) => ({
+        url: "/users/new/resend-email-verification",
+        method: "POST",
+        body: { email },
+      }),
+    }),
+
     resetPassword: builder.mutation<Response, { token: string; password: string }>({
       query: ({ token, password }) => ({
         url: "/users/forgot-password",
@@ -85,4 +93,5 @@ export const {
   useCreatePasswordMutation,
   useForgotPasswordMutation,
   useVerifyEmailMutation,
+  useResendEmailForNewUserMutation,
 } = AuthSlice;

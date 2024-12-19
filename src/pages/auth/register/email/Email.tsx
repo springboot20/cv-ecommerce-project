@@ -5,7 +5,10 @@ import { FormEvent, useEffect, useState } from "react";
 import { useOtp } from "../../../../hooks/useOtp";
 import { Button } from "@material-tailwind/react";
 import { useForm } from "../../../../hooks/useForm";
-import { useVerifyEmailMutation } from "../../../../features/auth/auth.slice";
+import {
+  useResendEmailForNewUserMutation,
+  useVerifyEmailMutation,
+} from "../../../../features/auth/auth.slice";
 import { toast } from "react-toastify";
 
 export const Email = () => {
@@ -14,23 +17,13 @@ export const Email = () => {
   const timestamp = user?.emailVerificationTokenExpiry;
 
   const date = new Date(timestamp!);
-  const minutes = date.getUTCMinutes(); // Minutes (UTC)
+  const seconds = date.getUTCSeconds();
 
-  const [expiresIn, setExpiresIn] = useState<number>(Number(minutes) ?? 60);
+  const [expiresIn, setExpiresIn] = useState<number>(Number(seconds) ?? 60);
   const { handlePrevStep, handleNextStep } = useForm();
   const [verifyEmail] = useVerifyEmailMutation();
+  const [resendEmailForNewUser] = useResendEmailForNewUserMutation();
   const [isEmailVerified, setIsEmailVerified] = useState(false);
-
-  useEffect(() => {
-    if (expiresIn > 0) {
-      const expireTime = setInterval(() => {
-        setExpiresIn((prev) => prev - 1);
-      }, 1000);
-      return () => {
-        clearInterval(expireTime);
-      };
-    }
-  }, [expiresIn]);
 
   const { values, handleChange, handleKeyDown, handlePaste, formatTime, inputRefs } = useOtp();
 
@@ -66,6 +59,35 @@ export const Email = () => {
       toast.error(errorMessage);
     }
   };
+
+  const handleEmailResend = async () => {
+    try {
+      const response = await resendEmailForNewUser({ email: user?.email! }).unwrap();
+      if (response.statusCode.toString().startsWith("2")) {
+        setIsEmailVerified(true);
+        toast.success(response.data.message);
+        await Promise.resolve(setTimeout(() => handleNextStep(), 1500));
+      }
+    } catch (error: any) {
+      const errorMessage =
+        error.error ||
+        (error.data && typeof error.data.message === "string"
+          ? error.data.message
+          : JSON.stringify(error.data?.message));
+      toast.error(errorMessage);
+    }
+  };
+
+  useEffect(() => {
+    if (expiresIn > 0) {
+      const expireTime = setInterval(() => {
+        setExpiresIn((prev) => prev - 1);
+      }, 1000);
+      return () => {
+        clearInterval(expireTime);
+      };
+    }
+  }, [expiresIn]);
 
   return (
     <div className="flex justify-center items-center px-2 sm:px-8 lg:px-0 flex-1 w-full">
@@ -139,9 +161,9 @@ export const Email = () => {
                 <Button
                   variant="text"
                   type="button"
-                  className="text-blue-500 font-medium p-0 hover:bg-transparent active:bg-transparent"
+                  className="text-blue-500 font-medium p-1 rounded hover:bg-transparent active:bg-transparent"
                   placeholder={undefined}
-                  ripple={false}
+                  onClick={handleEmailResend}
                   onPointerEnterCapture={undefined}
                   onPointerLeaveCapture={undefined}
                 >
@@ -151,26 +173,10 @@ export const Email = () => {
 
               <button
                 type="button"
-                onClick={handlePrevStep}
-                className="flex items-center justify-center space-x-2 mt-4"
+                onClick={handleNextStep}
+                className="text-lg text-blue-500 underline mt-2"
               >
-                <svg
-                  width="23"
-                  height="22"
-                  viewBox="0 0 23 22"
-                  fill="none"
-                  xmlns="http://www.w3.org/2000/svg"
-                >
-                  <path
-                    d="M17.9167 11H5.08337M5.08337 11L11.5 17.4167M5.08337 11L11.5 4.58334"
-                    stroke="#475467"
-                    strokeWidth="2"
-                    strokeLinecap="round"
-                    strokeLinejoin="round"
-                  />
-                </svg>
-
-                <span className="text-sm font-medium text-[#475467]">Back</span>
+                <span className="text-sm font-medium">skip</span>
               </button>
             </form>
           </>

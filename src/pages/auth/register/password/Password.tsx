@@ -35,11 +35,8 @@ const validationSchema = yup.object().shape({
 
   confirm_password: yup
     .string()
-    .matches(passwordRule, {
-      message:
-        "Password must be at least 8 digits characters long and contain at least one uppercase letter, one lowercase letter, and one number ",
-    })
-    .required("password is required"),
+    .oneOf([yup.ref("password")], "Passwords must match")
+    .required("Confirm password is required"),
 });
 
 export const Password = () => {
