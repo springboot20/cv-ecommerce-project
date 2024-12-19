@@ -14,14 +14,16 @@ export const Details = () => {
       email: "",
     },
     validationSchema: forgotSchema,
-    onSubmit: async (values) => {
+    onSubmit: async (values, {resetForm}) => {
       try {
         const response = await forgotPasword({ email: values.email }).unwrap();
 
         const { message, statusCode } = response;
 
         if (statusCode.toString().startsWith("2")) {
-          toast.success(message);
+          toast.success(message)       
+									setTimeout(() => handleNextStep(), 1500);
+          resetForm 
         }
 
         console.log(values)
