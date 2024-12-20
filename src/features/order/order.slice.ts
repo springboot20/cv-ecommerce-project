@@ -77,5 +77,5 @@ export const {
   useUpdatePaystackOrderMutation,
   useGetAllOrdersQuery,
   useGetUserOrdersQuery,
-  useGetAdOrderByIdQuery,
+  useGetOrderByIdQuery,
 } = OrderSlice;
