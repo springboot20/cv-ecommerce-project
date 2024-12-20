@@ -5,7 +5,7 @@ import { Dialog, RadioGroup } from "@headlessui/react";
 import { MinusIcon, PlusIcon, XMarkIcon } from "@heroicons/react/24/outline";
 import { StarIcon } from "@heroicons/react/20/solid";
 import { classNames, formatPrice } from "../../helpers";
-import { useAddItemToCartMutation } from "../../helpers/cart/cart.slice";
+import { useAddItemToCartMutation } from "../../features/cart/cart.slice";
 import { useGetProductByIdQuery } from "../../features/products/product.slice";
 import { ProductType } from "../../types/redux/product";
 import { toast } from "react-toastify";
@@ -22,7 +22,7 @@ const ProductPreviewModal: React.FC<{ open: boolean; onClose: () => void; produc
   const [message, setMessage] = useState<string>("");
   const [quantityInput, setQuantityInput] = useState<number>(1);
 
-  const product: ProductType = data?.data.product
+  const product: ProductType = data?.data.product;
 
   const handleAddItemToCart = async (
     event: React.FormEvent<HTMLFormElement>,

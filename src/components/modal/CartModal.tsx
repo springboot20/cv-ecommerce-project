@@ -5,7 +5,7 @@ import Button from "../icon/Button";
 import { useAppSelector } from "../../hooks/redux/redux.hooks";
 import { RootState } from "../../app/store";
 import { useEffect, useState } from "react";
-import { useGetUserCartQuery, useRemoveItemFromCartMutation } from "../../helpers/cart/cart.slice";
+import { useGetUserCartQuery, useRemoveItemFromCartMutation } from "../../features/cart/cart.slice";
 import { CartInterface } from "../../types/redux/cart";
 import { Dialog } from "@headlessui/react";
 import { LocalStorage } from "../../util";
@@ -20,7 +20,7 @@ export default function CartModal({
 }) {
   const { data, refetch } = useGetUserCartQuery();
   const [removeItemToCart] = useRemoveItemFromCartMutation();
-  const { isNewAddedToCart } = useAppSelector((state: RootState) => state.cart)
+  const { isNewAddedToCart } = useAppSelector((state: RootState) => state.cart);
   const [refreshTrigered, setRefreshTrigered] = useState(false);
 
   const cartItems = data?.data?.cart ?? (LocalStorage.get("cart") as CartInterface);

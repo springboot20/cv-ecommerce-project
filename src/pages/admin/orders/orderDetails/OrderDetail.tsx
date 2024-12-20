@@ -1,15 +1,15 @@
 import { useParams } from "react-router";
-import { useGetUserOrderByIdQuery } from "../../../../features/order/order.slice";
+import { useGetOrderByIdQuery } from "../../../../features/order/order.slice";
 import { useEffect } from "react";
 import { OrderFetched } from "../../../../types/redux/order";
 import { formatDate } from "../../../../util";
 import { OrderSkeletonLoad } from "../../../../components/loaders/Skeleton";
-import { formatPrice } from "../../../../helpers";
+// import { formatPrice } from "../../../../helpers";
 
 export default function OrderDetails() {
   const { orderId } = useParams();
 
-  const { data, isLoading, refetch } = useGetUserOrderByIdQuery(orderId!);
+  const { data, isLoading, refetch } = useGetOrderByIdQuery(orderId!);
 
   const order: OrderFetched = data?.data?.order;
 
@@ -37,10 +37,10 @@ export default function OrderDetails() {
         <OrderSkeletonLoad />
       ) : (
         <section className="mt-4">
-          {order?.items?.map((item) => {
+          {order?.items?.map((_) => {
             return (
               <div className="flex flex-col sm:flex-row gap-4">
-                <div className="sm:max-w-xs w-full h-72 lg:max-w-sm lg:h-96">
+                {/* <div className="sm:max-w-xs w-full h-72 lg:max-w-sm lg:h-96">
                   <img src={item?.product?.imageSrc?.url} alt={item?.product?.name} />
                 </div>
 
@@ -52,7 +52,7 @@ export default function OrderDetails() {
                       <p>{item?.product?.description}</p>
                     </div>
                   </div>
-                </div>
+                </div> */}
               </div>
             );
           })}
