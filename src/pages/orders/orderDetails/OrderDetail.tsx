@@ -4,6 +4,7 @@ import { useEffect } from "react";
 import { OrderFetched } from "../../../types/redux/order";
 import { formatDate } from "../../../util";
 import { OrderSkeletonLoad } from "../../../components/loaders/Skeleton";
+import { formatPrice } from "../../../helpers";
 
 export default function OrderDetails() {
   const { orderId } = useParams();
@@ -33,7 +34,31 @@ export default function OrderDetails() {
         </div>
       </header>
 
-      <OrderSkeletonLoad />
+      {isLoading ? (
+        <OrderSkeletonLoad />
+      ) : (
+        <section className="mt-4">
+          {order?.items?.map((item) => {
+            return (
+              <div className="flex flex-col sm:flex-row gap-4">
+                <div className="sm:max-w-xs w-full h-72 lg:max-w-sm lg:h-96">
+                  <img src={item?.product?.imageSrc?.url} alt={item?.product?.name} />
+                </div>
+
+                <div className="w-full h-max  grid grid-cols-1 sm:grid-cols-2">
+                  <div className="mt-4 col-span-full">
+                    <h3>{item?.product?.name}</h3>
+                    <h5>{formatPrice(item?.product?.price)}</h5>
+                    <div className="mt-2">
+                      <p>{item?.product?.description}</p>
+                    </div>
+                  </div>
+                </div>
+              </div>
+            );
+          })}
+        </section>
+      )}
     </div>
   );
 }
