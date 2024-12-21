@@ -35,7 +35,7 @@ export default function OrderDetails() {
         <section className="mt-4">
           {order?.items?.map((item) => {
             return (
-              <div className="flex flex-col sm:flex-row gap-4" key={item?._id}>
+              <div className="flex flex-col sm:flex-row gap-4" key={item?.product?._id}>
                 <div className="sm:max-w-xs w-full h-72 lg:max-w-sm lg:h-96">
                   <img src={item?.product?.imageSrc?.url} alt={item?.product?.name} />
                 </div>
