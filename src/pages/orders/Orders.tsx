@@ -13,9 +13,9 @@ const OrderHeader: React.FC<{
   canClickOrder: boolean;
 }> = ({ setStatus, status, setCanClickOrder, canClickOrder }) => {
   return (
-    <div className="mb-3">
+    <div className="mb-3 flex flex-col gap-3 sm:flex-row sm:items-center sm:justify-between">
       <fieldset>
-        <label htmlFor="status" className="tetx-base font-normal text-gray-700 capitalize mr-4">
+        <label htmlFor="status" className="text-lg font-normal text-gray-700 capitalize mr-4">
           filter status
         </label>
         <select
@@ -29,7 +29,11 @@ const OrderHeader: React.FC<{
           <option>Failed</option>
         </select>
       </fieldset>
-      <StatusSwitch enabled={canClickOrder} bgClass="bg-gray-700" setEnabled={setCanClickOrder} />
+
+      <div className="flex items-center gap-2">
+        <span className="text-lg font-medium text-gray-700">Toggle order click: </span>
+        <StatusSwitch enabled={canClickOrder} bgClass="bg-gray-700" setEnabled={setCanClickOrder} />
+      </div>
     </div>
   );
 };
