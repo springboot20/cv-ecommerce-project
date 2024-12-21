@@ -58,10 +58,11 @@ const Products = () => {
 
   useEffect(() => {
     if (data?.message && !displayedMessages.current.has(data.message)) {
-      toast.success(data.message);
-      displayedMessages.current.add(data.message);
+      toast.success(data.message, {toastId: data?.message}); // Display toast
+      displayedMessages.current.add(data.message); // Track displayed messages
     }
   }, [data?.message]);
+  
 
   const handlePreviewOpen = (id: string) => setOpenPreview((prev) => ({ ...prev, [id]: true }));
   const handlePreviewClose = (id: string) => setOpenPreview((prev) => ({ ...prev, [id]: false }));
