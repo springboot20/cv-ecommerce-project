@@ -171,7 +171,7 @@ export interface Orders {
 // Order item type (for order details)
 type OrderItems = {
   quantity: number;
-  productId: ProductType[];
+  product: ProductType;
 };
 
 // General Order structure (for fetched orders)
