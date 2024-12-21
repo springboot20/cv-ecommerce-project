@@ -1,21 +1,19 @@
 import { Fragment, useEffect, useRef, useState } from "react";
-import { classNames, formatPrice } from "../../helpers";
+import { classNames } from "../../helpers";
 import { motion } from "framer-motion";
 import { Pagination } from "../../components/Pagination";
 import { gridVariants } from "../../util/framerMotion.config";
-// import { Loader } from "../../components/Loader";
 import { toast } from "react-toastify";
 import { useGetAllProductsQuery } from "../../features/products/product.slice";
 import { ProductCategory, ProductType } from "../../types/redux/product";
 import { ProductsSkeletonLoading } from "../../components/loaders/Skeleton";
 import { CategoryPanel } from "../../components/panels/CategoryPanel";
 import { Disclosure } from "@headlessui/react";
-import { Bars3Icon, EyeIcon } from "@heroicons/react/24/outline";
-import {  LocalStorage } from "../../util";
+import { Bars3Icon } from "@heroicons/react/24/outline";
+import { LocalStorage } from "../../util";
 import { useGetAllCategoryQuery } from "../../features/category/category.slice";
-import Skeleton from "react-loading-skeleton";
 import ProductPreviewModal from "../../components/modal/PreviewProductModal";
-import { Link } from "react-router-dom";
+import { Product } from "./Product";
 
 const Products = () => {
   const [searchQuery, setSearchQuery] = useState<string>("");
@@ -58,11 +56,10 @@ const Products = () => {
 
   useEffect(() => {
     if (data?.message && !displayedMessages.current.has(data.message)) {
-      toast.success(data.message, {toastId: data?.message}); // Display toast
+      toast.success(data.message, { toastId: data?.message }); // Display toast
       displayedMessages.current.add(data.message); // Track displayed messages
     }
   }, [data?.message]);
-  
 
   const handlePreviewOpen = (id: string) => setOpenPreview((prev) => ({ ...prev, [id]: true }));
   const handlePreviewClose = (id: string) => setOpenPreview((prev) => ({ ...prev, [id]: false }));
@@ -104,41 +101,7 @@ const Products = () => {
                     onClose={() => handlePreviewClose(product?._id)}
                     productId={product?._id}
                   />
-                  <motion.div role="button" layout className="relative group overflow-hidden">
-                    <header className="h-52 w-full relative rounded-xl overflow-hidden">
-                      {product?.imageSrc.url ? (
-                        <img
-                          src={product?.imageSrc?.url}
-                          alt=""
-                          className="h-full absolute object-cover object-center w-full"
-                        />
-                      ) : (
-                        <Skeleton
-                          height={"100%"}
-                          // style={{ position: "absolute", objectFit: "cover" }}
-                          borderRadius={0}
-                          className="border border-gray-300 absolute object-cover"
-                        />
-                      )}
-                      <div className="group-hover:opacity-100 transition z-20 opacity-0 absolute inset-0 h-full w-full flex flex-col py-4 items-center justify-end">
-                        <button
-                          type="button"
-                          onClick={() => handlePreviewOpen(product?._id)}
-                          className="z-20 bg-gray-100/90 border text-gray-600 font-normal text-sm flex items-center gap-4 rounded p-2 capitalize"
-                        >
-                          preview product <EyeIcon className="h-5" aria-hidden={true} />
-                        </button>
-                      </div>
-                    </header>
-                    <div className="relative flex pt-2 justify-between gap-1.5">
-                      <h3 className="capitalize text-base font-medium text-gray-700">
-                        <Link to={`/collections/${product?._id}`}> {product?.name}</Link>
-                      </h3>
-                      <p className="text-base text-gray-700 font-medium">
-                        {formatPrice(product?.price)}
-                      </p>
-                    </div>
-                  </motion.div>
+                  <Product product={product} handlePreviewOpen={handlePreviewOpen} />
                 </Fragment>
               ))
             )}
