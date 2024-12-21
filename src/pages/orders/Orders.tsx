@@ -5,6 +5,7 @@ import OrderTable from "../../components/table/OrderTable";
 import { CardFooter, Typography, Button } from "@material-tailwind/react";
 import VerifyPaystackPayment from "./verify/VerifyPayment";
 import StatusSwitch from "../../components/switch/Switch";
+import { LocalStorage } from "../../util";
 
 const OrderHeader: React.FC<{
   setStatus: React.Dispatch<React.SetStateAction<string>>;
@@ -40,7 +41,9 @@ const OrderHeader: React.FC<{
 
 export default function OrderLists() {
   let limit = 10;
-  const [canClickOrder, setCanClickOrder] = useState(false); // State to allow clicking on orders
+  const toggleOrder = Boolean(localStorage.getItem("toggle-order")) || false;
+
+  const [canClickOrder, setCanClickOrder] = useState(toggleOrder);
   const [page, setPage] = useState<number>(1);
   const [status, setStatus] = useState<string>("");
   const {
@@ -76,7 +79,9 @@ export default function OrderLists() {
     }
   };
 
-  console.log(status);
+  useEffect(() => {
+    LocalStorage.set("toggle-order", canClickOrder);
+  }, [canClickOrder]);
 
   useEffect(() => {
     refetch();
