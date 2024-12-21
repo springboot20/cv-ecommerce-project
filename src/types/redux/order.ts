@@ -1,3 +1,5 @@
+import { ProductType } from "./product";
+
 // Address interface
 export interface AddressInterface {
   _id: string;
@@ -155,6 +157,7 @@ export type Customer = {
 export interface Orders {
   _id: string;
   customer: Customer;
+  address?: AddressInterface;
   orderStatus: "COMPLETED" | "PENDING" | "CANCELLED";
   isPaymentDone: boolean;
   paymentId: string;
@@ -163,13 +166,12 @@ export interface Orders {
   createdAt: string;
   updatedAt: string;
   __v: number;
-  totalItems: number;
 }
 
 // Order item type (for order details)
 type OrderItems = {
   quantity: number;
-  productId: string;
+  productId: ProductType[];
 };
 
 // General Order structure (for fetched orders)
