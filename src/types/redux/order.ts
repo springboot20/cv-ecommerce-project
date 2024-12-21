@@ -165,6 +165,7 @@ export interface Orders {
   orderPrice: number;
   createdAt: string;
   updatedAt: string;
+  totalOrder?: number;
   __v: number;
 }
 
