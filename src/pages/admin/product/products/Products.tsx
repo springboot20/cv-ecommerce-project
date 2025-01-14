@@ -3,7 +3,6 @@ import { formatPrice } from '../../../../helpers';
 import { motion } from 'framer-motion';
 import { Pagination } from '../../../../components/Pagination';
 import { gridVariants } from '../../../../util/framerMotion.config';
-import { toast } from 'react-toastify';
 import {
   useDeleteProductMutation,
   useGetAllProductsQuery,
@@ -61,31 +60,21 @@ const AdminProducts = () => {
   const onClose = (id: string) => setOpen((prev) => ({ ...prev, [id]: false }));
 
   useEffect(() => {
-    if (data?.message) {
-      toast.success(data?.message);
-    }
-
     if (productDeleted) {
       refetch();
     }
-  }, [data?.message, page, totalPages, refetch, productDeleted]);
+  }, [page, totalPages, refetch, productDeleted]);
 
   const handleProductDelete = useCallback(
     async (productId: string) => {
       await deleteProduct(productId)
         .unwrap()
-        .then((response) => {
-          console.log(response.data);
+        .then(() => {
           setProductDeleted(true);
-          toast.success(response.message);
         })
         .catch((error: any) => {
-          console.log(error);
-          if (error) {
-            toast.error(error.error);
-            toast.error(error.data.message);
-          }
           setProductDeleted(true);
+          console.log(error);
         });
     },
     [deleteProduct]

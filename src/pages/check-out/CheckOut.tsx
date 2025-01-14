@@ -43,15 +43,12 @@ const CheckOut: React.FC = () => {
 
   const handleAddressMutation = useCallback(
     async (data: InitialValues) => {
-      try {
-        const response = await createAddress(data).unwrap();
+      const response = await createAddress(data).unwrap();
 
-        if (response.statusCode.toString().startsWith('2')) {
-          setDone(true);
-          toast(response?.message, { type: 'success' });
-        }
-      } catch (error: any) {
-        toast(error?.error || error?.data?.message, { type: 'error' });
+      if (response.statusCode.toString().startsWith('2')) {
+        setDone(true);
+      } else {
+        setDone(false);
       }
     },
     [createAddress]

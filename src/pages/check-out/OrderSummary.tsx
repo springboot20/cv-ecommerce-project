@@ -3,7 +3,6 @@ import { useEffect } from 'react';
 import { formatPrice } from '../../helpers';
 import { PencilSquareIcon, TrashIcon } from '@heroicons/react/24/outline';
 import { useCart } from '../../hooks/useCart';
-import { toast } from 'react-toastify';
 import { Link } from 'react-router-dom';
 
 export const OrderSummary: React.FC = () => {
@@ -19,7 +18,6 @@ export const OrderSummary: React.FC = () => {
     selectedItemId,
     setQuantityInput,
     quantityInput,
-    message,
   } = useCart();
 
   const shipping = 5.0;
@@ -28,11 +26,8 @@ export const OrderSummary: React.FC = () => {
   };
 
   useEffect(() => {
-    if (message) {
-      toast.success(message);
-    }
     refetch();
-  }, [refreshTrigered, refetch, message]);
+  }, [refreshTrigered, refetch]);
 
   return (
     <div className='relative w-full flex-col lg:col-span-1'>
