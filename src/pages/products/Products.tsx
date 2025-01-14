@@ -1,9 +1,8 @@
-import { Fragment, useEffect, useRef, useState } from 'react';
+import { Fragment, useState } from 'react';
 import { classNames } from '../../helpers';
 import { motion } from 'framer-motion';
 import { Pagination } from '../../components/Pagination';
 import { gridVariants } from '../../util/framerMotion.config';
-import { toast } from 'react-toastify';
 import { useGetAllProductsQuery } from '../../features/products/product.slice';
 import { ProductCategory, ProductType } from '../../types/redux/product';
 import { ProductsSkeletonLoading } from '../../components/loaders/Skeleton';
@@ -21,7 +20,6 @@ const Products = () => {
   const [page, setPage] = useState<number>(1);
   const [openPreview, setOpenPreview] = useState<{ [key: string]: boolean }>({});
   // const [categoryQuery, setCategoryQuery] = useState<string>("");
-  const displayedMessages = useRef<Set<string>>(new Set());
 
   const limit = 10;
 
@@ -53,13 +51,6 @@ const Products = () => {
   };
 
   const handleSearch = (e: React.ChangeEvent<HTMLInputElement>) => setSearchQuery(e.target.value);
-
-  useEffect(() => {
-    if (data?.message && !displayedMessages.current.has(data.message)) {
-      toast.success(data.message, { toastId: data?.message }); // Display toast
-      displayedMessages.current.add(data.message); // Track displayed messages
-    }
-  }, [data?.message]);
 
   const handlePreviewOpen = (id: string) => setOpenPreview((prev) => ({ ...prev, [id]: true }));
   const handlePreviewClose = (id: string) => setOpenPreview((prev) => ({ ...prev, [id]: false }));

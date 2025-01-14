@@ -1,11 +1,11 @@
-import { Fragment, useEffect, useState } from "react";
-import { useGetUserOrdersQuery } from "../../features/order/order.slice";
-import { Orders } from "../../types/redux/order";
-import OrderTable from "../../components/table/OrderTable";
-import { CardFooter, Typography, Button } from "@material-tailwind/react";
-import VerifyPaystackPayment from "./verify/VerifyPayment";
-import StatusSwitch from "../../components/switch/Switch";
-import { LocalStorage } from "../../util";
+import { Fragment, useEffect, useState } from 'react';
+import { useGetUserOrdersQuery } from '../../features/order/order.slice';
+import { Orders } from '../../types/redux/order';
+import OrderTable from '../../components/table/OrderTable';
+import { CardFooter, Typography, Button } from '@material-tailwind/react';
+import VerifyPaystackPayment from './verify/VerifyPayment';
+import StatusSwitch from '../../components/switch/Switch';
+import { LocalStorage } from '../../util';
 
 const OrderHeader: React.FC<{
   setStatus: React.Dispatch<React.SetStateAction<string>>;
@@ -14,16 +14,16 @@ const OrderHeader: React.FC<{
   canClickOrder: boolean;
 }> = ({ setStatus, status, setCanClickOrder, canClickOrder }) => {
   return (
-    <div className="mb-3 flex flex-col gap-3 sm:flex-row sm:items-center sm:justify-between">
+    <div className='mb-3 flex flex-col gap-3 sm:flex-row sm:items-center sm:justify-between'>
       <fieldset>
-        <label htmlFor="status" className="text-lg font-normal text-gray-700 capitalize mr-4">
+        <label htmlFor='status' className='text-lg font-normal text-gray-700 capitalize mr-4'>
           filter status
         </label>
         <select
+          id='status'
           value={status}
-          className="py-1.5 px-3 rounded max-w-xs w-full"
-          onChange={(evt) => setStatus(evt.target.value)}
-        >
+          className='py-1.5 px-3 rounded max-w-xs w-full'
+          onChange={(evt) => setStatus(evt.target.value)}>
           <option>filter by status</option>
           <option>Pending</option>
           <option>Completed</option>
@@ -31,21 +31,21 @@ const OrderHeader: React.FC<{
         </select>
       </fieldset>
 
-      <div className="flex items-center gap-2">
-        <span className="text-lg font-medium text-gray-700">Toggle order click: </span>
-        <StatusSwitch enabled={canClickOrder} bgClass="bg-gray-700" setEnabled={setCanClickOrder} />
+      <div className='flex items-center gap-2'>
+        <span className='text-lg font-medium text-gray-700'>Toggle order click: </span>
+        <StatusSwitch enabled={canClickOrder} bgClass='bg-gray-700' setEnabled={setCanClickOrder} />
       </div>
     </div>
   );
 };
 
 export default function OrderLists() {
-  let limit = 10;
-  const toggleOrder = Boolean(localStorage.getItem("toggle-order")) || false;
+  const limit = 10;
+  const toggleOrder = Boolean(localStorage.getItem('toggle-order')) || false;
 
   const [canClickOrder, setCanClickOrder] = useState(toggleOrder);
   const [page, setPage] = useState<number>(1);
-  const [status, setStatus] = useState<string>("");
+  const [status, setStatus] = useState<string>('');
   const {
     data: ordersData,
     refetch,
@@ -60,7 +60,7 @@ export default function OrderLists() {
     ? ordersData?.data?.orders
     : [ordersData?.data?.orders];
 
-  const columns = ["id", "customer name", "customer email", "order price", "ordered at", "status"];
+  const columns = ['id', 'customer name', 'customer email', 'order price', 'ordered at', 'status'];
 
   console.log(ordersData);
 
@@ -80,17 +80,17 @@ export default function OrderLists() {
   };
 
   useEffect(() => {
-    LocalStorage.set("toggle-order", canClickOrder);
+    LocalStorage.set('toggle-order', canClickOrder);
   }, [canClickOrder]);
 
   useEffect(() => {
     refetch();
-  }, [page, status, limit, totalPages]);
+  }, [page, status, limit, totalPages, refetch]);
 
   return (
     <Fragment>
       <VerifyPaystackPayment />
-      <div className="mt-5">
+      <div className='mt-5'>
         <OrderTable
           columns={columns}
           data={orders}
@@ -104,47 +104,42 @@ export default function OrderLists() {
           }
           enableHeader={true}
           canClickOrder={canClickOrder}
-          loading={isLoading}
-        >
+          loading={isLoading}>
           <CardFooter
-            className="flex items-center justify-between border-t border-blue-gray-50 p-4"
+            className='flex items-center justify-between border-t border-blue-gray-50 p-4'
             placeholder={undefined}
             onPointerEnterCapture={undefined}
-            onPointerLeaveCapture={undefined}
-          >
+            onPointerLeaveCapture={undefined}>
             <Typography
-              variant="small"
-              color="blue-gray"
-              className="font-normal"
+              variant='small'
+              color='blue-gray'
+              className='font-normal'
               placeholder={undefined}
               onPointerEnterCapture={undefined}
-              onPointerLeaveCapture={undefined}
-            >
+              onPointerLeaveCapture={undefined}>
               Page {page} of {totalPages}
             </Typography>
-            <div className="flex gap-2">
+            <div className='flex gap-2'>
               <Button
-                variant="outlined"
-                size="sm"
+                variant='outlined'
+                size='sm'
                 onClick={handlePreviousPage}
                 disabled={page === 1}
-                className="rounded"
+                className='rounded'
                 placeholder={undefined}
                 onPointerEnterCapture={undefined}
-                onPointerLeaveCapture={undefined}
-              >
+                onPointerLeaveCapture={undefined}>
                 Previous
               </Button>
               <Button
-                variant="outlined"
-                size="sm"
+                variant='outlined'
+                size='sm'
                 onClick={handleNextPage}
                 disabled={!hasNextPage}
-                className="rounded"
+                className='rounded'
                 placeholder={undefined}
                 onPointerEnterCapture={undefined}
-                onPointerLeaveCapture={undefined}
-              >
+                onPointerLeaveCapture={undefined}>
                 Next
               </Button>
             </div>

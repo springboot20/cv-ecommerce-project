@@ -1,13 +1,14 @@
-import { useEffect, useState } from "react";
-import axios from "axios";
-import { useAppSelector } from "../../../hooks/redux/redux.hooks";
-import { RootState } from "../../../app/store";
-import PaymentSuccessModal from "../../../components/modal/PaymentSuccessfulModal";
-import { OrderResponse } from "../../../types/redux/order";
+import { useEffect, useState } from 'react';
+import axios from 'axios';
+import { useAppSelector } from '../../../hooks/redux/redux.hooks';
+import { RootState } from '../../../app/store';
+import PaymentSuccessModal from '../../../components/modal/PaymentSuccessfulModal';
+import { OrderResponse } from '../../../types/redux/order';
 
-let env = import.meta.env;
+const env = import.meta.env;
 
-let base_url = env.MODE === "development" ? env.VITE_API_BASE_URL_DEV : env.VITE_API_BASE_URL_PROD;
+const base_url =
+  env.MODE === 'development' ? env.VITE_API_BASE_URL_DEV : env.VITE_API_BASE_URL_PROD;
 
 export default function VerifyPaystackPayment() {
   const { tokens } = useAppSelector((state: RootState) => state.auth);
@@ -37,13 +38,13 @@ export default function VerifyPaystackPayment() {
 
   useEffect(() => {
     const urlParams = new URLSearchParams(window.location.search);
-    const trxref = urlParams.get("trxref");
-    const reference = urlParams.get("reference");
+    const trxref = urlParams.get('trxref');
+    const reference = urlParams.get('reference');
 
     if (trxref && reference) {
-      verifyPaystackPayment(trxref, reference, tokens?.access_token!);
+      verifyPaystackPayment(trxref, reference, tokens?.access_token as string);
     }
-  }, []);
+  }, [tokens?.access_token]);
 
   return (
     <PaymentSuccessModal

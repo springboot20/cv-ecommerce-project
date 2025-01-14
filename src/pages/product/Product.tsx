@@ -4,7 +4,6 @@ import { motion } from "framer-motion";
 import { Disclosure, Tab } from "@headlessui/react";
 import { gridVariants } from "../../util/framerMotion.config";
 import { formatPrice } from "../../helpers";
-import { toast } from "react-toastify";
 import { ProductSkeletonLoading } from "../../components/loaders/Skeleton";
 import CartModal from "../../components/modal/CartModal";
 import { useProduct } from "../../hooks/useProduct";
@@ -15,7 +14,6 @@ import { clx } from "../../util";
 const Product = () => {
   const navigate = useNavigate();
   const {
-    message,
     refetch,
     open,
     setOpen,
@@ -30,13 +28,11 @@ const Product = () => {
   } = useProduct();
 
   useEffect(() => {
-    if (message) {
-      toast.success(message);
-    }
+
     if (!refreshTrigered) refetch();
 
     refetch();
-  }, [refreshTrigered, message]);
+  }, [refreshTrigered, refetch]);
 
   return (
     <Fragment>

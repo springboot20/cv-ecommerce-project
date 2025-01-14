@@ -17,7 +17,7 @@ export default function OrderDetails() {
     refetch();
   }, [orderId, refetch]);
 
-  let shipping = 5.0;
+  const shipping = 5.0;
 
   return (
     <div className="px-4 xl:px-0">

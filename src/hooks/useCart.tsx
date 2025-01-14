@@ -4,7 +4,6 @@ import {
   useGetUserCartQuery,
   useRemoveItemFromCartMutation,
 } from '../features/cart/cart.slice';
-import { toast } from 'react-toastify';
 import { CartInterface } from '../types/redux/cart';
 
 export const useCart = () => {
@@ -16,7 +15,6 @@ export const useCart = () => {
   const [quantityInput, setQuantityInput] = useState<number>(0);
   const [selectedItemId, setSelectedItemId] = useState<string | null>(null);
   const [refreshTrigered, setRefreshTrigered] = useState(false);
-  const [message, setMessage] = useState<string>('');
   const cart: CartInterface = data?.data?.cart;
 
   const handleEditClick = (id: string) => {
@@ -36,16 +34,7 @@ export const useCart = () => {
 
   const handleUpdateQuantity = async (productId: string) => {
     if (selectedItemId !== null && quantityInput > 0) {
-      try {
-        const { message } = await addItemToCart({ productId, quantity: quantityInput }).unwrap();
-        if (message) {
-          toast.success(message);
-          setMessage(message);
-        }
-      } catch (error: any) {
-        toast.error(error.data?.message);
-        toast.error(error?.error);
-      }
+      await addItemToCart({ productId, quantity: quantityInput }).unwrap();
 
       setRefreshTrigered(!refreshTrigered);
       setSelectedItemId(null);
@@ -61,17 +50,8 @@ export const useCart = () => {
   };
 
   const handleDelete = async (productId: string) => {
-    try {
-      const { message } = await removeItemToCart(productId).unwrap();
-      setRefreshTrigered(!refreshTrigered);
-
-      if (message) {
-        toast.success(message);
-      }
-    } catch (error: any) {
-      toast.error(error.error);
-      toast.error(error.data?.message);
-    }
+    await removeItemToCart(productId).unwrap();
+    setRefreshTrigered(!refreshTrigered);
   };
 
   return {
@@ -81,7 +61,6 @@ export const useCart = () => {
     isEditing,
     cart,
     refreshTrigered,
-    message,
     handleUpdateQuantity,
     refetch,
     selectedItemId,
