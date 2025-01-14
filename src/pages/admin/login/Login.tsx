@@ -52,16 +52,17 @@ const AdminLogin = () => {
           if (![AcceptedRoles.ADMIN, AcceptedRoles.MODERATOR]?.includes(res.data?.user?.role)) {
             toast.error('access denied to access this resource');
             setTimeout(() => navigate('/login'), 1000);
+          } else {
+            toast.success(res.data.message);
+            setTimeout(() => {
+              navigate('/admin/overview');
+              actions.resetForm();
+            }, 1000);
           }
-          toast.success(res.data.message);
-          setTimeout(() => {
-            navigate('/admin/overview');
-            actions.resetForm();
-          }, 1000);
         })
         .catch((error) => {
           console.log(error);
-          toast.error(error.error);
+          toast.error(error?.data?.message || error.error);
         });
     },
   });

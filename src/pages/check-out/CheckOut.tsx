@@ -41,18 +41,21 @@ const CheckOut: React.FC = () => {
       onSubmit,
     });
 
-  const handleAddressMutation = useCallback(async (data: InitialValues) => {
-    try {
-      const response = await createAddress(data).unwrap();
+  const handleAddressMutation = useCallback(
+    async (data: InitialValues) => {
+      try {
+        const response = await createAddress(data).unwrap();
 
-      if (response.statusCode.toString().startsWith('2')) {
-        setDone(true);
-        toast(response?.message, { type: 'success' });
+        if (response.statusCode.toString().startsWith('2')) {
+          setDone(true);
+          toast(response?.message, { type: 'success' });
+        }
+      } catch (error: any) {
+        toast(error?.error || error?.data?.message, { type: 'error' });
       }
-    } catch (error: any) {
-      toast(error?.error || error?.response?.message, { type: 'error' });
-    }
-  }, []);
+    },
+    [createAddress]
+  );
 
   const formSteps = [
     <ShippingInformation

@@ -33,7 +33,7 @@ export const useProduct = () => {
       }
     } catch (error: any) {
       if (error?.data) {
-        toast.warn(error?.response?.message);
+        toast.warn(error?.data?.message);
       }
     }
   };

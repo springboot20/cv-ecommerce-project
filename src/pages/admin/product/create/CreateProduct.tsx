@@ -61,7 +61,6 @@ export default function CreateNewProduct() {
     values: InitialValuesInterface,
     { resetForm }: FormikHelpers<InitialValuesInterface>
   ) {
-    console.log(values);
     try {
       await addCategory({ name: values.category }).unwrap();
       const response = await createProduct(values).unwrap();
@@ -74,8 +73,7 @@ export default function CreateNewProduct() {
       navigate('/admin/products/all', { replace: true });
       resetForm();
     } catch (error: any) {
-      toast.error(error.error);
-      toast.error(error.data.message);
+      toast.error(error.data.message || error.error);
     }
   }
 

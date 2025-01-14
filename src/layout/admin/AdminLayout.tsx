@@ -109,7 +109,7 @@ export const AdminDashboardLayout = () => {
                   return <Navigate to='/logout' replace />;
                 })
                 .catch((error: any) => {
-                  toast.error(error?.error || error?.response?.message);
+                  toast.error(error?.error || error?.data?.message);
                 });
             }}
             className={classNames(
@@ -158,7 +158,7 @@ export const AdminDashboardLayout = () => {
                     toast.success(response?.message);
                   })
                   .catch((error: any) => {
-                    toast.error(error?.error || error?.response?.message);
+                    toast.error(error?.error || error?.data?.message);
                   });
               }}
               className={classNames(

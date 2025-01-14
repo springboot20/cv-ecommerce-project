@@ -96,7 +96,7 @@ export const ResetPassword = () => {
       } catch (error: any) {
         const defaultMessage = 'An unexpected error occurred. Please try again.';
         const errorMessage =
-          error?.response?.message ||
+          error?.data?.message ||
           (error.error && typeof error.error === 'string' ? error.error : defaultMessage);
         toast.error(errorMessage);
 
@@ -334,7 +334,7 @@ const Email: React.FC<
     } catch (error: any) {
       const defaultMessage = 'An unexpected error occurred. Please try again.';
       const errorMessage =
-        error?.response?.message ||
+        error?.data?.message ||
         (error.error && typeof error.error === 'string' ? error.error : defaultMessage);
       toast.error(errorMessage);
     }

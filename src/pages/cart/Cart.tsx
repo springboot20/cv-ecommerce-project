@@ -24,7 +24,7 @@ const Cart = () => {
     message,
   } = useCart();
 
-  let shipping = 5.0;
+  const shipping = 5.0;
   const OrderTotal = (): number => {
     return cart?.totalCart ?? 1 * shipping;
   };

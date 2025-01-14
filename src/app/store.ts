@@ -1,9 +1,9 @@
-import { configureStore } from "@reduxjs/toolkit";
-import { authReducer } from "../features/auth/auth.reducer";
-import { ApiService } from "./services/api.service";
-import { addressReducer } from "../features/order/address.reducer";
-import { cartReducer } from "../features/cart/cart.reducer";
-import { productReducer } from "../features/products/product.reducer";
+import { configureStore } from '@reduxjs/toolkit';
+import { authReducer } from '../features/auth/auth.reducer';
+import { ApiService, rtkQueryErrorLogger } from './services/api.service';
+import { addressReducer } from '../features/order/address.reducer';
+import { cartReducer } from '../features/cart/cart.reducer';
+import { productReducer } from '../features/products/product.reducer';
 
 const store = configureStore({
   reducer: {
@@ -17,7 +17,7 @@ const store = configureStore({
     gMD({
       immutableCheck: false, // Disable ImmutableStateInvariantMiddleware
       serializableCheck: false, // Optional: Disable SerializableStateInvariantMiddleware
-    }).concat(ApiService.middleware),
+    }).concat(ApiService.middleware, rtkQueryErrorLogger),
   devTools: true,
 });
 

@@ -1,11 +1,11 @@
-import { useState } from "react";
+import { useState } from 'react';
 import {
   useAddItemToCartMutation,
   useGetUserCartQuery,
   useRemoveItemFromCartMutation,
-} from "../features/cart/cart.slice";
-import { toast } from "react-toastify";
-import { CartInterface } from "../types/redux/cart";
+} from '../features/cart/cart.slice';
+import { toast } from 'react-toastify';
+import { CartInterface } from '../types/redux/cart';
 
 export const useCart = () => {
   const { data, refetch } = useGetUserCartQuery();
@@ -16,10 +16,8 @@ export const useCart = () => {
   const [quantityInput, setQuantityInput] = useState<number>(0);
   const [selectedItemId, setSelectedItemId] = useState<string | null>(null);
   const [refreshTrigered, setRefreshTrigered] = useState(false);
-  const [message, setMessage] = useState<string>("");
+  const [message, setMessage] = useState<string>('');
   const cart: CartInterface = data?.data?.cart;
-
-  console.log(cart);
 
   const handleEditClick = (id: string) => {
     const selectedItem = cart.items.find((item: any) => {
@@ -53,7 +51,7 @@ export const useCart = () => {
       setSelectedItemId(null);
       setIsEditing(false);
     } else {
-      console.error("Invalid quantity input.");
+      console.error('Invalid quantity input.');
     }
   };
 

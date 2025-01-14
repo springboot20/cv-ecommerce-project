@@ -40,7 +40,7 @@ const ProductPreviewModal: React.FC<{ open: boolean; onClose: () => void; produc
       }
     } catch (error: any) {
       if (error?.data) {
-        toast.warn(error?.response?.message);
+        toast.warn(error?.data?.message);
       }
     }
   };
@@ -50,7 +50,7 @@ const ProductPreviewModal: React.FC<{ open: boolean; onClose: () => void; produc
       toast.success(data?.message);
     }
     refetch();
-  }, [data?.message]);
+  }, [data?.message, refetch]);
 
   return (
     <Dialog open={open} onClose={onClose} className='relative z-20'>
@@ -70,6 +70,7 @@ const ProductPreviewModal: React.FC<{ open: boolean; onClose: () => void; produc
 
               <div className='grid w-full grid-cols-1 items-start gap-x-6 gap-y-8 sm:grid-cols-12 lg:gap-x-8'>
                 <img
+                  alt={`${product?.name}`}
                   src={product?.imageSrc?.url}
                   className='aspect-[2/3] w-full rounded-lg bg-gray-100 object-cover sm:col-span-4 lg:col-span-5'
                 />
