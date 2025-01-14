@@ -52,7 +52,7 @@ export const Password = () => {
       try {
         const response = await createPassword({
           password: values.password,
-          email: user?.email!,
+          email: user?.email,
         }).unwrap();
 
         if (response.statusCode.toString().startsWith("2")) {
@@ -73,12 +73,7 @@ export const Password = () => {
             }, 1500),
           );
         }
-        const errorMessage =
-          error.error ||
-          (error.data && typeof error.data.message === "string"
-            ? error.data.message
-            : JSON.stringify(error.data?.message));
-        toast.error(errorMessage);
+     
       }
     },
   });

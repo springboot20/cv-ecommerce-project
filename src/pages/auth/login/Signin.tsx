@@ -53,14 +53,7 @@ const Signin = () => {
           await Promise.resolve(setTimeout(() => navigate("/"), 2000));
           actions.resetForm();
         })
-        .catch((error) => {
-          const errorMessage =
-            error.error ||
-            (error.data && typeof error.data.message === "string"
-              ? error.data.message
-              : JSON.stringify(error.data?.message));
-          toast.error(errorMessage);
-        });
+       
     },
   });
 

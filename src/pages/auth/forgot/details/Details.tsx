@@ -15,26 +15,14 @@ export const Details = () => {
     },
     validationSchema: forgotSchema,
     onSubmit: async (values, { resetForm }) => {
-      try {
-        const response = await forgotPasword({ email: values.email }).unwrap();
+      const response = await forgotPasword({ email: values.email }).unwrap();
 
-        const { message, statusCode } = response;
+      const { message, statusCode } = response;
 
-        if (statusCode.toString().startsWith('2')) {
-          toast.success(message);
-          setTimeout(() => handleNextStep(), 1500);
-          resetForm;
-        }
-
-        console.log(values);
-      } catch (error: any) {
-        const errorMessage =
-          error.error ||
-          (error.data && typeof error.data.message === 'string'
-            ? error.data.message
-            : JSON.stringify(error.data?.message));
-
-        toast.error(errorMessage);
+      if (statusCode.toString().startsWith('2')) {
+        toast.success(message);
+        setTimeout(() => handleNextStep(), 1500);
+        resetForm();
       }
     },
   });

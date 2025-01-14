@@ -94,15 +94,12 @@ export const ResetPassword = () => {
           resetForm();
         }
       } catch (error: any) {
-        const defaultMessage = 'An unexpected error occurred. Please try again.';
-        const errorMessage =
-          error?.data?.message ||
-          (error.error && typeof error.error === 'string' ? error.error : defaultMessage);
-        toast.error(errorMessage);
 
         if ([404, 401, 500].includes(error?.statusCode)) {
           setTimeout(() => handlePrevStep(), 1500);
         }
+
+        throw error
       }
     },
   });

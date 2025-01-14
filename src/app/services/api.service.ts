@@ -1,5 +1,5 @@
 import { createApi, fetchBaseQuery } from '@reduxjs/toolkit/query/react';
-import { isRejectedWithValue } from '@reduxjs/toolkit';
+import { isFulfilled, isRejectedWithValue } from '@reduxjs/toolkit';
 import type { MiddlewareAPI, Middleware } from '@reduxjs/toolkit';
 import { toast } from 'react-toastify';
 import { LocalStorage } from '../../util';
@@ -31,11 +31,14 @@ export const ApiService = createApi({
 export const rtkQueryErrorLogger: Middleware = (_: MiddlewareAPI) => (next) => (action) => {
   // RTK Query uses `createAsyncThunk` from redux-toolkit under the hood, so we're able to utilize these matchers!
   if (isRejectedWithValue(action)) {
-    console.log(action.payload);
     const message = action.payload
       ? (action.payload as { data: any }).data?.message
       : action.error.message;
     toast.error(message, { className: 'text-xs' });
+    
+  } else if (isFulfilled(action)) {
+    const message = (action.payload as { message: string })?.message;
+    toast.success(message, { className: 'text-xs' });
   }
 
   return next(action);

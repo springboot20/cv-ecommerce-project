@@ -51,18 +51,13 @@ export const Email = () => {
           }, 1500),
         );
       }
-      const errorMessage =
-        error.error ||
-        (error.data && typeof error.data.message === "string"
-          ? error.data.message
-          : JSON.stringify(error.data?.message));
-      toast.error(errorMessage);
+  
     }
   };
 
   const handleEmailResend = async () => {
     try {
-      const response = await resendEmailForNewUser({ email: user?.email! }).unwrap();
+      const response = await resendEmailForNewUser({ email: user?.email }).unwrap();
       if (response.statusCode.toString().startsWith("2")) {
         toast.success(response.data.message);
       }

@@ -1,3 +1,4 @@
+/* eslint-disable no-unsafe-optional-chaining */
 import { useEffect } from "react";
 import ChartComponent from "../../../../components/chart/Chart";
 import {
