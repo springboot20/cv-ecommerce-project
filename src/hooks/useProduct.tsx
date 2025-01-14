@@ -1,9 +1,9 @@
-import { useParams } from "react-router-dom";
-import { useAddItemToCartMutation } from "../features/cart/cart.slice";
-import { useGetProductByIdQuery } from "../features/products/product.slice";
-import { useState } from "react";
-import { ProductType } from "../types/redux/product";
-import { toast } from "react-toastify";
+import { useParams } from 'react-router-dom';
+import { useAddItemToCartMutation } from '../features/cart/cart.slice';
+import { useGetProductByIdQuery } from '../features/products/product.slice';
+import { useState } from 'react';
+import { ProductType } from '../types/redux/product';
+import { toast } from 'react-toastify';
 
 export const useProduct = () => {
   const { id } = useParams();
@@ -13,11 +13,11 @@ export const useProduct = () => {
   const [quantityInput, setQuantityInput] = useState<number>(1);
   const [open, setOpen] = useState(false);
   const [refreshTrigered, setRefreshTrigered] = useState(false);
-  const [message, setMessage] = useState<string>("");
+  const [message, setMessage] = useState<string>('');
 
   const setRatingsValue = (rating: number) => setRatings(rating);
 
-  const product: ProductType = typeof data?.data.product === "object" && data?.data.product;
+  const product: ProductType = typeof data?.data.product === 'object' && data?.data.product;
 
   const handleAddItemToCart = async (productId: string) => {
     try {
@@ -33,7 +33,7 @@ export const useProduct = () => {
       }
     } catch (error: any) {
       if (error?.data) {
-        toast.warn(error?.data?.message);
+        toast.warn(error?.response?.message);
       }
     }
   };

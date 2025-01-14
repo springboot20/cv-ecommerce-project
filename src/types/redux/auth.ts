@@ -24,3 +24,9 @@ export type Token = {
   access_token: string;
   refresh_token: string;
 };
+
+export enum AcceptedRoles {
+  ADMIN = 'ADMIN',
+  USER = 'USER',
+  MODERATOR = 'MODERATOR',
+}

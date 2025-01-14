@@ -1,51 +1,46 @@
-import { lazy } from "react";
-import { createBrowserRouter, Navigate } from "react-router-dom";
+import { lazy } from 'react';
+import { createBrowserRouter, Navigate } from 'react-router-dom';
 
-import AppLayout from "../layout/app/AppLayout";
-import AdminLayout from "../layout/admin/AdminLayout";
-import AdminLogin from "../pages/admin/login/Login";
-import CreateNewProduct from "../pages/admin/product/create/CreateProduct";
-import EditProduct from "../pages/admin/product/edit/EditProduct";
-import AdminProducts from "../pages/admin/product/products/Products";
-import AdminUserEdit from "../pages/admin/users/edit/EditUser";
-import { AdminDashboardLayout } from "../layout/admin/AdminLayout";
-import { ProtectedRoute, AdminProtectedRoute } from "../components/Private.routes";
-import { AdminPublicRoute } from "../components/Public.routes";
-import AdminOrders from "../pages/admin/orders/Orders";
-import AdminOrderDetails from "../pages/admin/orders/orderDetails/OrderDetail";
-import { FormProvider } from "../context/FormContext";
+import AppLayout from '../layout/app/AppLayout';
+import AdminLayout from '../layout/admin/AdminLayout';
+import AdminLogin from '../pages/admin/login/Login';
+import CreateNewProduct from '../pages/admin/product/create/CreateProduct';
+import EditProduct from '../pages/admin/product/edit/EditProduct';
+import AdminProducts from '../pages/admin/product/products/Products';
+import AdminUserEdit from '../pages/admin/users/edit/EditUser';
+import { AdminDashboardLayout } from '../layout/admin/AdminLayout';
+import { ProtectedRoute, AdminProtectedRoute } from '../components/Private.routes';
+import { AdminPublicRoute } from '../components/Public.routes';
+import AdminOrders from '../pages/admin/orders/Orders';
+import AdminOrderDetails from '../pages/admin/orders/orderDetails/OrderDetail';
+import { FormProvider } from '../context/FormContext';
+import { AcceptedRoles } from '../types/redux/auth';
 
-const RegisterLayout = lazy(() => import("../layout/auth/register/RegisterLayout"));
-const ForgotLayout = lazy(() => import("../layout/auth/forgot/ForgotLayout"));
+const RegisterLayout = lazy(() => import('../layout/auth/register/RegisterLayout'));
+const ForgotLayout = lazy(() => import('../layout/auth/forgot/ForgotLayout'));
 
-const AdminOverview = lazy(() => import("../pages/admin/overview/Overview"));
-const AdminUsers = lazy(() => import("../pages/admin/users/Users"));
-const Home = lazy(() => import("../pages/home/Home"));
-const Products = lazy(() => import("../pages/products/Products"));
-const Product = lazy(() => import("../pages/product/Product"));
-const Cart = lazy(() => import("../pages/cart/Cart"));
-const CheckOut = lazy(() => import("../pages/check-out/CheckOut"));
-const Orders = lazy(() => import("../pages/orders/Orders"));
-const OrderDetails = lazy(() => import("../pages/orders/orderDetails/OrderDetail"));
-const Notfound = lazy(() => import("../components/NotFound"));
-const PublicRoute = lazy(() => import("../components/Public.routes"));
-const Login = lazy(() => import("../pages/auth/login/Signin"));
-const Forgot = lazy(() => import("../pages/auth/forgot/Forgot"));
-const Register = lazy(() => import("../pages/auth/register/Register"));
-const Settings = lazy(() => import("../pages/settings/Settings"));
-const Profile = lazy(() => import("../pages/settings/profile/Profile"));
-const EmailVerification = lazy(() => import("../pages/verifications/email/EmailVerification"));
-
-enum AcceptedRoles {
-  ADMIN = "ADMIN",
-  USER = "USER",
-  MODERATOR = "MODERATOR",
-}
+const AdminOverview = lazy(() => import('../pages/admin/overview/Overview'));
+const AdminUsers = lazy(() => import('../pages/admin/users/Users'));
+const Home = lazy(() => import('../pages/home/Home'));
+const Products = lazy(() => import('../pages/products/Products'));
+const Product = lazy(() => import('../pages/product/Product'));
+const Cart = lazy(() => import('../pages/cart/Cart'));
+const CheckOut = lazy(() => import('../pages/check-out/CheckOut'));
+const Orders = lazy(() => import('../pages/orders/Orders'));
+const OrderDetails = lazy(() => import('../pages/orders/orderDetails/OrderDetail'));
+const Notfound = lazy(() => import('../components/NotFound'));
+const PublicRoute = lazy(() => import('../components/Public.routes'));
+const Login = lazy(() => import('../pages/auth/login/Signin'));
+const Forgot = lazy(() => import('../pages/auth/forgot/Forgot'));
+const Register = lazy(() => import('../pages/auth/register/Register'));
+const Settings = lazy(() => import('../pages/settings/Settings'));
+const Profile = lazy(() => import('../pages/settings/profile/Profile'));
+const EmailVerification = lazy(() => import('../pages/verifications/email/EmailVerification'));
 
 const Router = () => {
   return createBrowserRouter([
     {
-      path: "/",
+      path: '/',
       element: <AppLayout />,
       children: [
         {
@@ -53,7 +48,7 @@ const Router = () => {
           element: <Home />,
         },
         {
-          path: "collections",
+          path: 'collections',
           element: (
             <ProtectedRoute roles={[AcceptedRoles.USER, AcceptedRoles.ADMIN]}>
               <Products />
@@ -61,7 +56,7 @@ const Router = () => {
           ),
         },
         {
-          path: "collections/:id",
+          path: 'collections/:id',
           element: (
             <ProtectedRoute roles={[AcceptedRoles.USER, AcceptedRoles.ADMIN]}>
               <Product />
@@ -69,7 +64,7 @@ const Router = () => {
           ),
         },
         {
-          path: "cart",
+          path: 'cart',
           element: (
             <ProtectedRoute roles={[AcceptedRoles.USER, AcceptedRoles.ADMIN]}>
               <Cart />
@@ -77,7 +72,7 @@ const Router = () => {
           ),
         },
         {
-          path: "check-out",
+          path: 'check-out',
           children: [
             {
               index: true,
@@ -90,7 +85,7 @@ const Router = () => {
           ],
         },
         {
-          path: "orders",
+          path: 'orders',
           children: [
             {
               index: true,
@@ -101,7 +96,7 @@ const Router = () => {
               ),
             },
             {
-              path: ":orderId",
+              path: ':orderId',
               element: (
                 <ProtectedRoute roles={[AcceptedRoles.USER, AcceptedRoles.ADMIN]}>
                   <OrderDetails />
@@ -111,7 +106,7 @@ const Router = () => {
           ],
         },
         {
-          path: "settings",
+          path: 'settings',
           element: (
             <ProtectedRoute roles={[AcceptedRoles.USER, AcceptedRoles.ADMIN]}>
               <Settings />
@@ -119,23 +114,23 @@ const Router = () => {
           ),
           children: [
             {
-              path: "profile",
+              path: 'profile',
               element: <Profile />,
             },
             {
-              path: "account",
+              path: 'account',
             },
           ],
         },
         {
-          path: "verify-email",
+          path: 'verify-email',
           element: <EmailVerification />,
         },
       ],
     },
 
     {
-      path: "admin",
+      path: 'admin',
       element: <AdminLayout />,
       children: [
         {
@@ -146,7 +141,7 @@ const Router = () => {
           ),
           children: [
             {
-              path: "overview",
+              path: 'overview',
               element: (
                 <AdminProtectedRoute roles={[AcceptedRoles.ADMIN, AcceptedRoles.MODERATOR]}>
                   <AdminOverview />
@@ -154,7 +149,7 @@ const Router = () => {
               ),
             },
             {
-              path: "orders",
+              path: 'orders',
               children: [
                 {
                   index: true,
@@ -165,7 +160,7 @@ const Router = () => {
                   ),
                 },
                 {
-                  path: ":orderId",
+                  path: ':orderId',
                   element: (
                     <AdminProtectedRoute roles={[AcceptedRoles.ADMIN, AcceptedRoles.MODERATOR]}>
                       <AdminOrderDetails />
@@ -175,10 +170,10 @@ const Router = () => {
               ],
             },
             {
-              path: "products",
+              path: 'products',
               children: [
                 {
-                  path: "all",
+                  path: 'all',
                   element: (
                     <AdminProtectedRoute roles={[AcceptedRoles.ADMIN, AcceptedRoles.MODERATOR]}>
                       <AdminProducts />
@@ -186,7 +181,7 @@ const Router = () => {
                   ),
                 },
                 {
-                  path: "create",
+                  path: 'create',
                   element: (
                     <AdminProtectedRoute roles={[AcceptedRoles.ADMIN]}>
                       <CreateNewProduct />
@@ -194,7 +189,7 @@ const Router = () => {
                   ),
                 },
                 {
-                  path: "edit/:id",
+                  path: 'edit/:id',
                   element: (
                     <AdminProtectedRoute roles={[AcceptedRoles.ADMIN]}>
                       <EditProduct />
@@ -204,7 +199,7 @@ const Router = () => {
               ],
             },
             {
-              path: "users",
+              path: 'users',
               children: [
                 {
                   index: true,
@@ -215,7 +210,7 @@ const Router = () => {
                   ),
                 },
                 {
-                  path: "edit/:userId",
+                  path: 'edit/:userId',
                   element: (
                     <AdminProtectedRoute roles={[AcceptedRoles.ADMIN]}>
                       <AdminUserEdit />
@@ -227,7 +222,7 @@ const Router = () => {
           ],
         },
         {
-          path: "login",
+          path: 'login',
           element: (
             <AdminPublicRoute>
               <AdminLogin />
@@ -235,13 +230,13 @@ const Router = () => {
           ),
         },
         {
-          path: "logout",
-          element: <Navigate to={"/admin/login"} />,
+          path: 'logout',
+          element: <Navigate to={'/admin/login'} />,
         },
       ],
     },
     {
-      path: "register",
+      path: 'register',
       element: (
         <FormProvider>
           <RegisterLayout />
@@ -259,7 +254,7 @@ const Router = () => {
       ],
     },
     {
-      path: "login",
+      path: 'login',
       element: (
         <PublicRoute>
           <Login />
@@ -267,7 +262,7 @@ const Router = () => {
       ),
     },
     {
-      path: "forgot",
+      path: 'forgot',
       element: (
         <FormProvider>
           <ForgotLayout />
@@ -285,7 +280,7 @@ const Router = () => {
       ],
     },
     {
-      path: "*",
+      path: '*',
       element: <Notfound />,
     },
   ]);

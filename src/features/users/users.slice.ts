@@ -32,7 +32,7 @@ export const UsersSlice = ApiService.injectEndpoints({
       providesTags: (result) =>
         result?.data?.users?.length
           ? [
-              ...result?.data.users.map((user: User) => ({
+              ...result.data.users.map((user: User) => ({
                 type: "User" as const,
                 id: user._id,
               })),
@@ -46,7 +46,7 @@ export const UsersSlice = ApiService.injectEndpoints({
       providesTags: (result) =>
         result?.data?.users?.length
           ? [
-              ...result?.data.users.map((user: User) => ({
+              ...result.data.users.map((user: User) => ({
                 type: "User" as const,
                 id: user._id,
               })),
