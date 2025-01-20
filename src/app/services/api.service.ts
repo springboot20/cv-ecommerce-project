@@ -34,11 +34,11 @@ export const rtkQueryErrorLogger: Middleware = (_: MiddlewareAPI) => (next) => (
     const message = action.payload
       ? (action.payload as { data: any }).data?.message
       : action.error.message;
-    toast.error(message, { className: 'text-xs' });
+    toast.error(message, { className: 'text-sm' });
     
   } else if (isFulfilled(action)) {
     const message = (action.payload as { message: string })?.message;
-    toast.success(message, { className: 'text-xs' });
+    toast.success(message, { className: 'text-sm' });
   }
 
   return next(action);

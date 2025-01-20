@@ -41,7 +41,7 @@ export default function CartModal({
   };
   useEffect(() => {
     refetch();
-  }, [refreshTrigered, isNewAddedToCart]);
+  }, [refreshTrigered, isNewAddedToCart, refetch]);
 
   return (
     <Dialog open={isOpen} onClose={setIsOpen} className="relative z-20">

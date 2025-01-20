@@ -1,6 +1,5 @@
 import axios from 'axios';
 import { useCallback, useEffect, useState } from 'react';
-import { toast } from 'react-toastify';
 import { EmailVerificationSuccessMessage } from '../messages/EmailMessage';
 import { useAppSelector } from '../../../hooks/redux/redux.hooks';
 import { RootState } from '../../../app/store';

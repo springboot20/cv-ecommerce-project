@@ -14,6 +14,7 @@ export const EmailVerificationSuccessMessage: React.FC = () => {
           </span>
         </div>
 
+
         <div className="space-y-5">
           
           <p className="text-gray-700 text-xl">
