@@ -32,8 +32,8 @@ export const Email = () => {
       }).unwrap();
 
       if (response.statusCode.toString().startsWith("2")) {
-        setIsEmailVerified(true);
-        await Promise.resolve(setTimeout(() => handleNextStep(), 1500));
+        setIsEmailVerified(true); 
+        handleNextStep()
       }
       console.log(values);
     } catch (error: any) {
