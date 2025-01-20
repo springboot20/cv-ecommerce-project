@@ -1,7 +1,7 @@
 import { EnvelopeIcon } from "@heroicons/react/24/outline";
 import { useAppSelector } from "../../../../hooks/redux/redux.hooks";
 import { RootState } from "../../../../app/store";
-import { FormEvent, useEffect, useState } from "react";
+import { FormEvent,  useState } from "react";
 import { useOtp } from "../../../../hooks/useOtp";
 import { Button } from "@material-tailwind/react";
 import { useForm } from "../../../../hooks/useForm";
@@ -9,16 +9,13 @@ import {
   useResendEmailForNewUserMutation,
   useVerifyEmailMutation,
 } from "../../../../features/auth/auth.slice";
+import { useTokenExpiry } from "../../../../hooks/useToken";
 
 export const Email = () => {
   const { user } = useAppSelector((state: RootState) => state.auth);
-
   const timestamp = user?.emailVerificationTokenExpiry;
+  const expiresIn = useTokenExpiry(+timestamp!);
 
-  const date = new Date(timestamp!);
-  const seconds = date.getUTCSeconds();
-
-  const [expiresIn, setExpiresIn] = useState<number>(Number(seconds) ?? 60);
   const { handlePrevStep, handleNextStep } = useForm();
   const [verifyEmail] = useVerifyEmailMutation();
   const [resendEmailForNewUser] = useResendEmailForNewUserMutation();
@@ -55,17 +52,6 @@ export const Email = () => {
   const handleEmailResend = async () => {
     await resendEmailForNewUser({ email: user?.email as string }).unwrap();
   };
-
-  useEffect(() => {
-    if (expiresIn > 0) {
-      const expireTime = setInterval(() => {
-        setExpiresIn((prev) => prev - 1);
-      }, 1000);
-      return () => {
-        clearInterval(expireTime);
-      };
-    }
-  }, [expiresIn]);
 
   return (
     <div className="flex justify-center items-center px-2 sm:px-8 lg:px-0 flex-1 w-full">
