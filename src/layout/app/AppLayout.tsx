@@ -1,13 +1,15 @@
-import { Fragment, useState } from "react";
+import { Fragment, useEffect, useState } from "react";
 import { Link, NavLink, Outlet, useNavigate } from "react-router-dom";
 import { Disclosure, Menu, Transition } from "@headlessui/react";
 import { BellIcon, XMarkIcon, Bars3Icon, UserIcon } from "@heroicons/react/24/outline";
 import CartModal from "../../components/modal/CartModal";
 import { useAppSelector } from "../../hooks/redux/redux.hooks";
 import { RootState } from "../../app/store";
-import { clx } from "../../util";
+import { clx, LocalStorage } from "../../util";
 import { useLogoutMutation } from "../../features/auth/auth.slice";
 import { toast } from "react-toastify";
+import { NotificationPanel } from "../../components/panels/notifications";
+import { Notification } from "../../features/notifications/notification.slice";
 
 const navigation = [
   { to: "/", name: "home", current: true },
@@ -23,7 +25,7 @@ function classNames(...classes: (boolean | string)[]) {
 const handleActive = ({ isActive }: { isActive: boolean }) => {
   return classNames(
     isActive ? "text-gray-800" : "text-gray-600",
-    "block rounded-md px-3 py-2 text-base font-medium flex-shrink-0 capitalize",
+    "block rounded-md px-3 py-2 text-base font-medium flex-shrink-0 capitalize"
   );
 };
 
@@ -33,6 +35,18 @@ const AppLayout: React.FC = () => {
   const { isAuthenticated } = useAppSelector((state: RootState) => state.auth);
   const navigate = useNavigate();
   const [logout] = useLogoutMutation();
+  const [unreadNotifications, setUnreadNotifications] = useState<Notification[]>(
+    LocalStorage.get("notifications") || []
+  );
+  const [notifications, setNotifications] = useState<Notification[]>(
+    LocalStorage.get("notifications") || []
+  );
+
+  const [openNotification, setOpenNotification] = useState(false);
+
+  useEffect(() => {
+    console.log(unreadNotifications, notifications);
+  }, []);
 
   return (
     <>
@@ -42,6 +56,7 @@ const AppLayout: React.FC = () => {
       >
         {({ open, close }) => (
           <>
+            <NotificationPanel open={openNotification} onClose={() => setOpenNotification(false)} />
             <CartModal isOpen={isOpen} setIsOpen={setOpen} />
             <div className="mx-auto max-w-7xl px-2 sm:px-2 lg:px-4 xl:p-0">
               <div className="relative">
@@ -96,7 +111,7 @@ const AppLayout: React.FC = () => {
                                       }}
                                       className={classNames(
                                         active ? "bg-gray-100" : "",
-                                        "flex w-full items-center gap-2 px-4 py-2 text-sm text-gray-800 font-medium",
+                                        "flex w-full items-center gap-2 px-4 py-2 text-sm text-gray-800 font-medium"
                                       )}
                                     >
                                       <svg
@@ -141,7 +156,7 @@ const AppLayout: React.FC = () => {
                                       to="/settings"
                                       className={classNames(
                                         active ? "bg-gray-100" : "",
-                                        "flex items-center gap-2 px-4 py-2 text-sm text-gray-800 font-medium w-full",
+                                        "flex items-center gap-2 px-4 py-2 text-sm text-gray-800 font-medium w-full"
                                       )}
                                     >
                                       <svg
@@ -224,10 +239,19 @@ const AppLayout: React.FC = () => {
                       </div>
 
                       <div className="flex items-center gap-5 lg:mr-0">
-                        <BellIcon className="h-8 w-8 relative before:absolute before:content-[''] before:h-4 before:w-4 before:rounded-full before:bg-red-600 before:top-2" />
+                        <button
+                          type="button"
+                          onClick={() => {
+                            setOpenNotification(true);
+                          }}
+                        >
+                          <span className="sr-only">Open notifications</span>
+                          <BellIcon className="h-8 w-8 relative before:absolute before:content-[''] before:h-4 before:w-4 before:rounded-full before:bg-red-600 before:top-2" />
+                        </button>
+
                         <button
                           className={classNames(
-                            "h-12 w-12 bg-gray-100 flex relative items-center justify-center rounded-full",
+                            "h-12 w-12 bg-gray-100 flex relative items-center justify-center rounded-full"
                           )}
                           onClick={() => setOpen(true)}
                         >
