@@ -147,7 +147,7 @@ export default function CreateNewProduct() {
                       errors.name && touched.name ? "ring-red-500" : "focus:ring-indigo-500"
                     )}
                   >
-                    <option disabled>select category</option>
+                    <option>select category</option>
                     <option>fasion</option>
                     <option>kitchen</option>
                     <option>electronics</option>

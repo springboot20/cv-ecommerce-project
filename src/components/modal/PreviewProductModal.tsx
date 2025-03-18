@@ -1,4 +1,4 @@
-import {  useState } from "react";
+import { useState } from "react";
 import { Dialog, RadioGroup } from "@headlessui/react";
 import { MinusIcon, PlusIcon, XMarkIcon } from "@heroicons/react/24/outline";
 import { StarIcon } from "@heroicons/react/20/solid";
@@ -8,6 +8,8 @@ import { useGetProductByIdQuery } from "../../features/products/product.slice";
 import { ProductType } from "../../types/redux/product";
 import { toast } from "react-toastify";
 import { Button } from "@material-tailwind/react";
+import { useAppDispatch } from "../../hooks/redux/redux.hooks";
+import { addItemToCart as addProductToCart } from "../../features/cart/cart.reducer";
 
 const ProductPreviewModal: React.FC<{ open: boolean; onClose: () => void; productId: string }> = ({
   open,
@@ -20,6 +22,8 @@ const ProductPreviewModal: React.FC<{ open: boolean; onClose: () => void; produc
   const [message, setMessage] = useState<string>("");
   const [quantityInput, setQuantityInput] = useState<number>(1);
 
+  const dispatch = useAppDispatch();
+
   const product: ProductType = data?.data.product;
 
   const handleAddItemToCart = async (
@@ -30,7 +34,8 @@ const ProductPreviewModal: React.FC<{ open: boolean; onClose: () => void; produc
     try {
       const response = await addItemToCart({ productId, quantity: quantityInput }).unwrap();
       setRefreshTrigered(!refreshTrigered);
-      console.log(response);
+
+      dispatch(addProductToCart(response));
 
       if (response?.message) {
         toast.success(response?.message);

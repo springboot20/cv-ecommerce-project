@@ -5,11 +5,12 @@ import { BellIcon, XMarkIcon, Bars3Icon, UserIcon } from "@heroicons/react/24/ou
 import CartModal from "../../components/modal/CartModal";
 import { useAppSelector } from "../../hooks/redux/redux.hooks";
 import { RootState } from "../../app/store";
-import { clx, LocalStorage } from "../../util";
+import { clx } from "../../util";
 import { useLogoutMutation } from "../../features/auth/auth.slice";
 import { toast } from "react-toastify";
 import { NotificationPanel } from "../../components/panels/notifications";
-import { Notification } from "../../features/notifications/notification.slice";
+// import { Notification } from "../../features/notifications/notification.slice";
+import { useNotification } from "../../hooks/useNotification";
 
 const navigation = [
   { to: "/", name: "home", current: true },
@@ -32,21 +33,17 @@ const handleActive = ({ isActive }: { isActive: boolean }) => {
 const AppLayout: React.FC = () => {
   const [isOpen, setOpen] = useState(false);
   const { cartItem } = useAppSelector((state: RootState) => state.cart);
+  const { unread_notifications } = useAppSelector((state: RootState) => state.notifications);
   const { isAuthenticated } = useAppSelector((state: RootState) => state.auth);
   const navigate = useNavigate();
   const [logout] = useLogoutMutation();
-  const [unreadNotifications, setUnreadNotifications] = useState<Notification[]>(
-    LocalStorage.get("notifications") || []
-  );
-  const [notifications, setNotifications] = useState<Notification[]>(
-    LocalStorage.get("notifications") || []
-  );
 
+  const { newNotification, setNewNotification } = useNotification();
   const [openNotification, setOpenNotification] = useState(false);
 
   useEffect(() => {
-    console.log(unreadNotifications, notifications);
-  }, []);
+    console.log(newNotification);
+  }, [newNotification, setNewNotification]);
 
   return (
     <>
@@ -246,7 +243,16 @@ const AppLayout: React.FC = () => {
                           }}
                         >
                           <span className="sr-only">Open notifications</span>
-                          <BellIcon className="h-8 w-8 relative before:absolute before:content-[''] before:h-4 before:w-4 before:rounded-full before:bg-red-600 before:top-2" />
+                          <div className="relative">
+                            <BellIcon className="h-8 w-8" />
+                            {unread_notifications.length > 0 && (
+                              <span className="absolute animate-bounce -top-1 -right-1 bg-red-600 text-white text-xs font-bold rounded-full h-5 w-5 flex items-center justify-center">
+                                {unread_notifications.length > 9
+                                  ? "9+"
+                                  : unread_notifications.length}
+                              </span>
+                            )}
+                          </div>
                         </button>
 
                         <button

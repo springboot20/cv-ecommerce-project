@@ -4,6 +4,8 @@ import { useGetProductByIdQuery } from "../features/products/product.slice";
 import { useState } from "react";
 import { ProductType } from "../types/redux/product";
 import { toast } from "react-toastify";
+import { addItemToCart as addProductToCart } from "../features/cart/cart.reducer";
+import { useAppDispatch } from "./redux/redux.hooks";
 
 export const useProduct = () => {
   const { id } = useParams();
@@ -13,6 +15,7 @@ export const useProduct = () => {
   const [quantityInput, setQuantityInput] = useState<number>(1);
   const [open, setOpen] = useState(false);
   const [refreshTrigered, setRefreshTrigered] = useState(false);
+  const dispatch = useAppDispatch();
 
   const setRatingsValue = (rating: number) => setRatings(rating);
 
@@ -20,7 +23,7 @@ export const useProduct = () => {
 
   const handleAddItemToCart = async (productId: string) => {
     const response = await addItemToCart({ productId, quantity: quantityInput }).unwrap();
-
+    dispatch(addProductToCart(response));
     toast.success(response?.message);
     setRefreshTrigered(!refreshTrigered);
   };
