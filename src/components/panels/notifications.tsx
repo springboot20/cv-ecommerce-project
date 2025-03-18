@@ -209,7 +209,7 @@ export const NotificationPanel: React.FC<{ open: boolean; onClose: () => void }>
                             >
                               New Notifications
                               {unread_notifications.length > 0 && (
-                                <span className="ml-2 bg-red-500 text-white text-xs rounded-full px-2 py-1">
+                                <span className="ml-2 my-1 bg-red-500 text-white text-sm justify-center flex items-center rounded-full h-6 w-6">
                                   {unread_notifications.length}
                                 </span>
                               )}
