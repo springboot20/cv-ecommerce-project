@@ -1,15 +1,15 @@
 /* eslint-disable no-unsafe-optional-chaining */
-import { useEffect } from "react";
-import ChartComponent from "../../../../components/chart/Chart";
+import { useEffect } from 'react';
+import ChartComponent from '../../../../components/chart/Chart';
 import {
   DailyStats,
   MonthlyStats,
   OrderStatsResponse,
   Statistics,
   WeeklyStats,
-} from "../../../../types/redux/order";
-import { Loading } from "../../../../components/loaders/Loading";
-import { useGetOrderStatsQuery } from "../../../../features/statistics/statistics.slice";
+} from '../../../../types/redux/order';
+import { Loading } from '../../../../components/loaders/Loading';
+import { useGetOrderStatsQuery } from '../../../../features/statistics/statistics.slice';
 
 export const PieOverview = () => {
   const { data, isLoading, refetch } = useGetOrderStatsQuery();
@@ -38,17 +38,17 @@ export const PieOverview = () => {
   const monthlyStats = stats?.monthly ?? [];
 
   const completedOrders = [
-    ...dailyStats?.filter((item) => item?._id?.status === "COMPLETED")?.map((item) => item?.count),
-    ...weeklyStats?.filter((item) => item?._id?.status === "COMPLETED")?.map((item) => item?.count),
+    ...dailyStats?.filter((item) => item?._id?.status === 'COMPLETED')?.map((item) => item?.count),
+    ...weeklyStats?.filter((item) => item?._id?.status === 'COMPLETED')?.map((item) => item?.count),
     ...monthlyStats
-      ?.filter((item) => item?._id?.status === "COMPLETED")
+      ?.filter((item) => item?._id?.status === 'COMPLETED')
       ?.map((item) => item?.count),
   ];
 
   const pendingOrders = [
-    ...dailyStats?.filter((item) => item?._id?.status === "PENDING")?.map((item) => item?.count),
-    ...weeklyStats?.filter((item) => item?._id?.status === "PENDING")?.map((item) => item?.count),
-    ...monthlyStats?.filter((item) => item?._id?.status === "PENDING")?.map((item) => item?.count),
+    ...dailyStats?.filter((item) => item?._id?.status === 'PENDING')?.map((item) => item?.count),
+    ...weeklyStats?.filter((item) => item?._id?.status === 'PENDING')?.map((item) => item?.count),
+    ...monthlyStats?.filter((item) => item?._id?.status === 'PENDING')?.map((item) => item?.count),
   ];
 
   const pieSeries = [
@@ -57,29 +57,29 @@ export const PieOverview = () => {
   ];
 
   const pieOptions = {
-    labels: ["Completed Orders", "Pending Orders"],
+    labels: ['Completed Orders', 'Pending Orders'],
     title: {
-      text: "Order Status",
+      text: 'Order Status',
       style: {
-        fontFamily: "Poppins, sans-serif",
+        fontFamily: 'Poppins, sans-serif',
       },
     },
     dataLabels: {
       enabled: true,
       style: {
-        fontFamily: "Poppins, sans-serif",
-        fontSize: "14px",
+        fontFamily: 'Poppins, sans-serif',
+        fontSize: '14px',
       },
     },
-    colors: ["#28A745", "#FF5733"],
+    colors: ['#28A745', '#FF5733'],
     annotations: {
       texts: [
         {
           y: 12,
           x: 20,
           fontSize: 16,
-          fontFamily: "Poppins, sans-serif",
-          fontWeight: "medium",
+          fontFamily: 'Poppins, sans-serif',
+          fontWeight: 'medium',
         },
       ],
     },
@@ -87,36 +87,36 @@ export const PieOverview = () => {
 
   useEffect(() => {
     refetch();
-  }, []);
+  }, [refetch]);
 
   return isLoading ? (
-    <div className="flex items-center justify-center h-full">
+    <div className='flex items-center justify-center h-full'>
       <Loading />
     </div>
   ) : (
-    <div className="w-[380px] h-[380px] lg:w-full lg:h-full">
+    <div className='w-[380px] h-[380px] lg:w-full lg:h-full'>
       <ChartComponent
-        type="donut"
+        type='donut'
         options={{
           ...pieOptions,
           legend: {
             show: true,
-            position: "bottom",
-            horizontalAlign: "center",
-            fontSize: "16px",
-            fontFamily: "Roboto, sans-serif",
+            position: 'bottom',
+            horizontalAlign: 'center',
+            fontSize: '16px',
+            fontFamily: 'Roboto, sans-serif',
           },
           plotOptions: {
             pie: {
               donut: {
-                size: "55%",
+                size: '55%',
               },
             },
           },
         }}
         series={pieSeries}
-        height={"100%"}
-        width={"100%"}
+        height={'100%'}
+        width={'100%'}
       />
     </div>
   );
