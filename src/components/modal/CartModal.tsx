@@ -8,8 +8,9 @@ import { useEffect, useState } from "react";
 import { useGetUserCartQuery, useRemoveItemFromCartMutation } from "../../features/cart/cart.slice";
 import { CartInterface } from "../../types/redux/cart";
 import { Dialog } from "@headlessui/react";
-import { LocalStorage } from "../../util";
+import { clx, LocalStorage } from "../../util";
 import { toast } from "react-toastify";
+import cartImage from "../../assets/cart-image.jpg";
 
 export default function CartModal({
   isOpen,
@@ -39,9 +40,10 @@ export default function CartModal({
       }
     }
   };
+
   useEffect(() => {
     refetch();
-  }, [refreshTrigered, isNewAddedToCart, refetch]);
+  }, [isNewAddedToCart, refreshTrigered, refetch]);
 
   return (
     <Dialog open={isOpen} onClose={setIsOpen} className="relative z-20">
@@ -67,58 +69,88 @@ export default function CartModal({
                     </div>
                   </div>
 
-                  <div className="mt-10">
-                    <div className="py-3">
-                      <div className="flow-root">
-                        <ul role="list" className="-my-6 divide-y divide-gray-200">
-                          {cartItems?.items?.map((item: any) => (
-                            <li key={item?.product?._id} className="flex py-6">
-                              <div className="h-24 w-24 flex-shrink-0 overflow-hidden rounded-md border border-gray-200">
-                                <img
-                                  src={item?.product?.imageSrc?.url}
-                                  alt={""}
-                                  className="h-full w-full object-cover object-center"
-                                />
-                              </div>
+                  <div className={clx("mt-4")}>
+                    {cartItems?.items.length ? (
+                      <>
+                        <div className="py-3">
+                          <div className="flow-root">
+                            <ul role="list" className="-my-6 divide-y divide-gray-200">
+                              {cartItems?.items?.map((item: any, index: number) => (
+                                <li key={index} className="flex py-6">
+                                  <div className="h-24 w-24 flex-shrink-0 overflow-hidden rounded-md border border-gray-200">
+                                    <img
+                                      src={item?.product?.imageSrc?.url}
+                                      alt={""}
+                                      className="h-full w-full object-cover object-center"
+                                    />
+                                  </div>
 
-                              <div className="ml-4 flex flex-1 flex-col">
-                                <div>
-                                  <div className="flex justify-between  font-medium text-gray-900">
-                                    <h3 className="text-gray-700 font-medium capitalize text-lg">
-                                      {item?.product?.name}
-                                    </h3>
-                                    <p className="text-lg font-medium text-gray-700">
-                                      {formatPrice(item?.product?.price)}
-                                    </p>
+                                  <div className="ml-4 flex flex-1 flex-col">
+                                    <div>
+                                      <div className="flex justify-between  font-medium text-gray-900">
+                                        <h3 className="text-gray-700 font-medium capitalize text-lg">
+                                          {item?.product?.name}
+                                        </h3>
+                                        <p className="text-lg font-medium text-gray-700">
+                                          {formatPrice(item?.product?.price)}
+                                        </p>
+                                      </div>
+                                    </div>
+                                    <div className="flex flex-1 items-end justify-between text-sm">
+                                      <p className="text-gray-500">Qty ({item?.quantity})</p>
+                                      <div className="flex space-x-4 items-center">
+                                        <Button
+                                          type="button"
+                                          onClick={() => {
+                                            handleDelete(item.product?._id);
+                                          }}
+                                          className="text-red-600 hover:text-red-500"
+                                        >
+                                          <TrashIcon className="h-6" />
+                                        </Button>
+                                      </div>
+                                    </div>
                                   </div>
-                                </div>
-                                <div className="flex flex-1 items-end justify-between text-sm">
-                                  <p className="text-gray-500">Qty ({item?.quantity})</p>
-                                  <div className="flex space-x-4 items-center">
-                                    <Button
-                                      type="button"
-                                      onClick={() => {
-                                        handleDelete(item.product?._id);
-                                      }}
-                                      className="text-red-600 hover:text-red-500"
-                                    >
-                                      <TrashIcon className="h-6" />
-                                    </Button>
-                                  </div>
-                                </div>
-                              </div>
-                            </li>
-                          ))}
-                        </ul>
+                                </li>
+                              ))}
+                            </ul>
+                          </div>
+                        </div>
+
+                        <Link
+                          to="/cart"
+                          onClick={() => setIsOpen(false)}
+                          className="text-base font-medium text-white py-2.5 px-2 rounded bg-gray-800 w-full block text-center"
+                        >
+                          Continue to checkout
+                        </Link>
+                      </>
+                    ) : (
+                      <div
+                        className={clx(
+                          cartItems?.items.length === 0 &&
+                            "h-[50vh] flex-col flex items-center justify-center"
+                        )}
+                      >
+                        <div className="mb-6">
+                          <img
+                            src={cartImage}
+                            alt=""
+                            className="max-w-full h-auto align-middle object-contain object-center block"
+                          />
+                        </div>
+                        <p className="text-sm font-medium text-gray-800">
+                          Your cart is empty. Keep shopping to find a product!
+                        </p>
+
+                        <Link
+                          to="/collections"
+                          className="bg-gray-800 w-full text-center mt-4 hover:bg-gray-600 rounded-md px-5 py-2 text-lg font-medium text-white shadow-sm focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-gray-600"
+                        >
+                          Keep Shopping
+                        </Link>
                       </div>
-                    </div>
-                    <Link
-                      to="/cart"
-                      onClick={() => setIsOpen(false)}
-                      className="text-base font-medium text-white py-2.5 px-2 rounded bg-gray-800 w-full block text-center"
-                    >
-                      Continue to checkout
-                    </Link>
+                    )}
                   </div>
                 </div>
               </div>

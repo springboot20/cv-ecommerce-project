@@ -1,9 +1,10 @@
-import { configureStore } from '@reduxjs/toolkit';
-import { authReducer } from '../features/auth/auth.reducer';
-import { ApiService, rtkQueryErrorLogger } from './services/api.service';
-import { addressReducer } from '../features/order/address.reducer';
-import { cartReducer } from '../features/cart/cart.reducer';
-import { productReducer } from '../features/products/product.reducer';
+import { configureStore } from "@reduxjs/toolkit";
+import { authReducer } from "../features/auth/auth.reducer";
+import { ApiService, rtkQueryErrorLogger } from "./services/api.service";
+import { addressReducer } from "../features/order/address.reducer";
+import { cartReducer } from "../features/cart/cart.reducer";
+import { productReducer } from "../features/products/product.reducer";
+import { notificationReducer } from "../features/notifications/notification.slice";
 
 const store = configureStore({
   reducer: {
@@ -11,6 +12,7 @@ const store = configureStore({
     address: addressReducer,
     cart: cartReducer,
     product: productReducer,
+    notifications: notificationReducer,
     [ApiService.reducerPath]: ApiService.reducer,
   },
   middleware: (gMD) =>

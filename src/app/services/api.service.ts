@@ -1,26 +1,26 @@
-import { createApi, fetchBaseQuery } from '@reduxjs/toolkit/query/react';
-import { isFulfilled, isRejectedWithValue } from '@reduxjs/toolkit';
-import type { MiddlewareAPI, Middleware } from '@reduxjs/toolkit';
-import { toast } from 'react-toastify';
-import { LocalStorage } from '../../util';
-import { Token } from '../../types/redux/auth';
+import { createApi, fetchBaseQuery } from "@reduxjs/toolkit/query/react";
+import { isRejectedWithValue } from "@reduxjs/toolkit";
+import type { MiddlewareAPI, Middleware } from "@reduxjs/toolkit";
+import { toast } from "react-toastify";
+import { LocalStorage } from "../../util";
+import { Token } from "../../types/redux/auth";
 
 const env = import.meta.env;
 
 export const ApiService = createApi({
   baseQuery: fetchBaseQuery({
-    baseUrl: env.MODE === 'development' ? env.VITE_API_BASE_URL_DEV : env.VITE_API_BASE_URL_PROD,
+    baseUrl: env.MODE === "development" ? env.VITE_API_BASE_URL_DEV : env.VITE_API_BASE_URL_PROD,
     prepareHeaders: (headers) => {
-      const tokens = LocalStorage.get('tokens') as Token;
+      const tokens = LocalStorage.get("tokens") as Token;
 
       if (tokens) {
-        headers.set('authorization', `Bearer ${tokens?.access_token}`);
+        headers.set("authorization", `Bearer ${tokens?.access_token}`);
       }
 
       return headers;
     },
   }),
-  tagTypes: ['Auth', 'Product', 'Cart', 'Category', 'User', 'Address', 'Order'],
+  tagTypes: ["Auth", "Product", "Cart", "Category", "User", "Address", "Order"],
   endpoints: () => ({}),
 });
 
@@ -34,12 +34,7 @@ export const rtkQueryErrorLogger: Middleware = (_: MiddlewareAPI) => (next) => (
     const message = action.payload
       ? (action.payload as { data: any }).data?.message
       : action.error.message;
-    toast.error(message, { className: 'text-sm' });
-    
-  } else if (isFulfilled(action)) {
-    const message = (action.payload as { message: string })?.message;
-    toast.success(message, { className: 'text-sm' });
+    toast.error(message, { className: "text-sm" });
   }
-
   return next(action);
 };

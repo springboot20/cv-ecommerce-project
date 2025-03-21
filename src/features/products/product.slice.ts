@@ -46,6 +46,7 @@ export const ProductSlice = ApiService.injectEndpoints({
       providesTags: (result) =>
         result?.data?.products?.length
           ? [
+              // eslint-disable-next-line no-unsafe-optional-chaining
               ...result?.data.products.map((p: ProductType) => ({
                 type: "Product" as const,
                 id: p._id,
