@@ -103,7 +103,7 @@ const OrderCountsChart = () => {
 
   useEffect(() => {
     refetch();
-  }, []);
+  }, [refetch]);
 
   return isLoading ? (
     <div className="flex items-center justify-center h-full">

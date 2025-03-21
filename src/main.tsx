@@ -12,18 +12,21 @@ import "slick-carousel/slick/slick.css";
 import "slick-carousel/slick/slick-theme.css";
 import "react-loading-skeleton/dist/skeleton.css";
 import { SkeletonTheme } from "react-loading-skeleton";
+import { SocketIoProvider } from "./context/SocketIoContext.tsx";
 
 ReactDOM.createRoot(document.getElementById("root")!).render(
   <React.StrictMode>
     <ThemeProvider>
       <Provider store={store}>
-        <SkeletonTheme>
-          <ToastContainer />
-          <Suspense fallback={<Loader />}>
-            <App />
-          </Suspense>
-        </SkeletonTheme>
+        <SocketIoProvider>
+          <SkeletonTheme>
+            <ToastContainer />
+            <Suspense fallback={<Loader />}>
+              <App />
+            </Suspense>
+          </SkeletonTheme>
+        </SocketIoProvider>
       </Provider>
     </ThemeProvider>
-  </React.StrictMode>,
+  </React.StrictMode>
 );

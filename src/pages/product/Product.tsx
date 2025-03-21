@@ -10,14 +10,15 @@ import { useProduct } from "../../hooks/useProduct";
 import { useNavigate } from "react-router-dom";
 import React, { Fragment, useEffect } from "react";
 import { clx } from "../../util";
+import { toast } from "react-toastify";
 
 const Product = () => {
   const navigate = useNavigate();
+  
   const {
     refetch,
     open,
     setOpen,
-    refreshTrigered,
     isLoading,
     ratings,
     setQuantityInput,
@@ -25,14 +26,14 @@ const Product = () => {
     handleAddItemToCart,
     setRatingsValue,
     product,
+    message,
   } = useProduct();
 
   useEffect(() => {
-
-    if (!refreshTrigered) refetch();
-
     refetch();
-  }, [refreshTrigered, refetch]);
+
+    toast.success(message);
+  }, [refetch, message]);
 
   return (
     <Fragment>
@@ -172,7 +173,7 @@ const Product = () => {
                     <button
                       className={clx(
                         selected && "text-gray-800 bg-[#EBEBEB]",
-                        "focus:outline-none text-lg font-satoshi font-normal p-3 border-r w-full",
+                        "focus:outline-none text-lg font-satoshi font-normal p-3 border-r w-full"
                       )}
                     >
                       Description
@@ -185,7 +186,7 @@ const Product = () => {
                     <button
                       className={clx(
                         selected && "text-gray-800 bg-[#EBEBEB]",
-                        "focus:outline-none text-lg font-satoshi font-normal p-3 w-full",
+                        "focus:outline-none text-lg font-satoshi font-normal p-3 w-full"
                       )}
                     >
                       Reviews ({0})

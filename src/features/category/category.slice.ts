@@ -23,7 +23,8 @@ export const CategorySlice = ApiService.injectEndpoints({
       providesTags: (result) =>
         result?.data?.categorie?.length
           ? [
-              ...result?.data?.categorie.map((c: ProductCategory) => ({
+              // eslint-disable-next-line no-unsafe-optional-chaining
+              ...result?.data?.categories.map((c: ProductCategory) => ({
                 type: "Category",
                 id: c._id,
               })),
