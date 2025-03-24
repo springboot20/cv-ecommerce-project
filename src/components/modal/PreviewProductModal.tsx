@@ -69,9 +69,9 @@ const ProductPreviewModal: React.FC<{ open: boolean; onClose: () => void; produc
                 <img
                   alt={`${product?.name}`}
                   src={product?.imageSrc?.url}
-                  className="aspect-[2/3] w-full rounded-lg bg-gray-100 object-cover sm:col-span-4 lg:col-span-5"
+                  className="aspect-[2/3] w-full rounded-lg bg-gray-100 object-cover col-span-full lg:col-span-5"
                 />
-                <div className="sm:col-span-8 lg:col-span-7">
+                <div className="lg:col-span-7">
                   <h2 className="text-2xl font-bold text-gray-900 sm:pr-12">{product?.name}</h2>
 
                   <section aria-labelledby="information-heading" className="mt-2">
