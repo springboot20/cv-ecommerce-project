@@ -104,7 +104,7 @@ const Product = () => {
                   <div className="grid grid-cols-4 gap-3 mt-4">
                     {products
                       ?.slice(0, 3)
-                      ?.filter((p) => p?._id !== product?._id)
+                      ?.filter((p: ProductType) => p?._id !== product?._id)
                       ?.map((product: ProductType) => (
                         <div
                           role="button"

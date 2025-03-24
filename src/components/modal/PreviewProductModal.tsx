@@ -1,15 +1,20 @@
 import { useState } from "react";
 import { Dialog, RadioGroup } from "@headlessui/react";
 import { MinusIcon, PlusIcon, XMarkIcon } from "@heroicons/react/24/outline";
-import { StarIcon } from "@heroicons/react/20/solid";
 import { classNames, formatPrice } from "../../helpers";
 import { useAddItemToCartMutation } from "../../features/cart/cart.slice";
 import { useGetProductByIdQuery } from "../../features/products/product.slice";
 import { ProductType } from "../../types/redux/product";
 import { toast } from "react-toastify";
-import { Button } from "@material-tailwind/react";
+import { Button, Rating } from "@material-tailwind/react";
 import { useAppDispatch } from "../../hooks/redux/redux.hooks";
 import { addItemToCart as addProductToCart } from "../../features/cart/cart.reducer";
+import { clx } from "../../util";
+
+type Size = {
+  name: string;
+  inStock: boolean;
+};
 
 const ProductPreviewModal: React.FC<{ open: boolean; onClose: () => void; productId: string }> = ({
   open,
@@ -22,9 +27,18 @@ const ProductPreviewModal: React.FC<{ open: boolean; onClose: () => void; produc
   const [message, setMessage] = useState<string>("");
   const [quantityInput, setQuantityInput] = useState<number>(1);
 
-  const dispatch = useAppDispatch();
-
   const product: ProductType = data?.data.product;
+  const dispatch = useAppDispatch();
+  const [selectedColor, setSelectedColor] = useState<string>("");
+  const [selectedSize, setSelectedSize] = useState<Size>(data?.data.product?.sizes[0] ?? {});
+
+  const handleColorChange = (color: string) => {
+    setSelectedColor(color);
+  };
+
+  const handleSizeChange = (size: Size) => {
+    setSelectedSize(size);
+  };
 
   const handleAddItemToCart = async (
     event: React.FormEvent<HTMLFormElement>,
@@ -59,7 +73,7 @@ const ProductPreviewModal: React.FC<{ open: boolean; onClose: () => void; produc
               <button
                 type="button"
                 onClick={onClose}
-                className="absolute right-4 top-4 text-gray-400 hover:text-gray-500 sm:right-6 sm:top-8 md:right-6 md:top-6 lg:right-8 lg:top-8"
+                className="absolute right-2 top-2 text-gray-400 hover:text-gray-500 sm:right-6 sm:top-8 md:right-6 md:top-6 lg:right-8 lg:top-8"
               >
                 <span className="sr-only">Close</span>
                 <XMarkIcon aria-hidden="true" className="size-6" />
@@ -69,9 +83,9 @@ const ProductPreviewModal: React.FC<{ open: boolean; onClose: () => void; produc
                 <img
                   alt={`${product?.name}`}
                   src={product?.imageSrc?.url}
-                  className="aspect-[2/3] w-full rounded-lg bg-gray-100 object-cover col-span-full lg:col-span-5"
+                  className="aspect-[3/3] lg:aspect-[3/5] w-full rounded-lg bg-gray-100 object-cover col-span-full lg:col-span-5"
                 />
-                <div className="lg:col-span-7">
+                <div className="col-span-full lg:col-span-7">
                   <h2 className="text-2xl font-bold text-gray-900 sm:pr-12">{product?.name}</h2>
 
                   <section aria-labelledby="information-heading" className="mt-2">
@@ -86,16 +100,14 @@ const ProductPreviewModal: React.FC<{ open: boolean; onClose: () => void; produc
                       <h4 className="sr-only">Reviews</h4>
                       <div className="flex items-center">
                         <div className="flex items-center">
-                          {[0, 1, 2, 3, 4].map((rating) => (
-                            <StarIcon
-                              key={rating}
-                              aria-hidden="true"
-                              className={classNames(
-                                product?.ratings > rating ? "text-gray-900" : "text-gray-200",
-                                "size-5 shrink-0"
-                              )}
-                            />
-                          ))}
+                          <Rating
+                            value={product?.ratings}
+                            className="h-8 !stroke-[1] disabled"
+                            placeholder={undefined}
+                            aria-disabled={true}
+                            onPointerEnterCapture={undefined}
+                            onPointerLeaveCapture={undefined}
+                          />
                         </div>
                         <p className="sr-only">{product?.ratings} out of 5 stars</p>
                         <a
@@ -120,36 +132,48 @@ const ProductPreviewModal: React.FC<{ open: boolean; onClose: () => void; produc
 
                     <form onSubmit={(event) => handleAddItemToCart(event, product?._id)}>
                       {/* Colors */}
-                      {product?.colors.length !== 0 && (
-                        <fieldset aria-label="Choose a color">
-                          <legend className="text-sm font-medium text-gray-900">Color</legend>
+                      {product?.colors?.length !== 0 && (
+                        <fieldset aria-label="Choose a color" className="mt-3">
+                          <legend className="text-base sm:text-lg font-medium text-gray-900 mt-6">
+                            Color
+                          </legend>
 
-                          <RadioGroup className="mt-4 flex items-center space-x-3">
+                          <div className="mt-3 flex flex-wrap gap-2">
                             {product?.colors?.map((color) => (
-                              <RadioGroup.Option
+                              <button
                                 key={color}
-                                value={color}
-                                aria-label={color}
-                                className={classNames(
-                                  "relative -m-0.5 flex cursor-pointer items-center justify-center rounded-full p-0.5 focus:outline-none data-[checked]:ring-2 data-[focus]:data-[checked]:ring data-[focus]:data-[checked]:ring-offset-1"
+                                type="button"
+                                onClick={() => handleColorChange(color)}
+                                className={clx(
+                                  "relative flex size-10 cursor-pointer items-center justify-center rounded-full focus:outline-none",
+                                  selectedColor === color ? `ring-2 ring-offset-0.5` : "",
+                                  color === "white" && "ring-black",
+                                  color === "black" ? "ring-black" : `ring-${color}-500`
                                 )}
+                                aria-label={color}
+                                aria-pressed={selectedColor === color}
                               >
                                 <span
                                   aria-hidden="true"
                                   className={classNames(
-                                    "size-8 rounded-full border border-black/10"
+                                    "size-8 rounded-full border border-black/10",
+                                    color === "white" || color === "black"
+                                      ? `bg-${color}`
+                                      : `bg-${color}-600`
                                   )}
                                 />
-                              </RadioGroup.Option>
+                              </button>
                             ))}
-                          </RadioGroup>
+                          </div>
                         </fieldset>
                       )}
 
                       {product?.sizes && product?.sizes?.length !== 0 && (
-                        <fieldset aria-label="Choose a size" className="mt-5">
+                        <fieldset aria-label="Choose a size" className="mt-3">
                           <div className="flex items-center justify-between">
-                            <div className="text-sm font-medium text-gray-900">Size</div>
+                            <div className="text-base sm:text-lg font-medium text-gray-900">
+                              Size
+                            </div>
                             <a
                               href="#"
                               className="text-sm font-medium text-gray-600 hover:text-gray-500"
@@ -163,12 +187,16 @@ const ProductPreviewModal: React.FC<{ open: boolean; onClose: () => void; produc
                               <RadioGroup.Option
                                 key={size?.name}
                                 value={size}
-                                disabled={!size?.inStock}
+                                // disabled={!size?.inStock}
+                                onChange={() => handleSizeChange(size)}
                                 className={classNames(
+                                  "group relative flex items-center justify-center rounded-md border py-3 px-4 text-sm font-medium uppercase focus:outline-none",
                                   size?.inStock
-                                    ? "cursor-pointer bg-white text-gray-900 shadow-sm"
+                                    ? "cursor-pointer hover:bg-gray-50"
                                     : "cursor-not-allowed bg-gray-50 text-gray-200",
-                                  "group relative flex items-center justify-center rounded-md border px-4 py-3 text-sm font-medium uppercase hover:bg-gray-50 focus:outline-none data-[focus]:ring-2 data-[focus]:ring-gray-500 sm:flex-1"
+                                  selectedSize === size
+                                    ? "border-indigo-500 bg-indigo-50 text-indigo-700"
+                                    : "border-gray-300 text-gray-900"
                                 )}
                               >
                                 <span>{size?.name}</span>
@@ -201,6 +229,15 @@ const ProductPreviewModal: React.FC<{ open: boolean; onClose: () => void; produc
                               </RadioGroup.Option>
                             ))}
                           </RadioGroup>
+
+                          {selectedSize && (
+                            <p className="mt-2 text-sm text-gray-500">
+                              Selected:{" "}
+                              <span className="font-medium text-gray-900">
+                                {selectedSize?.name}
+                              </span>
+                            </p>
+                          )}
                         </fieldset>
                       )}
 
