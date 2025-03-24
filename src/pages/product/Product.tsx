@@ -11,6 +11,8 @@ import { useNavigate } from "react-router-dom";
 import React, { Fragment, useEffect } from "react";
 import { clx } from "../../util";
 import { toast } from "react-toastify";
+import { useGetProductsByCategoryQuery } from "../../features/products/product.slice";
+import { ProductType } from "../../types/redux/product";
 
 type Size = {
   name: string;
@@ -38,11 +40,17 @@ const Product = () => {
     message,
   } = useProduct();
 
+  const { data, refetch: refetchCategory } = useGetProductsByCategoryQuery({
+    categoryId: product?.category?._id,
+  });
+  const products = data?.data?.products;
+
   useEffect(() => {
     refetch();
+    refetchCategory();
 
     toast.success(message);
-  }, [refetch, message]);
+  }, [refetch, message, refetchCategory]);
 
   const handleColorChange = (color: string) => {
     setSelectedColor(color);
@@ -84,20 +92,50 @@ const Product = () => {
               <ProductSkeletonLoading />
             ) : (
               <>
-                <div className="col-span-full lg:col-span-1 w-full flex items-start gap-2">
-                  <div className="h-[30rem] flex-1 relative rounded-2xl overflow-hidden w-full">
+                <div className="col-span-full lg:col-span-1 w-full gap-2">
+                  <div className="h-[25rem] flex-1 flex-shrink-0 relative rounded-2xl overflow-hidden w-full border">
                     <img
                       src={product?.imageSrc?.url}
                       alt=""
-                      className="object-cover object-center w-full h-full"
+                      className="object-cover appearance-none object-center w-full h-full"
                     />
+                  </div>
+
+                  <div className="grid grid-cols-4 gap-3 mt-4">
+                    {products
+                      ?.slice(0, 3)
+                      ?.filter((p) => p?._id !== product?._id)
+                      ?.map((product: ProductType) => (
+                        <div
+                          role="button"
+                          key={product?._id}
+                          onClick={() => navigate(`/collections/${product?._id}`)}
+                        >
+                          <div className="h-24 bg-white rounded-md p-2 border border-black/25">
+                            <img
+                              src={product?.imageSrc?.url}
+                              alt={product?.name}
+                              className="bg-cover h-full w-full"
+                            />
+                          </div>
+
+                          <div className="space-y-0.5 mt-2">
+                            <h3 className="uppercase text-sm font-semibold text-gray-800">
+                              {product?.name}
+                            </h3>
+                            <p className="text-sm font-semibold text-[#e2342d]">
+                              {formatPrice(product?.price ?? 0.0)}
+                            </p>
+                          </div>
+                        </div>
+                      ))}
                   </div>
                 </div>
                 <div className="col-span-full lg:col-span-1 w-full">
                   <div className="space-y-3">
                     <div className="flex items-center justify-between w-full">
                       <h3 className="uppercase text-xl font-bold text-gray-800">{product?.name}</h3>
-                      <p className="text-lg font-bold text-[#e2342d] uppercase">
+                      <p className="text-lg font-bold text-[#e2342d]">
                         {formatPrice(product?.price ?? 0.0)}
                       </p>
                     </div>
