@@ -52,14 +52,13 @@ const Signin = () => {
           toast.success(successMessage);
           await Promise.resolve(setTimeout(() => navigate("/"), 2000));
           actions.resetForm();
-        })
-       
+        });
     },
   });
 
   return (
-    <motion.div {...motionConfig}>
-      <div className="px-8 flex min-h-screen justify-center items-center bg-[#f2f2f2]">
+    <div className="px-8 flex min-h-screen justify-center items-center bg-[#f2f2f2]">
+      <motion.div {...motionConfig} className="w-full">
         <form
           onSubmit={handleSubmit}
           className="max-w-xl w-full mx-auto border-2 bg-white rounded-lg p-6"
@@ -150,8 +149,8 @@ const Signin = () => {
             </p>
           </div>
         </form>
-      </div>
-    </motion.div>
+      </motion.div>
+    </div>
   );
 };
 export default Signin;
