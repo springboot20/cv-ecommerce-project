@@ -60,7 +60,7 @@ const Products = () => {
     refetch();
     toast.success(data?.message);
 
-    console.log("fetched")
+    console.log("fetched");
   }, [refetch, data?.message]);
 
   return (
@@ -107,13 +107,15 @@ const Products = () => {
               ))
             )}
           </motion.div>
-          <Pagination
-            page={page}
-            totalPages={totalPages}
-            hasNextPage={hasNextPage}
-            handlePreviousPage={handlePreviousPage}
-            handleNextPage={handleNextPage}
-          />
+          {products?.lenght > 10 && (
+            <Pagination
+              page={page}
+              totalPages={totalPages}
+              hasNextPage={hasNextPage}
+              handlePreviousPage={handlePreviousPage}
+              handleNextPage={handleNextPage}
+            />
+          )}
         </div>
       </section>
     </Disclosure>
