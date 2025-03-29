@@ -17,20 +17,24 @@ import { toast } from "react-toastify";
 
 const Products = () => {
   const [searchQuery, setSearchQuery] = useState<string>("");
-  // const [featured, setFeatured] = useState<boolean>(false);
   const [page, setPage] = useState<number>(1);
   const [openPreview, setOpenPreview] = useState<{ [key: string]: boolean }>({});
   // const [categoryQuery, setCategoryQuery] = useState<string>("");
-
+  const [colorsQuery, setColorsQuery] = useState<string[]>([]);
+  // const [sizesQuery, setSizesQuery] = useState<string[]>([]);
   const limit = 10;
 
-  const { data: categoriedData } = useGetAllCategoryQuery();
-  const { data, isLoading, refetch } = useGetAllProductsQuery({
+  const [initialFilterState, setInitialFilterState] = useState({
     limit,
     page,
     featured: false,
-    name: searchQuery,
+    name: "",
+    colors: "",
+    sizes: "",
   });
+
+  const { data: categoriedData } = useGetAllCategoryQuery();
+  const { data, isLoading, refetch } = useGetAllProductsQuery(initialFilterState);
 
   const categories = categoriedData?.data.categories as ProductCategory[];
 
@@ -51,7 +55,16 @@ const Products = () => {
     }
   };
 
-  const handleSearch = (e: React.ChangeEvent<HTMLInputElement>) => setSearchQuery(e.target.value);
+  const handleSearch = (e: React.ChangeEvent<HTMLInputElement>) => {
+    const query = e.target.value;
+    setSearchQuery(query);
+
+    // Update filter state with search query
+    setInitialFilterState((prev) => ({
+      ...prev,
+      name: query,
+    }));
+  };
 
   const handlePreviewOpen = (id: string) => setOpenPreview((prev) => ({ ...prev, [id]: true }));
   const handlePreviewClose = (id: string) => setOpenPreview((prev) => ({ ...prev, [id]: false }));
@@ -60,13 +73,36 @@ const Products = () => {
     refetch();
     toast.success(data?.message);
 
-    console.log("fetched")
+    console.log("fetched");
   }, [refetch, data?.message]);
+
+  // Refetch when filter state changes
+  useEffect(() => {
+    refetch();
+  }, [initialFilterState, refetch]);
+
+  const colors = products?.map((p: ProductType) => p?.colors || []).filter(Boolean);
+
+  // Update page in filter state when page changes
+  useEffect(() => {
+    setInitialFilterState((prev) => ({
+      ...prev,
+      page,
+    }));
+  }, [page]);
+
+  console.log(colorsQuery);
 
   return (
     <Disclosure>
       <section className="relative flex items-stretch justify-between flex-shrink-0">
-        <CategoryPanel handleSearch={handleSearch} categories={categories} />
+        <CategoryPanel
+          colors={colors}
+          setColorsQuery={setColorsQuery}
+          handleSearch={handleSearch}
+          categories={categories}
+          setInitialFilterState={setInitialFilterState}
+        />
         <div
           className={classNames(
             isLoading ? "h-auto" : "h-auto",
@@ -107,13 +143,15 @@ const Products = () => {
               ))
             )}
           </motion.div>
-          <Pagination
-            page={page}
-            totalPages={totalPages}
-            hasNextPage={hasNextPage}
-            handlePreviousPage={handlePreviousPage}
-            handleNextPage={handleNextPage}
-          />
+          {products?.lenght > 10 && (
+            <Pagination
+              page={page}
+              totalPages={totalPages}
+              hasNextPage={hasNextPage}
+              handlePreviousPage={handlePreviousPage}
+              handleNextPage={handleNextPage}
+            />
+          )}
         </div>
       </section>
     </Disclosure>

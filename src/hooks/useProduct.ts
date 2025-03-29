@@ -7,6 +7,11 @@ import { toast } from "react-toastify";
 import { addItemToCart as addProductToCart } from "../features/cart/cart.reducer";
 import { useAppDispatch } from "./redux/redux.hooks";
 
+type Size = {
+  name: string;
+  inStock: boolean;
+};
+
 export const useProduct = () => {
   const { id } = useParams();
   const [addItemToCart] = useAddItemToCartMutation();
@@ -16,6 +21,8 @@ export const useProduct = () => {
   const [open, setOpen] = useState(false);
   const [refreshTrigered, setRefreshTrigered] = useState(false);
   const dispatch = useAppDispatch();
+  const [selectedColor, setSelectedColor] = useState<string>("");
+  const [selectedSize, setSelectedSize] = useState<Size>(data?.data.product?.sizes[0] ?? {});
 
   const setRatingsValue = (rating: number) => setRatings(rating);
 
@@ -41,5 +48,9 @@ export const useProduct = () => {
     handleAddItemToCart,
     quantityInput,
     setRatingsValue,
+    selectedColor,
+    selectedSize,
+    setSelectedColor,
+    setSelectedSize,
   };
 };

@@ -1,9 +1,9 @@
 import { PlusIcon, MinusIcon, ArrowLeftCircleIcon } from "@heroicons/react/24/outline";
 import { Button, Rating } from "@material-tailwind/react";
 import { motion } from "framer-motion";
-import { Disclosure, Tab } from "@headlessui/react";
+import { Disclosure, RadioGroup, Tab } from "@headlessui/react";
 import { gridVariants } from "../../util/framerMotion.config";
-import { formatPrice } from "../../helpers";
+import { classNames, formatPrice } from "../../helpers";
 import { ProductSkeletonLoading } from "../../components/loaders/Skeleton";
 import CartModal from "../../components/modal/CartModal";
 import { useProduct } from "../../hooks/useProduct";
@@ -11,16 +11,27 @@ import { useNavigate } from "react-router-dom";
 import React, { Fragment, useEffect } from "react";
 import { clx } from "../../util";
 import { toast } from "react-toastify";
+import { useGetProductsByCategoryQuery } from "../../features/products/product.slice";
+import { ProductType } from "../../types/redux/product";
+
+type Size = {
+  name: string;
+  inStock: boolean;
+};
 
 const Product = () => {
   const navigate = useNavigate();
-  
+
   const {
     refetch,
     open,
     setOpen,
     isLoading,
     ratings,
+    selectedColor,
+    selectedSize,
+    setSelectedColor,
+    setSelectedSize,
     setQuantityInput,
     quantityInput,
     handleAddItemToCart,
@@ -29,11 +40,27 @@ const Product = () => {
     message,
   } = useProduct();
 
+  const { data, refetch: refetchCategory } = useGetProductsByCategoryQuery({
+    categoryId: product?.category?._id,
+  });
+  const products = data?.data?.products;
+
   useEffect(() => {
     refetch();
+    refetchCategory();
 
     toast.success(message);
-  }, [refetch, message]);
+  }, [refetch, message, refetchCategory]);
+
+  const handleColorChange = (color: string) => {
+    setSelectedColor(color);
+  };
+
+  const handleSizeChange = (size: Size) => {
+    setSelectedSize(size);
+  };
+
+  console.log(selectedSize);
 
   return (
     <Fragment>
@@ -44,7 +71,7 @@ const Product = () => {
         initial="hidden"
         animate="visible"
         variants={gridVariants}
-        className="max-w-2xl lg:max-w-full mx-auto px-4 xl:px-0"
+        className="max-w-2xl lg:max-w-full xl:max-w-5xl mx-auto px-4 xl:px-0"
       >
         <div className="mb-4 w-max">
           <button
@@ -65,20 +92,50 @@ const Product = () => {
               <ProductSkeletonLoading />
             ) : (
               <>
-                <div className="col-span-full lg:col-span-1 w-full flex items-start gap-2">
-                  <div className="h-[35rem] flex-1 relative rounded-2xl overflow-hidden w-full">
+                <div className="col-span-full lg:col-span-1 w-full gap-2">
+                  <div className="h-[25rem] flex-1 flex-shrink-0 relative rounded-2xl overflow-hidden w-full border">
                     <img
                       src={product?.imageSrc?.url}
                       alt=""
-                      className="object-cover object-center w-full h-full"
+                      className="object-cover appearance-none object-center w-full h-full"
                     />
+                  </div>
+
+                  <div className="grid grid-cols-4 gap-3 mt-4">
+                    {products
+                      ?.slice(0, 3)
+                      ?.filter((p: ProductType) => p?._id !== product?._id)
+                      ?.map((product: ProductType) => (
+                        <div
+                          role="button"
+                          key={product?._id}
+                          onClick={() => navigate(`/collections/${product?._id}`)}
+                        >
+                          <div className="h-24 bg-white rounded-md p-2 border border-black/25">
+                            <img
+                              src={product?.imageSrc?.url}
+                              alt={product?.name}
+                              className="bg-cover h-full w-full"
+                            />
+                          </div>
+
+                          <div className="space-y-0.5 mt-2">
+                            <h3 className="uppercase text-sm font-semibold text-gray-800">
+                              {product?.name}
+                            </h3>
+                            <p className="text-sm font-semibold text-[#e2342d]">
+                              {formatPrice(product?.price ?? 0.0)}
+                            </p>
+                          </div>
+                        </div>
+                      ))}
                   </div>
                 </div>
                 <div className="col-span-full lg:col-span-1 w-full">
                   <div className="space-y-3">
                     <div className="flex items-center justify-between w-full">
                       <h3 className="uppercase text-xl font-bold text-gray-800">{product?.name}</h3>
-                      <p className="text-lg font-bold text-[#e2342d] uppercase">
+                      <p className="text-lg font-bold text-[#e2342d]">
                         {formatPrice(product?.price ?? 0.0)}
                       </p>
                     </div>
@@ -91,7 +148,7 @@ const Product = () => {
                         onPointerEnterCapture={undefined}
                         onPointerLeaveCapture={undefined}
                       />
-                      <span className="text-sm font-normal text-gray-600 inline-block">(3.9)</span>
+                      <span className="text-sm font-medium text-gray-600">{ratings} out of 5</span>
                     </div>
                   </div>
 
@@ -99,12 +156,117 @@ const Product = () => {
                     <h1 className="text-base sm:text-lg font-medium">Desscription</h1>
                     <p className="text-sm font-normal text-gray-700">{product?.description}</p>
 
-                    <Disclosure as="ul" className="mt-10 space-y-5">
+                    {product?.colors?.length !== 0 && (
+                      <fieldset aria-label="Choose a color" className="mt-3">
+                        <legend className="text-base sm:text-lg font-medium text-gray-900 mt-6">
+                          Color
+                        </legend>
+
+                        <div className="mt-3 flex flex-wrap gap-2">
+                          {product?.colors?.map((color) => (
+                            <button
+                              key={color}
+                              type="button"
+                              onClick={() => handleColorChange(color)}
+                              className={clx(
+                                "relative flex size-10 cursor-pointer items-center justify-center rounded-full focus:outline-none",
+                                selectedColor === color ? `ring-2 ring-offset-0.5` : "",
+                                color === "white" && "ring-black",
+                                color === "black" ? "ring-black" : `ring-${color}-500`
+                              )}
+                              aria-label={color}
+                              aria-pressed={selectedColor === color}
+                            >
+                              <span
+                                aria-hidden="true"
+                                className={classNames(
+                                  "size-8 rounded-full border border-black/10",
+                                  color === "white" || color === "black"
+                                    ? `bg-${color}`
+                                    : `bg-${color}-600`
+                                )}
+                              />
+                            </button>
+                          ))}
+                        </div>
+                      </fieldset>
+                    )}
+
+                    {product?.sizes && product?.sizes?.length !== 0 && (
+                      <fieldset aria-label="Choose a size" className="mt-3">
+                        <div className="flex items-center justify-between">
+                          <div className="text-base sm:text-lg font-medium text-gray-900">Size</div>
+                          <a
+                            href="#"
+                            className="text-sm font-medium text-gray-600 hover:text-gray-500"
+                          >
+                            Size guide
+                          </a>
+                        </div>
+
+                        <RadioGroup className="mt-4 grid grid-cols-4 gap-4">
+                          {product?.sizes?.map((size) => (
+                            <RadioGroup.Option
+                              key={size?.name}
+                              value={size}
+                              // disabled={!size?.inStock}
+                              onChange={() => handleSizeChange(size)}
+                              className={classNames(
+                                "group relative flex items-center justify-center rounded-md border py-3 px-4 text-sm font-medium uppercase focus:outline-none",
+                                size?.inStock
+                                  ? "cursor-pointer hover:bg-gray-50"
+                                  : "cursor-not-allowed bg-gray-50 text-gray-200",
+                                selectedSize === size
+                                  ? "border-indigo-500 bg-indigo-50 text-indigo-700"
+                                  : "border-gray-300 text-gray-900"
+                              )}
+                            >
+                              <span>{size?.name}</span>
+                              {size?.inStock ? (
+                                <span
+                                  aria-hidden="true"
+                                  className="pointer-events-none absolute -inset-px rounded-md border-2 border-transparent group-data-[focus]:border group-data-[checked]:border-indigo-500"
+                                />
+                              ) : (
+                                <span
+                                  aria-hidden="true"
+                                  className="pointer-events-none absolute -inset-px rounded-md border-2 border-gray-200"
+                                >
+                                  <svg
+                                    stroke="currentColor"
+                                    viewBox="0 0 100 100"
+                                    preserveAspectRatio="none"
+                                    className="absolute inset-0 size-full stroke-2 text-gray-200"
+                                  >
+                                    <line
+                                      x1={0}
+                                      x2={100}
+                                      y1={100}
+                                      y2={0}
+                                      vectorEffect="non-scaling-stroke"
+                                    />
+                                  </svg>
+                                </span>
+                              )}
+                            </RadioGroup.Option>
+                          ))}
+                        </RadioGroup>
+
+                        {selectedSize && (
+                          <p className="mt-2 text-sm text-gray-500">
+                            Selected:{" "}
+                            <span className="font-medium text-gray-900">{selectedSize?.name}</span>
+                          </p>
+                        )}
+                      </fieldset>
+                    )}
+
+                    <Disclosure as="ul" className="mt-10 space-y-3">
                       {/* Disclosure items */}
                     </Disclosure>
                   </div>
 
-                  <div className="flex items-center space-x-5 mt-8">{/* Color buttons */}</div>
+                  <div className="flex items-center space-x-5 mt-3">{/* Color buttons */}</div>
 
                   <div className="col-span-full">
                     <div className="relative flex items-center space-x-3">
@@ -150,7 +312,7 @@ const Product = () => {
 
                     <div className="flex items-center space-x-6 col-span-full">
                       <Button
-                        className="w-full uppercase text-center py-3.5 shadow-none text-base mt-14 bg-gray-800 border hover:bg-gray-700 transition rounded font-semibold"
+                        className="w-full uppercase text-center py-3.5 shadow-none text-base mt-8 bg-gray-800 border hover:bg-gray-700 transition rounded font-semibold"
                         onClick={() => handleAddItemToCart(product?._id)}
                         fullWidth
                         placeholder={undefined}

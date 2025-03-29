@@ -1,14 +1,21 @@
 import { Dialog, RadioGroup } from "@headlessui/react";
-import { StarIcon, XMarkIcon } from "@heroicons/react/24/outline";
+import { XMarkIcon } from "@heroicons/react/24/outline";
 import React from "react";
 import { classNames, formatPrice } from "../../helpers";
 import { setReadNotification } from "../../features/notifications/notification.slice";
 import { useAppDispatch } from "../../hooks/redux/redux.hooks";
+import { Rating } from "@material-tailwind/react";
+import { clx } from "../../util";
 
 type Notification = {
   event_type: string;
   data: any;
   message: string;
+};
+
+type Size = {
+  name: string;
+  inStock: boolean;
 };
 
 export const ProductNotificationModal: React.FC<{
@@ -64,16 +71,14 @@ export const ProductNotificationModal: React.FC<{
                       <h4 className="sr-only">Reviews</h4>
                       <div className="flex items-center">
                         <div className="flex items-center">
-                          {[0, 1, 2, 3, 4].map((rating) => (
-                            <StarIcon
-                              key={rating}
-                              aria-hidden="true"
-                              className={classNames(
-                                data?.ratings > rating ? "text-gray-900" : "text-gray-200",
-                                "size-5 shrink-0"
-                              )}
-                            />
-                          ))}
+                          <Rating
+                            value={data?.ratings}
+                            className="h-8 !stroke-[1] disabled"
+                            placeholder={undefined}
+                            aria-disabled={true}
+                            onPointerEnterCapture={undefined}
+                            onPointerLeaveCapture={undefined}
+                          />
                         </div>
                         <p className="sr-only">{data?.ratings} out of 5 stars</p>
                         <a
@@ -96,33 +101,40 @@ export const ProductNotificationModal: React.FC<{
                       Product options
                     </h3>
 
-                    {data?.colors.length !== 0 && (
-                      <fieldset aria-label="Choose a color">
-                        <legend className="text-sm font-medium text-gray-900">Color</legend>
+                    {data?.colors?.length !== 0 && (
+                      <div aria-label="Choose a color" className="mt-3">
+                        <legend className="text-base sm:text-lg font-medium text-gray-900 mt-6">
+                          Color
+                        </legend>
 
-                        <RadioGroup className="mt-4 flex items-center space-x-3">
-                          {data?.colors?.map((color: string) => (
-                            <RadioGroup.Option
+                        <div className="mt-3 flex flex-wrap gap-1">
+                          {data?.colors?.map((color: any) => (
+                            <button
                               key={color}
-                              value={color}
-                              aria-label={color}
-                              className={classNames(
-                                "relative -m-0.5 flex cursor-pointer items-center justify-center rounded-full p-0.5 focus:outline-none data-[checked]:ring-2 data-[focus]:data-[checked]:ring data-[focus]:data-[checked]:ring-offset-1"
+                              type="button"
+                              className={clx(
+                                "relative flex size-10 cursor-default items-center justify-center rounded-full focus:outline-none"
                               )}
                             >
                               <span
                                 aria-hidden="true"
-                                className={classNames("size-8 rounded-full border border-black/10")}
+                                className={classNames(
+                                  "size-8 rounded-full border border-black/10",
+                                  color === "white" || color === "black"
+                                    ? `bg-${color}`
+                                    : `bg-${color}-600`
+                                )}
                               />
-                            </RadioGroup.Option>
+                            </button>
                           ))}
-                        </RadioGroup>
-                      </fieldset>
+                        </div>
+                      </div>
                     )}
+
                     {data?.sizes && data?.sizes?.length !== 0 && (
-                      <fieldset aria-label="Choose a size" className="mt-5">
+                      <fieldset aria-label="Choose a size" className="mt-3">
                         <div className="flex items-center justify-between">
-                          <div className="text-sm font-medium text-gray-900">Size</div>
+                          <div className="text-base sm:text-lg font-medium text-gray-900">Size</div>
                           <a
                             href="#"
                             className="text-sm font-medium text-gray-600 hover:text-gray-500"
@@ -132,16 +144,16 @@ export const ProductNotificationModal: React.FC<{
                         </div>
 
                         <RadioGroup className="mt-4 grid grid-cols-4 gap-4">
-                          {data?.sizes?.map((size: any) => (
+                          {data?.sizes?.map((size: Size) => (
                             <RadioGroup.Option
                               key={size?.name}
                               value={size}
-                              disabled={!size?.inStock}
+                              // disabled={!size?.inStock}
                               className={classNames(
+                                "group relative flex items-center justify-center rounded-md border py-3 px-4 text-sm font-medium uppercase focus:outline-none",
                                 size?.inStock
-                                  ? "cursor-pointer bg-white text-gray-900 shadow-sm"
-                                  : "cursor-not-allowed bg-gray-50 text-gray-200",
-                                "group relative flex items-center justify-center rounded-md border px-4 py-3 text-sm font-medium uppercase hover:bg-gray-50 focus:outline-none data-[focus]:ring-2 data-[focus]:ring-gray-500 sm:flex-1"
+                                  ? "cursor-pointer hover:bg-gray-50"
+                                  : "cursor-not-allowed bg-gray-50 text-gray-200"
                               )}
                             >
                               <span>{size?.name}</span>
