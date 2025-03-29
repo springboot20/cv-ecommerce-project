@@ -320,7 +320,13 @@ export default function CreateNewProduct() {
                   <button
                     type="button"
                     onClick={() =>
-                      setFieldValue("sizes", [...values.sizes])
+                      setFieldValue("sizes", [
+                        ...values.sizes,
+                        {
+                          name: "",
+                          inStock: false,
+                        },
+                      ])
                     }
                     className="mt-2 px-3 py-1 bg-indigo-500 text-white rounded text-sm"
                   >
