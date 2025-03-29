@@ -21,7 +21,7 @@ const Products = () => {
   const [openPreview, setOpenPreview] = useState<{ [key: string]: boolean }>({});
   // const [categoryQuery, setCategoryQuery] = useState<string>("");
   const [colorsQuery, setColorsQuery] = useState<string[]>([]);
-  // const [sizesQuery, setSizesQuery] = useState<string[]>([]);
+  const [sizesQuery, setSizesQuery] = useState<string[]>([]);
   const limit = 10;
 
   const [initialFilterState, setInitialFilterState] = useState({
@@ -82,6 +82,7 @@ const Products = () => {
   }, [initialFilterState, refetch]);
 
   const colors = products?.map((p: ProductType) => p?.colors || []).filter(Boolean);
+  const sizes = products?.map((p: ProductType) => p?.sizes || []).filter(Boolean);
 
   // Update page in filter state when page changes
   useEffect(() => {
@@ -91,13 +92,13 @@ const Products = () => {
     }));
   }, [page]);
 
-  console.log(colorsQuery);
-
   return (
     <Disclosure>
       <section className="relative flex items-stretch justify-between flex-shrink-0">
         <CategoryPanel
           colors={colors}
+          sizes={sizes}
+          setSizesQuery={setSizesQuery}
           setColorsQuery={setColorsQuery}
           handleSearch={handleSearch}
           categories={categories}
@@ -115,6 +116,51 @@ const Products = () => {
               <Bars3Icon className="h-6" aria-hidden={true} />
             </Disclosure.Button>
           </div>
+
+          {/* Active filters display */}
+          {(colorsQuery.length > 0 || sizesQuery.length > 0 || searchQuery) && (
+            <div className="mt-4 flex flex-wrap gap-2 items-center">
+              <span className="text-sm font-medium text-gray-700">Active filters:</span>
+
+              {searchQuery && (
+                <span className="inline-flex items-center rounded-full bg-indigo-100 px-3 py-0.5 text-sm font-medium text-indigo-800">
+                  Search: {searchQuery}
+                </span>
+              )}
+
+              {colorsQuery.length > 0 && (
+                <span className="inline-flex items-center rounded-full bg-blue-100 px-3 py-0.5 text-sm font-medium text-blue-800">
+                  Colors: {colorsQuery.join(", ")}
+                </span>
+              )}
+
+              {sizesQuery.length > 0 && (
+                <span className="inline-flex items-center rounded-full bg-green-100 px-3 py-0.5 text-sm font-medium text-green-800">
+                  Sizes: {sizesQuery.join(", ")}
+                </span>
+              )}
+
+              <button
+                onClick={() => {
+                  setInitialFilterState({
+                    limit: 10,
+                    page: 1,
+                    featured: false,
+                    name: "",
+                    colors: "",
+                    sizes: "",
+                    // category: "",
+                  });
+                  setColorsQuery([]);
+                  setSizesQuery([]);
+                  setSearchQuery("");
+                }}
+                className="text-sm text-red-600 hover:text-red-800"
+              >
+                Clear all
+              </button>
+            </div>
+          )}
           <motion.div
             layout
             initial="hidden"

@@ -15,15 +15,36 @@ type Filter = {
   sizes: string;
 };
 
+type Size = {
+  name: string;
+  inStock: boolean;
+};
+
 export const CategoryPanel: React.FC<{
   handleSearch: (e: React.ChangeEvent<HTMLInputElement>) => void;
   categories: ProductCategory[];
   setColorsQuery: React.Dispatch<React.SetStateAction<string[]>>;
+  setSizesQuery: React.Dispatch<React.SetStateAction<string[]>>;
   setInitialFilterState: React.Dispatch<React.SetStateAction<Filter>>;
   colors: any[];
-}> = ({ handleSearch, categories, colors, setColorsQuery, setInitialFilterState }) => {
+  sizes: any[];
+}> = ({
+  handleSearch,
+  categories,
+  colors,
+  sizes,
+  setSizesQuery,
+  setColorsQuery,
+  setInitialFilterState,
+}) => {
   const [selectedColors, setSelectedColors] = useState<string[]>([]);
+  const [selectedSizes, setSelectedSizes] = useState<string[]>([]);
+  const [selectedCategory, setSelectedCategory] = useState<string>("");
+
   const uniqueColors = [...new Set(colors.flat())].filter(Boolean);
+  const uniqueSizes = [...new Set(sizes.flat().map((size: Size) => size.name))].filter(Boolean);
+
+  console.log(uniqueSizes);
 
   const handleColorsQuery = (color: string) => {
     // Toggle color selection
@@ -44,9 +65,45 @@ export const CategoryPanel: React.FC<{
       return newSelected;
     });
   };
+
+  const handleSizesQuery = (size: string) => {
+    // Toggle color selection
+    setSelectedSizes((prevSelected) => {
+      const newSelected = prevSelected.includes(size)
+        ? prevSelected.filter((_size) => _size !== size)
+        : [...prevSelected, size];
+
+      // Update the colors query array in parent component
+      setSizesQuery(newSelected);
+
+      // Update the filter state with comma-separated color string
+      setInitialFilterState((prevState) => ({
+        ...prevState,
+        sizes: newSelected.join(","),
+      }));
+
+      return newSelected;
+    });
+
+    console.log(size);
+  };
+
+  const handleCategorySelect = (categoryId: string) => {
+    const newCategory = selectedCategory === categoryId ? "" : categoryId;
+    setSelectedCategory(newCategory);
+
+    // Update filter state with selected category
+    setInitialFilterState((prevState) => ({
+      ...prevState,
+      category: newCategory,
+    }));
+  };
+
   const clearFilters = () => {
     setSelectedColors([]);
     setColorsQuery([]);
+    setSizesQuery([]);
+    setSelectedCategory("");
     setInitialFilterState({
       limit: 10,
       page: 1,
@@ -84,6 +141,7 @@ export const CategoryPanel: React.FC<{
             <h1 className="sm:text-lg lg:text-xl font-bold">Category</h1>
             <List
               className="p-0 mt-3"
+              onClick={() => handleCategorySelect("")}
               placeholder={undefined}
               onPointerEnterCapture={undefined}
               onPointerLeaveCapture={undefined}
@@ -99,7 +157,13 @@ export const CategoryPanel: React.FC<{
               {categories?.map((c) => (
                 <ListItem
                   key={c._id}
-                  className="group rounded-none py-1.5 px-3 text-sm font-medium text-blue-gray-700 hover:bg-gray-100 hover:text-gray-700 focus:bg-gray-200 focus:text-gary-700"
+                  className={clx(
+                    "group rounded-none py-1.5 px-3 text-sm font-medium text-blue-gray-700 hover:bg-gray-100 hover:text-gray-700 focus:bg-gray-200 focus:text-gary-700",
+                    selectedCategory === c._id
+                      ? "bg-indigo-50 text-indigo-700"
+                      : "text-blue-gray-700"
+                  )}
+                  onClick={() => handleCategorySelect(c._id)}
                   placeholder={undefined}
                   onPointerEnterCapture={undefined}
                   onPointerLeaveCapture={undefined}
@@ -109,6 +173,7 @@ export const CategoryPanel: React.FC<{
               ))}
             </List>
           </div>
+
           <div className="relative mt-4 pb-5 border-b">
             <h1 className="sm:text-lg lg:text-xl font-bold">Colors</h1>
             <List
@@ -117,43 +182,72 @@ export const CategoryPanel: React.FC<{
               onPointerEnterCapture={undefined}
               onPointerLeaveCapture={undefined}
             >
-              <ListItem
-                className="group rounded-none py-1.5 px-3 text-sm font-medium text-blue-gray-700 hover:bg-gray-100 hover:text-gray-700 focus:bg-gray-200 focus:text-gary-700"
-                placeholder={undefined}
-                onPointerEnterCapture={undefined}
-                onPointerLeaveCapture={undefined}
-              >
-                All
-              </ListItem>
-
               <div className="mt-3 flex flex-wrap gap-2">
-                {uniqueColors?.map((color: string) => (
-                  <button
-                    key={color}
-                    type="button"
-                    onClick={() => handleColorsQuery(color)}
-                    className={clx(
-                      "relative flex size-10 cursor-pointer items-center justify-center rounded-full focus:outline-none",
-                      selectedColors.includes(color) ? `ring-2 ring-offset-0.5` : "",
-                      color === "white" && "ring-black",
-                      color === "black" ? "ring-black" : `ring-${color}-500`
-                    )}
-                    aria-label={color}
-                    aria-pressed={selectedColors.includes(color)}
-                  >
-                    <span
-                      aria-hidden="true"
+                {uniqueColors?.map((color: string) => {
+                  const isHex = color.startsWith("#");
+                  const ringClass = isHex ? "" : `ring-${color}-500`;
+                  const inlineStyle = isHex ? { boxShadow: `0 0 0 2px ${color}` } : {};
+
+                  return (
+                    <div
+                      key={color}
+                      onClick={() => handleColorsQuery(color)}
                       className={clx(
-                        "size-8 rounded-full border border-black/10",
-                        color === "white" || color === "black" ? `bg-${color}` : `bg-${color}-600`
+                        "relative flex size-10 cursor-pointer items-center justify-center rounded-full focus:outline-none",
+                        selectedColors.includes(color) ? "ring-2 ring-offset-0.5" : "",
+                        color === "white" && "ring-black",
+                        color === "black" ? "ring-black" : ringClass
                       )}
-                    />
-                  </button>
-                ))}
+                      style={inlineStyle}
+                      aria-label={color}
+                      aria-pressed={selectedColors.includes(color)}
+                    >
+                      {/* Optional: Add a color preview */}
+                      <div className="size-8 rounded-full border border-black/10" arial-hidden={true} style={{ backgroundColor: color }}></div>
+                    </div>
+                  );
+                })}
               </div>
               {selectedColors.length > 0 && (
                 <div className="mt-2 flex flex-wrap gap-2">
                   <p className="text-sm text-gray-700">Selected: {selectedColors.join(", ")}</p>
+                </div>
+              )}
+            </List>
+          </div>
+
+          <div className="relative mt-4 pb-5 border-b">
+            <h1 className="sm:text-lg lg:text-xl font-bold">Size</h1>
+            <List
+              className="p-0 mt-3"
+              placeholder={undefined}
+              onPointerEnterCapture={undefined}
+              onPointerLeaveCapture={undefined}
+            >
+              <div className="mt-4 grid grid-cols-4 gap-4">
+                {uniqueSizes?.map((size) => {
+                  const isSelected = selectedSizes.includes(size);
+                  return (
+                    <button
+                      type="button"
+                      key={size}
+                      onClick={() => handleSizesQuery(size)}
+                      className={clx(
+                        "flex items-center justify-center rounded-md border py-2 px-3 text-sm font-medium uppercase focus:outline-none",
+                        "cursor-pointer hover:bg-gray-50",
+                        isSelected
+                          ? "border-indigo-500 bg-indigo-50 text-indigo-700"
+                          : "border-gray-300 text-gray-900"
+                      )}
+                    >
+                      {size}
+                    </button>
+                  );
+                })}
+              </div>
+              {selectedSizes.length > 0 && (
+                <div className="mt-2">
+                  <p className="text-sm text-gray-700">Selected: {selectedSizes.join(", ")}</p>
                 </div>
               )}
             </List>
