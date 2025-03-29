@@ -34,12 +34,7 @@ const initialValues: InitialValuesInterface = {
   featured: false,
   name: "",
   colors: [],
-  sizes: [
-    {
-      inStock: false,
-      name: "",
-    },
-  ],
+  sizes: [],
 };
 
 export default function CreateNewProduct() {
@@ -290,38 +285,42 @@ export default function CreateNewProduct() {
                   Product Sizes
                 </label>
                 <div className="mt-2">
-                  {values.sizes.map((_, index) => (
-                    <div key={index} className="flex gap-2 items-center mb-2">
-                      <Field
-                        name={`sizes[${index}].name`}
-                        type="text"
-                        placeholder="Size name"
-                        className="block w-full px-3 rounded border border-gray-300 py-2 text-gray-700 placeholder:text-gray-400 focus:ring-2 focus:ring-indigo-500 text-sm"
-                      />
-                      <Field
-                        name={`sizes[${index}].inStock`}
-                        type="checkbox"
-                        className="h-5 w-5 rounded-md"
-                      />
-                      <button
-                        type="button"
-                        className="text-red-500 hover:text-red-700"
-                        onClick={() =>
-                          setFieldValue(
-                            "sizes",
-                            values.sizes.filter((_, i) => i !== index)
-                          )
-                        }
-                      >
-                        <XCircleIcon className="h-6" />
-                        <span className="sr-only"> add size </span>
-                      </button>
-                    </div>
-                  ))}
+                  {values.sizes.length > 0 ? (
+                    values.sizes.map((_, index) => (
+                      <div key={index} className="flex gap-2 items-center mb-2">
+                        <Field
+                          name={`sizes[${index}].name`}
+                          type="text"
+                          placeholder="Size name"
+                          className="block w-full px-3 rounded border border-gray-300 py-2 text-gray-700 placeholder:text-gray-400 focus:ring-2 focus:ring-indigo-500 text-sm"
+                        />
+                        <Field
+                          name={`sizes[${index}].inStock`}
+                          type="checkbox"
+                          className="h-5 w-5 rounded-md"
+                        />
+                        <button
+                          type="button"
+                          className="text-red-500 hover:text-red-700"
+                          onClick={() =>
+                            setFieldValue(
+                              "sizes",
+                              values.sizes.filter((_, i) => i !== index)
+                            )
+                          }
+                        >
+                          <XCircleIcon className="h-6" />
+                          <span className="sr-only"> add size </span>
+                        </button>
+                      </div>
+                    ))
+                  ) : (
+                    <p className="text-base text-gray-500 text-center"> no size added</p>
+                  )}
                   <button
                     type="button"
                     onClick={() =>
-                      setFieldValue("sizes", [...values.sizes, { name: "", inStock: false }])
+                      setFieldValue("sizes", [...values.sizes])
                     }
                     className="mt-2 px-3 py-1 bg-indigo-500 text-white rounded text-sm"
                   >

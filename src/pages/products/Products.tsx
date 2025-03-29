@@ -17,20 +17,24 @@ import { toast } from "react-toastify";
 
 const Products = () => {
   const [searchQuery, setSearchQuery] = useState<string>("");
-  // const [featured, setFeatured] = useState<boolean>(false);
   const [page, setPage] = useState<number>(1);
   const [openPreview, setOpenPreview] = useState<{ [key: string]: boolean }>({});
-  // const [categoryQuery, setCategoryQuery] = useState<string>("");
-
+  const [categoryQuery, setCategoryQuery] = useState<string>("");
+  const [colorsQuery, setColorsQuery] = useState<string[]>([]);
+  const [sizesQuery, setSizesQuery] = useState<string[]>([]);
   const limit = 10;
 
-  const { data: categoriedData } = useGetAllCategoryQuery();
-  const { data, isLoading, refetch } = useGetAllProductsQuery({
+  const [initialFilterState, setInitialFilterState] = useState({
     limit,
     page,
     featured: false,
     name: searchQuery,
+    colors:"",
+    sizes: "",
   });
+
+  const { data: categoriedData } = useGetAllCategoryQuery();
+  const { data, isLoading, refetch } = useGetAllProductsQuery(initialFilterState);
 
   const categories = categoriedData?.data.categories as ProductCategory[];
 
@@ -63,10 +67,22 @@ const Products = () => {
     console.log("fetched");
   }, [refetch, data?.message]);
 
+  const colors = products?.map((p: ProductType) => {
+    return p?.colors;
+  });
+
+  console.log(colorsQuery);
+
   return (
     <Disclosure>
       <section className="relative flex items-stretch justify-between flex-shrink-0">
-        <CategoryPanel handleSearch={handleSearch} categories={categories} />
+        <CategoryPanel
+          colors={colors}
+          setColorsQuery={setColorsQuery}
+          handleSearch={handleSearch}
+          categories={categories}
+          setInitialFilterState={setInitialFilterState}
+        />
         <div
           className={classNames(
             isLoading ? "h-auto" : "h-auto",

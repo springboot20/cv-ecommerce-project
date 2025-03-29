@@ -31,7 +31,7 @@ export const ProductSlice = ApiService.injectEndpoints({
             formData.append(key, data[key]);
           }
         });
-        
+
         return {
           url: "/products",
           method: "POST",
@@ -41,8 +41,8 @@ export const ProductSlice = ApiService.injectEndpoints({
     }),
 
     getAllProducts: builder.query<Response, ProductQuery>({
-      query: ({ limit = 10, page = 1, featured, name }) =>
-        `products?limit=${limit}&page=${page}&featured=${featured}&name=${name}`,
+      query: ({ limit = 10, page = 1, featured, name, sizes = "", colors = "" }) =>
+        `products?limit=${limit}&page=${page}&featured=${featured}&name=${name}&colors=${colors}&sizes=${sizes}`,
       providesTags: (result) =>
         result?.data?.products?.length
           ? [
