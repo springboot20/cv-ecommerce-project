@@ -4,6 +4,7 @@ import { List, ListItem } from "@material-tailwind/react";
 import React from "react";
 import { ProductCategory } from "../../types/redux/product";
 import { clx } from "../../util";
+import { useState } from "react";
 
 type Filter = {
   limit: number;
@@ -21,23 +22,40 @@ export const CategoryPanel: React.FC<{
   setInitialFilterState: React.Dispatch<React.SetStateAction<Filter>>;
   colors: any[];
 }> = ({ handleSearch, categories, colors, setColorsQuery, setInitialFilterState }) => {
-  console.log(colors);
+  const [selectedColors, setSelectedColors] = useState<string[]>([]);
+  const uniqueColors = [...new Set(colors.flat())].filter(Boolean);
 
   const handleColorsQuery = (color: string) => {
-    setColorsQuery((prevColors) => {
-      if (!prevColors.includes(color)) {
-        return [color, ...prevColors];
-      }
+    // Toggle color selection
+    setSelectedColors((prevSelected) => {
+      const newSelected = prevSelected.includes(color)
+        ? prevSelected.filter((c) => c !== color)
+        : [...prevSelected, color];
 
-      return prevColors;
-    });
+      // Update the colors query array in parent component
+      setColorsQuery(newSelected);
 
-    setInitialFilterState((prevState) => {
-      return { ...prevState, colors: [...new Set([...colors.flat()])].join(",") };
+      // Update the filter state with comma-separated color string
+      setInitialFilterState((prevState) => ({
+        ...prevState,
+        colors: newSelected.join(","),
+      }));
+
+      return newSelected;
     });
   };
-
-  console.log([...new Set([...colors.flat()])].join(","));
+  const clearFilters = () => {
+    setSelectedColors([]);
+    setColorsQuery([]);
+    setInitialFilterState({
+      limit: 10,
+      page: 1,
+      featured: false,
+      name: "",
+      colors: "",
+      sizes: "",
+    });
+  };
 
   return (
     <>
@@ -109,19 +127,19 @@ export const CategoryPanel: React.FC<{
               </ListItem>
 
               <div className="mt-3 flex flex-wrap gap-2">
-                {[...new Set([...colors.flat()])]?.map((color: string) => (
+                {uniqueColors?.map((color: string) => (
                   <button
                     key={color}
                     type="button"
                     onClick={() => handleColorsQuery(color)}
                     className={clx(
                       "relative flex size-10 cursor-pointer items-center justify-center rounded-full focus:outline-none",
-                      // selectedColor === color ? `ring-2 ring-offset-0.5` : "",
+                      selectedColors.includes(color) ? `ring-2 ring-offset-0.5` : "",
                       color === "white" && "ring-black",
                       color === "black" ? "ring-black" : `ring-${color}-500`
                     )}
                     aria-label={color}
-                    // aria-pressed={selectedColor === color}
+                    aria-pressed={selectedColors.includes(color)}
                   >
                     <span
                       aria-hidden="true"
@@ -133,27 +151,16 @@ export const CategoryPanel: React.FC<{
                   </button>
                 ))}
               </div>
-              {colors?.length !== 0 && (
-                <fieldset aria-label="Choose a color" className="mt-3">
-                  <legend className="text-base sm:text-lg font-medium text-gray-900 mt-6">
-                    Color
-                  </legend>
-                </fieldset>
+              {selectedColors.length > 0 && (
+                <div className="mt-2 flex flex-wrap gap-2">
+                  <p className="text-sm text-gray-700">Selected: {selectedColors.join(", ")}</p>
+                </div>
               )}
             </List>
           </div>
 
           <button
-            onClick={() => {
-              setInitialFilterState({
-                limit: 10,
-                page: 1,
-                featured: false,
-                name: "",
-                colors: "",
-                sizes: "",
-              });
-            }}
+            onClick={clearFilters}
             className="rounded text-center bg-indigo-600 text-white font-medium text-sm w-full px-2 py-2.5 capitalize"
             type="button"
           >

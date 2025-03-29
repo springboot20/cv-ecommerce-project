@@ -19,17 +19,17 @@ const Products = () => {
   const [searchQuery, setSearchQuery] = useState<string>("");
   const [page, setPage] = useState<number>(1);
   const [openPreview, setOpenPreview] = useState<{ [key: string]: boolean }>({});
-  const [categoryQuery, setCategoryQuery] = useState<string>("");
+  // const [categoryQuery, setCategoryQuery] = useState<string>("");
   const [colorsQuery, setColorsQuery] = useState<string[]>([]);
-  const [sizesQuery, setSizesQuery] = useState<string[]>([]);
+  // const [sizesQuery, setSizesQuery] = useState<string[]>([]);
   const limit = 10;
 
   const [initialFilterState, setInitialFilterState] = useState({
     limit,
     page,
     featured: false,
-    name: searchQuery,
-    colors:"",
+    name: "",
+    colors: "",
     sizes: "",
   });
 
@@ -55,7 +55,16 @@ const Products = () => {
     }
   };
 
-  const handleSearch = (e: React.ChangeEvent<HTMLInputElement>) => setSearchQuery(e.target.value);
+  const handleSearch = (e: React.ChangeEvent<HTMLInputElement>) => {
+    const query = e.target.value;
+    setSearchQuery(query);
+
+    // Update filter state with search query
+    setInitialFilterState((prev) => ({
+      ...prev,
+      name: query,
+    }));
+  };
 
   const handlePreviewOpen = (id: string) => setOpenPreview((prev) => ({ ...prev, [id]: true }));
   const handlePreviewClose = (id: string) => setOpenPreview((prev) => ({ ...prev, [id]: false }));
@@ -67,9 +76,20 @@ const Products = () => {
     console.log("fetched");
   }, [refetch, data?.message]);
 
-  const colors = products?.map((p: ProductType) => {
-    return p?.colors;
-  });
+  // Refetch when filter state changes
+  useEffect(() => {
+    refetch();
+  }, [initialFilterState, refetch]);
+
+  const colors = products?.map((p: ProductType) => p?.colors || []).filter(Boolean);
+
+  // Update page in filter state when page changes
+  useEffect(() => {
+    setInitialFilterState((prev) => ({
+      ...prev,
+      page,
+    }));
+  }, [page]);
 
   console.log(colorsQuery);
 
