@@ -67,16 +67,16 @@ export const CategoryPanel: React.FC<{
   };
 
   const handleSizesQuery = (size: string) => {
-    // Toggle color selection
+    // Toggle size selection
     setSelectedSizes((prevSelected) => {
       const newSelected = prevSelected.includes(size)
         ? prevSelected.filter((_size) => _size !== size)
         : [...prevSelected, size];
 
-      // Update the colors query array in parent component
+      // Update the sizes query array in parent component
       setSizesQuery(newSelected);
 
-      // Update the filter state with comma-separated color string
+      // Update the filter state with comma-separated size string
       setInitialFilterState((prevState) => ({
         ...prevState,
         sizes: newSelected.join(","),
