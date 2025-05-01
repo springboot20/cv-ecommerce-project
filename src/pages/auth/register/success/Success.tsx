@@ -4,11 +4,12 @@ import { useAppSelector } from "../../../../hooks/redux/redux.hooks";
 import { RootState } from "../../../../app/store";
 import { useForm } from "../../../../hooks/useForm";
 
-
-export const Success = () => {
+export const Success: React.FC<{
+  setPage: React.Dispatch<React.SetStateAction<string>>;
+}> = ({ setPage }) => {
   const navigate = useNavigate();
   const { user } = useAppSelector((state: RootState) => state.auth);
-  const {setCurrentStep} = useForm()
+  const { setCurrentStep } = useForm();
 
   return (
     <div className="flex justify-center items-center px-2 sm:px-8 lg:px-0 flex-1 w-full">
@@ -32,9 +33,9 @@ export const Success = () => {
                 } else {
                   navigate("/login");
                 }
-
               }, 1500);
-              setCurrentStep(0)
+              setCurrentStep(0);
+              setPage("details")
             }}
             className="rounded-3xl w-full bg-light-blue-600 px-3 py-2 text-lg font-medium text-white shadow-sm hover:bg-light-blue-500 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-light-blue-600 disabled:opacity-70"
           >

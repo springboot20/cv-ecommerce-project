@@ -57,7 +57,7 @@ const Signin = () => {
   });
 
   return (
-    <div className="px-8 flex min-h-screen justify-center items-center bg-[#f2f2f2]">
+    <div className="px-2 flex min-h-screen justify-center items-center bg-[#f2f2f2]">
       <motion.div {...motionConfig} className="w-full">
         <form
           onSubmit={handleSubmit}
@@ -137,11 +137,11 @@ const Signin = () => {
               {isLoading ? <span>Signing in...</span> : <span>Sign in</span>}
             </Button>
           </div>
-          <div className="flex items-center justify-between mt-4">
-            <Link to="/forgot" className="text-blue-500 hover:underline text-lg font-normal">
+          <div className="flex flex-col sm:flex-row items-center sm:justify-between mt-4">
+            <Link to="/forgot" className="text-blue-500 hover:underline text-sm font-normal">
               forgot password?
             </Link>
-            <p className="text-lg font-normal text-gray-600">
+            <p className="text-sm font-normal text-gray-600">
               Don't have an account?{" "}
               <Link to="/register" className="text-blue-500">
                 Sign up

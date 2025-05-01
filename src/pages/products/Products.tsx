@@ -14,10 +14,12 @@ import { useGetAllCategoryQuery } from "../../features/category/category.slice";
 import ProductPreviewModal from "../../components/modal/PreviewProductModal";
 import { Product } from "./Product";
 import { toast } from "react-toastify";
+import { useNavigate } from "react-router";
 
 const Products = () => {
   const [searchQuery, setSearchQuery] = useState<string>("");
   const [page, setPage] = useState<number>(1);
+  const navigate = useNavigate();
   const [openPreview, setOpenPreview] = useState<{ [key: string]: boolean }>({});
   // const [categoryQuery, setCategoryQuery] = useState<string>("");
   const [colorsQuery, setColorsQuery] = useState<string[]>([]);
@@ -75,6 +77,22 @@ const Products = () => {
 
     console.log("fetched");
   }, [refetch, data?.message]);
+
+  useEffect(() => {
+    if (searchQuery.trim() !== " ") {
+      navigate(`/collections?search=${searchQuery}`);
+    }
+
+    if (colorsQuery?.length !== 0) {
+      navigate(`/collections?search=${searchQuery}&colors=${colorsQuery}`);
+    }
+
+    if (sizesQuery?.length !== 0) {
+      navigate(`/collections?search=${searchQuery}&colors=${colorsQuery}&sizes=${sizesQuery}`);
+    }
+
+    return () => navigate(`/collections`);
+  }, [searchQuery, colorsQuery, sizesQuery, setSearchQuery, setColorsQuery, setSizesQuery]);
 
   // Refetch when filter state changes
   useEffect(() => {

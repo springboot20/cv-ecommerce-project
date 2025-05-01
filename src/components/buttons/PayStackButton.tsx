@@ -12,8 +12,6 @@ const PayButton: React.FC = () => {
       .then((response) => {
         const { url } = response.data;
 
-        console.log(response);
-
         // Open Paystack payment page in a new tab
         const paymentWindow = window.open(url);
 

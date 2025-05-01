@@ -1,7 +1,7 @@
 import { EnvelopeIcon } from "@heroicons/react/24/outline";
 import { useAppSelector } from "../../../../hooks/redux/redux.hooks";
 import { RootState } from "../../../../app/store";
-import { FormEvent,  useState } from "react";
+import { FormEvent, useState } from "react";
 import { useOtp } from "../../../../hooks/useOtp";
 import { Button } from "@material-tailwind/react";
 import { useForm } from "../../../../hooks/useForm";
@@ -11,7 +11,9 @@ import {
 } from "../../../../features/auth/auth.slice";
 import { useTokenExpiry } from "../../../../hooks/useToken";
 
-export const Email = () => {
+export const Email: React.FC<{
+  setPage: React.Dispatch<React.SetStateAction<string>>;
+}> = ({ setPage }) => {
   const { user } = useAppSelector((state: RootState) => state.auth);
   const timestamp = user?.emailVerificationTokenExpiry;
   const expiresIn = useTokenExpiry(+timestamp!);
@@ -32,8 +34,9 @@ export const Email = () => {
       }).unwrap();
 
       if (response.statusCode.toString().startsWith("2")) {
-        setIsEmailVerified(true); 
-        handleNextStep()
+        setIsEmailVerified(true);
+        handleNextStep();
+        setPage("password");
       }
       console.log(values);
     } catch (error: any) {
@@ -137,7 +140,10 @@ export const Email = () => {
 
               <button
                 type="button"
-                onClick={handleNextStep}
+                onClick={() => {
+                  handleNextStep();
+                  setPage("password");
+                }}
                 className="text-lg text-blue-500 underline mt-2"
               >
                 <span className="text-sm font-medium">skip</span>
