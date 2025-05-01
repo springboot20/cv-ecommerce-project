@@ -79,20 +79,29 @@ const Products = () => {
   }, [refetch, data?.message]);
 
   useEffect(() => {
-    if (searchQuery.trim() !== "") {
-      navigate(`/collections?search=${searchQuery}`);
-    }
+     // Build query parameters object for cleaner URL construction
+  const queryParams = new URLSearchParams();
+  
+  if (searchQuery.trim()) {
+    queryParams.set('search', searchQuery.trim());
+  }
+  
+  if (colorsQuery?.length > 0) {
+    queryParams.set('colors', colorsQuery.join(','));
+  }
+  
+  if (sizesQuery?.length > 0) {
+    queryParams.set('sizes', sizesQuery.join(','));
+  }
+  
+  // Create the URL string with query parameters
+  const queryString = queryParams.toString();
+  const url = queryString ? `/collections?${queryString}` : '/collections';
+  
+  // Only navigate if URL needs to change
+  navigate(url, { replace: true });
 
-    if (colorsQuery?.length !== 0) {
-      navigate(`/collections?search=${searchQuery}&colors=${colorsQuery}`);
-    }
-
-    if (sizesQuery?.length !== 0) {
-      navigate(`/collections?search=${searchQuery}&colors=${colorsQuery}&sizes=${sizesQuery}`);
-    }
-
-    return () => navigate(`/collections`);
-  }, [searchQuery, colorsQuery, sizesQuery, setSearchQuery, setColorsQuery, setSizesQuery]);
+  }, [searchQuery, colorsQuery, sizesQuery, navigate]);
 
   // Refetch when filter state changes
   useEffect(() => {
