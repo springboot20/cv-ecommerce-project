@@ -79,28 +79,27 @@ const Products = () => {
   }, [refetch, data?.message]);
 
   useEffect(() => {
-     // Build query parameters object for cleaner URL construction
-  const queryParams = new URLSearchParams();
-  
-  if (searchQuery.trim()) {
-    queryParams.set('search', searchQuery.trim());
-  }
-  
-  if (colorsQuery?.length > 0) {
-    queryParams.set('colors', colorsQuery.join(','));
-  }
-  
-  if (sizesQuery?.length > 0) {
-    queryParams.set('sizes', sizesQuery.join(','));
-  }
-  
-  // Create the URL string with query parameters
-  const queryString = queryParams.toString();
-  const url = queryString ? `/collections?${queryString}` : '/collections';
-  
-  // Only navigate if URL needs to change
-  navigate(url, { replace: true });
+    // Build query parameters object for cleaner URL construction
+    const queryParams = new URLSearchParams();
 
+    if (searchQuery.trim()) {
+      queryParams.set("search", searchQuery.trim());
+    }
+
+    if (colorsQuery?.length > 0) {
+      queryParams.set("colors", colorsQuery.join(","));
+    }
+
+    if (sizesQuery?.length > 0) {
+      queryParams.set("sizes", sizesQuery.join(","));
+    }
+
+    // Create the URL string with query parameters
+    const queryString = queryParams.toString();
+    const url = queryString ? `/collections?${queryString}` : "/collections";
+
+    // Only navigate if URL needs to change
+    navigate(url, { replace: true });
   }, [searchQuery, colorsQuery, sizesQuery, navigate]);
 
   // Refetch when filter state changes
