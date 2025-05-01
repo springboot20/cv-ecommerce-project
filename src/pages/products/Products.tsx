@@ -79,7 +79,7 @@ const Products = () => {
   }, [refetch, data?.message]);
 
   useEffect(() => {
-    if (searchQuery.trim() !== " ") {
+    if (searchQuery.trim() !== "") {
       navigate(`/collections?search=${searchQuery}`);
     }
 
