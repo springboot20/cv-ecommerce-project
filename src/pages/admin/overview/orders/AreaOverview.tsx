@@ -106,11 +106,11 @@ const OrderCountsChart = () => {
   }, [refetch]);
 
   return isLoading || !data || statistics.length ? (
-    <div className="flex items-center justify-center h-full">
+    <div className="flex items-center justify-center min-h-72">
       <Loading />
     </div>
   ) : (
-    <div>
+    <div className="h-full">
       {/* Tabs for Switching Data */}
       <div className="flex justify-end mb-2">
         {["daily", "weekly", "monthly"].map((tab) => (
@@ -166,7 +166,7 @@ const OrderCountsChart = () => {
         }}
         series={series}
         type="bar"
-        height={350}
+        height="100%"
       />
     </div>
   );

@@ -94,7 +94,7 @@ export const PieOverview = () => {
       <Loading />
     </div>
   ) : (
-    <div className="w-[380px] h-[380px] lg:w-full lg:h-full">
+    <div className="h-full">
       <ChartComponent
         type="donut"
         options={{
@@ -115,8 +115,8 @@ export const PieOverview = () => {
           },
         }}
         series={pieSeries}
-        height={"100%"}
-        width={"100%"}
+        height="100%"
+        width="100%"
       />
     </div>
   );
