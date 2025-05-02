@@ -14,6 +14,11 @@ export type FormikEvent = {
   };
   touched?: FormikTouched<InitialValues>;
   errors?: FormikErrors<InitialValues>;
+  setFieldValue?: (
+    field: string,
+    value: any,
+    shouldValidate?: boolean
+  ) => Promise<void> | Promise<FormikErrors<InitialValues>>;
 };
 
 export interface InitialValues {
@@ -27,10 +32,9 @@ export interface InitialValues {
   lastname: string;
   address_line_one: string;
   address_line_two: string;
-  "card-name": string;
-  "card-number": string;
+  "card_name": string;
+  "card_number": string;
   cvc: string;
-  "card-year": string;
-  "card-month": string;
+  "card_expiry": string;
   shipping_method: string;
 }
