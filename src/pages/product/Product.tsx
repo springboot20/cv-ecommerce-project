@@ -71,7 +71,7 @@ const Product = () => {
         initial="hidden"
         animate="visible"
         variants={gridVariants}
-        className="max-w-2xl lg:max-w-full xl:max-w-5xl mx-auto px-4 xl:px-0"
+        className="max-w-2xl lg:max-w-4xl xl:max-w-5xl mx-auto px-4 xl:px-0"
       >
         <div className="mb-4 w-max">
           <button
@@ -88,7 +88,7 @@ const Product = () => {
         </div>
         <section>
           <div className="grid grid-cols-1 lg:grid-cols-2 place-items-center lg:place-items-start place-content-center gap-8">
-            {isLoading ? (
+            {isLoading || !data ? (
               <ProductSkeletonLoading />
             ) : (
               <>
@@ -109,9 +109,10 @@ const Product = () => {
                         <div
                           role="button"
                           key={product?._id}
+                          className="col-span-1 w-full"
                           onClick={() => navigate(`/collections/${product?._id}`)}
                         >
-                          <div className="h-24 bg-white rounded-md p-2 border border-black/25">
+                          <div className="h-20 bg-white w-full rounded-md p-2 border border-black/25">
                             <img
                               src={product?.imageSrc?.url}
                               alt={product?.name}
@@ -120,10 +121,10 @@ const Product = () => {
                           </div>
 
                           <div className="space-y-0.5 mt-2">
-                            <h3 className="uppercase text-sm font-semibold text-gray-800">
+                            <h3 className="capitalize text-xs font-medium text-gray-800">
                               {product?.name}
                             </h3>
-                            <p className="text-sm font-semibold text-[#e2342d]">
+                            <p className="text-xs font-medium text-[#e2342d]">
                               {formatPrice(product?.price ?? 0.0)}
                             </p>
                           </div>

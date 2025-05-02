@@ -69,11 +69,11 @@ const ProductPreviewModal: React.FC<{ open: boolean; onClose: () => void; produc
       <div className="fixed inset-0 w-screen overflow-y-auto">
         <div className="flex min-h-full items-stretch justify-center text-center md:items-center md:px-2 lg:px-4">
           <Dialog.Panel className="flex w-full transform text-left text-base transition data-[closed]:translate-y-4 data-[closed]:opacity-0 data-[enter]:duration-300 data-[leave]:duration-200 data-[enter]:ease-out data-[leave]:ease-in md:my-8 md:max-w-2xl md:px-4 data-[closed]:md:translate-y-0 data-[closed]:md:scale-95 lg:max-w-4xl">
-            <div className="relative flex w-full items-center overflow-hidden bg-white px-4 pb-8 pt-14 shadow-2xl sm:px-6 sm:pt-8 md:p-6 lg:p-8">
+            <div className="relative flex w-full items-center overflow-hidden bg-white px-4 pb-8 pt-8 shadow-2xl sm:px-6 sm:pt-8 md:p-6 lg:p-8">
               <button
                 type="button"
                 onClick={onClose}
-                className="absolute right-2 top-2 text-gray-400 hover:text-gray-500 sm:right-6 sm:top-8 md:right-6 md:top-6 lg:right-8 lg:top-8"
+                className="absolute right-2 top-2 text-gray-400 hover:text-gray-500 sm:right-2 sm:top-1 md:right-2 md:top-1.5 lg:right-4 lg:top-4"
               >
                 <span className="sr-only">Close</span>
                 <XMarkIcon aria-hidden="true" className="size-6" />
@@ -83,7 +83,7 @@ const ProductPreviewModal: React.FC<{ open: boolean; onClose: () => void; produc
                 <img
                   alt={`${product?.name}`}
                   src={product?.imageSrc?.url}
-                  className="aspect-[3/3] lg:aspect-[3/5] w-full rounded-lg bg-gray-100 object-cover col-span-full lg:col-span-5"
+                  className="aspect-[3/3] md:aspect-[2/1.5] lg:aspect-[3/5] lg:min-h-full w-full rounded-lg bg-gray-100 object-cover col-span-full lg:col-span-5"
                 />
                 <div className="col-span-full lg:col-span-7">
                   <h2 className="text-2xl font-bold text-gray-900 sm:pr-12">{product?.name}</h2>
