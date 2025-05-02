@@ -62,7 +62,9 @@ const validationSchema = yup.object().shape({
     .required("Confirm password is required"),
 });
 
-export const ResetPassword = () => {
+export const ResetPassword: React.FC<{
+  setPage: React.Dispatch<React.SetStateAction<string>>;
+}> = ({ setPage }) => {
   const [tokenEntered, setTokenEntered] = useState(false);
   const [showPassword, setShowPassword] = useState(false);
   const { user } = useAppSelector((state: RootState) => state.auth);
@@ -86,6 +88,8 @@ export const ResetPassword = () => {
           token: otpValues.join(""),
           password: values.password,
         }).unwrap();
+
+        setPage("success");
 
         if (response.statusCode.toString().startsWith("2")) {
           setTimeout(() => handleNextStep(), 1500);

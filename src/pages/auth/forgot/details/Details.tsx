@@ -5,7 +5,9 @@ import { forgotSchema } from "../../../../schema/Schema";
 import { useFormik } from "formik";
 import { useForm } from "../../../../hooks/useForm";
 
-export const Details = () => {
+export const Details: React.FC<{
+  setPage: React.Dispatch<React.SetStateAction<string>>;
+}> = ({ setPage }) => {
   const [forgotPasword, { isLoading }] = useForgotPasswordMutation();
   const { handleNextStep } = useForm();
   const { values, handleBlur, handleSubmit, handleChange, errors, touched } = useFormik({
@@ -15,6 +17,7 @@ export const Details = () => {
     validationSchema: forgotSchema,
     onSubmit: async (values, { resetForm }) => {
       await forgotPasword({ email: values.email }).unwrap();
+      setPage("password");
 
       setTimeout(() => handleNextStep(), 1500);
       resetForm();
