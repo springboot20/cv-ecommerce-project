@@ -105,7 +105,7 @@ const OrderCountsChart = () => {
     refetch();
   }, [refetch]);
 
-  return isLoading ? (
+  return isLoading || !data || statistics.length ? (
     <div className="flex items-center justify-center h-full">
       <Loading />
     </div>
@@ -134,6 +134,33 @@ const OrderCountsChart = () => {
               animateGradually: {
                 delay: 300,
               },
+            },
+          },
+          plotOptions: {
+            bar: {
+              borderRadius: 15,
+              distributed: true,
+            },
+          },
+          grid: {
+            show: true,
+            borderColor: "#E5E7EB",
+            strokeDashArray: 4,
+            xaxis: {
+              lines: {
+                show: true,
+              },
+            },
+            yaxis: {
+              lines: {
+                show: true,
+              },
+            },
+            padding: {
+              top: 0,
+              right: 10,
+              bottom: 0,
+              left: 10,
             },
           },
         }}
