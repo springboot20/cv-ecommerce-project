@@ -38,6 +38,7 @@ export const useProduct = () => {
   return {
     refetch,
     open,
+    data,
     setOpen,
     refreshTrigered,
     isLoading,
