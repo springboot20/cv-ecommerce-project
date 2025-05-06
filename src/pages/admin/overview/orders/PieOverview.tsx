@@ -77,7 +77,7 @@ export const PieOverview = () => {
     refetch();
   }, [refetch]);
 
-  return isLoading || !data || statistics.length === 0 ? (
+  return isLoading || !data || !statistics.length ? (
     <div className="flex items-center justify-center min-h-72">
       <Loading />
     </div>
