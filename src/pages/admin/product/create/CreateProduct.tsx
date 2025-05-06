@@ -76,7 +76,7 @@ export default function CreateNewProduct() {
 
   return (
     <Formik initialValues={initialValues} onSubmit={onSubmit}>
-      {({ errors, touched, setFieldValue, values }) => {
+      {({ errors, isSubmitting, touched, setFieldValue, values }) => {
         return (
           <Form className="mt-4 w-full bg-white p-6 border gap-10 grid grid-cols-1 xl:grid-cols-3 mx-auto max-w-6xl">
             <div className="col-span-full xl:col-span-2">
@@ -337,9 +337,7 @@ export default function CreateNewProduct() {
             </div>
 
             <div className="col-span-full xl:col-span-1">
-              <div
-                className={clx("col-span-full xl:col-span-1", !selectedFile ? "xl:h-64" : "h-fit")}
-              >
+              <div className={clx("col-span-full xl:col-span-1 h-ft")}>
                 <fieldset className="h-full">
                   <label
                     htmlFor="image"
@@ -353,13 +351,13 @@ export default function CreateNewProduct() {
                     onDragLeave={handleDragLeave}
                     onDrop={handleDrop}
                     className={clx(
-                      "border-dashed px-6 h-full py-9 border-[0.15rem] mt-2 rounded-md flex items-center justify-center",
+                      "border-dashed p-6 h-full border-[0.15rem] mt-2 rounded-md flex items-center justify-center",
                       isDropping ? "border-indigo-400" : "border-gray-400"
                     )}
                   >
                     <div className="text-center">
                       {selectedFile && (
-                        <div className="h-32 w-full ring-2 ring-offset-2 ring-indigo-500 rounded overflow-hidden mb-1 mx-auto">
+                        <div className="spect-[1/0.5] lg:aspect-[1/1] w-full ring-2 ring-offset-2 ring-indigo-500 rounded overflow-hidden mb-1">
                           <img
                             src={URL.createObjectURL(selectedFile)}
                             alt="upload"
@@ -423,10 +421,29 @@ export default function CreateNewProduct() {
             <div className="flex items-center gap-4 mt-4">
               <button
                 type="submit"
-                // disabled={!dirty}
-                className="disabled:ring-gray-200 disabled:pointer-events-none disabled:text-indigo-300 disabled:bg-[#FAFAFA] disabled:ring-1 text-base capitalize font-medium border-none ring-2 w-fit ring-gray-200 rounded-md py-2.5 px-6 text-white bg-indigo-500"
+                disabled={isSubmitting}
+                className={clx(
+                  "disabled:ring-gray-200 disabled:pointer-events-none disabled:text-indigo-300 disabled:bg-[#FAFAFA] disabled:ring-1 text-base capitalize font-medium border-none ring-2 w-fit ring-gray-200 rounded-md py-2.5 px-6 text-white bg-indigo-500",
+                  isSubmitting ? "flex gap-2 items-center cursor-not-allowed" : "text-center"
+                )}
               >
-                create product
+                {isSubmitting ? (
+                  <>
+                    <span>creating...</span>
+                    <svg className="h-8 w-8 animate-spin" viewBox="3 3 18 18">
+                      <path
+                        className="fill-gray-300"
+                        d="M12 5C8.13401 5 5 8.13401 5 12C5 15.866 8.13401 19 12 19C15.866 19 19 15.866 19 12C19 8.13401 15.866 5 12 5ZM3 12C3 7.02944 7.02944 3 12 3C16.9706 3 21 7.02944 21 12C21 16.9706 16.9706 21 12 21C7.02944 21 3 16.9706 3 12Z"
+                      ></path>
+                      <path
+                        className="fill-secondary"
+                        d="M16.9497 7.05015C14.2161 4.31648 9.78392 4.31648 7.05025 7.05015C6.65973 7.44067 6.02656 7.44067 5.63604 7.05015C5.24551 6.65962 5.24551 6.02646 5.63604 5.63593C9.15076 2.12121 14.8492 2.12121 18.364 5.63593C18.7545 6.02646 18.7545 6.65962 18.364 7.05015C17.9734 7.44067 17.3403 7.44067 16.9497 7.05015Z"
+                      ></path>
+                    </svg>
+                  </>
+                ) : (
+                  "create product"
+                )}
               </button>
             </div>
           </Form>
