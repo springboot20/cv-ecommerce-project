@@ -49,7 +49,7 @@ const AppLayout: React.FC = () => {
     <>
       <Disclosure
         as="nav"
-        className={`fixed top-0 left-0 z-10 right-0 dark:bg-gray-800 bg-white border-b border-black/20`}
+        className={`fixed top-0 left-0 z-20 right-0 dark:bg-gray-800 bg-white border-b border-black/20`}
       >
         {({ open, close }) => (
           <>
