@@ -130,7 +130,13 @@ const ProductPreviewModal: React.FC<{ open: boolean; onClose: () => void; produc
                       Product options
                     </h3>
 
-                    <form onSubmit={(event) => handleAddItemToCart(event, product?._id)}>
+                    <form
+                      onSubmit={(event) => {
+                        handleAddItemToCart(event, product?._id);
+
+                        onClose();
+                      }}
+                    >
                       {/* Colors */}
                       {product?.colors?.length !== 0 && (
                         <fieldset aria-label="Choose a color" className="mt-3">
