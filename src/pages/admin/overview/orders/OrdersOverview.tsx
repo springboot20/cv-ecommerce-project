@@ -7,7 +7,7 @@ export const OrdersOverview = () => {
       <div className="bg-white rounded-lg p-4 col-span-1 xl:col-span-2 w-full border min-h-72 md:min-h-96">
         <OrderCountsChart />
       </div>
-      <div className="bg-white rounded-lg p-4 col-span-1 border grid place-items-center xl:place-items-stretch min-h-72 md:min-h-96">
+      <div className="bg-white rounded-lg p-4 col-span-1 border grid place-items-center xl:place-items-stretch h-72 xl:h-96">
         <PieOverview />
       </div>
     </div>

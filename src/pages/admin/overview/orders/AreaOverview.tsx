@@ -31,49 +31,77 @@ const OrderCountsChart = () => {
     return acc;
   }, initialStats);
 
-  const dailyStats = stats?.daily ?? [];
-  const weeklyStats = stats?.weekly ?? [];
-  const monthlyStats = stats?.monthly ?? [];
+  const dailyStats = stats.daily || [];
+  const weeklyStats = stats.weekly || [];
+  const monthlyStats = stats.monthly || [];
 
   const activeStats =
-    activeTab === "daily"
-      ? dailyStats
-      : activeTab === "weekly"
-      ? weeklyStats
-      : activeTab === "monthly"
-      ? monthlyStats
-      : [];
+    activeTab === "daily" ? dailyStats : activeTab === "weekly" ? weeklyStats : monthlyStats;
+
+  const completedOrders = activeStats
+    .filter((item) => item?._id?.status === "COMPLETED")
+    .map((item) => item?.count || 0);
+
+  const pendingOrders = activeStats
+    .filter((item) => item?._id?.status === "PENDING")
+    .map((item) => item?.count || 0);
 
   const series = [
     {
       name: "Completed Orders",
-      data: activeStats
-        ?.filter((item) => item?._id.status === "COMPLETED")
-        .map((item) => item?.count),
+      data: completedOrders,
     },
     {
       name: "Pending Orders",
-      data: activeStats
-        ?.filter((item) => item?._id.status === "PENDING")
-        .map((item) => item?.count),
+      data: pendingOrders,
     },
   ];
 
+  const categories = activeStats.map((item) => {
+    const id = item?._id || {};
+
+    try {
+      if (activeTab === "daily" && "day" in id && "month" in id && "year" in id) {
+        return `Day ${id.day}, ${id.month}/${id.year}`;
+      } else if (activeTab === "weekly" && "week" in id && "year" in id) {
+        return `Week ${id.week}, ${id.year}`;
+      } else if (activeTab === "monthly" && "month" in id && "year" in id) {
+        const monthNames = [
+          "Jan",
+          "Feb",
+          "Mar",
+          "Apr",
+          "May",
+          "Jun",
+          "Jul",
+          "Aug",
+          "Sep",
+          "Oct",
+          "Nov",
+          "Dec",
+        ];
+        const monthName = monthNames[id?.month - 1] || id.month;
+        return `${monthName} ${id.year}`;
+      }
+    } catch (error) {
+      console.error("Error formatting category:", error);
+    }
+
+    return "Unknown";
+  });
+
+  console.log(categories.length);
+
   const options = {
     xaxis: {
-      categories: activeStats.map((item) => {
-        const id = item?._id;
-
-        if (activeTab === "daily" && "day" in id && "month" in id) {
-          return `Day ${id.day}, ${id.month}/${id.year}`;
-        } else if (activeTab === "weekly" && "week" in id) {
-          return `Week ${id.week}, ${id.year}`;
-        } else if (activeTab === "monthly" && "month" in id) {
-          return `Month ${id.month}, ${id.year}`;
-        } else {
-          return ""; // Fallback in case of invalid data
-        }
-      }),
+      categories,
+      labels: {
+        style: {
+          fontFamily: "Poppins, sans-serif",
+        },
+        rotate: -45,
+        rotateAlways: categories.some((c) => c.length > 10),
+      },
     },
     title: {
       text: "Order Counts",
@@ -91,9 +119,10 @@ const OrderCountsChart = () => {
         enabled: false,
       },
     },
-    tooltip: {
-      style: {
-        fontFamily: "Poppins, sans-serif",
+    fill: {
+      type: "gradient",
+      gradient: {
+        type: "vertical",
       },
     },
     dataLabels: {
@@ -105,12 +134,12 @@ const OrderCountsChart = () => {
     refetch();
   }, [refetch]);
 
-  return isLoading || !data || statistics.length ? (
+  return isLoading || !data || !statistics.length ? (
     <div className="flex items-center justify-center min-h-72">
       <Loading />
     </div>
   ) : (
-    <div className="h-full">
+    <>
       {/* Tabs for Switching Data */}
       <div className="flex justify-end mb-2">
         {["daily", "weekly", "monthly"].map((tab) => (
@@ -131,16 +160,31 @@ const OrderCountsChart = () => {
           chart: {
             ...options.chart,
             animations: {
+              enabled: true,
               animateGradually: {
+                enabled: true,
                 delay: 300,
+              },
+              dynamicAnimation: {
+                enabled: true,
+                speed: 350,
+              },
+            },
+            fontFamily: "Poppins, sans-serif",
+          },
+          tooltip: {
+            style: {
+              fontFamily: "Poppins, sans-serif",
+            },
+            y: {
+              formatter: function (value) {
+                return value.toString();
               },
             },
           },
-          plotOptions: {
-            bar: {
-              borderRadius: 15,
-              distributed: true,
-            },
+          stroke: {
+            curve: "smooth",
+            width: [2, 2],
           },
           grid: {
             show: true,
@@ -165,10 +209,11 @@ const OrderCountsChart = () => {
           },
         }}
         series={series}
-        type="bar"
+        type="area"
         height="100%"
+        width="100%"
       />
-    </div>
+    </>
   );
 };
 
