@@ -14,10 +14,12 @@ import { useGetAllCategoryQuery } from "../../features/category/category.slice";
 import ProductPreviewModal from "../../components/modal/PreviewProductModal";
 import { Product } from "./Product";
 import { toast } from "react-toastify";
+import { useNavigate } from "react-router";
 
 const Products = () => {
   const [searchQuery, setSearchQuery] = useState<string>("");
   const [page, setPage] = useState<number>(1);
+  const navigate = useNavigate();
   const [openPreview, setOpenPreview] = useState<{ [key: string]: boolean }>({});
   // const [categoryQuery, setCategoryQuery] = useState<string>("");
   const [colorsQuery, setColorsQuery] = useState<string[]>([]);
@@ -75,6 +77,30 @@ const Products = () => {
 
     console.log("fetched");
   }, [refetch, data?.message]);
+
+  useEffect(() => {
+    // Build query parameters object for cleaner URL construction
+    const queryParams = new URLSearchParams();
+
+    if (searchQuery.trim()) {
+      queryParams.set("search", searchQuery.trim());
+    }
+
+    if (colorsQuery?.length > 0) {
+      queryParams.set("colors", colorsQuery.join(","));
+    }
+
+    if (sizesQuery?.length > 0) {
+      queryParams.set("sizes", sizesQuery.join(","));
+    }
+
+    // Create the URL string with query parameters
+    const queryString = queryParams.toString();
+    const url = queryString ? `/collections?${queryString}` : "/collections";
+
+    // Only navigate if URL needs to change
+    navigate(url, { replace: true });
+  }, [searchQuery, colorsQuery, sizesQuery, navigate]);
 
   // Refetch when filter state changes
   useEffect(() => {

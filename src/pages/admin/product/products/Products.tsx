@@ -65,8 +65,6 @@ const AdminProducts = () => {
       refetch();
     }
     toast.success(data?.message);
-
-    console.log(data?.message)
   }, [page, totalPages, refetch, productDeleted, data?.message]);
 
   const handleProductDelete = useCallback(
@@ -85,6 +83,21 @@ const AdminProducts = () => {
     },
     [deleteProduct]
   );
+
+  useEffect(() => {
+    const queryParams = new URLSearchParams();
+
+    if (searchQuery.trim()) {
+      queryParams.set("search", searchQuery.trim());
+    }
+
+    queryParams.set("page", page.toString());
+
+    const queryString = queryParams.toString();
+    const url = queryString ? `/admin/products/all?${queryString}` : "/admin/products/all";
+
+    navigate(url, { replace: true });
+  }, [page, searchQuery, navigate]);
 
   return (
     <Fragment>

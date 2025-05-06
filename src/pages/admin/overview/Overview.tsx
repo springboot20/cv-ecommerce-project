@@ -38,7 +38,7 @@ export default function Overview() {
 
   return (
     <Fragment>
-      {isLoading ? (
+      {isLoading || !statistics || !data ? (
         <ProductStatisticsCardLoader cardsNumber={4} />
       ) : (
         <div className='grid grid-cols-1 sm:grid-cols-2 gap-5 lg:gap-3 xl:gap-5 xl:grid-cols-4 mt-4'>

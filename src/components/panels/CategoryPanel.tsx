@@ -41,8 +41,8 @@ export const CategoryPanel: React.FC<{
   const [selectedSizes, setSelectedSizes] = useState<string[]>([]);
   const [selectedCategory, setSelectedCategory] = useState<string>("");
 
-  const uniqueColors = [...new Set(colors.flat())].filter(Boolean);
-  const uniqueSizes = [...new Set(sizes.flat().map((size: Size) => size.name))].filter(Boolean);
+  const uniqueColors = [...new Set(colors?.flat())].filter(Boolean);
+  const uniqueSizes = [...new Set(sizes?.flat()?.map((size: Size) => size.name))].filter(Boolean);
 
   console.log(uniqueSizes);
 

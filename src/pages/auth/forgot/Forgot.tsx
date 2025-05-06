@@ -1,14 +1,17 @@
 import { Fragment } from "react/jsx-runtime";
 import { motion } from "framer-motion";
 import { useForm } from "../../../hooks/useForm";
-import { useEffect } from "react";
+import { useEffect, useState } from "react";
 import { Details } from "./details/Details";
 import { Success } from "./success/Success";
 import { classNames } from "../../../helpers";
 import { ResetPassword } from "./password/Password";
+import { useNavigate } from "react-router";
 
 const Forgot = () => {
   const { steps, setSteps, currentStep } = useForm();
+  const [page, setPage] = useState("details");
+  const navigate = useNavigate();
 
   const variants = {
     hidden: { opacity: 0, x: -100 },
@@ -17,8 +20,16 @@ const Forgot = () => {
   };
 
   useEffect(() => {
-    setSteps([<Details />, <ResetPassword />, <Success />]);
+    setSteps([
+      <Details setPage={setPage} />,
+      <ResetPassword setPage={setPage} />,
+      <Success setPage={setPage} />,
+    ]);
   }, [setSteps]);
+
+  useEffect(() => {
+    navigate(`/forgot?tab=${page}&step=${currentStep + 1}`);
+  }, [page, navigate, currentStep]);
 
   return (
     <Fragment>

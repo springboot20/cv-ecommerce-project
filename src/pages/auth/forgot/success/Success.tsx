@@ -4,7 +4,9 @@ import { useAppSelector } from "../../../../hooks/redux/redux.hooks";
 import { RootState } from "../../../../app/store";
 import { useForm } from "../../../../hooks/useForm";
 
-export const Success = () => {
+export const Success: React.FC<{
+  setPage: React.Dispatch<React.SetStateAction<string>>;
+}> = ({ setPage }) => {
   const { user } = useAppSelector((state: RootState) => state.auth);
   const navigate = useNavigate();
   const { setCurrentStep } = useForm();
@@ -33,6 +35,7 @@ export const Success = () => {
                 }
               }, 1500);
               setCurrentStep(0);
+              setPage("details")
             }}
             className="rounded-3xl w-full bg-light-blue-600 px-3 py-2 text-lg font-medium text-white shadow-sm hover:bg-light-blue-500 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-light-blue-600 disabled:opacity-70"
           >

@@ -1,14 +1,17 @@
 import { motion } from "framer-motion";
 import { useForm } from "../../../hooks/useForm";
 import { classNames } from "../../../helpers";
-import { useEffect } from "react";
+import { useEffect, useState } from "react";
 import { Details } from "./details/Details";
 import { Email } from "./email/Email";
 import { Password } from "./password/Password";
 import { Success } from "./success/Success";
+import { useNavigate } from "react-router";
 
 const Register = () => {
   const { steps, setSteps, currentStep } = useForm();
+  const navigate = useNavigate();
+  const [page, setPage] = useState<string>("details");
 
   const variants = {
     hidden: { opacity: 0, x: -100 },
@@ -17,8 +20,17 @@ const Register = () => {
   };
 
   useEffect(() => {
-    setSteps([<Details />, <Email />, <Password />, <Success />]);
+    setSteps([
+      <Details setPage={setPage} />,
+      <Email setPage={setPage} />,
+      <Password setPage={setPage} />,
+      <Success setPage={setPage} />,
+    ]);
   }, [setSteps]);
+
+  useEffect(() => {
+    navigate(`/register?tab=${page}&step=${currentStep + 1}`);
+  }, [page, currentStep, setPage]);
 
   return (
     <>
@@ -39,11 +51,7 @@ const Register = () => {
             {Array(steps.length)
               .fill("-")
               .map((_, i) => {
-                return (
-                  <Stepper
-                    activeClass={currentStep === i ? "bg-blue-500" : "bg-gray-400"}
-                  />
-                );
+                return <Stepper activeClass={currentStep === i ? "bg-blue-500" : "bg-gray-400"} />;
               })}
           </div>
         </div>
@@ -53,12 +61,8 @@ const Register = () => {
 };
 export default Register;
 
-const Stepper: React.FC<{ activeClass: string;  }> = ({
-  activeClass,
-}) => {
+const Stepper: React.FC<{ activeClass: string }> = ({ activeClass }) => {
   return (
-    <div
-      className={classNames(activeClass, "size-2 rounded-full block cursor-pointer")}
-    ></div>
+    <div className={classNames(activeClass, "size-2 rounded-full block cursor-pointer")}></div>
   );
 };
