@@ -61,7 +61,13 @@ export const ProductSlice = ApiService.injectEndpoints({
         const formData = new FormData();
 
         Object.keys(patch).forEach((key) => {
-          formData.append(key, patch[key]);
+          if (key === "imageSrc" && patch[key]) {
+            formData.append(key, patch[key]);
+          } else if (Array.isArray(patch[key]) || typeof patch[key] === "object") {
+            formData.append(key, JSON.stringify(patch[key]));
+          } else {
+            formData.append(key, patch[key]);
+          }
         });
 
         return {
