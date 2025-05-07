@@ -15,8 +15,10 @@ type Size = {
 export const useProduct = () => {
   const { id } = useParams();
   const [addItemToCart] = useAddItemToCartMutation();
-  const { data, isLoading, refetch } = useGetProductByIdQuery(id as string);
-  const [ratings, setRatings] = useState<number>(1);
+  const { data, isLoading, refetch } = useGetProductByIdQuery(id as string, {
+    skip: !id,
+  });
+  const [ratings, setRatings] = useState<number>(0.0);
   const [quantityInput, setQuantityInput] = useState<number>(1);
   const [open, setOpen] = useState(false);
   const [refreshTrigered, setRefreshTrigered] = useState(false);

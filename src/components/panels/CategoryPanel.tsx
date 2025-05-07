@@ -116,14 +116,14 @@ export const CategoryPanel: React.FC<{
 
   return (
     <>
-      <div className="fixed hidden lg:block flex-1 max-w-sm min-h-screen top-36 w-full flex-col border-r">
+      <div className="fixed hidden lg:block flex-1 max-w-sm min-h-screen top-32 w-full flex-col border-r">
         <div className="w-full h-full p-3.5">
           <Disclosure.Button className="lg:hidden absolute right-8 top-4">
             <span className="sr-only">Close side panel</span>
             <XMarkIcon className="h-6" aria-hidden={true} />
           </Disclosure.Button>
 
-          <div className="relative mt-8">
+          <div className="relative">
             <MagnifyingGlassIcon
               className={`eye-icon absolute top-[50%] translate-y-[-50%] left-4 cursor-pointer text-xl text-gray-700`}
             />

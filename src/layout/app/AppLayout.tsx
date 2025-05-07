@@ -38,6 +38,8 @@ const AppLayout: React.FC = () => {
   const navigate = useNavigate();
   const [logout] = useLogoutMutation();
 
+  console.log(cartItem);
+
   const { newNotification, setNewNotification } = useNotification();
   const [openNotification, setOpenNotification] = useState(false);
 
@@ -53,8 +55,13 @@ const AppLayout: React.FC = () => {
       >
         {({ open, close }) => (
           <>
-            <NotificationPanel open={openNotification} onClose={() => setOpenNotification(false)} />
-            <CartModal isOpen={isOpen} setIsOpen={setOpen} />
+            {isAuthenticated && (
+              <NotificationPanel
+                open={openNotification}
+                onClose={() => setOpenNotification(false)}
+              />
+            )}
+            {isAuthenticated && <CartModal isOpen={isOpen} setIsOpen={setOpen} />}
             <div className="mx-auto max-w-7xl px-2 sm:px-2 lg:px-4 xl:p-0">
               <div className="relative">
                 <div className="flex items-center justify-end py-2 h-12 space-x-3">

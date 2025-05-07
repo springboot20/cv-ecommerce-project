@@ -168,8 +168,8 @@ const CheckOut: React.FC = () => {
   return (
     <Fragment>
       <main className="mx-auto max-w-5xl px-2 md:px-4 xl:px-0">
-        <div className="grid grid-cols-1 lg:grid-cols-2 xl:grid-cols-3 gap-4 xl:gap-6">
-          <form id="form" onSubmit={handleSubmit} className="col-span-1 xl:col-span-2">
+        <div className="grid grid-cols-1 lg:grid-cols-3 gap-4 xl:gap-6">
+          <form id="form" onSubmit={handleSubmit} className="col-span-1 lg:col-span-2">
             <StepIndicator currentStep={currentStep} />
             <div className="">
               <motion.div>

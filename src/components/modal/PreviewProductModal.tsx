@@ -63,8 +63,8 @@ const ProductPreviewModal: React.FC<{ open: boolean; onClose: () => void; produc
   };
 
   return (
-    <Dialog open={open} onClose={onClose} className="relative z-20">
-      <Dialog.Backdrop className="fixed inset-0 z-10 hidden bg-gray-500/75 transition-opacity data-[closed]:opacity-0 data-[enter]:duration-300 data-[leave]:duration-200 data-[enter]:ease-out data-[leave]:ease-in md:block" />
+    <Dialog open={open} onClose={onClose} className="relative z-30">
+      <Dialog.Backdrop className="fixed inset-0 z-20 hidden bg-gray-500/75 transition-opacity data-[closed]:opacity-0 data-[enter]:duration-300 data-[leave]:duration-200 data-[enter]:ease-out data-[leave]:ease-in md:block" />
 
       <div className="fixed inset-0 w-screen overflow-y-auto">
         <div className="flex min-h-full items-stretch justify-center text-center md:items-center md:px-2 lg:px-4">

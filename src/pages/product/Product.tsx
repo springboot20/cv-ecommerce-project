@@ -210,7 +210,7 @@ const Product = () => {
                             <RadioGroup.Option
                               key={size?.name}
                               value={size}
-                              // disabled={!size?.inStock}
+                              disabled={!size?.inStock}
                               onChange={() => handleSizeChange(size)}
                               className={classNames(
                                 "group relative flex items-center justify-center rounded-md border py-3 px-4 text-sm font-medium uppercase focus:outline-none",

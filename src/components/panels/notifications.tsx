@@ -196,8 +196,8 @@ export const NotificationPanel: React.FC<{ open: boolean; onClose: () => void }>
 
   return (
     <>
-      <Dialog open={open} onClose={onClose} className="relative z-20">
-        <Dialog.Backdrop className="fixed inset-0 z-10 bg-gray-500 bg-opacity-75 transition-opacity duration-500 ease-in-out data-[closed]:opacity-0" />
+      <Dialog open={open} onClose={onClose} className="relative z-30">
+        <Dialog.Backdrop className="fixed inset-0 z-20 bg-gray-500 bg-opacity-75 transition-opacity duration-500 ease-in-out data-[closed]:opacity-0" />
         <div className="fixed inset-0 overflow-hidden">
           <div className="absolute inset-0 overflow-hidden">
             <div className="pointer-events-none fixed inset-y-0 right-0 flex max-w-full pl-10">
