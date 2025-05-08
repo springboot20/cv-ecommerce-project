@@ -26,7 +26,7 @@ export const Product: React.FC<{
             className="border border-gray-300 absolute object-cover"
           />
         )}
-        <div className="group-hover:opacity-100 transition z-20 opacity-0 absolute inset-0 h-full w-full flex flex-col py-4 items-center justify-end">
+        <div className="group-hover:opacity-100 transition z-10 opacity-0 absolute inset-0 h-full w-full flex flex-col py-4 items-center justify-end">
           <button
             type="button"
             onClick={() => handlePreviewOpen(product?._id)}

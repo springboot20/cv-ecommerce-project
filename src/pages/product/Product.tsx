@@ -40,14 +40,21 @@ const Product = () => {
     message,
   } = useProduct();
 
-  const { data, refetch: refetchCategory } = useGetProductsByCategoryQuery({
-    categoryId: product?.category?._id,
-  });
+  const { data, refetch: refetchCategory } = useGetProductsByCategoryQuery(
+    {
+      categoryId: product?.category?._id,
+    },
+    {
+      skip: !product?.category?._id,
+    }
+  );
   const products = data?.data?.products;
 
   useEffect(() => {
     refetch();
-    refetchCategory();
+    if (product?.category?._id) {
+      refetchCategory();
+    }
 
     toast.success(message);
   }, [refetch, message, refetchCategory]);

@@ -8,7 +8,6 @@ import { ProductCategory, ProductType } from "../../types/redux/product";
 import { ProductsSkeletonLoading } from "../../components/loaders/Skeleton";
 import { CategoryPanel } from "../../components/panels/CategoryPanel";
 import { Disclosure } from "@headlessui/react";
-import { Bars3Icon } from "@heroicons/react/24/outline";
 import { LocalStorage } from "../../util";
 import { useGetAllCategoryQuery } from "../../features/category/category.slice";
 import ProductPreviewModal from "../../components/modal/PreviewProductModal";
@@ -136,13 +135,6 @@ const Products = () => {
             "w-full absolute justify-between left-0 right-0 lg:left-[24rem] lg:w-[calc(100%-24rem)] px-4 xl:px-0 xl:pl-4"
           )}
         >
-          <div className="lg:hidden">
-            <Disclosure.Button>
-              <span className="sr-only">Open side panel</span>
-              <Bars3Icon className="h-6" aria-hidden={true} />
-            </Disclosure.Button>
-          </div>
-
           {/* Active filters display */}
           {(colorsQuery.length > 0 || sizesQuery.length > 0 || searchQuery) && (
             <div className="mt-4 flex flex-wrap gap-2 items-center">
