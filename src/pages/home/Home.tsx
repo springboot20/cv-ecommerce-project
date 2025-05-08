@@ -14,6 +14,7 @@ import {
 import Slider from "react-slick";
 import { productCarouselSettings } from "../../util/slickSlider.config";
 import { ProductType } from "../../types/redux/product";
+import { Footer } from "../../components/Footer";
 
 const Home = () => {
   const { products } = useAppSelector((state: RootState) => state.product);
@@ -381,6 +382,8 @@ const Home = () => {
           </div>
         </div>
       </section>
+
+      <Footer />
     </Fragment>
   );
 };

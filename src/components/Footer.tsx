@@ -21,20 +21,20 @@ export const Footer = () => {
   const footerRoutes = [
     {
       title: 'Home',
-      to: '/home',
+      to: '/',
     },
     {
       title: 'Collection',
-      to: '#',
+      to: '/collections',
     },
     {
-      title: 'Products',
-      to: '#',
+      title: 'Orders',
+      to: '/orders',
     },
   ]
 
   return (
-    <footer className="bg-white p-10 w-full relative">
+    <footer className="bg-white inset-x-0 p-10 w-full relative">
       <div className="max-w-8xl mx-auto flex flex-col space-y-10">
         {/* Top section with logo, navigation links, and email subscription */}
         <div className="flex items-start justify-between space-x-8">
