@@ -101,7 +101,7 @@ const ProductPreviewModal: React.FC<{ open: boolean; onClose: () => void; produc
                       <div className="flex items-center">
                         <div className="flex items-center">
                           <Rating
-                            value={product?.ratings}
+                            value={Math.floor(product?.rating?.rate)}
                             className="h-8 !stroke-[1] disabled"
                             placeholder={undefined}
                             aria-disabled={true}
@@ -109,7 +109,7 @@ const ProductPreviewModal: React.FC<{ open: boolean; onClose: () => void; produc
                             onPointerLeaveCapture={undefined}
                           />
                         </div>
-                        <p className="sr-only">{product?.ratings} out of 5 stars</p>
+                        <p className="sr-only">{product?.rating?.rate} out of 5 stars</p>
                         <a
                           href="#"
                           className="ml-3 text-sm font-medium text-gray-600 hover:text-gray-500"

@@ -9,13 +9,22 @@ export interface ProductType {
   imageSrc: { url: string; public_id: string };
   subImgs: { url: string; public_id: string }[];
   category: ProductCategory;
-  ratings: number;
+  rating: Rating;
   sizes: {
     name: string;
     inStock: boolean;
   }[];
   colors: string[];
 }
+
+type Rating = {
+  _id: string;
+  productId: string;
+  rate: number;
+  comment?:string;
+  createdAt: string;
+  updatedAt: string;
+};
 
 export interface InitialState {
   products: ProductType[];
