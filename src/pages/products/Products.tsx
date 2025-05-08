@@ -308,7 +308,7 @@ const Products = () => {
     navigate("/collections", { replace: true });
   };
 
-  const displayProducts = filteredProducts.length > 0 ? filteredProducts : products;
+  const displayProducts = filteredProducts?.length > 0 ? filteredProducts : products;
 
   return (
     <Disclosure>
@@ -337,11 +337,11 @@ const Products = () => {
           {/* Display the number of products and active filters */}
           <div className="mt-4 flex flex-wrap gap-2 items-center justify-between">
             <div className="text-sm font-medium text-gray-700">
-              Showing {displayProducts.length}{" "}
-              {displayProducts.length === 1 ? "product" : "products"}
+              Showing {displayProducts?.length}{" "}
+              {displayProducts?.length === 1 ? "product" : "products"}
             </div>
             {/* Active filters display */}
-            {(colorsQuery.length > 0 || sizesQuery.length > 0 || searchQuery) && (
+            {(colorsQuery?.length > 0 || sizesQuery?.length > 0 || searchQuery) && (
               <div className="mt-4 flex flex-wrap gap-2 items-center">
                 <span className="text-sm font-medium text-gray-700">Active filters:</span>
 
@@ -357,7 +357,7 @@ const Products = () => {
                   </span>
                 )}
 
-                {colorsQuery.length > 0 && (
+                {colorsQuery?.length > 0 && (
                   <span className="inline-flex items-center rounded-full bg-blue-100 px-3 py-0.5 text-sm font-medium text-blue-800">
                     Colors: {colorsQuery.join(", ")}
                     <button
@@ -369,9 +369,9 @@ const Products = () => {
                   </span>
                 )}
 
-                {sizesQuery.length > 0 && (
+                {sizesQuery?.length > 0 && (
                   <span className="inline-flex items-center rounded-full bg-green-100 px-3 py-0.5 text-sm font-medium text-green-800">
-                    Sizes: {sizesQuery.join(", ")}
+                    Sizes: {sizesQuery?.join(", ")}
                     <button
                       onClick={() => setSizesQuery([])}
                       className="ml-1 text-indigo-500 hover:text-indigo-800"
@@ -426,7 +426,7 @@ const Products = () => {
               ))
             )}
           </motion.div>
-          {!isLoading && displayProducts.length > 0 && totalPages > 1 && (
+          {!isLoading && displayProducts?.length > 0 && totalPages > 1 && (
             <Pagination
               page={page}
               totalPages={totalPages}
