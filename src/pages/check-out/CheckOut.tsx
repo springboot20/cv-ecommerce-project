@@ -35,8 +35,8 @@ const CheckOut: React.FC = () => {
   };
 
   // Initialize state from URL parameters
-  const [currentStep, setCurrentStep] = useState(getInitialStepFromUrl());
-  const [tabView, setTabView] = useState(getInitialTabFromUrl());
+  const [currentStep, setCurrentStep] = useState(getInitialStepFromUrl() || 0);
+  const [tabView, setTabView] = useState(getInitialTabFromUrl() || "address");
 
   const initialValues: InitialValues = {
     email: "",
@@ -171,18 +171,17 @@ const CheckOut: React.FC = () => {
         <div className="grid grid-cols-1 lg:grid-cols-3 gap-4 xl:gap-6">
           <form id="form" onSubmit={handleSubmit} className="col-span-1 lg:col-span-2">
             <StepIndicator currentStep={currentStep} />
-            <div className="">
-              <motion.div>
-                <motion.div
-                  key={currentStep}
-                  initial="hidden"
-                  animate="visible"
-                  exit="exit"
-                  variants={variants}
-                  transition={{ duration: 0.5 }}
-                >
-                  {formSteps[currentStep]}
-                </motion.div>
+            <div className="w-full">
+              <motion.div
+                key={currentStep}
+                initial="hidden"
+                animate="visible"
+                exit="exit"
+                variants={variants}
+                transition={{ duration: 0.5 }}
+                className="w-full"
+              >
+                {formSteps[currentStep]}
               </motion.div>
 
               <div className="mt-6 flex items-center justify-between space-x-3">

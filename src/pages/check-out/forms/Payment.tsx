@@ -14,7 +14,7 @@ const Payment: React.FC<FormikEvent & { done: boolean }> = ({
   return (
     <>
       <Tab.Group>
-        <Tab.List className="border max-w-md flex items-center">
+        <Tab.List className="border w-full flex items-center">
           <Tab as={React.Fragment}>
             {({ selected }) => (
               <button
@@ -152,13 +152,7 @@ const Payment: React.FC<FormikEvent & { done: boolean }> = ({
           </Tab.Panel>
 
           <Tab.Panel></Tab.Panel>
-          <Tab.Panel>
-            {done && (
-              <div className="px-5 py-4">
-                <PayButton />
-              </div>
-            )}
-          </Tab.Panel>
+          <Tab.Panel className="xl:max-w-md mx-auto">{done && <PayButton />}</Tab.Panel>
         </Tab.Panels>
       </Tab.Group>
     </>

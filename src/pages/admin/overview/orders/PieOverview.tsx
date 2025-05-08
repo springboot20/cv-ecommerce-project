@@ -16,7 +16,7 @@ export const PieOverview = () => {
 
   const response: OrderStatsResponse = data?.data?.statistics;
 
-  const statistics = Array.isArray(response) ? response : [response];
+  const statistics = Array.isArray(response) ? response : response ? [response] : [];
 
   console.log(statistics);
 
@@ -33,28 +33,16 @@ export const PieOverview = () => {
     return acc;
   }, initialStats);
 
-  const dailyStats = stats?.daily ?? [];
-  const weeklyStats = stats?.weekly ?? [];
-  const monthlyStats = stats?.monthly ?? [];
+  const completedOrders = stats.daily
+    .filter((item) => item?._id?.status === "COMPLETED")
+    .reduce((total, item) => total + (item?.count || 0), 0);
 
-  const completedOrders = [
-    ...dailyStats?.filter((item) => item?._id?.status === "COMPLETED")?.map((item) => item?.count),
-    ...weeklyStats?.filter((item) => item?._id?.status === "COMPLETED")?.map((item) => item?.count),
-    ...monthlyStats
-      ?.filter((item) => item?._id?.status === "COMPLETED")
-      ?.map((item) => item?.count),
-  ];
+  const pendingOrders = stats.daily
+    .filter((item) => item?._id?.status === "PENDING")
+    .reduce((total, item) => total + (item?.count || 0), 0);
 
-  const pendingOrders = [
-    ...dailyStats?.filter((item) => item?._id?.status === "PENDING")?.map((item) => item?.count),
-    ...weeklyStats?.filter((item) => item?._id?.status === "PENDING")?.map((item) => item?.count),
-    ...monthlyStats?.filter((item) => item?._id?.status === "PENDING")?.map((item) => item?.count),
-  ];
-
-  const pieSeries = [
-    completedOrders.reduce((acc, count) => acc + count, 0),
-    pendingOrders.reduce((acc, count) => acc + count, 0),
-  ];
+  const pieSeries = [completedOrders, pendingOrders];
+  const totalOrders = completedOrders + pendingOrders;
 
   const pieOptions = {
     labels: ["Completed Orders", "Pending Orders"],
@@ -89,35 +77,58 @@ export const PieOverview = () => {
     refetch();
   }, [refetch]);
 
-  return isLoading || !data || statistics.length ? (
+  return isLoading || !data || !statistics.length ? (
     <div className="flex items-center justify-center min-h-72">
       <Loading />
     </div>
   ) : (
-    <div className="h-full">
-      <ChartComponent
-        type="donut"
-        options={{
-          ...pieOptions,
-          legend: {
-            show: true,
-            position: "bottom",
-            horizontalAlign: "center",
-            fontSize: "16px",
-            fontFamily: "Roboto, sans-serif",
+    <ChartComponent
+      type="donut"
+      options={{
+        ...pieOptions,
+        legend: {
+          show: true,
+          position: "bottom",
+          horizontalAlign: "center",
+          fontSize: "12px",
+          fontFamily: "Roboto, sans-serif",
+        },
+        dataLabels: {
+          ...pieOptions.dataLabels,
+          formatter: function (_, opts) {
+            const count = pieSeries[opts.seriesIndex];
+            const percentage = ((count / totalOrders) * 100).toFixed(1);
+            return `${count} (${percentage}%)`;
           },
-          plotOptions: {
-            pie: {
-              donut: {
-                size: "55%",
+        },
+        tooltip: {
+          y: {
+            formatter: function (val) {
+              return val.toString();
+            },
+          },
+        },
+        plotOptions: {
+          pie: {
+            donut: {
+              size: "55%",
+              labels: {
+                show: true,
+                total: {
+                  show: true,
+                  label: "Total Orders",
+                  formatter: function () {
+                    return totalOrders.toString();
+                  },
+                },
               },
             },
           },
-        }}
-        series={pieSeries}
-        height="100%"
-        width="100%"
-      />
-    </div>
+        },
+      }}
+      series={pieSeries}
+      height="100%"
+      width="100%"
+    />
   );
 };
