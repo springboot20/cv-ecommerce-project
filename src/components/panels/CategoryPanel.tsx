@@ -135,7 +135,7 @@ export const CategoryPanel: React.FC<{
     setSizesQuery([]);
     setCategoryQuery("");
     setPriceRange({ min: 0, max: 1000 });
-    setSortBy("featured");
+    // setSortBy("featured");
     setPage(1);
     setInitialFilterState({
       limit: 10,
