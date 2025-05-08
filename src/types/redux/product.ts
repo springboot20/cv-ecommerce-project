@@ -9,6 +9,10 @@ export interface ProductType {
   imageSrc: { url: string; public_id: string };
   subImgs: { url: string; public_id: string }[];
   category: ProductCategory;
+  totalRatings: number;
+  averageRating: number;
+
+  ratingCounts: { [key: number]: number };
   sizes: {
     name: string;
     inStock: boolean;
@@ -24,7 +28,7 @@ export type Rating = {
   userId:
     | string
     | {
-      _id:string;
+        _id: string;
         name: string;
         avatar: {
           url: string;
@@ -32,7 +36,7 @@ export type Rating = {
         };
       };
   rate: number;
-  isVerifiedPurchase:boolean;
+  isVerifiedPurchase: boolean;
   comment?: string;
   createdAt: string;
   updatedAt: string;

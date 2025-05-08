@@ -6,10 +6,13 @@ import { useAddItemToCartMutation } from "../../features/cart/cart.slice";
 import { useGetProductByIdQuery } from "../../features/products/product.slice";
 import { ProductType } from "../../types/redux/product";
 import { toast } from "react-toastify";
-import { Button, Rating } from "@material-tailwind/react";
+import { Button } from "@material-tailwind/react";
 import { useAppDispatch } from "../../hooks/redux/redux.hooks";
 import { addItemToCart as addProductToCart } from "../../features/cart/cart.reducer";
 import { clx } from "../../util";
+import { StarIcon as StarSolid } from "@heroicons/react/24/solid";
+import { useProduct } from "../../hooks/useProduct";
+import { useGetProductRatingsQuery } from "../../features/ratings/rate.slice";
 
 type Size = {
   name: string;
@@ -26,6 +29,17 @@ const ProductPreviewModal: React.FC<{ open: boolean; onClose: () => void; produc
   const [refreshTrigered, setRefreshTrigered] = useState(false);
   const [message, setMessage] = useState<string>("");
   const [quantityInput, setQuantityInput] = useState<number>(1);
+  const { page } = useProduct();
+
+  const { data: ratingsData } = useGetProductRatingsQuery(
+    {
+      productId,
+      page,
+      limit: 5,
+    },
+    { skip: !productId }
+  );
+  const { summary = {} } = ratingsData?.data || {};
 
   const product: ProductType = data?.data.product;
   const dispatch = useAppDispatch();
@@ -98,24 +112,23 @@ const ProductPreviewModal: React.FC<{ open: boolean; onClose: () => void; produc
                     {/* Reviews */}
                     <div className="mt-6">
                       <h4 className="sr-only">Reviews</h4>
-                      <div className="flex items-center">
-                        <div className="flex items-center">
-                          <Rating
-                            value={0}
-                            className="h-8 !stroke-[1] disabled"
-                            placeholder={undefined}
-                            aria-disabled={true}
-                            onPointerEnterCapture={undefined}
-                            onPointerLeaveCapture={undefined}
-                          />
+                      <div className="flex items-center gap-1">
+                        <div className="flex items-center my-2">
+                          {[1, 2, 3, 4, 5].map((star) => (
+                            <StarSolid
+                              key={star}
+                              className={classNames(
+                                "w-5 h-5",
+                                star <= Math.round(summary?.averageRating)
+                                  ? "text-yellow-400"
+                                  : "text-gray-300"
+                              )}
+                            />
+                          ))}
                         </div>
-                        <p className="sr-only">{0} out of 5 stars</p>
-                        <a
-                          href="#"
-                          className="ml-3 text-sm font-medium text-gray-600 hover:text-gray-500"
-                        >
-                          {/* {product.reviewCount} reviews */}
-                        </a>
+                        <span className="text-sm font-medium text-gray-600">
+                          {summary?.averageRating || 0} out of 5
+                        </span>
                       </div>
                     </div>
 

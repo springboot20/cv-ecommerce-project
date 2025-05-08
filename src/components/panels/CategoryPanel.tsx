@@ -96,7 +96,6 @@ export const CategoryPanel: React.FC<{
   // const handleSortChange = (e: React.ChangeEvent<HTMLSelectElement>) => {
   //   setSortBy(e.target.value);
   // };
-  
 
   const handleSizesQuery = (size: string) => {
     // Toggle size selection
@@ -229,7 +228,7 @@ export const CategoryPanel: React.FC<{
                 >
                   <div
                     className="size-8 rounded-full border border-black/10"
-                    arial-hidden={true}
+                    arial-hidden={"true"}
                     style={{ backgroundColor: color }}
                   ></div>
                 </div>
@@ -317,7 +316,7 @@ export const CategoryPanel: React.FC<{
   return (
     <>
       {/* Desktop Filter Panel */}
-        <div className="hidden lg:block flex-1 max-w-sm fixed top-32 w-full h-screen">
+      <div className="hidden lg:block flex-1 max-w-sm fixed top-32 w-full h-screen">
         <div className="w-full h-full overflow-y-auto p-3.5 pb-32">
           <div className="relative">
             <MagnifyingGlassIcon className="eye-icon absolute top-[50%] translate-y-[-50%] left-4 cursor-pointer text-xl text-gray-700" />

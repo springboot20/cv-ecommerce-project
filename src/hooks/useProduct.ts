@@ -6,6 +6,7 @@ import { ProductType } from "../types/redux/product";
 import { toast } from "react-toastify";
 import { addItemToCart as addProductToCart } from "../features/cart/cart.reducer";
 import { useAppDispatch } from "./redux/redux.hooks";
+import { useGetProductRatingsQuery } from "../features/ratings/rate.slice";
 
 type Size = {
   name: string;
@@ -24,15 +25,19 @@ export const useProduct = () => {
   const dispatch = useAppDispatch();
   const [selectedColor, setSelectedColor] = useState<string>("");
   const [selectedSize, setSelectedSize] = useState<Size>(data?.data.product?.sizes[0] ?? {});
+  const [page, setPage] = useState(1);
+  const product = data?.data.product as ProductType;
+  const { data: ratingsData } = useGetProductRatingsQuery(
+    {
+      productId: id,
+      page,
+      limit: 5,
+    },
+    { skip: !id }
+  );
+  const { ratings = [], summary = {} } = ratingsData?.data || {};
 
-  const setRatingsValue = (rating: number) => setRatings(rating);
-  const product: ProductType = typeof data?.data.product === "object" && data?.data.product;
-
-  const [ratings, setRatings] = useState<number>(product?.rating?.rate);
-
-  console.log(ratings);
-
-  console.log(product?.rating?.rate);
+  console.log(ratingsData);
 
   const handleAddItemToCart = async (productId: string) => {
     const response = await addItemToCart({ productId, quantity: quantityInput }).unwrap();
@@ -54,10 +59,12 @@ export const useProduct = () => {
     message: data?.message,
     handleAddItemToCart,
     quantityInput,
-    setRatingsValue,
     selectedColor,
     selectedSize,
     setSelectedColor,
     setSelectedSize,
+    page,
+    setPage,
+    summary,
   };
 };

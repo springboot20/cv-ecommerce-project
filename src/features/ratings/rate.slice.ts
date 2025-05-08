@@ -20,7 +20,7 @@ export const ratingApi = ApiService.injectEndpoints({
     // Get all ratings for a product
     getProductRatings: builder.query<Response, RatingQuery>({
       query: ({ productId, page = 1, limit = 10, sort = "newest", verified = "all" }) => ({
-        url: `/ratings/product/${productId}`,
+        url: `/products/ratings/${productId}`,
         params: { page, limit, sort, verified },
       }),
       providesTags: (result, _, { productId }) =>
@@ -39,19 +39,17 @@ export const ratingApi = ApiService.injectEndpoints({
     // Get user's rating for a specific product
     getUserProductRating: builder.query<Response, string>({
       query: (productId) => ({
-        url: `/ratings/user-rating/${productId}`,
+        url: `/products/ratings/user-rating/${productId}`,
       }),
-      providesTags: (_, __, productId) => [
-        { type: "Rating", id: `USER_PRODUCT_${productId}` },
-      ],
+      providesTags: (_, __, productId) => [{ type: "Rating", id: `USER_PRODUCT_${productId}` }],
     }),
 
     // Add rating without comment
     rateProduct: builder.mutation<Response, RatingRequest>({
       query: ({ productId, rating }) => ({
-        url: `/ratings/product/${productId}`,
+        url: `/products/ratings/rate-without-comment`,
         method: "POST",
-        body: { rating },
+        body: { rating, productId },
       }),
       invalidatesTags: (_, ___, { productId }) => [
         { type: "Rating", id: "LIST" },
@@ -64,9 +62,9 @@ export const ratingApi = ApiService.injectEndpoints({
     // Add rating with comment
     rateProductWithComment: builder.mutation<Response, RatingRequest>({
       query: ({ productId, rating, comment }) => ({
-        url: `/ratings/product/${productId}/comment`,
+        url: `/products/ratings/rate-with-comment`,
         method: "POST",
-        body: { rating, comment },
+        body: { rating, comment, productId },
       }),
       invalidatesTags: (_, __, { productId }) => [
         { type: "Rating", id: "LIST" },
@@ -79,7 +77,7 @@ export const ratingApi = ApiService.injectEndpoints({
     // Delete a rating
     deleteRating: builder.mutation<Response, string>({
       query: (ratingId) => ({
-        url: `/ratings/${ratingId}`,
+        url: `/products/ratings/${ratingId}`,
         method: "DELETE",
       }),
       invalidatesTags: (_, __, ratingId) => [

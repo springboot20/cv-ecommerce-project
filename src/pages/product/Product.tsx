@@ -1,5 +1,5 @@
 import { PlusIcon, MinusIcon, ArrowLeftCircleIcon } from "@heroicons/react/24/outline";
-import { Button, Rating } from "@material-tailwind/react";
+import { Button } from "@material-tailwind/react";
 import { motion } from "framer-motion";
 import { Disclosure, RadioGroup, Tab } from "@headlessui/react";
 import { gridVariants } from "../../util/framerMotion.config";
@@ -13,6 +13,8 @@ import { clx } from "../../util";
 import { toast } from "react-toastify";
 import { useGetProductsByCategoryQuery } from "../../features/products/product.slice";
 import { ProductType } from "../../types/redux/product";
+import ProductRatings from "./ProductRating";
+import { StarIcon as StarSolid } from "@heroicons/react/24/solid";
 
 type Size = {
   name: string;
@@ -27,7 +29,6 @@ const Product = () => {
     open,
     setOpen,
     isLoading,
-    ratings,
     selectedColor,
     selectedSize,
     setSelectedColor,
@@ -35,10 +36,15 @@ const Product = () => {
     setQuantityInput,
     quantityInput,
     handleAddItemToCart,
-    setRatingsValue,
+    summary,
     product,
     message,
+    page,
+    setPage,
   } = useProduct();
+
+
+  console.log(summary)
 
   const { data, refetch: refetchCategory } = useGetProductsByCategoryQuery(
     {
@@ -148,15 +154,20 @@ const Product = () => {
                       </p>
                     </div>
                     <div className="flex items-center gap-1">
-                      <Rating
-                        value={ratings}
-                        className="h-8 !stroke-[1]"
-                        onChange={(value) => setRatingsValue(value)}
-                        placeholder={undefined}
-                        onPointerEnterCapture={undefined}
-                        onPointerLeaveCapture={undefined}
-                      />
-                      <span className="text-sm font-medium text-gray-600">{ratings} out of 5</span>
+                      <div className="flex items-center my-2">
+                        {[1, 2, 3, 4, 5].map((star) => (
+                          <StarSolid
+                            key={star}
+                            className={classNames(
+                              "w-5 h-5",
+                              star <= Math.round(summary?.averageRating)
+                                ? "text-yellow-400"
+                                : "text-gray-300"
+                            )}
+                          />
+                        ))}
+                      </div>
+                      <span className="text-sm font-medium text-gray-600">{summary?.averageRating || 0} out of 5</span>
                     </div>
                   </div>
 
@@ -370,7 +381,14 @@ const Product = () => {
                   <p className="text-lg font-normal text-gray-700">{product?.description}</p>
                 </Tab.Panel>
 
-                <Tab.Panel></Tab.Panel>
+                <Tab.Panel>
+                  <ProductRatings
+                    productId={product?._id}
+                    setPage={setPage}
+                    page={page}
+                    refetch={refetch}
+                  />
+                </Tab.Panel>
               </Tab.Panels>
             </Tab.Group>
           </div>

@@ -1,5 +1,4 @@
 import { useState, useEffect } from "react";
-import { useParams } from "react-router-dom";
 import { StarIcon as StarOutline } from "@heroicons/react/24/outline";
 import { StarIcon as StarSolid } from "@heroicons/react/24/solid";
 import { toast } from "react-toastify";
@@ -14,11 +13,19 @@ import { useAppSelector } from "../../hooks/redux/redux.hooks";
 import { RootState } from "../../app/store";
 import { Rating } from "../../types/redux/product";
 
-const ProductRatings = () => {
-  const { id } = useParams();
+const ProductRatings = ({
+  productId,
+  page,
+  setPage,
+  refetch: refetchProduct,
+}: {
+  productId: string;
+  page: number;
+  setPage: React.Dispatch<React.SetStateAction<number>>;
+  refetch: () => void;
+}) => {
   const [activeTab, setActiveTab] = useState("all");
   const [sortBy, setSortBy] = useState("newest");
-  const [page, setPage] = useState(1);
   const [userRating, setUserRating] = useState(0);
   const [hoverRating, setHoverRating] = useState(0);
   const [showCommentForm, setShowCommentForm] = useState(false);
@@ -28,7 +35,7 @@ const ProductRatings = () => {
 
   // Fetch product ratings
   const { data, isLoading, refetch } = useGetProductRatingsQuery({
-    productId: id,
+    productId,
     page,
     limit: 5,
     sort: sortBy,
@@ -66,14 +73,14 @@ const ProductRatings = () => {
     try {
       if (showCommentForm && comment.trim()) {
         await rateProductWithComment({
-          productId: id,
+          productId,
           rating: userRating,
           comment,
         }).unwrap();
         toast.success("Thank you for your rating and review!");
       } else {
         await rateProduct({
-          productId: IDBIndex,
+          productId,
           rating: userRating,
         }).unwrap();
         toast.success("Thank you for your rating!");
@@ -81,6 +88,7 @@ const ProductRatings = () => {
 
       setShowCommentForm(false);
       refetch();
+      refetchProduct()
     } catch (error: any) {
       toast.error(error?.data?.message || "Failed to submit rating");
     }
@@ -93,6 +101,7 @@ const ProductRatings = () => {
       setUserRating(0);
       setComment("");
       refetch();
+      refetchProduct()
     } catch (error: any) {
       toast.error(error?.data?.message || "Failed to delete rating");
     }
