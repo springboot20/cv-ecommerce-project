@@ -52,7 +52,7 @@ export const CategoryPanel: React.FC<{
   sizes,
   setSizesQuery,
   setPriceRange,
-  setSortBy,
+  // setSortBy,
   setColorsQuery,
   searchQuery,
   setCategoryQuery,
@@ -65,8 +65,6 @@ export const CategoryPanel: React.FC<{
 
   const uniqueColors = [...new Set(colors?.flat())].filter(Boolean);
   const uniqueSizes = [...new Set(sizes?.flat()?.map((size: Size) => size.name))].filter(Boolean);
-
-  console.log(uniqueSizes);
 
   const handleColorsQuery = (color: string) => {
     // Toggle color selection
@@ -95,9 +93,9 @@ export const CategoryPanel: React.FC<{
     setPage(1); // Reset to first page
   };
 
-  const handleSortChange = (e: React.ChangeEvent<HTMLSelectElement>) => {
-    setSortBy(e.target.value);
-  };
+  // const handleSortChange = (e: React.ChangeEvent<HTMLSelectElement>) => {
+  //   setSortBy(e.target.value);
+  // };
   
 
   const handleSizesQuery = (size: string) => {
