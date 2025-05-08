@@ -15,13 +15,15 @@ export interface ProductType {
     inStock: boolean;
   }[];
   colors: string[];
+  createdAt: string;
+  updatedAt: string;
 }
 
 type Rating = {
   _id: string;
   productId: string;
   rate: number;
-  comment?:string;
+  comment?: string;
   createdAt: string;
   updatedAt: string;
 };

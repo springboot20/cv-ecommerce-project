@@ -24,23 +24,44 @@ type Size = {
 export const CategoryPanel: React.FC<{
   handleSearch: (e: React.ChangeEvent<HTMLInputElement>) => void;
   categories: ProductCategory[];
+  categoryQuery: string;
+  searchQuery: string;
+  setPriceRange: React.Dispatch<
+    React.SetStateAction<{
+      min: number;
+      max: number;
+    }>
+  >;
+  setSortBy: React.Dispatch<React.SetStateAction<string>>;
   setColorsQuery: React.Dispatch<React.SetStateAction<string[]>>;
+  setCategoryQuery: React.Dispatch<React.SetStateAction<string>>;
+  setPage: React.Dispatch<React.SetStateAction<number>>;
   setSizesQuery: React.Dispatch<React.SetStateAction<string[]>>;
   setInitialFilterState: React.Dispatch<React.SetStateAction<Filter>>;
   colors: any[];
   sizes: any[];
+  priceRange: {
+    min: number;
+    max: number;
+  };
 }> = ({
   handleSearch,
+  setPage,
   categories,
   colors,
   sizes,
   setSizesQuery,
+  setPriceRange,
+  setSortBy,
   setColorsQuery,
+  searchQuery,
+  setCategoryQuery,
   setInitialFilterState,
+  categoryQuery,
+  priceRange,
 }) => {
   const [selectedColors, setSelectedColors] = useState<string[]>([]);
   const [selectedSizes, setSelectedSizes] = useState<string[]>([]);
-  const [selectedCategory, setSelectedCategory] = useState<string>("");
 
   const uniqueColors = [...new Set(colors?.flat())].filter(Boolean);
   const uniqueSizes = [...new Set(sizes?.flat()?.map((size: Size) => size.name))].filter(Boolean);
@@ -65,7 +86,19 @@ export const CategoryPanel: React.FC<{
 
       return newSelected;
     });
+
+    setPage(1);
   };
+
+  const handlePriceRangeChange = (min: number, max: number) => {
+    setPriceRange({ min, max });
+    setPage(1); // Reset to first page
+  };
+
+  const handleSortChange = (e: React.ChangeEvent<HTMLSelectElement>) => {
+    setSortBy(e.target.value);
+  };
+  
 
   const handleSizesQuery = (size: string) => {
     // Toggle size selection
@@ -85,13 +118,11 @@ export const CategoryPanel: React.FC<{
 
       return newSelected;
     });
-
-    console.log(size);
   };
 
   const handleCategorySelect = (categoryId: string) => {
-    const newCategory = selectedCategory === categoryId ? "" : categoryId;
-    setSelectedCategory(newCategory);
+    const newCategory = categoryQuery === categoryId ? "" : categoryId;
+    setCategoryQuery(newCategory);
 
     // Update filter state with selected category
     setInitialFilterState((prevState) => ({
@@ -104,7 +135,10 @@ export const CategoryPanel: React.FC<{
     setSelectedColors([]);
     setColorsQuery([]);
     setSizesQuery([]);
-    setSelectedCategory("");
+    setCategoryQuery("");
+    setPriceRange({ min: 0, max: 1000 });
+    setSortBy("featured");
+    setPage(1);
     setInitialFilterState({
       limit: 10,
       page: 1,
@@ -126,12 +160,13 @@ export const CategoryPanel: React.FC<{
             type="text"
             placeholder="search for product here..."
             onChange={handleSearch}
+            value={searchQuery}
             className="block w-full rounded-md border-0 py-3 pl-11 text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-gray-600 text-base font-base sm:leading-6"
           />
         </div>
       )}
 
-      <div className="relative pb-5 border-b">
+      <div className="relative pb-5 border-b mt-3">
         <h1 className="sm:text-lg lg:text-xl font-bold">Category</h1>
         <List
           className="p-0 mt-3"
@@ -153,7 +188,7 @@ export const CategoryPanel: React.FC<{
               key={c._id}
               className={clx(
                 "group rounded-none py-1.5 px-3 text-sm font-medium text-blue-gray-700 hover:bg-gray-100 hover:text-gray-700 focus:bg-gray-200 focus:text-gary-700",
-                selectedCategory === c._id ? "bg-indigo-50 text-indigo-700" : "text-blue-gray-700"
+                categoryQuery === c._id ? "bg-indigo-50 text-indigo-700" : "text-blue-gray-700"
               )}
               onClick={() => handleCategorySelect(c._id)}
               placeholder={undefined}
@@ -248,6 +283,29 @@ export const CategoryPanel: React.FC<{
         </List>
       </div>
 
+      <div className="relative mt-4 pb-5 border-b">
+        <h1 className="sm:text-lg lg:text-xl font-bold">Price Range</h1>
+        <div className="space-y-2 pt-4">
+          <div className="flex items-center justify-between">
+            <input
+              type="number"
+              placeholder="Min"
+              value={priceRange.min}
+              onChange={(e) => handlePriceRangeChange(Number(e.target.value), priceRange.max)}
+              className="w-24 rounded-md border-gray-300 shadow-sm focus:border-indigo-500 focus:ring-indigo-500 sm:text-sm"
+            />
+            <span className="mx-2 text-gray-500">to</span>
+            <input
+              type="number"
+              placeholder="Max"
+              value={priceRange.max}
+              onChange={(e) => handlePriceRangeChange(priceRange.min, Number(e.target.value))}
+              className="w-24 rounded-md border-gray-300 shadow-sm focus:border-indigo-500 focus:ring-indigo-500 sm:text-sm"
+            />
+          </div>
+        </div>
+      </div>
+
       <button
         onClick={clearFilters}
         className="rounded text-center bg-indigo-600 text-white font-medium text-sm w-full px-2 py-2.5 capitalize mt-4"
@@ -261,8 +319,8 @@ export const CategoryPanel: React.FC<{
   return (
     <>
       {/* Desktop Filter Panel */}
-      <div className="fixed hidden lg:block flex-1 max-w-sm min-h-screen top-32 w-full flex-col border-r">
-        <div className="w-full h-full p-3.5">
+        <div className="hidden lg:block flex-1 max-w-sm fixed top-32 w-full h-screen">
+        <div className="w-full h-full overflow-y-auto p-3.5 pb-32">
           <div className="relative">
             <MagnifyingGlassIcon className="eye-icon absolute top-[50%] translate-y-[-50%] left-4 cursor-pointer text-xl text-gray-700" />
             <input
@@ -271,6 +329,7 @@ export const CategoryPanel: React.FC<{
               type="text"
               placeholder="search for product here..."
               onChange={handleSearch}
+              value={searchQuery}
               className="block w-full rounded-md border-0 py-3 pl-11 text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-gray-600 text-base font-base sm:leading-6"
             />
           </div>
