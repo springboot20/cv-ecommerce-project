@@ -35,9 +35,9 @@ export const Footer = () => {
 
   return (
     <footer className="bg-white inset-x-0 p-10 w-full relative">
-      <div className="max-w-8xl mx-auto flex flex-col space-y-10">
+      <div className="max-w-8xl mx-auto">
         {/* Top section with logo, navigation links, and email subscription */}
-        <div className="flex items-start justify-between space-x-8">
+        <div className="grid grid-cols-1 gap-6 md:grid-cols-2 lg:grid-cols-3">
           {/* Logo and site name */}
           <div className="flex-shrink-0">
             <span className="logo-name text-gray-800 text-3xl font-semibold">
@@ -47,7 +47,7 @@ export const Footer = () => {
           </div>
 
           {/* Navigation links */}
-          <div className="flex space-x-20">
+          <div className="flex space-x-20 w-fit">
             {/* Footer routes */}
             <div className="flex flex-col space-y-2">
               <h4 className="text-lg font-semibold text-[#4a4b4d] mb-2">
@@ -82,7 +82,7 @@ export const Footer = () => {
           </div>
 
           {/* Email subscription */}
-          <div className="flex flex-col items-start space-y-6 w-[20rem] bottom-0">
+          <div className="flex flex-col items-start space-y-6 w-auto bottom-0">
             <p className="text-base text-[#4a4b4d] leading-7 font-medium">
               Be the first to know about our biggest and best sales. We'll never
               send more than one email a month.
