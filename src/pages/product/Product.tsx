@@ -1,20 +1,23 @@
 import { PlusIcon, MinusIcon, ArrowLeftCircleIcon } from "@heroicons/react/24/outline";
-import { Button, Rating } from "@material-tailwind/react";
+import { Button } from "@material-tailwind/react";
 import { motion } from "framer-motion";
-import { Disclosure, RadioGroup, Tab } from "@headlessui/react";
+import { Disclosure, Tab } from "@headlessui/react";
 import { gridVariants } from "../../util/framerMotion.config";
 import { classNames, formatPrice } from "../../helpers";
 import { ProductSkeletonLoading } from "../../components/loaders/Skeleton";
 import CartModal from "../../components/modal/CartModal";
 import { useProduct } from "../../hooks/useProduct";
 import { useNavigate } from "react-router-dom";
-import React, { Fragment, useEffect } from "react";
+import React, { Fragment, useEffect, useState } from "react";
 import { clx } from "../../util";
 import { toast } from "react-toastify";
 import { useGetProductsByCategoryQuery } from "../../features/products/product.slice";
-import { ProductType } from "../../types/redux/product";
+import { ProductType, Rating } from "../../types/redux/product";
+import ProductRatings from "./ProductRating";
+import { StarIcon as StarSolid } from "@heroicons/react/24/solid";
 
 type Size = {
+  _id: string;
   name: string;
   inStock: boolean;
 };
@@ -27,27 +30,35 @@ const Product = () => {
     open,
     setOpen,
     isLoading,
-    ratings,
-    selectedColor,
-    selectedSize,
-    setSelectedColor,
-    setSelectedSize,
     setQuantityInput,
     quantityInput,
     handleAddItemToCart,
-    setRatingsValue,
+    summary,
     product,
     message,
+    page,
+    ratings,
+    setPage,
   } = useProduct();
 
-  const { data, refetch: refetchCategory } = useGetProductsByCategoryQuery({
-    categoryId: product?.category?._id,
-  });
+  const [selectedColor, setSelectedColor] = useState<string>("");
+  const [selectedSize, setSelectedSize] = useState<Size | undefined>(undefined);
+
+  const { data, refetch: refetchCategory } = useGetProductsByCategoryQuery(
+    {
+      categoryId: product?.category?._id,
+    },
+    {
+      skip: !product?.category?._id,
+    }
+  );
   const products = data?.data?.products;
 
   useEffect(() => {
     refetch();
-    refetchCategory();
+    if (product?.category?._id) {
+      refetchCategory();
+    }
 
     toast.success(message);
   }, [refetch, message, refetchCategory]);
@@ -57,10 +68,19 @@ const Product = () => {
   };
 
   const handleSizeChange = (size: Size) => {
-    setSelectedSize(size);
+    console.log(size);
+    if (size?.inStock) {
+      setSelectedSize(size);
+    }
   };
 
   console.log(selectedSize);
+
+  const product_ratings = ratings?.filter(
+    (rate: Rating) => rate?.productId === product?._id
+  ) as Rating[];
+
+  console.log(product_ratings);
 
   return (
     <Fragment>
@@ -141,15 +161,22 @@ const Product = () => {
                       </p>
                     </div>
                     <div className="flex items-center gap-1">
-                      <Rating
-                        value={ratings}
-                        className="h-8 !stroke-[1]"
-                        onChange={(value) => setRatingsValue(value)}
-                        placeholder={undefined}
-                        onPointerEnterCapture={undefined}
-                        onPointerLeaveCapture={undefined}
-                      />
-                      <span className="text-sm font-medium text-gray-600">{ratings} out of 5</span>
+                      <div className="flex items-center my-2">
+                        {[1, 2, 3, 4, 5].map((star) => (
+                          <StarSolid
+                            key={star}
+                            className={classNames(
+                              "w-5 h-5",
+                              star <= Math.round(summary?.averageRating)
+                                ? "text-yellow-400"
+                                : "text-gray-300"
+                            )}
+                          />
+                        ))}
+                      </div>
+                      <span className="text-sm font-medium text-gray-600">
+                        {summary?.averageRating || 0} out of 5
+                      </span>
                     </div>
                   </div>
 
@@ -164,32 +191,45 @@ const Product = () => {
                         </legend>
 
                         <div className="mt-3 flex flex-wrap gap-2">
-                          {product?.colors?.map((color) => (
-                            <button
-                              key={color}
-                              type="button"
-                              onClick={() => handleColorChange(color)}
-                              className={clx(
-                                "relative flex size-10 cursor-pointer items-center justify-center rounded-full focus:outline-none",
-                                selectedColor === color ? `ring-2 ring-offset-0.5` : "",
-                                color === "white" && "ring-black",
-                                color === "black" ? "ring-black" : `ring-${color}-500`
-                              )}
-                              aria-label={color}
-                              aria-pressed={selectedColor === color}
-                            >
-                              <span
-                                aria-hidden="true"
-                                className={classNames(
-                                  "size-8 rounded-full border border-black/10",
-                                  color === "white" || color === "black"
-                                    ? `bg-${color}`
-                                    : `bg-${color}-600`
+                          {product?.colors?.map((color) => {
+                            const isHex = color.startsWith("#");
+                            const ringClass = isHex ? "" : `ring-${color}-500`;
+                            const inlineStyle = isHex ? { boxShadow: `0 0 0 2px ${color}` } : {};
+
+                            return (
+                              <button
+                                key={color}
+                                type="button"
+                                onClick={() => handleColorChange(color)}
+                                className={clx(
+                                  "relative flex size-10 cursor-pointer items-center justify-center rounded-full focus:outline-none",
+                                  selectedColor === color ? `ring-2 ring-offset-0.5` : "",
+                                  color === "white" && "ring-black",
+                                  color === "black" ? "ring-black" : ringClass
                                 )}
-                              />
-                            </button>
-                          ))}
+                                  style={inlineStyle}
+                                aria-label={color}
+                                aria-pressed={selectedColor === color}
+                              >
+                                <span
+                                  aria-hidden="true"
+                                  className={classNames(
+                                    "size-8 rounded-full border border-black/10",
+                                  )}
+                                                   style={{ backgroundColor: color }}
+
+                                />
+                              </button>
+                            );
+                          })}
                         </div>
+
+                        {selectedColor && (
+                          <p className="mt-2 text-sm text-gray-500">
+                            Selected:{" "}
+                            <span className="font-medium text-gray-900">{selectedColor}</span>
+                          </p>
+                        )}
                       </fieldset>
                     )}
 
@@ -205,53 +245,28 @@ const Product = () => {
                           </a>
                         </div>
 
-                        <RadioGroup className="mt-4 grid grid-cols-4 gap-4">
-                          {product?.sizes?.map((size) => (
-                            <RadioGroup.Option
-                              key={size?.name}
-                              value={size}
-                              // disabled={!size?.inStock}
-                              onChange={() => handleSizeChange(size)}
-                              className={classNames(
-                                "group relative flex items-center justify-center rounded-md border py-3 px-4 text-sm font-medium uppercase focus:outline-none",
-                                size?.inStock
-                                  ? "cursor-pointer hover:bg-gray-50"
-                                  : "cursor-not-allowed bg-gray-50 text-gray-200",
-                                selectedSize === size
-                                  ? "border-indigo-500 bg-indigo-50 text-indigo-700"
-                                  : "border-gray-300 text-gray-900"
-                              )}
-                            >
-                              <span>{size?.name}</span>
-                              {size?.inStock ? (
-                                <span
-                                  aria-hidden="true"
-                                  className="pointer-events-none absolute -inset-px rounded-md border-2 border-transparent group-data-[focus]:border group-data-[checked]:border-indigo-500"
-                                />
-                              ) : (
-                                <span
-                                  aria-hidden="true"
-                                  className="pointer-events-none absolute -inset-px rounded-md border-2 border-gray-200"
-                                >
-                                  <svg
-                                    stroke="currentColor"
-                                    viewBox="0 0 100 100"
-                                    preserveAspectRatio="none"
-                                    className="absolute inset-0 size-full stroke-2 text-gray-200"
-                                  >
-                                    <line
-                                      x1={0}
-                                      x2={100}
-                                      y1={100}
-                                      y2={0}
-                                      vectorEffect="non-scaling-stroke"
-                                    />
-                                  </svg>
-                                </span>
-                              )}
-                            </RadioGroup.Option>
-                          ))}
-                        </RadioGroup>
+                        <div className="mt-4 grid grid-cols-4 gap-4">
+                          {product?.sizes?.map((size) => {
+                            const isSelected = selectedSize?._id === size?._id;
+
+                            return (
+                              <button
+                                type="button"
+                                key={size?.name}
+                                onClick={() => handleSizeChange(size)}
+                                className={clx(
+                                  "flex items-center justify-center rounded-md border py-2 px-3 text-sm font-medium uppercase focus:outline-none",
+                                  "cursor-pointer hover:bg-gray-50",
+                                  isSelected
+                                    ? "border-indigo-500 bg-indigo-50 text-indigo-700"
+                                    : "border-gray-300 text-gray-900"
+                                )}
+                              >
+                                {size?.name}
+                              </button>
+                            );
+                          })}
+                        </div>
 
                         {selectedSize && (
                           <p className="mt-2 text-sm text-gray-500">
@@ -352,7 +367,7 @@ const Product = () => {
                         "focus:outline-none text-lg font-satoshi font-normal p-3 w-full"
                       )}
                     >
-                      Reviews ({0})
+                      Reviews ({product_ratings?.length})
                     </button>
                   )}
                 </Tab>
@@ -363,7 +378,14 @@ const Product = () => {
                   <p className="text-lg font-normal text-gray-700">{product?.description}</p>
                 </Tab.Panel>
 
-                <Tab.Panel></Tab.Panel>
+                <Tab.Panel>
+                  <ProductRatings
+                    productId={product?._id}
+                    setPage={setPage}
+                    page={page}
+                    refetch={refetch}
+                  />
+                </Tab.Panel>
               </Tab.Panels>
             </Tab.Group>
           </div>

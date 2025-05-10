@@ -138,7 +138,7 @@ export const NotificationPanel: React.FC<{ open: boolean; onClose: () => void }>
                     leaveFrom="transform opacity-100 scale-100"
                     leaveTo="transform opacity-0 scale-95"
                   >
-                    <Menu.Items className="absolute right-0 z-10 mt-4 w-max origin-top-right rounded-md bg-white py-1 shadow-lg ring-1 ring-black ring-opacity-5 focus:outline-none">
+                    <Menu.Items className="absolute -right-4 md:-right-12 z-10 mt-4 w-max origin-top-right rounded-md bg-white py-1 shadow-lg ring-1 ring-black ring-opacity-5 focus:outline-none">
                       {isUnread && (
                         <Menu.Item>
                           {({ active }) => (
@@ -196,14 +196,14 @@ export const NotificationPanel: React.FC<{ open: boolean; onClose: () => void }>
 
   return (
     <>
-      <Dialog open={open} onClose={onClose} className="relative z-20">
-        <Dialog.Backdrop className="fixed inset-0 z-10 bg-gray-500 bg-opacity-75 transition-opacity duration-500 ease-in-out data-[closed]:opacity-0" />
+      <Dialog open={open} onClose={onClose} className="relative z-30">
+        <Dialog.Backdrop className="fixed inset-0 z-20 bg-gray-500 bg-opacity-75 transition-opacity duration-500 ease-in-out data-[closed]:opacity-0" />
         <div className="fixed inset-0 overflow-hidden">
           <div className="absolute inset-0 overflow-hidden">
             <div className="pointer-events-none fixed inset-y-0 right-0 flex max-w-full pl-10">
               <Dialog.Panel className="pointer-events-auto w-screen max-w-md transform transition duration-500 ease-in-out data-[closed]:translate-x-full sm:duration-700">
                 <div className="flex h-full flex-col bg-white shadow-xl">
-                  <div className="flex-1 overflow-y-auto px-4 py-6 sm:px-6">
+                  <div className="flex-1 px-4 py-6 sm:px-6">
                     <div className="flex items-start justify-between">
                       <Dialog.Title className="text-lg font-medium text-gray-900">
                         Notifications
@@ -212,7 +212,7 @@ export const NotificationPanel: React.FC<{ open: boolean; onClose: () => void }>
                         <button
                           type="button"
                           onClick={() => onClose()}
-                          className="h-10 w-10 flex items-center justify-center absolute right-4 top-4 rounded-full bg-gray-100"
+                          className="h-10 w-10 z-20 flex items-center justify-center absolute right-4 top-4 rounded-full bg-gray-100"
                         >
                           <span className="sr-only">Close panel</span>
                           <XMarkIcon className="h-5" strokeWidth={1.5} />
@@ -267,19 +267,20 @@ export const NotificationPanel: React.FC<{ open: boolean; onClose: () => void }>
                             x: 0,
                           }}
                         >
-                          <div className="flow-root">
-                            {unread_notifications.length > 0 ? (
-                              <ul role="list" className=" divide-y divide-gray-200">
-                                {unread_notifications.map((notification, index) =>
-                                  renderNotificationItem(notification, index, true)
-                                )}
-                              </ul>
-                            ) : (
-                              <div className="py-10 text-center text-gray-500">
-                                No new notifications
-                              </div>
-                            )}
-                          </div>
+                          {unread_notifications.length > 0 ? (
+                            <ul
+                              role="list"
+                              className="flow-root min-h-screen divide-y divide-gray-200  overflow-y-auto"
+                            >
+                              {unread_notifications.map((notification, index) =>
+                                renderNotificationItem(notification, index, true)
+                              )}
+                            </ul>
+                          ) : (
+                            <div className="py-10 text-center text-gray-500">
+                              No new notifications
+                            </div>
+                          )}
                         </Tab.Panel>
 
                         <Tab.Panel
@@ -291,19 +292,17 @@ export const NotificationPanel: React.FC<{ open: boolean; onClose: () => void }>
                             x: 0,
                           }}
                         >
-                          <div className="flow-root">
-                            {notifications.length > 0 ? (
-                              <ul role="list" className=" divide-y divide-gray-200">
-                                {notifications.map((notification, index) =>
-                                  renderNotificationItem(notification, index, false)
-                                )}
-                              </ul>
-                            ) : (
-                              <div className="py-10 text-center text-gray-500">
-                                No read notifications
-                              </div>
-                            )}
-                          </div>
+                          {notifications.length > 0 ? (
+                            <ul role="list" className="flow-root min-h-screen divide-y divide-gray-200">
+                              {notifications.map((notification, index) =>
+                                renderNotificationItem(notification, index, false)
+                              )}
+                            </ul>
+                          ) : (
+                            <div className="py-10 text-center text-gray-500">
+                              No read notifications
+                            </div>
+                          )}
                         </Tab.Panel>
                       </Tab.Panels>
                     </Tab.Group>

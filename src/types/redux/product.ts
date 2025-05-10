@@ -9,13 +9,39 @@ export interface ProductType {
   imageSrc: { url: string; public_id: string };
   subImgs: { url: string; public_id: string }[];
   category: ProductCategory;
-  ratings: number;
+  totalRatings: number;
+  averageRating: number;
+
+  ratingCounts: { [key: number]: number };
   sizes: {
+    _id:string
     name: string;
     inStock: boolean;
   }[];
   colors: string[];
+  createdAt: string;
+  updatedAt: string;
 }
+
+export type Rating = {
+  _id: string;
+  productId: string;
+  userId:
+    | string
+    | {
+        _id: string;
+        name: string;
+        avatar: {
+          url: string;
+          public_id: string;
+        };
+      };
+  rate: number;
+  isVerifiedPurchase: boolean;
+  comment?: string;
+  createdAt: string;
+  updatedAt: string;
+};
 
 export interface InitialState {
   products: ProductType[];
