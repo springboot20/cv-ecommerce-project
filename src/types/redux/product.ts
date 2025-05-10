@@ -14,6 +14,7 @@ export interface ProductType {
 
   ratingCounts: { [key: number]: number };
   sizes: {
+    _id:string
     name: string;
     inStock: boolean;
   }[];

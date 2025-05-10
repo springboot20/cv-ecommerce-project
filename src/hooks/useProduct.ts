@@ -8,11 +8,6 @@ import { addItemToCart as addProductToCart } from "../features/cart/cart.reducer
 import { useAppDispatch } from "./redux/redux.hooks";
 import { useGetProductRatingsQuery } from "../features/ratings/rate.slice";
 
-type Size = {
-  name: string;
-  inStock: boolean;
-};
-
 export const useProduct = () => {
   const { id } = useParams();
   const [addItemToCart] = useAddItemToCartMutation();
@@ -23,8 +18,6 @@ export const useProduct = () => {
   const [open, setOpen] = useState(false);
   const [refreshTrigered, setRefreshTrigered] = useState(false);
   const dispatch = useAppDispatch();
-  const [selectedColor, setSelectedColor] = useState<string>("");
-  const [selectedSize, setSelectedSize] = useState<Size>(data?.data.product?.sizes[0] ?? {});
   const [page, setPage] = useState(1);
   const product = data?.data.product as ProductType;
   const { data: ratingsData } = useGetProductRatingsQuery(
@@ -59,10 +52,6 @@ export const useProduct = () => {
     message: data?.message,
     handleAddItemToCart,
     quantityInput,
-    selectedColor,
-    selectedSize,
-    setSelectedColor,
-    setSelectedSize,
     page,
     setPage,
     summary,
