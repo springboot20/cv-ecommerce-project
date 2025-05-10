@@ -30,8 +30,6 @@ export const useProduct = () => {
   );
   const { ratings = [], summary = {} } = ratingsData?.data || {};
 
-  console.log(ratingsData);
-
   const handleAddItemToCart = async (productId: string) => {
     const response = await addItemToCart({ productId, quantity: quantityInput }).unwrap();
     dispatch(addProductToCart(response));

@@ -41,12 +41,8 @@ const Product = () => {
     setPage,
   } = useProduct();
 
-  console.log(summary);
-
   const [selectedColor, setSelectedColor] = useState<string>("");
   const [selectedSize, setSelectedSize] = useState<Size | undefined>(undefined);
-
-  console.log(selectedSize);
 
   const { data, refetch: refetchCategory } = useGetProductsByCategoryQuery(
     {
