@@ -41,8 +41,8 @@ const Cart = () => {
             Shopping Cart
           </h1>
         </div>
-        <div className='relative grid grid-cols-1 lg:grid-cols-2 xl:grid-cols-3 gap-6 mt-8'>
-          <div className='col-span-1 xl:col-span-2'>
+        <div className='relative grid grid-cols-1 lg:grid-cols-3 gap-6 mt-8'>
+          <div className='col-span-1 lg:col-span-2'>
             <div className='rounded-md border bg-white border-gray-300 mb-12 p-6'>
               {!cart?.items?.length ? (
                 <div className='flex flex-col justify-center items-center text-center'>

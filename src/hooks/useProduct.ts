@@ -6,27 +6,29 @@ import { ProductType } from "../types/redux/product";
 import { toast } from "react-toastify";
 import { addItemToCart as addProductToCart } from "../features/cart/cart.reducer";
 import { useAppDispatch } from "./redux/redux.hooks";
-
-type Size = {
-  name: string;
-  inStock: boolean;
-};
+import { useGetProductRatingsQuery } from "../features/ratings/rate.slice";
 
 export const useProduct = () => {
   const { id } = useParams();
   const [addItemToCart] = useAddItemToCartMutation();
-  const { data, isLoading, refetch } = useGetProductByIdQuery(id as string);
-  const [ratings, setRatings] = useState<number>(1);
+  const { data, isLoading, refetch } = useGetProductByIdQuery(id as string, {
+    skip: !id,
+  });
   const [quantityInput, setQuantityInput] = useState<number>(1);
   const [open, setOpen] = useState(false);
   const [refreshTrigered, setRefreshTrigered] = useState(false);
   const dispatch = useAppDispatch();
-  const [selectedColor, setSelectedColor] = useState<string>("");
-  const [selectedSize, setSelectedSize] = useState<Size>(data?.data.product?.sizes[0] ?? {});
-
-  const setRatingsValue = (rating: number) => setRatings(rating);
-
-  const product: ProductType = typeof data?.data.product === "object" && data?.data.product;
+  const [page, setPage] = useState(1);
+  const product = data?.data.product as ProductType;
+  const { data: ratingsData } = useGetProductRatingsQuery(
+    {
+      productId: id,
+      page,
+      limit: 5,
+    },
+    { skip: !id }
+  );
+  const { ratings = [], summary = {} } = ratingsData?.data || {};
 
   const handleAddItemToCart = async (productId: string) => {
     const response = await addItemToCart({ productId, quantity: quantityInput }).unwrap();
@@ -48,10 +50,8 @@ export const useProduct = () => {
     message: data?.message,
     handleAddItemToCart,
     quantityInput,
-    setRatingsValue,
-    selectedColor,
-    selectedSize,
-    setSelectedColor,
-    setSelectedSize,
+    page,
+    setPage,
+    summary,
   };
 };
