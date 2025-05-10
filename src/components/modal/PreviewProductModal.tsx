@@ -15,6 +15,7 @@ import { useProduct } from "../../hooks/useProduct";
 import { useGetProductRatingsQuery } from "../../features/ratings/rate.slice";
 
 type Size = {
+  _id: string;
   name: string;
   inStock: boolean;
 };
@@ -44,14 +45,16 @@ const ProductPreviewModal: React.FC<{ open: boolean; onClose: () => void; produc
   const product: ProductType = data?.data.product;
   const dispatch = useAppDispatch();
   const [selectedColor, setSelectedColor] = useState<string>("");
-  const [selectedSize, setSelectedSize] = useState<Size>(data?.data.product?.sizes[0] ?? {});
+  const [selectedSize, setSelectedSize] = useState<Size | undefined>(undefined);
 
   const handleColorChange = (color: string) => {
     setSelectedColor(color);
   };
 
   const handleSizeChange = (size: Size) => {
-    setSelectedSize(size);
+    if (size?.inStock) {
+      setSelectedSize(size);
+    }
   };
 
   const handleAddItemToCart = async (
@@ -158,32 +161,44 @@ const ProductPreviewModal: React.FC<{ open: boolean; onClose: () => void; produc
                           </legend>
 
                           <div className="mt-3 flex flex-wrap gap-2">
-                            {product?.colors?.map((color) => (
-                              <button
-                                key={color}
-                                type="button"
-                                onClick={() => handleColorChange(color)}
-                                className={clx(
-                                  "relative flex size-10 cursor-pointer items-center justify-center rounded-full focus:outline-none",
-                                  selectedColor === color ? `ring-2 ring-offset-0.5` : "",
-                                  color === "white" && "ring-black",
-                                  color === "black" ? "ring-black" : `ring-${color}-500`
-                                )}
-                                aria-label={color}
-                                aria-pressed={selectedColor === color}
-                              >
-                                <span
-                                  aria-hidden="true"
-                                  className={classNames(
-                                    "size-8 rounded-full border border-black/10",
-                                    color === "white" || color === "black"
-                                      ? `bg-${color}`
-                                      : `bg-${color}-600`
+                            {product?.colors?.map((color) => {
+                              const isHex = color.startsWith("#");
+                              const ringClass = isHex ? "" : `ring-${color}-500`;
+                              const inlineStyle = isHex ? { boxShadow: `0 0 0 2px ${color}` } : {};
+
+                              return (
+                                <button
+                                  key={color}
+                                  type="button"
+                                  onClick={() => handleColorChange(color)}
+                                  className={clx(
+                                    "relative flex size-10 cursor-pointer items-center justify-center rounded-full focus:outline-none",
+                                    selectedColor === color ? `ring-2 ring-offset-0.5` : "",
+                                    color === "white" && "ring-black",
+                                    color === "black" ? "ring-black" : ringClass
                                   )}
-                                />
-                              </button>
-                            ))}
+                                  aria-label={color}
+                                  style={inlineStyle}
+                                  aria-pressed={selectedColor === color}
+                                >
+                                  <span
+                                    aria-hidden="true"
+                                    className={classNames(
+                                      "size-8 rounded-full border border-black/10"
+                                    )}
+                                    style={{ backgroundColor: color }}
+                                  />
+                                </button>
+                              );
+                            })}
                           </div>
+
+                           {selectedColor && (
+                          <p className="mt-2 text-sm text-gray-500">
+                            Selected:{" "}
+                            <span className="font-medium text-gray-900">{selectedColor}</span>
+                          </p>
+                        )}
                         </fieldset>
                       )}
 
@@ -201,53 +216,28 @@ const ProductPreviewModal: React.FC<{ open: boolean; onClose: () => void; produc
                             </a>
                           </div>
 
-                          <RadioGroup className="mt-4 grid grid-cols-4 gap-4">
-                            {product?.sizes?.map((size) => (
-                              <RadioGroup.Option
-                                key={size?.name}
-                                value={size}
-                                // disabled={!size?.inStock}
-                                onChange={() => handleSizeChange(size)}
-                                className={classNames(
-                                  "group relative flex items-center justify-center rounded-md border py-3 px-4 text-sm font-medium uppercase focus:outline-none",
-                                  size?.inStock
-                                    ? "cursor-pointer hover:bg-gray-50"
-                                    : "cursor-not-allowed bg-gray-50 text-gray-200",
-                                  selectedSize === size
-                                    ? "border-indigo-500 bg-indigo-50 text-indigo-700"
-                                    : "border-gray-300 text-gray-900"
-                                )}
-                              >
-                                <span>{size?.name}</span>
-                                {size?.inStock ? (
-                                  <span
-                                    aria-hidden="true"
-                                    className="pointer-events-none absolute -inset-px rounded-md border-2 border-transparent group-data-[focus]:border group-data-[checked]:border-indigo-500"
-                                  />
-                                ) : (
-                                  <span
-                                    aria-hidden="true"
-                                    className="pointer-events-none absolute -inset-px rounded-md border-2 border-gray-200"
-                                  >
-                                    <svg
-                                      stroke="currentColor"
-                                      viewBox="0 0 100 100"
-                                      preserveAspectRatio="none"
-                                      className="absolute inset-0 size-full stroke-2 text-gray-200"
-                                    >
-                                      <line
-                                        x1={0}
-                                        x2={100}
-                                        y1={100}
-                                        y2={0}
-                                        vectorEffect="non-scaling-stroke"
-                                      />
-                                    </svg>
-                                  </span>
-                                )}
-                              </RadioGroup.Option>
-                            ))}
-                          </RadioGroup>
+                          <div className="mt-4 grid grid-cols-4 gap-4">
+                            {product?.sizes?.map((size) => {
+                              const isSelected = selectedSize?._id === size?._id;
+
+                              return (
+                                <button
+                                  type="button"
+                                  key={size?.name}
+                                  onClick={() => handleSizeChange(size)}
+                                  className={clx(
+                                    "flex items-center justify-center rounded-md border py-2 px-3 text-sm font-medium uppercase focus:outline-none",
+                                    "cursor-pointer hover:bg-gray-50",
+                                    isSelected
+                                      ? "border-indigo-500 bg-indigo-50 text-indigo-700"
+                                      : "border-gray-300 text-gray-900"
+                                  )}
+                                >
+                                  {size?.name}
+                                </button>
+                              );
+                            })}
+                          </div>
 
                           {selectedSize && (
                             <p className="mt-2 text-sm text-gray-500">

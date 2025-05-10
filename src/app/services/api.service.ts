@@ -14,8 +14,6 @@ export const ApiService = createApi({
       const tokens = LocalStorage.get("tokens") as Token;
       const isAuthenticated = LocalStorage.get("authentified") as boolean;
 
-      console.log(isAuthenticated);
-
       if (tokens && isAuthenticated) {
         headers.set("authorization", `Bearer ${tokens?.access_token}`);
       }

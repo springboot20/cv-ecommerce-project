@@ -108,25 +108,35 @@ export const ProductNotificationModal: React.FC<{
                         </legend>
 
                         <div className="mt-3 flex flex-wrap gap-1">
-                          {data?.colors?.map((color: any) => (
-                            <button
-                              key={color}
-                              type="button"
-                              className={clx(
-                                "relative flex size-10 cursor-default items-center justify-center rounded-full focus:outline-none"
-                              )}
-                            >
-                              <span
-                                aria-hidden="true"
-                                className={classNames(
-                                  "size-8 rounded-full border border-black/10",
-                                  color === "white" || color === "black"
-                                    ? `bg-${color}`
-                                    : `bg-${color}-600`
-                                )}
-                              />
-                            </button>
-                          ))}
+                          {data?.colors?.map((color: any) => {
+                            {
+                              const isHex = color.startsWith("#");
+                              const ringClass = isHex ? "" : `ring-${color}-500`;
+                              const inlineStyle = isHex ? { boxShadow: `0 0 0 2px ${color}` } : {};
+
+                              return (
+                                <button
+                                  key={color}
+                                  type="button"
+                                  className={clx(
+                                    "relative flex size-10 cursor-pointer items-center justify-center rounded-full focus:outline-none",
+                                    color === "white" && "ring-black",
+                                    color === "black" ? "ring-black" : ringClass
+                                  )}
+                                  aria-label={color}
+                                  style={inlineStyle}
+                                >
+                                  <span
+                                    aria-hidden="true"
+                                    className={classNames(
+                                      "size-8 rounded-full border border-black/10"
+                                    )}
+                                    style={{ backgroundColor: color }}
+                                  />
+                                </button>
+                              );
+                            }
+                          })}
                         </div>
                       </div>
                     )}

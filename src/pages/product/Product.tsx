@@ -191,31 +191,37 @@ const Product = () => {
                         </legend>
 
                         <div className="mt-3 flex flex-wrap gap-2">
-                          {product?.colors?.map((color) => (
-                            <button
-                              key={color}
-                              type="button"
-                              onClick={() => handleColorChange(color)}
-                              className={clx(
-                                "relative flex size-10 cursor-pointer items-center justify-center rounded-full focus:outline-none",
-                                selectedColor === color ? `ring-2 ring-offset-0.5` : "",
-                                color === "white" && "ring-black",
-                                color === "black" ? "ring-black" : `ring-${color}-500`
-                              )}
-                              aria-label={color}
-                              aria-pressed={selectedColor === color}
-                            >
-                              <span
-                                aria-hidden="true"
-                                className={classNames(
-                                  "size-8 rounded-full border border-black/10",
-                                  color === "white" || color === "black"
-                                    ? `bg-${color}`
-                                    : `bg-${color}-600`
+                          {product?.colors?.map((color) => {
+                            const isHex = color.startsWith("#");
+                            const ringClass = isHex ? "" : `ring-${color}-500`;
+                            const inlineStyle = isHex ? { boxShadow: `0 0 0 2px ${color}` } : {};
+
+                            return (
+                              <button
+                                key={color}
+                                type="button"
+                                onClick={() => handleColorChange(color)}
+                                className={clx(
+                                  "relative flex size-10 cursor-pointer items-center justify-center rounded-full focus:outline-none",
+                                  selectedColor === color ? `ring-2 ring-offset-0.5` : "",
+                                  color === "white" && "ring-black",
+                                  color === "black" ? "ring-black" : ringClass
                                 )}
-                              />
-                            </button>
-                          ))}
+                                  style={inlineStyle}
+                                aria-label={color}
+                                aria-pressed={selectedColor === color}
+                              >
+                                <span
+                                  aria-hidden="true"
+                                  className={classNames(
+                                    "size-8 rounded-full border border-black/10",
+                                  )}
+                                                   style={{ backgroundColor: color }}
+
+                                />
+                              </button>
+                            );
+                          })}
                         </div>
 
                         {selectedColor && (
