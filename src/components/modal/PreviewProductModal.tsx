@@ -1,5 +1,5 @@
 import { useState } from "react";
-import { Dialog, RadioGroup } from "@headlessui/react";
+import { Dialog } from "@headlessui/react";
 import { MinusIcon, PlusIcon, XMarkIcon } from "@heroicons/react/24/outline";
 import { classNames, formatPrice } from "../../helpers";
 import { useAddItemToCartMutation } from "../../features/cart/cart.slice";
