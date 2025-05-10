@@ -1,4 +1,4 @@
-import { Fragment, useEffect, useState } from "react";
+import { Fragment,  useState } from "react";
 import { Link, NavLink, Outlet, useNavigate } from "react-router-dom";
 import { Disclosure, Menu, Transition } from "@headlessui/react";
 import { BellIcon, XMarkIcon, Bars3Icon, UserIcon } from "@heroicons/react/24/outline";
@@ -9,8 +9,6 @@ import { clx } from "../../util";
 import { useLogoutMutation } from "../../features/auth/auth.slice";
 import { toast } from "react-toastify";
 import { NotificationPanel } from "../../components/panels/notifications";
-// import { Notification } from "../../features/notifications/notification.slice";
-import { useNotification } from "../../hooks/useNotification";
 
 const navigation = [
   { to: "/", name: "home", current: true },
@@ -37,15 +35,7 @@ const AppLayout: React.FC = () => {
   const { isAuthenticated } = useAppSelector((state: RootState) => state.auth);
   const navigate = useNavigate();
   const [logout] = useLogoutMutation();
-
-  console.log(cartItem);
-
-  const { newNotification, setNewNotification } = useNotification();
   const [openNotification, setOpenNotification] = useState(false);
-
-  useEffect(() => {
-    console.log(newNotification);
-  }, [newNotification, setNewNotification]);
 
   return (
     <>

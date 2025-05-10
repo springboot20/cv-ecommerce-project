@@ -81,8 +81,6 @@ const Products = () => {
   useEffect(() => {
     refetch();
     toast.success(data?.message);
-
-    console.log("fetched");
   }, [refetch, data?.message]);
 
   // Parse URL query parameters on load and when URL changes
@@ -216,12 +214,10 @@ const Products = () => {
 
     // Apply color filter
     if (colorsQuery.length > 0) {
-      console.log(colors?.length);
 
       filtered = filtered?.filter((product) => {
         const productColors = product?.colors || [];
         return colorsQuery.some((color: any) => {
-          console.log(color);
           return (
             productColors.includes(color) ||
             productColors.some((productColor: any) => productColor === color)
