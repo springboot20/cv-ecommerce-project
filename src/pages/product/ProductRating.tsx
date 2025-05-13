@@ -112,7 +112,7 @@ const ProductRatings = ({
   };
 
   // If no ratings data is available yet
-  if (isLoading) {
+  if (isLoading || !ratings.length) {
     return (
       <div className="animate-pulse p-4">
         <div className="h-6 bg-gray-200 rounded w-1/4 mb-4"></div>

@@ -344,50 +344,12 @@ const Product = () => {
             )}
           </div>
           <div className="mt-7 relative">
-            <Tab.Group>
-              <Tab.List className="border border-b-0 max-w-xs flex items-center">
-                <Tab as={React.Fragment}>
-                  {({ selected }) => (
-                    <button
-                      className={clx(
-                        selected && "text-gray-800 bg-[#EBEBEB]",
-                        "focus:outline-none text-lg font-satoshi font-normal p-3 border-r w-full"
-                      )}
-                    >
-                      Description
-                    </button>
-                  )}
-                </Tab>
-
-                <Tab as={React.Fragment}>
-                  {({ selected }) => (
-                    <button
-                      className={clx(
-                        selected && "text-gray-800 bg-[#EBEBEB]",
-                        "focus:outline-none text-lg font-satoshi font-normal p-3 w-full"
-                      )}
-                    >
-                      Reviews ({product_ratings?.length})
-                    </button>
-                  )}
-                </Tab>
-              </Tab.List>
-
-              <Tab.Panels className="border w-full">
-                <Tab.Panel as="div" className="p-3">
-                  <p className="text-lg font-normal text-gray-700">{product?.description}</p>
-                </Tab.Panel>
-
-                <Tab.Panel>
-                  <ProductRatings
+           <ProductRatings
                     productId={product?._id}
                     setPage={setPage}
                     page={page}
                     refetch={refetch}
                   />
-                </Tab.Panel>
-              </Tab.Panels>
-            </Tab.Group>
           </div>
         </section>
       </motion.main>
