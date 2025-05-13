@@ -110,6 +110,8 @@ const ProductRatings = ({
   const handlePageChange = (newPage: number) => {
     setPage(newPage);
   };
+  
+  const { ratings = [], summary = {}, pagination = {} } = data?.data || {};
 
   // If no ratings data is available yet
   if (isLoading || !ratings.length) {
@@ -125,7 +127,6 @@ const ProductRatings = ({
     );
   }
 
-  const { ratings = [], summary = {}, pagination = {} } = data?.data || {};
 
   return (
     <div className="bg-white p-6 rounded-lg shadow-sm">

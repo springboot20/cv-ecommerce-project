@@ -1,14 +1,14 @@
 import { PlusIcon, MinusIcon, ArrowLeftCircleIcon } from "@heroicons/react/24/outline";
 import { Button } from "@material-tailwind/react";
 import { motion } from "framer-motion";
-import { Disclosure, Tab } from "@headlessui/react";
+import { Disclosure } from "@headlessui/react";
 import { gridVariants } from "../../util/framerMotion.config";
 import { classNames, formatPrice } from "../../helpers";
 import { ProductSkeletonLoading } from "../../components/loaders/Skeleton";
 import CartModal from "../../components/modal/CartModal";
 import { useProduct } from "../../hooks/useProduct";
 import { useNavigate } from "react-router-dom";
-import React, { Fragment, useEffect, useState } from "react";
+import  { Fragment, useEffect, useState } from "react";
 import { clx } from "../../util";
 import { toast } from "react-toastify";
 import { useGetProductsByCategoryQuery } from "../../features/products/product.slice";
