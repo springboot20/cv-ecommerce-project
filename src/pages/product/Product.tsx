@@ -8,7 +8,7 @@ import { ProductSkeletonLoading } from "../../components/loaders/Skeleton";
 import CartModal from "../../components/modal/CartModal";
 import { useProduct } from "../../hooks/useProduct";
 import { useNavigate } from "react-router-dom";
-import  { Fragment, useEffect, useState } from "react";
+import { Fragment, useEffect, useState } from "react";
 import { clx } from "../../util";
 import { toast } from "react-toastify";
 import { useGetProductsByCategoryQuery } from "../../features/products/product.slice";
@@ -207,17 +207,16 @@ const Product = () => {
                                   color === "white" && "ring-black",
                                   color === "black" ? "ring-black" : ringClass
                                 )}
-                                  style={inlineStyle}
+                                style={inlineStyle}
                                 aria-label={color}
                                 aria-pressed={selectedColor === color}
                               >
                                 <span
                                   aria-hidden="true"
                                   className={classNames(
-                                    "size-8 rounded-full border border-black/10",
+                                    "size-8 rounded-full border border-black/10"
                                   )}
-                                                   style={{ backgroundColor: color }}
-
+                                  style={{ backgroundColor: color }}
                                 />
                               </button>
                             );
@@ -344,12 +343,12 @@ const Product = () => {
             )}
           </div>
           <div className="mt-7 relative">
-           <ProductRatings
-                    productId={product?._id}
-                    setPage={setPage}
-                    page={page}
-                    refetch={refetch}
-                  />
+            <ProductRatings
+              productId={product?._id}
+              setPage={setPage}
+              page={page}
+              refetch={refetch}
+            />
           </div>
         </section>
       </motion.main>
