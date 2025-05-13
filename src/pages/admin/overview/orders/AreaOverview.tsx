@@ -1,71 +1,117 @@
 import { useEffect, useState } from "react";
 import ChartComponent from "../../../../components/chart/Chart";
-import {
-  DailyStats,
-  MonthlyStats,
-  OrderStatsResponse,
-  Statistics,
-  WeeklyStats,
-} from "../../../../types/redux/order";
+import { OrderStatsResponse, Statistics } from "../../../../types/redux/order";
 import { Loading } from "../../../../components/loaders/Loading";
 import { useGetOrderStatsQuery } from "../../../../features/statistics/statistics.slice";
+
+interface GroupedStat {
+  timeData: {
+    status?: string;
+    day?: number;
+    month?: number;
+    year?: number;
+    week?: number;
+    [key: string]: any;
+  };
+  COMPLETED: number;
+  PENDING: number;
+  [key: string]: any;
+}
+
+interface GroupedStats {
+  [key: string]: GroupedStat;
+}
 
 const OrderCountsChart = () => {
   const { data, refetch, isLoading } = useGetOrderStatsQuery();
   const [activeTab, setActiveTab] = useState<"daily" | "weekly" | "monthly">("daily");
-  const response: OrderStatsResponse = data?.data?.statistics;
+  const response: OrderStatsResponse = data?.data?.statistics || [];
   const statistics = Array.isArray(response) ? response : [response];
 
   console.log(statistics);
 
   const initialStats: Statistics = {
-    daily: [] as DailyStats[],
-    weekly: [] as WeeklyStats[],
-    monthly: [] as MonthlyStats[],
+    daily: [],
+    weekly: [],
+    monthly: [],
   };
 
-  const stats: Statistics = statistics?.reduce((acc: Statistics, s: any) => {
-    acc.daily = s?.daily;
-    acc.weekly = s?.weekly;
-    acc.monthly = s?.monthly;
+  const stats: Statistics = statistics?.reduce((acc: Statistics, stat: any) => {
+    if (stat) {
+      if (Array.isArray(stat.daily)) acc.daily = stat.daily;
+      if (Array.isArray(stat.weekly)) acc.weekly = stat.weekly;
+      if (Array.isArray(stat.monthly)) acc.monthly = stat.monthly;
+    }
     return acc;
   }, initialStats);
 
-  const dailyStats = stats.daily || [];
-  const weeklyStats = stats.weekly || [];
-  const monthlyStats = stats.monthly || [];
+  // Get current active stats
+  const activeStats = stats[activeTab] || [];
 
-  const activeStats =
-    activeTab === "daily" ? dailyStats : activeTab === "weekly" ? weeklyStats : monthlyStats;
+  // Group data by time period (day/week/month) to ensure matching data points
+  const groupedStats: GroupedStats = activeStats.reduce<GroupedStats>((acc, stat) => {
+    if (!stat || !stat._id) return acc;
 
-  const completedOrders = activeStats
-    .filter((item) => item?._id?.status === "COMPLETED")
-    .map((item) => item?.count || 0);
+    // Create a unique key based on the time period
+    let timeKey = "";
+    if (activeTab === "daily" && stat._id.day && stat._id.month && stat._id.year) {
+      timeKey = `${stat._id.day}-${stat._id.month}-${stat._id.year}`;
+    } else if (activeTab === "weekly" && stat._id.week && stat._id.year) {
+      timeKey = `${stat._id.week}-${stat._id.year}`;
+    } else if (activeTab === "monthly" && stat._id.month && stat._id.year) {
+      timeKey = `${stat._id.month}-${stat._id.year}`;
+    } else {
+      return acc; // Skip entries with missing data
+    }
 
-  const pendingOrders = activeStats
-    .filter((item) => item?._id?.status === "PENDING")
-    .map((item) => item?.count || 0);
+    // Initialize the time entry if it doesn't exist
+    if (!acc[timeKey]) {
+      acc[timeKey] = {
+        timeData: stat._id,
+        COMPLETED: 0,
+        PENDING: 0,
+      };
+    }
 
-  const series = [
-    {
-      name: "Completed Orders",
-      data: completedOrders,
-    },
-    {
-      name: "Pending Orders",
-      data: pendingOrders,
-    },
-  ];
+    // Add the count for the appropriate status
+    if (stat._id.status) {
+      acc[timeKey][stat._id.status] = stat.count || 0;
+    }
 
-  const categories = activeStats.map((item) => {
-    const id = item?._id || {};
+    return acc;
+  }, {} satisfies GroupedStats);
+
+  // Convert the grouped data to sorted arrays for display
+  const sortedTimeKeys = Object.keys(groupedStats).sort((a, b) => {
+    const aData = groupedStats[a].timeData;
+    const bData = groupedStats[b].timeData;
+
+    if (activeTab === "daily") {
+      // Sort by year, then month, then day
+      return aData.year! - bData.year! || aData.month! - bData.month! || aData.day! - bData.day!;
+    } else if (activeTab === "weekly") {
+      // Sort by year, then week
+      return aData.year! - bData.year! || aData.week! - bData.week!;
+    } else {
+      // Sort by year, then month
+      return aData.year! - bData.year! || aData.month! - bData.month!;
+    }
+  });
+
+  // Create series data from sorted groups
+  const completedOrders = sortedTimeKeys.map((key) => groupedStats[key].COMPLETED);
+  const pendingOrders = sortedTimeKeys.map((key) => groupedStats[key].PENDING);
+
+  // Generate formatted categories for x-axis
+  const categories = sortedTimeKeys.map((key) => {
+    const timeData = groupedStats[key].timeData;
 
     try {
-      if (activeTab === "daily" && "day" in id && "month" in id && "year" in id) {
-        return `Day ${id.day}, ${id.month}/${id.year}`;
-      } else if (activeTab === "weekly" && "week" in id && "year" in id) {
-        return `Week ${id.week}, ${id.year}`;
-      } else if (activeTab === "monthly" && "month" in id && "year" in id) {
+      if (activeTab === "daily") {
+        return `${timeData.day}/${timeData.month}/${timeData.year}`;
+      } else if (activeTab === "weekly") {
+        return `Week ${timeData.week}, ${timeData.year}`;
+      } else if (activeTab === "monthly") {
         const monthNames = [
           "Jan",
           "Feb",
@@ -80,8 +126,9 @@ const OrderCountsChart = () => {
           "Nov",
           "Dec",
         ];
-        const monthName = monthNames[id?.month - 1] || id.month;
-        return `${monthName} ${id.year}`;
+        const monthIndex = parseInt(String(timeData.month || 0)) - 1;
+        const monthName = monthNames[monthIndex] || `Month ${timeData.month || 0}`;
+        return `${monthName} ${timeData.year || 0}`;
       }
     } catch (error) {
       console.error("Error formatting category:", error);
@@ -90,7 +137,16 @@ const OrderCountsChart = () => {
     return "Unknown";
   });
 
-  console.log(categories.length);
+  const series = [
+    {
+      name: "Completed Orders",
+      data: completedOrders,
+    },
+    {
+      name: "Pending Orders",
+      data: pendingOrders,
+    },
+  ];
 
   const options = {
     xaxis: {
@@ -100,7 +156,7 @@ const OrderCountsChart = () => {
           fontFamily: "Poppins, sans-serif",
         },
         rotate: -45,
-        rotateAlways: categories.some((c) => c.length > 10),
+        rotateAlways: categories.length > 0 && categories.some((c) => c.length > 10),
       },
     },
     title: {

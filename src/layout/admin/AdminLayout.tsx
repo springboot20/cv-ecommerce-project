@@ -123,7 +123,7 @@ export const AdminDashboardLayout = () => {
         </div>
       </nav>
 
-      <Disclosure.Panel className='fixed z-10  transition-all lg:hidden left-0 right-0 w-full  bg-white top-20 border-r'>
+      <Disclosure.Panel className='fixed z-10 transition-all lg:hidden left-0 right-0 w-full  bg-white top-20 border-r'>
         <div className=''>
           <div className='flex flex-col items-center w-full'>
             {routes.map(({ label, Icon, to, current }) => (

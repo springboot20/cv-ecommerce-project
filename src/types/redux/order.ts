@@ -91,10 +91,8 @@ type OrderStatus = "COMPLETED" | "PENDING";
 // Daily statistics type
 export type DailyStats = {
   _id: {
-    day: number;
-    month: number;
-    year: number;
     status: OrderStatus;
+    [key:string]: any
   };
   order_items: number;
   total_amount: number;
@@ -104,9 +102,9 @@ export type DailyStats = {
 // Weekly statistics type
 export type WeeklyStats = {
   _id: {
-    week: number;
-    year: number;
     status: OrderStatus;
+    [key:string]: any
+
   };
   order_items: number;
   total_amount: number;
@@ -116,9 +114,9 @@ export type WeeklyStats = {
 // Monthly statistics type
 export type MonthlyStats = {
   _id: {
-    month: number;
-    year: number;
     status: OrderStatus;
+    [key:string]: any
+
   };
   order_items: number;
   total_amount: number;
