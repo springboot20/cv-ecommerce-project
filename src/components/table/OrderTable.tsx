@@ -18,7 +18,7 @@ const OrderTable: React.FC<{
   children,
   enableHeader = false,
   Header,
-  loading,
+  loading,  
   canClickOrder = false,
 }) => {
   const navigate = useNavigate();
