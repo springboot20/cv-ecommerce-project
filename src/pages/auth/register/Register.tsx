@@ -30,7 +30,7 @@ const Register = () => {
 
   useEffect(() => {
     navigate(`/register?tab=${page}&step=${currentStep + 1}`);
-  }, [page, currentStep, setPage]);
+  }, [page, currentStep, setPage, navigate]);
 
   return (
     <>
